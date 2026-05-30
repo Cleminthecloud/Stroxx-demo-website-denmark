@@ -8,6 +8,8 @@ import BuyButton from '@/components/BuyButton';
 import GlassLink from '@/components/GlassLink';
 import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
+import ParticleImage from '@/components/ParticleImage';
+import CursorGlow from '@/components/CursorGlow';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   specialists,
@@ -203,13 +205,9 @@ export default function Home() {
           <div key={f.cat.slug} className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 grid gap-14 lg:grid-cols-2 lg:items-center">
             {/* floating hero product — lit cut-out, no awkward crop */}
             <Reveal className={idx % 2 ? 'lg:order-2' : ''}>
-              <div className="relative aspect-[5/4] grid place-items-center">
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(48% 46% at 50% 52%, rgba(0,130,202,0.16), transparent 70%)' }} />
-                <div className="absolute inset-[16%] rounded-full" style={{ background: 'radial-gradient(circle, rgba(244,246,248,0.9), rgba(244,246,248,0) 66%)' }} />
-                <div className="absolute left-1/2 top-[64%] -translate-x-1/2 h-24 w-2/3 rounded-full bg-black/55 blur-2xl" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={toolTexture(f.hero.imgId)} alt={f.hero.name}
-                  className="relative z-10 max-h-[78%] max-w-[80%] object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.45)]" />
+              <div className="relative aspect-[5/4]">
+                <CursorGlow size="52% 54%" intensity={0.2} />
+                <ParticleImage src={toolTexture(f.hero.imgId)} className="h-full w-full" />
                 <div className="absolute top-2 left-2 text-fog/50 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} — {f.cat.name}</div>
               </div>
             </Reveal>
