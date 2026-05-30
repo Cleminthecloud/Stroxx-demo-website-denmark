@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { categories } from '@/lib/data';
+import { categories, productsInCategory } from '@/lib/data';
 
 export default function CategoryList() {
   const ref = useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export default function CategoryList() {
       {categories.map((c, i) => (
         <Link
           key={c.slug}
-          href={`/produkter?cat=${c.slug}`}
+          href={productsInCategory(c.slug).length > 0 ? `/kategori/${c.slug}` : `/produkter?cat=${c.slug}`}
           className="group relative z-10 flex items-center gap-4 py-4 border-b border-white/[0.06]"
         >
           <span className="text-fog/40 text-xs tabular-nums w-7 group-hover:text-stroxx-blue transition-colors">

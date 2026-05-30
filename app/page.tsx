@@ -5,7 +5,7 @@ import ScrollHint from '@/components/ScrollHint';
 import LumaVideo from '@/components/LumaVideo';
 import ProductCard from '@/components/ProductCard';
 import BuyButton from '@/components/BuyButton';
-import GlassIcon from '@/components/GlassIcon';
+import GlassLink from '@/components/GlassLink';
 import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
@@ -148,21 +148,21 @@ export default function Home() {
                   {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
                 </div>
                 <blockquote className="text-white text-xl leading-snug mb-7">“{s.quote}”</blockquote>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mb-5">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale" />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0">
                     <div className="text-white text-sm">{s.name}</div>
                     <div className="text-fog text-xs">{s.role} · {s.location}</div>
                   </div>
-                  <div className="flex gap-2">
-                    <GlassIcon href={`tel:+45${s.phone}`} label={`Ring til ${s.name}`} size={38}>
-                      <Phone size={15} strokeWidth={2} />
-                    </GlassIcon>
-                    <GlassIcon href={`mailto:${s.email}`} label={`Skriv til ${s.name}`} size={38}>
-                      <Mail size={15} strokeWidth={2} />
-                    </GlassIcon>
-                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2.5">
+                  <GlassLink href={`tel:+45${s.phone}`} label="Ring">
+                    <Phone size={15} strokeWidth={2} className="relative" />
+                  </GlassLink>
+                  <GlassLink href={`mailto:${s.email}`} label="Email">
+                    <Mail size={15} strokeWidth={2} className="relative" />
+                  </GlassLink>
                 </div>
               </Reveal>
             ))}

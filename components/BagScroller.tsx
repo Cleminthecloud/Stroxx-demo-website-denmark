@@ -34,7 +34,6 @@ type P = { x: number; y: number; vx: number; vy: number; life: number; max: numb
 
 export default function BagScroller() {
   const bag = useRef<HTMLImageElement>(null);
-  const shadow = useRef<HTMLDivElement>(null);
   const pool = useRef<HTMLDivElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
   const cur = useRef({ x: 0, y: 14, s: 1.04, r: 0, o: 1, lastY: 14 });
@@ -88,8 +87,9 @@ export default function BagScroller() {
         if (!puffed && et >= 0.9) { puffed = true; spawnPuff(); shakeT0 = now; }
       }
       const vy = c.y - c.lastY; c.lastY = c.y;
+      const lift = Math.min(1, Math.max(0, (c.s - 0.7) / 0.4 - vy * 0.1 + (-entY) * 0.012));
 
-      // decaying impact jolt — screen-space, applied only to the bag + shadow
+      // decaying impact jolt — screen-space, applied only to the bag + pool
       // (no ancestor transform, so the fixed layer's containing block never changes → no blink)
       let shX = 0, shY = 0;
       if (shakeT0 >= 0) {
@@ -106,21 +106,20 @@ export default function BagScroller() {
       if (bag.current) {
         bag.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + entY}vh) scale(${c.s}) rotate(${c.r}deg)`;
         bag.current.style.opacity = String(c.o);
-        bag.current.style.filter = `blur(${Math.max(0, blur).toFixed(2)}px)`;
+        // shape-accurate CSS drop-shadow that grows as the bag lifts (stacked for depth)
+        const off = 18 + lift * 34;
+        const bl = 20 + lift * 34;
+        const a1 = (0.55 - lift * 0.18).toFixed(2);
+        const a2 = (0.4 - lift * 0.14).toFixed(2);
+        bag.current.style.filter =
+          `blur(${Math.max(0, blur).toFixed(2)}px) ` +
+          `drop-shadow(0px ${(off * 0.5).toFixed(0)}px ${(bl * 0.6).toFixed(0)}px rgba(0,0,0,${a1})) ` +
+          `drop-shadow(0px ${off.toFixed(0)}px ${bl.toFixed(0)}px rgba(0,0,0,${a2}))`;
       }
-      const lift = Math.min(1, Math.max(0, (c.s - 0.7) / 0.4 - vy * 0.1 + (-entY) * 0.012));
       if (pool.current) {
         const ps = c.s * (1.5 + lift * 0.4);
-        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 12}vh) scale(${ps}, ${ps * 0.34})`;
-        pool.current.style.opacity = String(0.5 * c.o);
-      }
-      if (shadow.current) {
-        const sx = c.s * (1.0 + lift * 0.55);
-        const sy = c.s * (0.24 + lift * 0.12);
-        const op = Math.max(0, (0.85 - lift * 0.4) * c.o);
-        const gap = 11 + lift * 8;
-        shadow.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + gap}vh) scale(${sx}, ${sy})`;
-        shadow.current.style.opacity = String(op);
+        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 13}vh) scale(${ps}, ${ps * 0.32})`;
+        pool.current.style.opacity = String(0.55 * c.o);
       }
 
       if (dctx && dust.current) {
@@ -153,12 +152,6 @@ export default function BagScroller() {
         width: 'min(64vw, 1000px)', height: 'min(64vw, 1000px)',
         background: 'radial-gradient(ellipse 50% 36% at 50% 50%, rgba(120,170,210,0.16), rgba(120,170,210,0) 64%)',
         filter: 'blur(20px)', transform: 'translate(-50%,-50%)',
-      }} />
-      {/* dynamic contact shadow */}
-      <div ref={shadow} className="absolute left-1/2 top-1/2" style={{
-        width: 'min(60vw, 920px)', height: 'min(60vw, 920px)',
-        background: 'radial-gradient(ellipse 48% 30% at 50% 50%, rgba(0,0,0,0.9), rgba(0,0,0,0) 64%)',
-        filter: 'blur(22px)', transform: 'translate(-50%,-50%)',
       }} />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img ref={bag} src={BAG_SRC} alt="" className="absolute left-1/2 top-1/2 w-[min(62vw,980px)] will-change-transform" style={{ transform: 'translate(-50%,-50%)' }} />
