@@ -5,6 +5,7 @@ import ScrollHint from '@/components/ScrollHint';
 import LumaVideo from '@/components/LumaVideo';
 import ProductCard from '@/components/ProductCard';
 import BuyButton from '@/components/BuyButton';
+import GlassIcon from '@/components/GlassIcon';
 import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
@@ -154,15 +155,13 @@ export default function Home() {
                     <div className="text-white text-sm">{s.name}</div>
                     <div className="text-fog text-xs">{s.role} · {s.location}</div>
                   </div>
-                  <div className="flex gap-1.5">
-                    <a href={`tel:+45${s.phone}`} aria-label={`Ring til ${s.name}`}
-                      className="grid h-8 w-8 place-items-center rounded-full border border-white/10 text-fog hover:text-white hover:border-stroxx-blue hover:bg-white/5 transition-colors">
-                      <Phone size={14} strokeWidth={2} />
-                    </a>
-                    <a href={`mailto:${s.email}`} aria-label={`Skriv til ${s.name}`}
-                      className="grid h-8 w-8 place-items-center rounded-full border border-white/10 text-fog hover:text-white hover:border-stroxx-blue hover:bg-white/5 transition-colors">
-                      <Mail size={14} strokeWidth={2} />
-                    </a>
+                  <div className="flex gap-2">
+                    <GlassIcon href={`tel:+45${s.phone}`} label={`Ring til ${s.name}`} size={38}>
+                      <Phone size={15} strokeWidth={2} />
+                    </GlassIcon>
+                    <GlassIcon href={`mailto:${s.email}`} label={`Skriv til ${s.name}`} size={38}>
+                      <Mail size={15} strokeWidth={2} />
+                    </GlassIcon>
                   </div>
                 </div>
               </Reveal>
