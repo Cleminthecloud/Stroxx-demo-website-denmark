@@ -1,20 +1,26 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-/** Scroll-driven particle image-reveal. Samples a (white-background) product
+/** Interactive particle image-reveal. Samples a (white-background) product
  *  photo, drops the white, and turns the remaining pixels into a cloud of
- *  blue particles that scatter in / assemble as the element enters the
- *  viewport — and drift apart again as it leaves. All particles are STROXX
- *  blue shades, tinted by the source pixel's luminance. */
+ *  blue particles that assemble into the product as the element scrolls into
+ *  view. The particles are alive: each has its own spring stiffness and drag
+ *  (speed variation), a gentle gravity, and a perpetual idle wander so a few
+ *  always drift. The cursor repels nearby particles — they scatter, then
+ *  spring back and realign. All particles are STROXX-blue shades, tinted by
+ *  the source pixel's luminance. */
 
 const BLUES = ['#042C53', '#0C447C', '#0082CA', '#378ADD', '#85B7EB', '#BCD8F5'];
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
-const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+
+const GRAV = 0.016;   // gentle downward pull
+const MR = 100;       // cursor influence radius (px)
+const MF = 2.8;       // cursor repulsion strength
 
 export default function ParticleImage({
   src,
   className = '',
-  maxParticles = 6500,
+  maxParticles = 5200,
 }: {
   src: string;
   className?: string;
@@ -31,16 +37,11 @@ export default function ParticleImage({
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    let W = 0, H = 0;
-    let tx: Float32Array = new Float32Array(0);
-    let ty: Float32Array = new Float32Array(0);
-    let sx: Float32Array = new Float32Array(0);
-    let sy: Float32Array = new Float32Array(0);
-    let dl: Float32Array = new Float32Array(0);
-    let rs: Float32Array = new Float32Array(0);
+    let W = 0, H = 0, n = 0, dot = 1.4;
+    let px!: Float32Array, py!: Float32Array, vx!: Float32Array, vy!: Float32Array;
+    let ox!: Float32Array, oy!: Float32Array, ix!: Float32Array, iy!: Float32Array;
+    let kk!: Float32Array, dr!: Float32Array, wa!: Float32Array, ws!: Float32Array, wp!: Float32Array, sz!: Float32Array;
     let cols: string[] = [];
-    let n = 0;
-    let psize = 2;
 
     const size = () => {
       W = host.clientWidth; H = host.clientHeight;
@@ -77,61 +78,102 @@ export default function ParticleImage({
           if (y < minY) minY = y; if (y > maxY) maxY = y;
         }
       }
-      let total = cand.length / 3;
+      const total = cand.length / 3;
       if (total === 0) return;
       const stride = total > maxParticles ? Math.ceil(total / maxParticles) : 1;
 
       const bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
       const scale = Math.min((W * 0.64) / bw, (H * 0.64) / bh);
       const bcx = (minX + maxX) / 2, bcy = (minY + maxY) / 2;
-      psize = Math.max(1.4, scale * 0.9);
+      dot = Math.max(1, scale * 0.42);
 
-      const pts: { x: number; y: number; L: number }[] = [];
-      for (let k = 0; k < total; k += stride) {
-        const idx = k * 3;
-        pts.push({ x: cand[idx], y: cand[idx + 1], L: cand[idx + 2] / 255 });
-      }
-      n = pts.length;
-      tx = new Float32Array(n); ty = new Float32Array(n);
-      sx = new Float32Array(n); sy = new Float32Array(n);
-      dl = new Float32Array(n); rs = new Float32Array(n); cols = new Array(n);
-      const rad = Math.min(W, H) * 0.5;
-      for (let k = 0; k < n; k++) {
-        const px = W / 2 + (pts[k].x - bcx) * scale;
-        const py = H / 2 + (pts[k].y - bcy) * scale;
-        tx[k] = px; ty[k] = py;
-        const ang = Math.random() * Math.PI * 2;
-        const rr = rad * (0.45 + Math.random() * 0.55);
-        sx[k] = W / 2 + Math.cos(ang) * rr;
-        sy[k] = H / 2 + Math.sin(ang) * rr;
-        dl[k] = Math.random() * 0.5;
-        rs[k] = 0.6 + Math.random() * 0.8;
-        const t = clamp01((pts[k].L - 0.18) / 0.72);
-        cols[k] = BLUES[Math.min(BLUES.length - 1, Math.floor(t * BLUES.length))];
+      const idxs: number[] = [];
+      for (let k = 0; k < total; k += stride) idxs.push(k);
+      n = idxs.length;
+      px = new Float32Array(n); py = new Float32Array(n);
+      vx = new Float32Array(n); vy = new Float32Array(n);
+      ox = new Float32Array(n); oy = new Float32Array(n);
+      ix = new Float32Array(n); iy = new Float32Array(n);
+      kk = new Float32Array(n); dr = new Float32Array(n);
+      wa = new Float32Array(n); ws = new Float32Array(n); wp = new Float32Array(n); sz = new Float32Array(n);
+      cols = new Array(n);
+
+      for (let m = 0; m < n; m++) {
+        const idx = idxs[m] * 3;
+        const sxp = cand[idx], syp = cand[idx + 1], L = cand[idx + 2] / 255;
+        ix[m] = W / 2 + (sxp - bcx) * scale;
+        iy[m] = H / 2 + (syp - bcy) * scale;
+        // scatter origins spread across the whole frame (never clipped at an edge)
+        ox[m] = Math.random() * W;
+        oy[m] = Math.random() * H;
+        px[m] = ox[m]; py[m] = oy[m];
+        const free = Math.random() < 0.06;          // a few perpetual free-floaters
+        kk[m] = free ? 0.0035 : 0.011 + Math.random() * 0.035;  // spring + speed variation
+        dr[m] = 0.80 + Math.random() * 0.10;        // per-particle drag
+        wa[m] = free ? 5 + Math.random() * 12 : 0.3 + Math.random() * 1.5; // wander amplitude
+        ws[m] = 0.4 + Math.random() * 1.8;          // wander speed
+        wp[m] = Math.random() * Math.PI * 2;
+        sz[m] = 0.7 + Math.random() * 0.55;
+        const t = clamp01((L - 0.18) / 0.72);
+        cols[m] = BLUES[Math.min(BLUES.length - 1, Math.floor(t * BLUES.length))];
       }
     };
 
-    let progress = 0, target = 0, visible = true, raf = 0;
+    // cursor tracking (window-level; canvas is pointer-events-none)
+    let cliX = -1e5, cliY = -1e5;
+    const onPointer = (e: PointerEvent) => { cliX = e.clientX; cliY = e.clientY; };
+    window.addEventListener('pointermove', onPointer, { passive: true });
+
+    let progress = 0, target = 0, raf = 0;
     const computeTarget = () => {
       const r = host.getBoundingClientRect();
       const vh = window.innerHeight;
       target = clamp01((vh - r.top) / (vh * 0.72));
     };
 
-    const draw = () => {
+    const t0 = performance.now();
+    const draw = (now: number) => {
       ctx.clearRect(0, 0, W, H);
       if (n === 0) { raf = requestAnimationFrame(draw); return; }
-      progress += (target - progress) * 0.08;
+      const t = (now - t0) / 1000;
+      progress += (target - progress) * 0.06;
       const p = reduce ? 1 : progress;
-      for (let k = 0; k < n; k++) {
-        const lp = clamp01((p - dl[k] * 0.4) / (1 - dl[k] * 0.4));
-        const e = ease(lp);
-        const x = sx[k] + (tx[k] - sx[k]) * e;
-        const y = sy[k] + (ty[k] - sy[k]) * e;
-        ctx.globalAlpha = 0.1 + e * 0.9;
-        ctx.fillStyle = cols[k];
-        const s = psize * rs[k];
-        ctx.fillRect(x - s / 2, y - s / 2, s, s);
+
+      // cursor in canvas-local space (null when far outside the frame)
+      const r = host.getBoundingClientRect();
+      let mx = cliX - r.left, my = cliY - r.top;
+      const hasM = !reduce && mx > -MR && mx < W + MR && my > -MR && my < H + MR;
+
+      for (let m = 0; m < n; m++) {
+        const asx = ox[m] + (ix[m] - ox[m]) * p;
+        const asy = oy[m] + (iy[m] - oy[m]) * p;
+        let tx = asx, ty = asy;
+        if (!reduce) {
+          tx += Math.cos(t * ws[m] + wp[m]) * wa[m];
+          ty += Math.sin(t * ws[m] * 1.27 + wp[m]) * wa[m];
+        }
+        let ax = (tx - px[m]) * kk[m];
+        let ay = (ty - py[m]) * kk[m];
+        if (!reduce) ay += GRAV;
+        if (hasM) {
+          const ddx = px[m] - mx, ddy = py[m] - my;
+          const d2 = ddx * ddx + ddy * ddy;
+          if (d2 < MR * MR) {
+            const d = Math.sqrt(d2) + 0.01;
+            const f = MF * (1 - d / MR);
+            ax += (ddx / d) * f;
+            ay += (ddy / d) * f;
+          }
+        }
+        vx[m] = (vx[m] + ax) * dr[m];
+        vy[m] = (vy[m] + ay) * dr[m];
+        px[m] += vx[m];
+        py[m] += vy[m];
+
+        ctx.globalAlpha = 0.12 + p * 0.85;
+        ctx.fillStyle = cols[m];
+        const s = dot * sz[m];
+        ctx.fillRect(px[m] - s / 2, py[m] - s / 2, s, s);
       }
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(draw);
@@ -139,14 +181,12 @@ export default function ParticleImage({
 
     const onScroll = () => computeTarget();
     const onResize = () => { size(); build(); computeTarget(); };
-
     img.onload = () => { size(); build(); computeTarget(); };
     img.src = src;
 
     const io = new IntersectionObserver(([en]) => {
-      visible = en.isIntersecting;
-      if (visible && !raf) raf = requestAnimationFrame(draw);
-      if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
+      if (en.isIntersecting && !raf) raf = requestAnimationFrame(draw);
+      if (!en.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
     }, { rootMargin: '120px' });
     io.observe(host);
 
@@ -157,6 +197,7 @@ export default function ParticleImage({
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
+      window.removeEventListener('pointermove', onPointer);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
     };

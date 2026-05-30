@@ -10,8 +10,8 @@ export default function CategoryList() {
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    el.style.setProperty('--mx', `${e.clientX - r.left + 340}px`);
+    el.style.setProperty('--my', `${e.clientY - r.top + 340}px`);
   };
 
   return (
