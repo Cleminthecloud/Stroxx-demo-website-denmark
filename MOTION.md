@@ -19,6 +19,23 @@ The site should feel like **one continuous surface**, not a stack of sections. M
 - Scroll lerp: 0.08–0.12 per frame.
 - Animated CTA edge: 7s linear loop.
 
+## Slide-in reveals
+
+`<Reveal from="…">` (`components/Reveal.tsx`) is the one entrance primitive. IntersectionObserver adds `.is-in`; CSS does the rest, all on the brand ease (`cubic-bezier(.16,1,.3,1)`, ~1.05s) with a blur-off so every entrance is one family.
+
+- `from="up"` (default) — soft rise + blur. Body text, grids, small items.
+- `from="left"` / `from="right"` — horizontal slide (desktop only; falls back to the rise on mobile so nothing overflows). Use to match a zig-zag layout: a block slides in **from its own side**.
+- `from="far-left"` / `from="far-right"` — longer slide for hero pieces (the particle product, the guarantee film).
+- `from="down"` — rare; small downward settle.
+
+**Rhythm rule.** On alternating two-column rows, each side enters from its own edge (left column ← left, right column → right). The homepage category blocks, the product-page zig-zag sections, and the finder header all follow this so the eye is led down the page. Stagger paired items 80–120ms (`delay`).
+
+`prefers-reduced-motion` collapses all of it to a plain fade.
+
+## Glass cards — hover
+
+`.glass-card` (any glass surface): on hover, an animated blue gradient stroke runs around the rim (shared `@property --a` + `glass-spin`) and the card lifts on a soft blue glow. Pure CSS — no per-card listeners, so the 358-card finder stays light. Applied to product cards and the product-page USP cards.
+
 ## Buttons — the hierarchy
 
 One CTA primitive (`components/GlassButton.tsx`, styled by `.glass-cta` in `globals.css`). Never hand-roll a button. Four tiers plus controls:

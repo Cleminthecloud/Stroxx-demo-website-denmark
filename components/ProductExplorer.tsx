@@ -2,6 +2,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
+import Reveal from '@/components/Reveal';
 import ParticleImage from '@/components/ParticleImage';
 import CursorGlow from '@/components/CursorGlow';
 import GlassButton from '@/components/GlassButton';
@@ -55,7 +56,7 @@ export default function ProductExplorer() {
       {activeCat && catHero ? (
         <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
           <CursorGlow size="40% 60%" intensity={0.16} className="-z-10" />
-          <div>
+          <Reveal from="left">
             <div className="eyebrow mb-4">Kategori</div>
             <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
               {activeCat.name}
@@ -66,14 +67,14 @@ export default function ProductExplorer() {
                 Se hele {activeCat.name.toLowerCase()} hos Carl Ras <ArrowRight size={16} />
               </GlassButton>
             </div>
-          </div>
-          <div className="relative aspect-[5/4]">
+          </Reveal>
+          <Reveal from="far-right" className="relative aspect-[5/4]">
             <ParticleImage key={activeCat.slug} src={toolTexture(particleImgId(activeCat.slug, catHero.imgId))} className="h-full w-full" />
-          </div>
+          </Reveal>
         </div>
       ) : (
         <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
-          <div>
+          <Reveal from="left">
             <div className="eyebrow mb-4">Produkter</div>
             <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
               Find dit STROXX-værktøj
@@ -82,10 +83,10 @@ export default function ProductExplorer() {
               Filtrér i sortimentet og spring direkte til købet hos Carl Ras. Et udpluk
               af de 1.400+ varenumre — købet sker altid på partnerens platform.
             </p>
-          </div>
-          <div className="relative aspect-[5/4]">
+          </Reveal>
+          <Reveal from="far-right" className="relative aspect-[5/4]">
             <ParticleImage key="alle" src="/Images/bag_top_clean.png" className="h-full w-full" />
-          </div>
+          </Reveal>
         </div>
       )}
 

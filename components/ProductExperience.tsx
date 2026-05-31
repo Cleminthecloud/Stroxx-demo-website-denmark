@@ -134,7 +134,7 @@ export default function ProductExperience({
   ];
 
   const Specs = (
-    <Reveal>
+    <Reveal from="left">
       <div className="border border-line rounded-sm overflow-hidden">
         {product.specs.length > 0 ? product.specs.map((s, i) => (
           <div key={s.label + i} className={`flex justify-between gap-6 px-5 py-3.5 text-sm ${i % 2 ? 'bg-carbon' : 'bg-ink'}`}>
@@ -173,9 +173,9 @@ export default function ProductExperience({
       <ScrollText as="h2" text={'Samme følelse.\nLangt fra prisen.'} className="h-display text-white text-[clamp(1.8rem,4vw,3.4rem)] leading-[0.95] mb-10" />
       <div className="grid gap-5">
         {usps.map((u, i) => (
-          <Reveal key={u.title} delay={i * 90}>
+          <Reveal key={u.title} delay={i * 90} from="left">
             <div
-              className="rounded-2xl p-6 flex gap-4 items-start border border-white/10 backdrop-blur-xl bg-gradient-to-b from-white/[0.08] to-white/[0.02]"
+              className="glass-card rounded-2xl p-6 flex gap-4 items-start border border-white/10 backdrop-blur-xl bg-gradient-to-b from-white/[0.08] to-white/[0.02]"
               style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), inset 0 0 22px rgba(255,255,255,0.03)' }}
             >
               <u.icon size={24} strokeWidth={1.6} className="text-stroxx-blue shrink-0 mt-0.5" />
@@ -219,7 +219,7 @@ export default function ProductExperience({
 
       {/* content column — right half on desktop, full on mobile */}
       <div className="relative z-30">
-        <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[46%] pt-10 lg:pt-0">{Details}</div></div></section>
+        <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
         <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
         <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>
         <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifikationer</div></Reveal><ScrollText as="h2" text="Tallene bag værktøjet." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup /></div></div></div></section>

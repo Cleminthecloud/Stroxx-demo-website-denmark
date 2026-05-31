@@ -19,7 +19,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const buyUrl = cat ? categoryBuyUrl(cat.path) : '#';
   return (
     <div className="relative group">
-      <div className="glass rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
+      <div className="glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
         {product.badges.length > 0 && (
           <div className="absolute top-3 left-3 z-20 flex gap-1.5">
             {product.badges.slice(0, 2).map((b) => (

@@ -185,7 +185,7 @@ export default function Home() {
               text="Vi tør godt. Er du ikke tilfreds med dit STROXX-værktøj, får du pengene igen. Så er der ikke så meget at tænke over — bare at komme i gang." />
             <GuaranteeModal />
           </div>
-          <Reveal delay={120}>
+          <Reveal delay={120} from="far-right">
             <div className="max-w-md mx-auto">
               <LumaVideo src={brandImages.guaranteeFilm} size={560} className="w-full" />
             </div>
@@ -206,13 +206,13 @@ export default function Home() {
         {featuredCategories.map((f, idx) => (
           <div key={f.cat.slug} className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 grid gap-14 lg:grid-cols-2 lg:items-center">
             {/* floating hero product — particle reveal */}
-            <Reveal className={idx % 2 ? 'lg:order-2' : ''}>
+            <Reveal from={idx % 2 ? 'far-right' : 'far-left'} className={idx % 2 ? 'lg:order-2' : ''}>
               <div className="relative aspect-[5/4]">
                 <ParticleImage src={toolTexture(f.particleImgId)} className="h-full w-full" />
                 <div className="absolute top-2 left-2 text-fog/50 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} — {f.cat.name}</div>
               </div>
             </Reveal>
-            <Reveal delay={120} className={idx % 2 ? 'lg:order-1' : ''}>
+            <Reveal delay={120} from={idx % 2 ? 'left' : 'right'} className={idx % 2 ? 'lg:order-1' : ''}>
               <h3 className="h-display text-white text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] mb-5">{f.cat.name}</h3>
               <p className="text-fog text-lg leading-relaxed mb-10 max-w-xl">{f.cat.blurb}</p>
               <div className="grid sm:grid-cols-2 gap-6 mb-10">
