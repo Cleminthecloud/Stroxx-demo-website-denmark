@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import Reveal from '@/components/Reveal';
@@ -9,12 +9,13 @@ import GlassButton from '@/components/GlassButton';
 import ProductCard from '@/components/ProductCard';
 import ProClubSignup from '@/components/ProClubSignup';
 import { Hammer, Wallet, ShieldCheck, Phone, Mail, ArrowRight } from 'lucide-react';
-import { Product, Specialist, toolTexture, crImage } from '@/lib/data';
+import { Product, Specialist, toolTexture } from '@/lib/data';
 
+// Carl Ras splash colours — match the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
-  'POPULÆR': 'bg-stroxx-blue text-white', 'BLÅ PRIS': 'bg-stroxx-blue text-white',
-  'KAMPAGNE': 'bg-stroxx-red text-white', 'BEST I TEST': 'bg-white text-ink',
-  'NYHED': 'bg-stroxx-blue text-white', 'OUTLET': 'bg-steel text-white', 'MILJØ': 'bg-green-600 text-white',
+  'BLÅ PRIS': 'bg-[#0072BC] text-white', 'POPULÆR': 'bg-[#002C5F] text-white',
+  'KAMPAGNE': 'bg-[#EE7F00] text-white', 'BEST I TEST': 'bg-white text-ink',
+  'NYHED': 'bg-[#0072BC] text-white', 'OUTLET': 'bg-[#5A6473] text-white', 'MILJØ': 'bg-[#4C9A2A] text-white',
 };
 
 type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };
@@ -44,21 +45,12 @@ export default function ProductExperience({
   product: Product; related: Product[]; spec: Specialist;
   buyUrl: string; categoryName: string; categorySlug: string;
 }) {
-  const [wide, setWide] = useState<boolean | null>(null);
   const prodRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const cur = useRef({ x: -24, y: -2, s: 1.0, r: -4, o: 1 });
   const glow = useRef({ x: -24, y: -2, s: 1.15, o: 1, vx: 0, vy: 0 });
 
   useEffect(() => {
-    const im = new Image();
-    im.onload = () => setWide(im.naturalWidth / im.naturalHeight > 1.32);
-    im.onerror = () => setWide(false);
-    im.src = crImage(product.imgId);
-  }, [product.imgId]);
-
-  useEffect(() => {
-    if (wide !== false) return; // pinned travel only for square/portrait
     const pe = prodRef.current, ge = glowRef.current;
     if (!pe) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -94,9 +86,7 @@ export default function ProductExperience({
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [wide]);
-
-  const portrait = wide === false || wide === null;
+  }, []);
 
   const Figure = (size: string, withGlow = true) => (
     <div className="relative">
@@ -211,26 +201,8 @@ export default function ProductExperience({
     </section>
   );
 
-  // ——— WIDE image: stacked hero, content centred, no pin ———
-  if (wide) {
-    return (
-      <main className="bg-ink">
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(50% 50% at 50% 38%, rgba(0,130,202,0.16), transparent 70%)' }} />
-          <div className="relative mx-auto max-w-[1100px] px-5 md:px-10 pt-32 md:pt-40 pb-16 flex flex-col items-center text-center">
-            {Figure('h-[52vh] min-h-[320px]')}
-            <div className="mt-12 max-w-2xl flex flex-col items-center">{Details}</div>
-          </div>
-        </section>
-        <section className="relative z-30"><div className="mx-auto max-w-[1100px] px-5 md:px-10 py-24">{SellingPoints}</div></section>
-        <section className="relative z-30 overflow-hidden"><div className="absolute inset-0" style={{ background: 'radial-gradient(50% 60% at 50% 50%, rgba(0,130,202,0.10), transparent 72%)' }} /><div className="relative mx-auto max-w-[1000px] px-5 md:px-10 py-24">{Review}</div></section>
-        <section id="specifikationer" className="relative z-30 scroll-mt-24"><div className="mx-auto max-w-[1100px] px-5 md:px-10 py-24 grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start"><div><Reveal><div className="eyebrow mb-5">Specifikationer</div></Reveal><ScrollText as="h2" text="Tallene bag værktøjet." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-10" />{Specs}</div><ProClubSignup /></div></section>
-        {Related}
-      </main>
-    );
-  }
-
-  // ——— SQUARE / PORTRAIT: pinned product travels; content scrolls in a right column ———
+  // ——— ONE universal template for EVERY product, regardless of image aspect:
+  // the pinned product cut-out travels & zig-zags down while content scrolls past ———
   return (
     <main className="bg-ink">
       {/* fixed traveling product (desktop) — the light trails the product */}

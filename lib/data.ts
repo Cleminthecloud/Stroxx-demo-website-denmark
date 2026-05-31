@@ -75,7 +75,9 @@ const p = (
   name: string, price: string, imgId: number, category: string,
   opts: Partial<Product> = {}
 ): Product => ({
-  slug: slugify(name),
+  // append the item number so duplicate product names never collide — unique
+  // slugs are required for routing AND for stable React keys in lists.
+  slug: slugify(name) + (opts.code ? `-${opts.code}` : ''),
   name, price, imgId, category,
   unit: opts.unit ?? 'Styk',
   code: opts.code,

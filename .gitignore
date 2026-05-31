@@ -11,3 +11,6 @@ next-env.d.ts
 /INFO
 /docs
 /lib/_products.txt
+
+# scratch
+_checkslug.ts

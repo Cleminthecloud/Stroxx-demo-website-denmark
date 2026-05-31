@@ -2,14 +2,15 @@ import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import { Product, toolTexture, categoryBySlug, categoryBuyUrl } from '@/lib/data';
 
+// Carl Ras splash colours — match the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
-  'POPULÆR': 'bg-stroxx-blue text-white',
-  'BLÅ PRIS': 'bg-stroxx-blue text-white',
-  'KAMPAGNE': 'bg-stroxx-red text-white',
+  'BLÅ PRIS': 'bg-[#0072BC] text-white',
+  'POPULÆR': 'bg-[#002C5F] text-white',
+  'KAMPAGNE': 'bg-[#EE7F00] text-white',
   'BEST I TEST': 'bg-white text-ink',
-  'NYHED': 'bg-stroxx-blue text-white',
-  'OUTLET': 'bg-steel text-white',
-  'MILJØ': 'bg-green-600 text-white',
+  'NYHED': 'bg-[#0072BC] text-white',
+  'OUTLET': 'bg-[#5A6473] text-white',
+  'MILJØ': 'bg-[#4C9A2A] text-white',
 };
 
 export default function ProductCard({ product }: { product: Product }) {
