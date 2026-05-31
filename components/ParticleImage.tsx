@@ -10,7 +10,9 @@ import { useEffect, useRef } from 'react';
  *  spring back and realign. All particles are STROXX-blue shades, tinted by
  *  the source pixel's luminance. */
 
-const BLUES = ['#042C53', '#0C447C', '#0082CA', '#378ADD', '#85B7EB', '#BCD8F5'];
+// Floor kept bright enough that even near-black product pixels read on the
+// dark stage (deep navy disappeared against the background).
+const BLUES = ['#155A96', '#1E6FB0', '#0082CA', '#3C92E0', '#85B7EB', '#C3DDF6'];
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 const GRAV = 0.016;   // gentle downward pull
@@ -52,7 +54,9 @@ export default function ParticleImage({
     const img = new Image();
     img.crossOrigin = 'anonymous';
 
+    let built = false;
     const build = () => {
+      if (!W || !H || !img.complete || !img.naturalWidth) return;
       const ar = img.naturalWidth / img.naturalHeight || 1;
       const OW = 250, OH = Math.max(1, Math.round(OW / ar));
       const off = document.createElement('canvas');
@@ -107,16 +111,17 @@ export default function ParticleImage({
         ox[m] = Math.random() * W;
         oy[m] = Math.random() * H;
         px[m] = ox[m]; py[m] = oy[m];
-        const free = Math.random() < 0.06;          // a few perpetual free-floaters
+        const free = Math.random() < 0.18;          // perpetual free-floaters drifting around
         kk[m] = free ? 0.0035 : 0.011 + Math.random() * 0.035;  // spring + speed variation
         dr[m] = 0.80 + Math.random() * 0.10;        // per-particle drag
         wa[m] = free ? 5 + Math.random() * 12 : 0.3 + Math.random() * 1.5; // wander amplitude
         ws[m] = 0.4 + Math.random() * 1.8;          // wander speed
         wp[m] = Math.random() * Math.PI * 2;
         sz[m] = 0.7 + Math.random() * 0.55;
-        const t = clamp01((L - 0.18) / 0.72);
+        const t = clamp01((L - 0.1) / 0.68);
         cols[m] = BLUES[Math.min(BLUES.length - 1, Math.floor(t * BLUES.length))];
       }
+      built = true;
     };
 
     // cursor tracking (window-level; canvas is pointer-events-none)
@@ -133,6 +138,9 @@ export default function ParticleImage({
 
     const t0 = performance.now();
     const draw = (now: number) => {
+      // build once, retrying each frame until the element has a real size +
+      // the image has decoded (never rebuild after — that would re-scatter)
+      if (!built) { size(); build(); computeTarget(); }
       ctx.clearRect(0, 0, W, H);
       if (n === 0) { raf = requestAnimationFrame(draw); return; }
       const t = (now - t0) / 1000;
@@ -180,9 +188,20 @@ export default function ParticleImage({
     };
 
     const onScroll = () => computeTarget();
-    const onResize = () => { size(); build(); computeTarget(); };
-    img.onload = () => { size(); build(); computeTarget(); };
-    img.src = src;
+    // on a real resize, rebuild ONCE for the new size (built flag gates it)
+    const onResize = () => { built = false; size(); computeTarget(); };
+    // Load with retries: the image proxy can hand back its 1x1 BLANK fallback
+    // on a cold upstream miss, which yields zero product pixels. Each attempt
+    // uses a distinct cache key — also keeps the CORS read from colliding with
+    // the plain <img> (no-crossorigin) cache entry the product cards create.
+    let tries = 0;
+    const load = () => { tries++; img.src = src + (src.includes('?') ? '&' : '?') + 'pr=' + tries; };
+    img.onload = () => {
+      size(); build(); computeTarget();
+      if (!built && tries < 6) setTimeout(load, 350);
+    };
+    img.onerror = () => { if (tries < 6) setTimeout(load, 350); };
+    load();
 
     const io = new IntersectionObserver(([en]) => {
       if (en.isIntersecting && !raf) raf = requestAnimationFrame(draw);

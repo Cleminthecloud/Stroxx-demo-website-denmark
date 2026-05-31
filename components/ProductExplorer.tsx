@@ -2,7 +2,11 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
-import { products, categories, categoryBySlug, categoryBuyUrl } from '@/lib/data';
+import ParticleImage from '@/components/ParticleImage';
+import CursorGlow from '@/components/CursorGlow';
+import GlassButton from '@/components/GlassButton';
+import { ArrowRight } from 'lucide-react';
+import { products, categories, categoryBySlug, categoryBuyUrl, toolTexture, particleImgId } from '@/lib/data';
 
 const parsePrice = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
 
@@ -39,20 +43,51 @@ export default function ProductExplorer() {
   }, [active, q, sort]);
 
   const activeCat = active ? categoryBySlug(active) : null;
+  const catHero = useMemo(() => {
+    if (!active) return null;
+    const items = products.filter((p) => p.tags.includes(active));
+    return items.find((p) => p.hero) ?? items[0] ?? null;
+  }, [active]);
 
   return (
     <div className="mx-auto max-w-[1400px] px-5 md:px-8 pb-24">
-      {/* header */}
-      <div className="pt-28 md:pt-36 pb-10">
-        <div className="eyebrow mb-4">Produkter</div>
-        <h1 className="h-display text-[clamp(2.2rem,6vw,5rem)] text-white max-w-[16ch]">
-          Find dit STROXX-værktøj
-        </h1>
-        <p className="mt-5 text-fog text-lg max-w-2xl">
-          Filtrér i sortimentet og spring direkte til købet hos Carl Ras. Et udpluk af de
-          1.400+ varenumre — købet sker altid på partnerens platform.
-        </p>
-      </div>
+      {/* header — generic finder intro, or a particle hero for the active category */}
+      {activeCat && catHero ? (
+        <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
+          <CursorGlow size="40% 60%" intensity={0.16} className="-z-10" />
+          <div>
+            <div className="eyebrow mb-4">Kategori</div>
+            <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
+              {activeCat.name}
+            </h1>
+            <p className="mt-5 text-fog text-lg max-w-md">{activeCat.blurb}</p>
+            <div className="mt-7">
+              <GlassButton href={categoryBuyUrl(activeCat.path)} external>
+                Se hele {activeCat.name.toLowerCase()} hos Carl Ras <ArrowRight size={16} />
+              </GlassButton>
+            </div>
+          </div>
+          <div className="relative aspect-[5/4]">
+            <ParticleImage key={activeCat.slug} src={toolTexture(particleImgId(activeCat.slug, catHero.imgId))} className="h-full w-full" />
+          </div>
+        </div>
+      ) : (
+        <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
+          <div>
+            <div className="eyebrow mb-4">Produkter</div>
+            <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
+              Find dit STROXX-værktøj
+            </h1>
+            <p className="mt-5 text-fog text-lg max-w-md">
+              Filtrér i sortimentet og spring direkte til købet hos Carl Ras. Et udpluk
+              af de 1.400+ varenumre — købet sker altid på partnerens platform.
+            </p>
+          </div>
+          <div className="relative aspect-[5/4]">
+            <ParticleImage key="alle" src="/Images/bag_top_clean.png" className="h-full w-full" />
+          </div>
+        </div>
+      )}
 
       {/* controls */}
       <div className="sticky top-16 z-30 -mx-5 md:-mx-8 px-5 md:px-8 py-4 bg-ink/85 backdrop-blur-md border-y border-line mb-10">
@@ -60,8 +95,8 @@ export default function ProductExplorer() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setActive(null)}
-              className={`text-sm px-3 py-1.5 rounded-sm border transition-colors ${
-                !active ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white'
+              className={`text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+                !active ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
               }`}
             >
               Alle
@@ -70,8 +105,8 @@ export default function ProductExplorer() {
               <button
                 key={c.slug}
                 onClick={() => setActive(c.slug)}
-                className={`text-sm px-3 py-1.5 rounded-sm border transition-colors ${
-                  active === c.slug ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white'
+                className={`text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+                  active === c.slug ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                 }`}
               >
                 {c.name}
@@ -83,7 +118,7 @@ export default function ProductExplorer() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Søg i produkter…"
-              className="flex-1 min-w-[200px] bg-carbon border border-line rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
+              className="flex-1 min-w-[200px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
             />
             <div className="flex items-center gap-2 text-sm">
               <span className="text-fog">Sortér:</span>
@@ -91,8 +126,8 @@ export default function ProductExplorer() {
                 <button
                   key={k}
                   onClick={() => setSort(k)}
-                  className={`px-3 py-1.5 rounded-sm border transition-colors ${
-                    sort === k ? 'border-white text-white' : 'border-line text-fog hover:text-white'
+                  className={`px-3.5 py-1.5 rounded-full border transition-colors ${
+                    sort === k ? 'border-white text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                   }`}
                 >
                   {l}
@@ -102,19 +137,6 @@ export default function ProductExplorer() {
           </div>
         </div>
       </div>
-
-      {/* active-category buy band */}
-      {activeCat && (
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-carbon border border-line rounded-sm p-5">
-          <div>
-            <div className="text-white font-medium">{activeCat.name}</div>
-            <div className="text-fog text-sm">{activeCat.blurb}</div>
-          </div>
-          <a href={categoryBuyUrl(activeCat.path)} target="_blank" rel="noopener noreferrer" className="btn-blue shrink-0">
-            Se hele kategorien hos Carl Ras
-          </a>
-        </div>
-      )}
 
       <div className="text-fog text-sm mb-6">{filtered.length} produkter</div>
 

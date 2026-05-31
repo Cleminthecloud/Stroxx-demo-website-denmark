@@ -10,3 +10,4 @@ next-env.d.ts
 # internal-only material — do NOT commit
 /INFO
 /docs
+/lib/_products.txt

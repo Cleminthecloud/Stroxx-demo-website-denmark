@@ -9,7 +9,7 @@ import GlassLink from '@/components/GlassLink';
 import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
 import ParticleImage from '@/components/ParticleImage';
-import CursorGlow from '@/components/CursorGlow';
+import ProvDet from '@/components/ProvDet';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   specialists,
@@ -150,21 +150,21 @@ export default function Home() {
                   {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
                 </div>
                 <blockquote className="text-white text-xl leading-snug mb-7">“{s.quote}”</blockquote>
-                <div className="flex items-center gap-3 mb-5">
+                <div className="flex items-center gap-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale" />
-                  <div className="min-w-0">
-                    <div className="text-white text-sm">{s.name}</div>
-                    <div className="text-fog text-xs">{s.role} · {s.location}</div>
+                  <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-white text-sm truncate">{s.name}</div>
+                    <div className="text-fog text-xs truncate">{s.role} · {s.location}</div>
                   </div>
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  <GlassLink href={`tel:+45${s.phone}`} label="Ring">
-                    <Phone size={15} strokeWidth={2} className="relative" />
-                  </GlassLink>
-                  <GlassLink href={`mailto:${s.email}`} label="Email">
-                    <Mail size={15} strokeWidth={2} className="relative" />
-                  </GlassLink>
+                  <div className="flex gap-2 shrink-0">
+                    <GlassLink href={`tel:+45${s.phone}`} label="Ring">
+                      <Phone size={15} strokeWidth={2} className="relative" />
+                    </GlassLink>
+                    <GlassLink href={`mailto:${s.email}`} label="Email">
+                      <Mail size={15} strokeWidth={2} className="relative" />
+                    </GlassLink>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -173,7 +173,7 @@ export default function Home() {
       </section>
 
       {/* GUARANTEE */}
-      <section className="relative z-40 overflow-hidden">
+      <section className="relative z-40">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
           <div>
@@ -202,12 +202,11 @@ export default function Home() {
         </div>
 
         {featuredCategories.map((f, idx) => (
-          <div key={f.cat.slug} className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 grid gap-14 lg:grid-cols-2 lg:items-center">
-            {/* floating hero product — lit cut-out, no awkward crop */}
+          <div key={f.cat.slug} className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 grid gap-14 lg:grid-cols-2 lg:items-center">
+            {/* floating hero product — particle reveal */}
             <Reveal className={idx % 2 ? 'lg:order-2' : ''}>
               <div className="relative aspect-[5/4]">
-                <CursorGlow size="52% 54%" intensity={0.2} />
-                <ParticleImage src={toolTexture(f.hero.imgId)} className="h-full w-full" />
+                <ParticleImage src={toolTexture(f.particleImgId)} className="h-full w-full" />
                 <div className="absolute top-2 left-2 text-fog/50 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} — {f.cat.name}</div>
               </div>
             </Reveal>
@@ -234,8 +233,7 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section className="relative z-40 h-[80vh] flex flex-col items-center justify-center text-center px-6">
-        <ScrollText as="h2" text="Prøv det."
-          className="h-display text-white text-[clamp(3rem,11vw,11rem)] leading-[0.86] mb-12" />
+        <ProvDet />
         <BuyButton href={`${CR_BRAND}/?${UTM}`}>Køb STROXX hos Carl Ras</BuyButton>
       </section>
     </main>

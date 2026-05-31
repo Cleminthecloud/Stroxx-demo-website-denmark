@@ -34,6 +34,7 @@ type P = { x: number; y: number; vx: number; vy: number; life: number; max: numb
 
 export default function BagScroller() {
   const bag = useRef<HTMLImageElement>(null);
+  const spill = useRef<HTMLDivElement>(null);
   const pool = useRef<HTMLDivElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
   const cur = useRef({ x: 0, y: 14, s: 1.04, r: 0, o: 1, lastY: 14 });
@@ -121,6 +122,8 @@ export default function BagScroller() {
         pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 13}vh) scale(${ps}, ${ps * 0.32})`;
         pool.current.style.opacity = String(0.55 * c.o);
       }
+      // the blue spill fades out together with the bag
+      if (spill.current) spill.current.style.opacity = String(c.o);
 
       if (dctx && dust.current) {
         dctx.clearRect(0, 0, dust.current.width, dust.current.height);
@@ -145,8 +148,8 @@ export default function BagScroller() {
 
   return (
     <div className="fixed inset-0 z-[45] pointer-events-none select-none" aria-hidden>
-      {/* stronger blue spill */}
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(42% 38% at 50% 52%, rgba(0,130,202,0.28), transparent 72%)' }} />
+      {/* stronger blue spill — fades out with the bag */}
+      <div ref={spill} className="absolute inset-0" style={{ background: 'radial-gradient(42% 38% at 50% 52%, rgba(0,130,202,0.28), transparent 72%)' }} />
       {/* soft light pool so the shadow has something to fall on */}
       <div ref={pool} className="absolute left-1/2 top-1/2" style={{
         width: 'min(64vw, 1000px)', height: 'min(64vw, 1000px)',
