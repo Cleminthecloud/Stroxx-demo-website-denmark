@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import GlassButton from '@/components/GlassButton';
 import { UTM, CR_BRAND, bagTools, formatDKK } from '@/lib/data';
 
 const ToolBagScene = dynamic(() => import('@/components/scene/ToolBagScene'), {
@@ -51,11 +52,9 @@ export default function HeroStage() {
                 Ligesom alt dit dyre værktøj. Det koster bare ikke nær så meget.
                 <span className="text-white"> Fedt værktøj til temmelig tynde priser.</span> Simpelthen.
               </p>
-              <div className="pointer-events-auto mt-6 flex flex-wrap gap-3">
-                <a href="/produkter" className="btn-blue">Se produkterne</a>
-                <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-                  Køb hos Carl Ras
-                </a>
+              <div className="pointer-events-auto mt-6 flex flex-wrap items-center gap-3">
+                <GlassButton href="/produkter">Se produkterne</GlassButton>
+                <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">Køb hos Carl Ras</GlassButton>
               </div>
             </div>
 

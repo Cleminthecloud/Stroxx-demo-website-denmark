@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
+import GlassButton from '@/components/GlassButton';
 import { Product, toolTexture, categoryBySlug, categoryBuyUrl } from '@/lib/data';
 
 // Carl Ras splash colours — match the real badges on carl-ras.dk
@@ -49,22 +50,8 @@ export default function ProductCard({ product }: { product: Product }) {
             <span className="text-[10px] text-fog ml-1.5">DKK / {product.unit}</span>
           </div>
           <div className="flex gap-2">
-            <a href={buyUrl} target="_blank" rel="noopener noreferrer"
-              className="flex-1 text-center text-xs font-semibold text-white rounded-full py-2.5 transition-all hover:-translate-y-0.5"
-              style={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02)), rgba(0,130,202,0.9)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.2), 0 4px 14px rgba(0,130,202,0.32)',
-              }}>
-              Køb hos Carl Ras
-            </a>
-            <Link href={`/produkt/${product.slug}`}
-              className="flex-1 text-center text-xs font-semibold text-white rounded-full py-2.5 border border-white/10 hover:border-white/25 transition-all hover:-translate-y-0.5"
-              style={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015))',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), 0 3px 12px rgba(0,0,0,0.3)',
-              }}>
-              Udforsk
-            </Link>
+            <GlassButton href={buyUrl} external size="sm" className="flex-1">Køb hos Carl Ras</GlassButton>
+            <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Udforsk</GlassButton>
           </div>
         </div>
       </div>

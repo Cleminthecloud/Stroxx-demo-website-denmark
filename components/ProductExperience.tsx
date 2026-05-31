@@ -192,7 +192,7 @@ export default function ProductExperience({
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 py-24">
         <Reveal className="mb-10 flex items-end justify-between gap-6">
           <h2 className="h-display text-white text-[clamp(1.6rem,3vw,2.4rem)]">Relateret STROXX-værktøj</h2>
-          <Link href={`/produkter?cat=${categorySlug}`} className="hidden sm:inline-flex items-center gap-1.5 text-fog text-sm hover:text-white transition-colors shrink-0">Se hele kategorien <ArrowRight size={15} /></Link>
+          <Link href={`/produkter?cat=${categorySlug}`} className="link-arrow hidden sm:inline-flex shrink-0">Se hele kategorien <ArrowRight size={15} /></Link>
         </Reveal>
         <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
           {related.map((p, i) => (<Reveal key={p.slug} delay={(i % 4) * 70}><ProductCard product={p} /></Reveal>))}

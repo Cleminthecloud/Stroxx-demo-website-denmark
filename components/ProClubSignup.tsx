@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import GlassButton from '@/components/GlassButton';
 
 export default function ProClubSignup() {
   const [done, setDone] = useState(false);
@@ -33,7 +34,7 @@ export default function ProClubSignup() {
             placeholder="din@mail.dk"
             className="flex-1 bg-ink border border-line rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
           />
-          <button type="submit" className="btn-blue justify-center">Tilmeld</button>
+          <GlassButton submit>Tilmeld</GlassButton>
         </form>
       )}
       <p className="text-fog/60 text-[11px] mt-3">

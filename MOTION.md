@@ -19,6 +19,24 @@ The site should feel like **one continuous surface**, not a stack of sections. M
 - Scroll lerp: 0.08–0.12 per frame.
 - Animated CTA edge: 7s linear loop.
 
+## Buttons — the hierarchy
+
+One CTA primitive (`components/GlassButton.tsx`, styled by `.glass-cta` in `globals.css`). Never hand-roll a button. Four tiers plus controls:
+
+| Tier | How | When | Rule |
+|---|---|---|---|
+| **Primary** | `<GlassButton href>` (blue glass fill, animated edge-light, cursor glow) | The single decisive action of a section — usually "Køb hos Carl Ras" or the main on-page journey | **Max one per section.** If two feel equal, one must drop to secondary. |
+| **Secondary** | `<GlassButton variant="ghost">` | Supporting action ("Tekniske specs", "Køb hos Carl Ras" when explore is primary) | Identical geometry to primary, no fill. |
+| **Tertiary** | `<Link className="link-arrow">… <ArrowRight/></Link>` | Low-emphasis navigation ("Se hele kategorien") | No box. Text + sliding arrow only. |
+| **Utility / icon** | `<GlassLink>` / `<GlassIcon>` (`.glass-btn`) | Icon actions — Ring, Email, social | Small frosted pill, no blue fill. |
+| **Controls** | rounded-full bordered toggles (finder chips, sort) | Filters / state toggles, *not* CTAs | Active = `bg-stroxx-blue`; idle = `border-line`. Never glass — controls must read as controls. |
+
+**Sizing.** `size="md"` (default) everywhere; `size="sm"` only in dense rows (product cards). **Submit buttons** use `<GlassButton submit>` (renders a `<button type="submit">`).
+
+**Alignment.** Button rows are `flex items-center gap-3`. All CTAs in a row share one tier-pair (primary + ghost), so heights and radii always match.
+
+**Order.** Primary first (left), secondary after. On the product page the primary "Køb" always precedes the ghost "Tekniske specs".
+
 ## Owners
 
 `components/Reveal.tsx` · `ScrollText.tsx` · `BagScroller.tsx` · `ProductExperience.tsx` · `ParticleImage.tsx` · `CursorGlow.tsx` · `GlassButton.tsx` · tokens in `app/globals.css`.
