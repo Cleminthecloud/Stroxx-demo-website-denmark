@@ -115,12 +115,12 @@ export default function ProductExperience({
       </div>
       <h1 className="h-display text-white text-[clamp(2rem,4.4vw,3.6rem)] leading-[0.98] mb-5">{product.name}</h1>
       {product.blurb && <p className="text-fog text-lg leading-relaxed mb-7 max-w-md">{product.blurb}</p>}
-      <div className="flex items-end gap-8 mb-8">
-        <div>
-          <div className="h-display text-white text-4xl">{product.price}</div>
-          <div className="text-fog text-sm mt-1">DKK inkl. moms / {product.unit}</div>
+      <div className="mb-8">
+        <div className="h-display text-white text-4xl">{product.price}</div>
+        <div className="mt-1.5 flex flex-wrap items-baseline gap-x-6 gap-y-1 text-fog text-sm">
+          <span>DKK inkl. moms / {product.unit}</span>
+          {product.code && <span>Varenr: <span className="text-white">{product.code}</span></span>}
         </div>
-        {product.code && <div className="text-fog text-sm pb-1">Kode <span className="text-white">{product.code}</span></div>}
       </div>
       <div className="flex flex-wrap gap-3 mb-6">
         <GlassButton href={buyUrl} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>

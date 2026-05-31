@@ -1,4 +1,4 @@
-import BagScroller from '@/components/BagScroller';
+import BagJourney from '@/components/BagJourney';
 import Reveal from '@/components/Reveal';
 import ScrollText from '@/components/ScrollText';
 import ScrollHint from '@/components/ScrollHint';
@@ -48,8 +48,8 @@ function Marquee({ text }: { text: string }) {
 export default function Home() {
   return (
     <main className="relative">
-      {/* the bag travels through the page as you scroll */}
-      <BagScroller />
+      {/* the bag falls in, travels the page, and fills with tools as you scroll */}
+      <BagJourney />
 
       {/* HERO — giant wordmark, bag centred on top */}
       <section className="relative z-10 h-screen flex items-center justify-center">

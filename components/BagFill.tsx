@@ -18,25 +18,36 @@ import { bagTools, toolTexture, formatDKK } from '@/lib/data';
    two-layer bag art arrives, swap BAG_BACK/BAG_FRONT and drop the clip.
    ────────────────────────────────────────────────────────────────────────── */
 
-const BAG_BACK = '/Images/Bag-test/bag_use.png';
-const BAG_FRONT = '/Images/Bag-test/bag_use.png'; // same image, clipped to front wall
-const BAG_AR = 1024 / 1536; // width / height of the PNG canvas
+// Exported so the homepage BagJourney reuses the exact same tuned geometry.
+export const BAG_BACK = '/Images/Bag-test/bag_use.png';
+export const BAG_AR = 1024 / 1536; // width / height of the PNG canvas
 
-// y (% of stage height) of the front-lip top edge. Tools below this are hidden
-// behind the front wall. ~46% matches where the bag's front face begins.
-const LIP = 46;
+// The front wall occluder: a DEDICATED front-panel cut-out (just the front wall
+// with the STROXX label + pockets), laid opaquely on top of the tools so their
+// lower halves are hidden. Positioned over the bag's own front wall — nudge
+// these % so it sits exactly on top of the back layer's front wall.
+export const FRONT_PANEL = '/Images/Bag-test/newfront_trythis.png';
+// Computed so the panel's STROXX badge lands exactly on the back bag's badge at
+// matching scale (measured badge centroids: bag 60.7%,53.5% — panel 55%,25.2%;
+// badge widths gave the 75% panel width). height auto keeps aspect.
+export const PANEL = { left: 19, top: 45, width: 75 }; // % of stage
 
 // each tool: id (from bagTools), x/y rest centre (% of stage), w (% of stage
 // width), rotation (deg). Order = drop order = depth (later drops in front).
-type Slot = { id: number; x: number; y: number; w: number; rot: number };
-const TOOLS: Slot[] = [
-  { id: 159146, x: 50, y: 35, w: 30, rot: -3 }, // Krydslaser — back centre
-  { id: 171900, x: 62, y: 37, w: 27, rot: 5 },  // Rundsavklinge — back right
-  { id: 134353, x: 34, y: 42, w: 40, rot: 7 },  // Torpedo vaterpas — wide, left
-  { id: 53081, x: 64, y: 41, w: 25, rot: -9 },  // Multitool — right
-  { id: 161224, x: 27, y: 45, w: 29, rot: 13 }, // Speed vinkel — front left
-  { id: 159147, x: 48, y: 46, w: 22, rot: -6 }, // Afstandsmåler — front centre
-  { id: 53078, x: 70, y: 47, w: 19, rot: 17 },  // Kniv — front right
+export type Slot = { id: number; x: number; y: number; w: number; rot: number };
+// Dark / clean-knockout tools only. `w` is sized to the tools' REAL relative
+// dimensions (longest side): torpedo level 250mm is the biggest, the 165mm saw
+// blade much smaller, the cross-laser smallest. (Estimated — the saw blade fills
+// its photo tightly so it needs a smaller box than its real size suggests.)
+export const TOOLS: Slot[] = [
+  { id: 124546, x: 44, y: 38, w: 18, rot: -11 }, // Rundsavklinge Z30 (165mm) — back left
+  { id: 159146, x: 53, y: 39, w: 23, rot: -3 },  // Krydslaser (~115mm) — back centre
+  { id: 171900, x: 65, y: 41, w: 18, rot: 6 },   // Rundsavklinge Z48 (165mm) — back right
+  { id: 134353, x: 32, y: 44, w: 40, rot: 7 },   // Torpedo vaterpas (250mm) — wide, left
+  { id: 53081, x: 61, y: 46, w: 21, rot: -9 },   // Multitool (~150mm) — right
+  { id: 161224, x: 28, y: 48, w: 16, rot: 12 },  // Speed vinkel (~185mm) — front left (fills photo → smaller box)
+  { id: 53080, x: 49, y: 51, w: 17, rot: -15 },  // Kniv 18mm (~140mm) — front centre
+  { id: 53078, x: 71, y: 49, w: 22, rot: 16 },   // Kniv 25mm (~165mm) — front right
 ];
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -68,7 +79,8 @@ export default function BagFill() {
           const local = clamp((p - start) / 0.34);
           const e = local <= 0 ? 0 : easeOutBack(local);
           const fall = (1 - e) * 78;            // vh above rest → 0 on land
-          const blur = (1 - clamp(local / 0.85)) * 7; // motion blur while falling
+          // only a slight blur while falling; fully sharp well before it lands
+          const blur = (1 - clamp(local / 0.6)) * 3;
           const wobble = Math.sin(local * Math.PI) * (1 - local) * 4; // settle sway
           node.style.opacity = local > 0 ? '1' : '0';
           node.style.transform =
@@ -133,18 +145,28 @@ export default function BagFill() {
 
           {/* 3 — bag front lip (same image, only the lower front wall shows) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={BAG_FRONT} alt="" aria-hidden
-            className="absolute inset-0 h-full w-full object-contain select-none"
-            style={{ zIndex: 40, clipPath: `inset(${LIP}% 0 0 0)` }} />
-        </div>
+          <img src={FRONT_PANEL} alt="" aria-hidden
+            className="absolute select-none"
+            style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
-        {/* price counter overlay */}
-        <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 text-center" style={{ zIndex: 50 }}>
-          <div className="eyebrow mb-2">Fyld posen</div>
-          <div className="h-display text-white text-[clamp(2rem,5vw,3.6rem)] leading-none">
-            {formatDKK(total)} <span className="text-fog text-base align-top">DKK</span>
+          {/* price tag — compact glass chip, anchored to the bag so it travels
+              with it; the running total + count tick up as tools land */}
+          <div className="absolute" style={{ right: '-3%', bottom: '22%', zIndex: 50 }}>
+            <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)',
+              }}>
+              <div className="text-[9px] uppercase tracking-[0.18em] text-fog mb-1">I posen</div>
+              <div className="h-display text-white text-xl leading-none tabular-nums">
+                {formatDKK(total)}<span className="text-fog text-[11px] ml-1 align-baseline">kr</span>
+              </div>
+              <div className="mt-1.5 text-[10px] tracking-wide">
+                <span className="text-stroxx-blue font-semibold tabular-nums">{landed}</span>
+                <span className="text-fog/60"> / {TOOLS.length} værktøjer</span>
+              </div>
+            </div>
           </div>
-          <div className="text-fog text-sm mt-2">{landed} af {TOOLS.length} værktøjer</div>
         </div>
       </div>
     </section>

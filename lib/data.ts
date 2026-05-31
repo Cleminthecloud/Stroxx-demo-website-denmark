@@ -3,6 +3,8 @@
 // (names, prices in DKK incl. moms, item codes, Carl-Ras image asset ids).
 // Purchase always happens on the local partner platform (Carl Ras in DK).
 
+import { PDP_PATHS } from './pdp';
+
 export const UTM = 'utm_source=cr-byg&utm_medium=brandsite_link&utm_campaign=stroxx';
 export const CR_BRAND = 'https://www.carl-ras.dk/maerker/stroxx';
 
@@ -18,14 +20,19 @@ export const toolTexture = (id: number | string, f?: '50383' | '50384' | '50388'
 /** Deep-link to the Carl-Ras category listing, UTM preserved. */
 export const categoryBuyUrl = (path: string) => `${CR_BRAND}/${path}/?${UTM}`;
 
-/** Deep-link to a specific product on Carl Ras by its exact item number
- *  (varenummer). Carl Ras resolves a single-item search straight to that
- *  product, so this always lands on the right PDP. Falls back to the STROXX
- *  brand page when a product has no code. UTM preserved. */
-export const productBuyUrl = (code?: string) =>
-  code
+/** Deep-link to a specific product's real Carl Ras PDP via its item number
+ *  (varenummer), using the harvested PDP_PATHS map. Products not in the map
+ *  (a few secondary variants) fall back to a single-item search that resolves
+ *  to the product. UTM preserved. */
+export const productBuyUrl = (code?: string) => {
+  if (code && PDP_PATHS[code]) {
+    const path = PDP_PATHS[code];
+    return `https://www.carl-ras.dk${path}${path.includes('?') ? '&' : '?'}${UTM}`;
+  }
+  return code
     ? `https://www.carl-ras.dk/search/?search=${encodeURIComponent(code)}&${UTM}`
     : `${CR_BRAND}/?${UTM}`;
+};
 
 export type Category = {
   slug: string;

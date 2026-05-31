@@ -28,16 +28,14 @@ export default function Footer() {
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Sider</div>
             <div className="space-y-3">
               <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
-              <a href="/#kategorier" className="block text-fog hover:text-white">Kategorier</a>
               <a href="/#specialister" className="block text-fog hover:text-white">Specialister</a>
             </div>
           </div>
           <div className="text-sm">
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Køb</div>
             <div className="space-y-3">
-              <a href="https://www.carl-ras.dk/maerker/stroxx/" target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Køb STROXX</a>
+              <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Køb STROXX</a>
               <a href={`https://www.carl-ras.dk/om-carl-ras/butikker/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Find butik</a>
-              <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Alle STROXX-produkter</a>
             </div>
           </div>
         </div>
