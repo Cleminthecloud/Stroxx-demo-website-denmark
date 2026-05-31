@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Check, X, FileText, ArrowUpRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 
-const PDF = 'https://cdn.prod.website-files.com/693fc82ce8e0df3e1f7ceda4/69dcbbef1a2b77d4400020a8_STROXX%20%E2%80%93%2030%20dages%20tilfredshedsgaranti_2.pdf';
+const PDF = '/STROXX-tilfredshedsgaranti.pdf';
 
 const POINTS = [
   'Er du ikke tilfreds, får du pengene tilbage.',
