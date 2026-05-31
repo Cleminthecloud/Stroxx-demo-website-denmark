@@ -22,7 +22,7 @@ const MF = 2.8;       // cursor repulsion strength
 export default function ParticleImage({
   src,
   className = '',
-  maxParticles = 5200,
+  maxParticles = 8200,
 }: {
   src: string;
   className?: string;
@@ -58,7 +58,9 @@ export default function ParticleImage({
     const build = () => {
       if (!W || !H || !img.complete || !img.naturalWidth) return;
       const ar = img.naturalWidth / img.naturalHeight || 1;
-      const OW = 250, OH = Math.max(1, Math.round(OW / ar));
+      // finer source sampling → more candidate pixels → denser, sharper product
+      // (capped by maxParticles; real detail ceiling rises with image quality)
+      const OW = 340, OH = Math.max(1, Math.round(OW / ar));
       const off = document.createElement('canvas');
       off.width = OW; off.height = OH;
       const o = off.getContext('2d');
@@ -111,7 +113,7 @@ export default function ParticleImage({
         ox[m] = Math.random() * W;
         oy[m] = Math.random() * H;
         px[m] = ox[m]; py[m] = oy[m];
-        const free = Math.random() < 0.18;          // perpetual free-floaters drifting around
+        const free = Math.random() < 0.26;          // perpetual free-floaters drifting around
         kk[m] = free ? 0.0035 : 0.011 + Math.random() * 0.035;  // spring + speed variation
         dr[m] = 0.80 + Math.random() * 0.10;        // per-particle drag
         wa[m] = free ? 5 + Math.random() * 12 : 0.3 + Math.random() * 1.5; // wander amplitude
@@ -133,7 +135,12 @@ export default function ParticleImage({
     const computeTarget = () => {
       const r = host.getBoundingClientRect();
       const vh = window.innerHeight;
-      target = clamp01((vh - r.top) / (vh * 0.72));
+      // Assemble FAST and EARLY: starts the moment the frame peeks in, and is
+      // fully formed by the time its top reaches the middle of the viewport
+      // (~60% of the way through the entry) so the finished product is on
+      // screen well before the user scrolls past it.
+      const travel = (vh - r.top) / vh;           // 0 = just entering at bottom, 1 = top at top
+      target = clamp01((travel - 0.05) / 0.45);   // p=1 when top hits ~0.5·vh
     };
 
     const t0 = performance.now();
@@ -144,7 +151,7 @@ export default function ParticleImage({
       ctx.clearRect(0, 0, W, H);
       if (n === 0) { raf = requestAnimationFrame(draw); return; }
       const t = (now - t0) / 1000;
-      progress += (target - progress) * 0.06;
+      progress += (target - progress) * 0.085;
       const p = reduce ? 1 : progress;
 
       // cursor in canvas-local space (null when far outside the frame)

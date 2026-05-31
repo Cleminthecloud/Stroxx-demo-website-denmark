@@ -10,6 +10,7 @@ import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
 import ParticleImage from '@/components/ParticleImage';
 import ProvDet from '@/components/ProvDet';
+import GuaranteeModal from '@/components/GuaranteeModal';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   specialists,
@@ -182,6 +183,7 @@ export default function Home() {
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
               text="Vi tør godt. Er du ikke tilfreds med dit STROXX-værktøj, får du pengene igen. Så er der ikke så meget at tænke over — bare at komme i gang." />
+            <GuaranteeModal />
           </div>
           <Reveal delay={120}>
             <div className="max-w-md mx-auto">
