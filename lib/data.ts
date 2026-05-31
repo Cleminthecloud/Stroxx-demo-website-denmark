@@ -18,6 +18,15 @@ export const toolTexture = (id: number | string, f?: '50383' | '50384' | '50388'
 /** Deep-link to the Carl-Ras category listing, UTM preserved. */
 export const categoryBuyUrl = (path: string) => `${CR_BRAND}/${path}/?${UTM}`;
 
+/** Deep-link to a specific product on Carl Ras by its exact item number
+ *  (varenummer). Carl Ras resolves a single-item search straight to that
+ *  product, so this always lands on the right PDP. Falls back to the STROXX
+ *  brand page when a product has no code. UTM preserved. */
+export const productBuyUrl = (code?: string) =>
+  code
+    ? `https://www.carl-ras.dk/search/?search=${encodeURIComponent(code)}&${UTM}`
+    : `${CR_BRAND}/?${UTM}`;
+
 export type Category = {
   slug: string;
   name: string;

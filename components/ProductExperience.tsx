@@ -97,20 +97,22 @@ export default function ProductExperience({
         <div className="pointer-events-none absolute -z-10" style={{ inset: '-40%', background: 'radial-gradient(40% 38% at 50% 48%, rgba(0,130,202,0.32), transparent 68%)' }} />
       )}
       <div className="pointer-events-none absolute left-1/2 bottom-[4%] h-10 w-3/5 -translate-x-1/2 rounded-[50%] bg-black/55 blur-2xl" />
-      {product.badges.length > 0 && (
-        <div className="absolute top-2 left-2 z-20 flex gap-1.5">
-          {product.badges.slice(0, 3).map((b) => (
-            <span key={b} className={`text-[11px] font-semibold px-2.5 py-1 rounded-sm ${badgeStyle[b] ?? 'bg-steel text-white'}`}>{b}</span>
-          ))}
-        </div>
-      )}
       <KnockoutImage src={toolTexture(product.imgId, '50383')} alt={product.name} maxSize={1100} className={`relative w-full ${size}`} />
     </div>
   );
 
   const Details = (
     <>
-      <div className="eyebrow mb-4">STROXX · {categoryName}</div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="eyebrow">STROXX · {categoryName}</div>
+        {product.badges.length > 0 && (
+          <div className="flex gap-1.5">
+            {product.badges.slice(0, 3).map((b) => (
+              <span key={b} className={`text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-sm ${badgeStyle[b] ?? 'bg-steel text-white'}`}>{b}</span>
+            ))}
+          </div>
+        )}
+      </div>
       <h1 className="h-display text-white text-[clamp(2rem,4.4vw,3.6rem)] leading-[0.98] mb-5">{product.name}</h1>
       {product.blurb && <p className="text-fog text-lg leading-relaxed mb-7 max-w-md">{product.blurb}</p>}
       <div className="flex items-end gap-8 mb-8">
@@ -221,8 +223,11 @@ export default function ProductExperience({
       {/* mobile inline hero */}
       <div className="lg:hidden px-5 pt-28 pb-2">{Figure('h-[50vh] min-h-[300px]')}</div>
 
-      {/* content column — right half on desktop, full on mobile */}
-      <div className="relative z-30">
+      {/* content column — right half on desktop, full on mobile. Sits above the
+          Related section's fade-in gradient so that gradient only darkens the
+          empty area the product travels through, never the content (e.g. the
+          Pro Club box). */}
+      <div className="relative z-40">
         <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
         <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
         <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>

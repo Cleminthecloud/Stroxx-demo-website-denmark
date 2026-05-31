@@ -2,7 +2,7 @@ import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import GlassButton from '@/components/GlassButton';
 import GlassCardGlow from '@/components/GlassCardGlow';
-import { Product, toolTexture, categoryBySlug, categoryBuyUrl } from '@/lib/data';
+import { Product, toolTexture, productBuyUrl } from '@/lib/data';
 
 // Carl Ras splash colours — match the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
@@ -16,8 +16,7 @@ const badgeStyle: Record<string, string> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
-  const cat = categoryBySlug(product.category);
-  const buyUrl = cat ? categoryBuyUrl(cat.path) : '#';
+  const buyUrl = productBuyUrl(product.code);
   return (
     <div className="relative group">
       <GlassCardGlow className="relative glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">

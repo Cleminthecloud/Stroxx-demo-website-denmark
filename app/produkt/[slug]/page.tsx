@@ -4,7 +4,7 @@ import {
   products,
   productBySlug,
   categoryBySlug,
-  categoryBuyUrl,
+  productBuyUrl,
   crImage,
   specialists,
 } from '@/lib/data';
@@ -32,7 +32,7 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
   if (!product) notFound();
 
   const cat = categoryBySlug(product.category);
-  const buyUrl = cat ? categoryBuyUrl(cat.path) : '#';
+  const buyUrl = productBuyUrl(product.code);
   const related = products
     .filter((p) => p.slug !== product.slug && p.tags.some((t) => product.tags.includes(t)))
     .slice(0, 4);

@@ -146,12 +146,12 @@ export default function Home() {
           </div>
           <div className="grid gap-x-10 gap-y-16 md:grid-cols-3">
             {specialists.slice(0, 6).map((s, i) => (
-              <Reveal key={s.name} delay={(i % 3) * 80}>
+              <Reveal key={s.name} delay={(i % 3) * 80} className="flex flex-col h-full">
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
                 </div>
                 <blockquote className="text-white text-xl leading-snug mb-7">“{s.quote}”</blockquote>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mt-auto">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -218,9 +218,9 @@ export default function Home() {
               <div className="grid sm:grid-cols-2 gap-6 mb-10">
                 {f.items.slice(0, 2).map((p) => (<ProductCard key={p.slug} product={p} />))}
               </div>
-              <a href={categoryBuyUrl(f.cat.path)} target="_blank" rel="noopener noreferrer" className="group/cta inline-flex items-center gap-1.5 text-stroxx-blue text-sm hover:text-white transition-colors">
+              <a href={categoryBuyUrl(f.cat.path)} target="_blank" rel="noopener noreferrer" className="link-arrow">
                 Se hele {f.cat.name.toLowerCase()} hos Carl Ras
-                <ArrowRight size={16} strokeWidth={2} className="transition-transform group-hover/cta:translate-x-1" />
+                <ArrowRight size={16} strokeWidth={2} />
               </a>
             </Reveal>
           </div>

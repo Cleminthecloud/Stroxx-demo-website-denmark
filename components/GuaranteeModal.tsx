@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Check, X, FileText, ArrowUpRight } from 'lucide-react';
+import { Check, X, FileText, ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 
 const PDF = '/STROXX-tilfredshedsgaranti.pdf';
@@ -31,7 +31,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
   return (
     <>
       <button onClick={() => setOpen(true)} className="link-arrow mt-8">
-        {trigger} <ArrowUpRight size={15} />
+        {trigger} <ArrowRight size={15} />
       </button>
 
       {open && (
