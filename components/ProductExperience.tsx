@@ -64,20 +64,21 @@ export default function ProductExperience({
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
       const t = sample(p);
-      // product — fairly responsive, eases toward the scroll keyframe
-      c.x = lerp(c.x, t.x, 0.13); c.y = lerp(c.y, t.y, 0.13); c.s = lerp(c.s, t.s, 0.12);
-      c.r = lerp(c.r, t.r, 0.12); c.o = lerp(c.o, t.o, 0.14);
+      // product — leads the motion: snappy enough that the image clearly drives,
+      // so the light reads as chasing it rather than both drifting together.
+      c.x = lerp(c.x, t.x, 0.17); c.y = lerp(c.y, t.y, 0.17); c.s = lerp(c.s, t.s, 0.15);
+      c.r = lerp(c.r, t.r, 0.15); c.o = lerp(c.o, t.o, 0.2);
       pe.style.transform = `translate(-50%,-50%) translate(${c.x}vw, ${c.y}vh) scale(${c.s}) rotate(${c.r}deg)`;
       pe.style.opacity = String(c.o);
-      // blue light — a heavier body that TRAILS the product: spring pulls it
-      // toward the product, gravity gives it weight, friction settles it. The
-      // softer stiffness + damping make it lag, drift and catch up.
+      // blue light — an elastic body that TRAILS the product. Softer spring +
+      // low friction make it lag behind, overshoot, then wobble back into place,
+      // like a light genuinely tracking the image. Gravity gives it a little sag.
       if (ge) {
-        g.vx += (c.x - g.x) * 0.045;
-        g.vy += (c.y - g.y) * 0.045 + 0.03; // + gravity (vh/frame²)
-        g.vx *= 0.86; g.vy *= 0.86;
+        g.vx += (c.x - g.x) * 0.032;
+        g.vy += (c.y - g.y) * 0.032 + 0.018; // + gravity (vh/frame²)
+        g.vx *= 0.915; g.vy *= 0.915;         // less friction → elastic overshoot
         g.x += g.vx; g.y += g.vy;
-        g.s = lerp(g.s, c.s * 1.18, 0.05);
+        g.s = lerp(g.s, c.s * 1.18, 0.045);
         g.o = lerp(g.o, c.o, 0.1);
         ge.style.transform = `translate(-50%,-50%) translate(${g.x}vw, ${g.y}vh) scale(${g.s})`;
         ge.style.opacity = String(g.o);
@@ -189,6 +190,9 @@ export default function ProductExperience({
 
   const Related = related.length > 0 && (
     <section className="relative z-30 bg-ink">
+      {/* long gradient lead-in so the travelling product + its glow dissolve
+          into ink instead of being hard-cut by the solid section bg */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -translate-y-full h-[55vh] bg-gradient-to-b from-transparent to-ink" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 py-24">
         <Reveal className="mb-10 flex items-end justify-between gap-6">
           <h2 className="h-display text-white text-[clamp(1.6rem,3vw,2.4rem)]">Relateret STROXX-værktøj</h2>

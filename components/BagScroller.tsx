@@ -45,6 +45,8 @@ export default function BagScroller() {
     const ENTER = 850;
     let puffed = false;
     const parts: P[] = [];
+    // elastic trailing light — springs toward the bag, lagging & overshooting
+    const gl = { x: cur.current.x, y: cur.current.y, vx: 0, vy: 0 };
     const dctx = dust.current?.getContext('2d') || null;
     const sizeDust = () => { if (dust.current) { dust.current.width = innerWidth; dust.current.height = innerHeight; } };
     sizeDust();
@@ -122,8 +124,17 @@ export default function BagScroller() {
         pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 13}vh) scale(${ps}, ${ps * 0.32})`;
         pool.current.style.opacity = String(0.55 * c.o);
       }
-      // the blue spill fades out together with the bag
-      if (spill.current) spill.current.style.opacity = String(c.o);
+      // blue light elastically TRAILS the bag — softer spring + low friction so
+      // it lags, overshoots, then wobbles back, like a light tracking the image.
+      // Gravity gives it a little downward sag. Fades out together with the bag.
+      gl.vx += (c.x - gl.x) * 0.03;
+      gl.vy += (c.y - gl.y) * 0.03 + 0.012;
+      gl.vx *= 0.92; gl.vy *= 0.92;
+      gl.x += gl.vx; gl.y += gl.vy;
+      if (spill.current) {
+        spill.current.style.transform = `translate(-50%,-50%) translate(${gl.x}vw, ${gl.y}vh)`;
+        spill.current.style.opacity = String(c.o);
+      }
 
       if (dctx && dust.current) {
         dctx.clearRect(0, 0, dust.current.width, dust.current.height);
@@ -148,8 +159,12 @@ export default function BagScroller() {
 
   return (
     <div className="fixed inset-0 z-[45] pointer-events-none select-none" aria-hidden>
-      {/* stronger blue spill — fades out with the bag */}
-      <div ref={spill} className="absolute inset-0" style={{ background: 'radial-gradient(42% 38% at 50% 52%, rgba(0,130,202,0.28), transparent 72%)' }} />
+      {/* stronger blue spill — an elastic blob that trails the bag, fades with it */}
+      <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
+        width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
+        background: 'radial-gradient(42% 42% at 50% 50%, rgba(0,130,202,0.30), transparent 70%)',
+        transform: 'translate(-50%,-50%)',
+      }} />
       {/* soft light pool so the shadow has something to fall on */}
       <div ref={pool} className="absolute left-1/2 top-1/2" style={{
         width: 'min(64vw, 1000px)', height: 'min(64vw, 1000px)',

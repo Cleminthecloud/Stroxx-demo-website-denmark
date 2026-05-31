@@ -34,7 +34,13 @@ The site should feel like **one continuous surface**, not a stack of sections. M
 
 ## Glass cards — hover
 
-`.glass-card` (any glass surface): on hover, an animated blue gradient stroke runs around the rim (shared `@property --a` + `glass-spin`) and the card lifts on a soft blue glow. Pure CSS — no per-card listeners, so the 358-card finder stays light. Applied to product cards and the product-page USP cards.
+`.glass-card` (any glass surface): on hover a concentrated bright STROXX-blue arc travels around the rim (shared `@property --a` + `glass-spin`, 4s) with a blurred copy tracking it for the bloom, and the card lifts on a soft blue box-shadow. Pure CSS — no per-card listeners.
+
+`GlassCardGlow` adds the cursor-aware layer on top: it tracks the pointer as `--gx/--gy` and drives (a) a soft blue light pooled inside the card, blurred so it reads as light diffused through frosted glass — it sits *behind* the knocked-out product so it glows around the cut-out; and (b) `.glass-glow__refract`, a bright specular masked to the rim nearest the cursor (`mix-blend: screen`) — the Apple-glass edge refraction. The only JS is setting two CSS vars on move (React delegates the handler, so 100s of cards stay cheap).
+
+## Trailing light — elastic
+
+Where a product/bag travels on scroll, the blue light is a **separate elastic body** that trails it. The image leads (responsive lerp ~0.17), the light springs toward it with a soft stiffness (~0.03) and low friction (damping ~0.91–0.92) plus a little gravity, so it lags, overshoots and wobbles back — reading as a light genuinely tracking the image rather than glued to it. Implemented in `ProductExperience.tsx` (pinned product) and `BagScroller.tsx` (homepage bag).
 
 ## Buttons — the hierarchy
 

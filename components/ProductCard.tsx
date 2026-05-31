@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import GlassButton from '@/components/GlassButton';
+import GlassCardGlow from '@/components/GlassCardGlow';
 import { Product, toolTexture, categoryBySlug, categoryBuyUrl } from '@/lib/data';
 
 // Carl Ras splash colours — match the real badges on carl-ras.dk
@@ -19,7 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const buyUrl = cat ? categoryBuyUrl(cat.path) : '#';
   return (
     <div className="relative group">
-      <div className="glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
+      <GlassCardGlow className="relative glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
         {product.badges.length > 0 && (
           <div className="absolute top-3 left-3 z-20 flex gap-1.5">
             {product.badges.slice(0, 2).map((b) => (
@@ -50,11 +51,11 @@ export default function ProductCard({ product }: { product: Product }) {
             <span className="text-[10px] text-fog ml-1.5">DKK / {product.unit}</span>
           </div>
           <div className="flex gap-2">
-            <GlassButton href={buyUrl} external size="sm" className="flex-1">Køb hos Carl Ras</GlassButton>
+            <GlassButton href={buyUrl} external size="sm" className="flex-1">Køb</GlassButton>
             <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Udforsk</GlassButton>
           </div>
         </div>
-      </div>
+      </GlassCardGlow>
     </div>
   );
 }
