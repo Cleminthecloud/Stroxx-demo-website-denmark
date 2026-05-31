@@ -12,10 +12,13 @@ export const CR_BRAND = 'https://www.carl-ras.dk/maerker/stroxx';
 export const crImage = (id: number | string) =>
   `https://images.carl-ras.dk/digizuitecore/LegacyService/api/assetstream/${id}/50384`;
 
-/** Our same-origin proxy (canvas-readable). Format: '50384' = 800px (default,
- *  cards), '50383' = 1600px (product hero). */
+/** Our same-origin proxy (canvas-readable). The proxy serves the transparent
+ *  PNG cut-out (Digizuite rendition 50391), falling back to JPG. IMG_V is a
+ *  cache-buster: bump it whenever the proxy's rendition logic changes so the
+ *  CDN edge (s-maxage) serves fresh images instead of stale cached ones. */
+const IMG_V = '3';
 export const toolTexture = (id: number | string, f?: '50383' | '50384' | '50388') =>
-  `/api/tool/${id}${f ? `?f=${f}` : ''}`;
+  `/api/tool/${id}?v=${IMG_V}${f ? `&f=${f}` : ''}`;
 
 /** Deep-link to the Carl-Ras category listing, UTM preserved. */
 export const categoryBuyUrl = (path: string) => `${CR_BRAND}/${path}/?${UTM}`;
