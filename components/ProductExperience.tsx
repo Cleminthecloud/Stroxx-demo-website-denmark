@@ -138,13 +138,13 @@ export default function ProductExperience({
 
   const Specs = (
     <Reveal from="left">
-      <div className="border border-line rounded-sm overflow-hidden">
+      <div className="glass-panel rounded-xl overflow-hidden">
         {product.specs.length > 0 ? product.specs.map((s, i) => (
-          <div key={s.label + i} className={`flex justify-between gap-6 px-5 py-3.5 text-sm ${i % 2 ? 'bg-carbon' : 'bg-ink'}`}>
+          <div key={s.label + i} className={`flex justify-between gap-6 px-5 py-3.5 text-sm ${i % 2 ? 'bg-white/[0.045]' : 'bg-transparent'}`}>
             <span className="text-fog">{s.label}</span><span className="text-white font-medium text-right">{s.value}</span>
           </div>
-        )) : <div className="px-5 py-4 text-fog text-sm bg-carbon">Specifikationer følger.</div>}
-        <div className="flex justify-between gap-6 px-5 py-3.5 text-sm bg-ink border-t border-line">
+        )) : <div className="px-5 py-4 text-fog text-sm">Specifikationer følger.</div>}
+        <div className="flex justify-between gap-6 px-5 py-3.5 text-sm bg-white/[0.02] border-t border-white/10">
           <span className="text-fog">Varenummer</span><span className="text-white font-medium">{product.code}</span>
         </div>
       </div>
