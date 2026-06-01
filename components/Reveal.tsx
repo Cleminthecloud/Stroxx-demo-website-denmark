@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type From = 'up' | 'down' | 'left' | 'right' | 'far-left' | 'far-right';
 
@@ -21,14 +21,25 @@ export default function Reveal({
   as?: any;
 }) {
   const ref = useRef<HTMLElement>(null);
+  const [shown, setShown] = useState(false);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || shown) return;
+    // Above-the-fold safety: if the element is already in view on mount, reveal
+    // it straight away instead of waiting on the observer's first callback —
+    // otherwise a hero slide (e.g. the product title/price/CTA) can stay hidden
+    // until the user scrolls.
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.92 && r.bottom > 0) {
+      const t = setTimeout(() => setShown(true), delay);
+      return () => clearTimeout(t);
+    }
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
-            setTimeout(() => el.classList.add('is-in'), delay);
+            setTimeout(() => setShown(true), delay);
             io.unobserve(el);
           }
         });
@@ -37,10 +48,10 @@ export default function Reveal({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [delay]);
+  }, [delay, shown]);
   const dir = from === 'up' ? '' : `reveal--${from}`;
   return (
-    <Tag ref={ref as any} className={`reveal ${dir} ${className}`}>
+    <Tag ref={ref as any} className={`reveal ${dir} ${className} ${shown ? 'is-in' : ''}`}>
       {children}
     </Tag>
   );
