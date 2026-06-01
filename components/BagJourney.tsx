@@ -67,15 +67,19 @@ export default function BagJourney() {
     addEventListener('resize', sizeDust);
 
     const bagBaseH = () => Math.min(0.70 * innerHeight, 980);
+    // The bag PNG is padded: the visible tote bottom sits at 0.767 of the image
+    // height (measured from alpha bounds), so the impact dust must spawn at that
+    // base — not at the box bottom — or it kicks up in the empty padding below.
+    const TOTE_BASE = 0.767;
     const spawnPuff = () => {
       const c = cur.current;
       const bagH = bagBaseH() * c.s, bagW = bagH * BAG_AR;
       const cx = innerWidth / 2 + (c.x / 100) * innerWidth;
-      const baseY = innerHeight / 2 + (c.y / 100) * innerHeight + bagH * 0.42;
+      const baseY = innerHeight / 2 + (c.y / 100) * innerHeight + bagH * (TOTE_BASE - 0.5);
       for (let i = 0; i < 54; i++) {
         const sp = 2 + Math.random() * 6;
         const dir = Math.random() < 0.5 ? -1 : 1;
-        parts.push({ x: cx + (Math.random() - 0.5) * bagW * 0.8, y: baseY + (Math.random() - 0.5) * 16,
+        parts.push({ x: cx + (Math.random() - 0.5) * bagW * 0.7, y: baseY + (Math.random() - 0.5) * 16,
           vx: dir * sp * (0.4 + Math.random()), vy: -Math.random() * 3 - 0.5, life: 1, max: 55 + Math.random() * 55, r: 16 + Math.random() * 46 });
       }
     };
