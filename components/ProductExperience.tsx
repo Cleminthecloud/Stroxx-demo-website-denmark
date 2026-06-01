@@ -177,10 +177,7 @@ export default function ProductExperience({
       <div className="grid gap-5">
         {usps.map((u, i) => (
           <Reveal key={u.title} delay={i * 90} from="left">
-            <div
-              className="glass-card rounded-2xl p-6 flex gap-4 items-start border border-white/10 backdrop-blur-xl bg-gradient-to-b from-white/[0.08] to-white/[0.02]"
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), inset 0 0 22px rgba(255,255,255,0.03)' }}
-            >
+            <div className="glass-card glass-panel rounded-2xl p-6 flex gap-4 items-start">
               <u.icon size={24} strokeWidth={1.6} className="text-stroxx-blue shrink-0 mt-0.5" />
               <div><div className="text-white text-lg font-medium mb-1.5">{u.title}</div><p className="text-fog text-sm leading-relaxed">{u.body}</p></div>
             </div>
