@@ -13,7 +13,7 @@ const SLIDES = [
   { src: '/Images/campaign/tea.jpg', sm: '/Images/campaign/tea-sm.jpg', pos: '68% 50%', alt: 'Håndværker i smækbukser drikker af fint porcelæn' },
   { src: '/Images/campaign/glasses.jpg', sm: '/Images/campaign/glasses-sm.jpg', pos: '72% 50%', alt: 'Smilende håndværker med bling-solbriller og vinkelsliber' },
 ];
-const DWELL = 5200; // ms per slide
+const DWELL = 3400; // ms per slide
 
 export default function CampaignBand() {
   const [i, setI] = useState(0);
@@ -60,8 +60,8 @@ export default function CampaignBand() {
                 // gentle drift — keeps the head in shot while still feeling alive.
                 transform: reduce ? 'none' : `scale(${active ? 1.06 : 1.0})`,
                 transition: reduce
-                  ? 'opacity 1.2s ease'
-                  : 'opacity 1.5s ease, transform 6.8s ease-out',
+                  ? 'opacity 0.9s ease'
+                  : 'opacity 0.9s ease, transform 4.6s ease-out',
                 willChange: 'opacity, transform',
               }}
             />
