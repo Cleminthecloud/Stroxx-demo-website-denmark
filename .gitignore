@@ -14,3 +14,7 @@ next-env.d.ts
 
 # scratch
 _checkslug.ts
+
+# heavy campaign source originals (~8MB each) — the site ships the optimised
+# copies in /public/Images/campaign/. Keep these locally, don't deploy them.
+/public/Images/Campaign images/

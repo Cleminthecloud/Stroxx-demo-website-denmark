@@ -11,6 +11,7 @@ import CategoryList from '@/components/CategoryList';
 import ParticleImage from '@/components/ParticleImage';
 import ProvDet from '@/components/ProvDet';
 import GuaranteeModal from '@/components/GuaranteeModal';
+import CampaignBand from '@/components/CampaignBand';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   specialists,
@@ -192,6 +193,9 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      {/* CAMPAIGN — print campaign as a cinematic image series */}
+      <CampaignBand />
 
       {/* CATEGORIES */}
       <section id="kategorier" className="relative z-40">
