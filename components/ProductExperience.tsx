@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import Reveal from '@/components/Reveal';
@@ -47,8 +47,10 @@ export default function ProductExperience({
 }) {
   const prodRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const tagRef = useRef<HTMLAnchorElement>(null);
   const cur = useRef({ x: -24, y: -2, s: 1.0, r: -4, o: 1 });
   const glow = useRef({ x: -24, y: -2, s: 1.15, o: 1, vx: 0, vy: 0 });
+  const [pastHero, setPastHero] = useState(false); // drives the mobile sticky buy-bar
 
   useEffect(() => {
     const pe = prodRef.current, ge = glowRef.current;
@@ -70,6 +72,18 @@ export default function ProductExperience({
       c.r = lerp(c.r, t.r, 0.15); c.o = lerp(c.o, t.o, 0.2);
       pe.style.transform = `translate(-50%,-50%) translate(${c.x}vw, ${c.y}vh) scale(${c.s}) rotate(${c.r}deg)`;
       pe.style.opacity = String(c.o);
+      // buy tag — rides the product's x/y (no scale/rotate, so it stays upright &
+      // legible), sitting just under its base. Fades in once the hero has left so
+      // it doesn't duplicate the hero CTA, and fades out with the product.
+      const te = tagRef.current;
+      if (te) {
+        // lower-right corner of the product (offsets scale with it), so it clears
+        // the product's face instead of covering it
+        te.style.transform = `translate(-50%,-50%) translate(${c.x + c.s * 13}vw, ${c.y + c.s * 25}vh)`;
+        const o = Math.min(1, Math.max(0, (p - 0.07) / 0.1)) * c.o;
+        te.style.opacity = String(o);
+        te.style.pointerEvents = o > 0.6 ? 'auto' : 'none';
+      }
       // blue light — an elastic body that TRAILS the product. Softer spring +
       // low friction make it lag behind, overshoot, then wobble back into place,
       // like a light genuinely tracking the image. Gravity gives it a little sag.
@@ -87,6 +101,17 @@ export default function ProductExperience({
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
+  }, []);
+
+  // mobile: reveal the sticky buy-bar once the user scrolls past the hero
+  useEffect(() => {
+    const onScroll = () => {
+      const v = window.scrollY > window.innerHeight * 0.55;
+      setPastHero((prev) => (prev === v ? prev : v));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const Figure = (size: string, withGlow = true) => (
@@ -217,6 +242,25 @@ export default function ProductExperience({
         </div>
       </div>
 
+      {/* buy tag riding the product (desktop) — own layer ABOVE the content so the
+          pill is clickable (layer is pointer-events-none; only the pill is auto,
+          so it never blocks scroll or text selection elsewhere) */}
+      <div className="fixed inset-0 z-[50] pointer-events-none hidden lg:block">
+        <a ref={tagRef} href={buyUrl} target="_blank" rel="noopener noreferrer"
+          className="group absolute left-1/2 top-1/2 flex items-center gap-3.5 rounded-2xl pl-4 pr-2.5 py-2.5 backdrop-blur-xl border border-white/[0.12]"
+          style={{ opacity: 0, transform: 'translate(-50%,-50%)', willChange: 'transform, opacity',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 14px 34px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.16)' }}>
+          <span className="text-left leading-tight">
+            <span className="block text-white text-[13px] font-medium truncate max-w-[190px]">{product.name}</span>
+            <span className="block h-display text-white text-lg leading-none tabular-nums mt-0.5">{product.price}<span className="text-fog text-xs ml-1">kr</span></span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-stroxx-blue px-3.5 py-2.5 text-xs font-semibold text-white transition-colors group-hover:bg-[#006aa8]">
+            Køb <ArrowRight size={14} strokeWidth={2} />
+          </span>
+        </a>
+      </div>
+
       {/* mobile inline hero */}
       <div className="lg:hidden px-5 pt-28 pb-2">{Figure('h-[50vh] min-h-[300px]')}</div>
 
@@ -232,6 +276,24 @@ export default function ProductExperience({
       </div>
 
       {Related}
+
+      {/* mobile sticky buy-bar — the product is inline (doesn't travel) on mobile,
+          so the riding tag becomes a slim pinned bar that slides up after the hero */}
+      <div
+        className={`lg:hidden fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 pt-2 transition-transform duration-300 ease-out ${pastHero ? 'translate-y-0' : 'translate-y-[140%]'}`}
+        style={{ pointerEvents: pastHero ? 'auto' : 'none' }}
+      >
+        <div className="glass-panel rounded-2xl flex items-center gap-3 px-4 py-3">
+          <span className="min-w-0 flex-1 leading-tight">
+            <span className="block text-white text-sm font-medium truncate">{product.name}</span>
+            <span className="block h-display text-white text-lg leading-none tabular-nums mt-0.5">{product.price}<span className="text-fog text-xs ml-1">kr</span></span>
+          </span>
+          <a href={buyUrl} target="_blank" rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-stroxx-blue px-5 py-2.5 text-sm font-semibold text-white">
+            Køb <ArrowRight size={15} strokeWidth={2} />
+          </a>
+        </div>
+      </div>
     </main>
   );
 }
