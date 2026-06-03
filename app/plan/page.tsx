@@ -1,8 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, type MouseEvent as ReactMouseEvent } from 'react';
 import Link from 'next/link';
 import GlassButton from '@/components/GlassButton';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Download } from 'lucide-react';
 
 type PhaseId = 'kickoff' | 'build' | 'review' | 'release' | 'rollout';
 
@@ -51,7 +51,16 @@ const COLS = '180px repeat(13,minmax(0,1fr))';
 
 export default function PlanPage() {
   const [active, setActive] = useState<PhaseId | null>(null);
-  const [detail, setDetail] = useState<string>('Hover a bar for detail · tap a phase to highlight its timeline.');
+  const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(null);
+
+  const showTip = (e: ReactMouseEvent, text: string) => setTip({ text, x: e.clientX, y: e.clientY });
+  const hideTip = () => setTip(null);
+  // cursor-tracked glow for the glass cards (drives --gx/--gy)
+  const glowMove = (e: ReactMouseEvent<HTMLElement>) => {
+    const el = e.currentTarget; const r = el.getBoundingClientRect();
+    el.style.setProperty('--gx', `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty('--gy', `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
 
   const rowOn = (r: Row) => active === null || r.phase === active;
 
@@ -59,8 +68,8 @@ export default function PlanPage() {
     const dim = !rowOn(r);
     if (r.kind === 'ms' || r.kind === 'msBlue') {
       return (
-        <div style={{ gridColumn: `${r.s}/${r.e}` }} className="flex items-center justify-center"
-          onMouseEnter={() => setDetail(r.tip)}>
+        <div style={{ gridColumn: `${r.s}/${r.e}` }} className="flex items-center justify-center cursor-default"
+          onMouseMove={(e) => showTip(e, r.tip)} onMouseLeave={hideTip}>
           <span className="block h-3.5 w-3.5 rotate-45 rounded-[3px]" style={{
             background: r.kind === 'msBlue' ? '#2C93E0' : '#37B24D',
             boxShadow: `0 0 14px ${r.kind === 'msBlue' ? 'rgba(44,147,224,.55)' : 'rgba(55,178,77,.5)'}`,
@@ -70,7 +79,7 @@ export default function PlanPage() {
       );
     }
     return (
-      <div onMouseEnter={() => setDetail(r.tip)} title={r.tip}
+      <div onMouseMove={(e) => showTip(e, r.tip)} onMouseLeave={hideTip}
         className="flex items-center overflow-hidden rounded-full px-2.5 cursor-default"
         style={{
           gridColumn: `${r.s}/${r.e}`, background: BAR_BG[r.kind], height: 17,
@@ -83,7 +92,7 @@ export default function PlanPage() {
   };
 
   return (
-    <main className="bg-ink min-h-screen">
+    <main className="plan-main bg-ink min-h-screen">
       {/* hero */}
       <section className="mx-auto max-w-[1180px] px-6 md:px-10 pt-32 md:pt-40 pb-10">
         <div className="eyebrow mb-5">Projektplan</div>
@@ -95,8 +104,12 @@ export default function PlanPage() {
           one clean review pass, then live in Denmark for Carl Ras — followed by a repeatable,
           questionnaire-driven rollout to Germany, France and Belgium off the same foundation.
         </p>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="no-print flex flex-wrap items-center gap-3">
           <GlassButton href="/">Explore the live site <ArrowRight size={16} /></GlassButton>
+          <button type="button" onClick={() => window.print()}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-white rounded-full px-5 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] transition-colors">
+            Download PDF <Download size={15} />
+          </button>
           <a href="#timeline" className="link-arrow text-sm">See the timeline <ArrowRight size={15} /></a>
         </div>
       </section>
@@ -104,22 +117,26 @@ export default function PlanPage() {
       {/* process */}
       <section className="mx-auto max-w-[1180px] px-6 md:px-10 py-8">
         <h2 className="text-[13px] tracking-[0.16em] uppercase text-fog font-semibold mb-2">The process at a glance</h2>
-        <p className="text-fog/60 text-xs mb-6">Tap a phase to highlight it on the timeline below.</p>
+        <p className="no-print text-fog/60 text-xs mb-6">Tap a phase to highlight it on the timeline below.</p>
         <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-5">
           {PHASES.map((p) => {
             const on = active === p.id;
             return (
-              <button key={p.id} type="button" onClick={() => setActive(on ? null : p.id)}
-                className="text-left rounded-xl border p-4 transition-all duration-300"
+              <button key={p.id} type="button" onClick={() => setActive(on ? null : p.id)} onMouseMove={glowMove}
+                className="glass-card group relative overflow-hidden text-left rounded-xl border p-4 transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.035]"
                 style={{
                   background: on ? 'rgba(0,130,202,0.10)' : '#14161A',
                   borderColor: on ? 'rgba(44,147,224,0.55)' : '#2A2D33',
                   boxShadow: on ? '0 0 26px rgba(0,130,202,0.18)' : 'none',
                 }}>
-                <div className="text-[11px] tracking-[0.14em] font-semibold mb-2"
-                  style={{ color: p.id === 'rollout' ? '#9aa6b5' : '#2C93E0' }}>{p.n} · {p.when.toUpperCase()}</div>
-                <div className="text-white text-[15px] font-medium mb-1.5">{p.title}</div>
-                <p className="text-fog text-xs leading-relaxed">{p.desc}</p>
+                <span className="glass-glow__light" aria-hidden />
+                <span className="glass-glow__refract" aria-hidden />
+                <span className="relative z-10 block">
+                  <span className="block text-[11px] tracking-[0.14em] font-semibold mb-2"
+                    style={{ color: p.id === 'rollout' ? '#9aa6b5' : '#2C93E0' }}>{p.n} · {p.when.toUpperCase()}</span>
+                  <span className="block text-white text-[15px] font-medium mb-1.5">{p.title}</span>
+                  <span className="block text-fog text-xs leading-relaxed">{p.desc}</span>
+                </span>
               </button>
             );
           })}
@@ -164,8 +181,7 @@ export default function PlanPage() {
           </div>
         </div>
 
-        {/* live detail line */}
-        <div className="mt-3 text-[12.5px] text-fog leading-relaxed min-h-[20px]">{detail}</div>
+        <p className="no-print mt-3 text-xs text-fog/50">Hover the timeline bars for detail.</p>
 
         {/* legend */}
         <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[11.5px] text-fog">
@@ -187,7 +203,7 @@ export default function PlanPage() {
       </section>
 
       {/* CTA into the site */}
-      <section className="mx-auto max-w-[1180px] px-6 md:px-10 py-16">
+      <section className="no-print mx-auto max-w-[1180px] px-6 md:px-10 py-16">
         <div className="rounded-2xl border border-line p-8 md:p-12 text-center relative overflow-hidden"
           style={{ background: 'radial-gradient(120% 140% at 50% 0%, rgba(0,130,202,0.14), transparent 60%), #14161A' }}>
           <div className="eyebrow mb-4">Det levende site</div>
@@ -198,6 +214,19 @@ export default function PlanPage() {
           </div>
         </div>
       </section>
+
+      {/* cursor-following tooltip for the timeline */}
+      {tip && (
+        <div className="no-print pointer-events-none fixed z-[80] max-w-[260px] rounded-xl border border-white/[0.12] px-3.5 py-2.5 text-[12px] leading-snug text-fog backdrop-blur-md"
+          style={{
+            left: Math.min(tip.x + 16, (typeof window !== 'undefined' ? window.innerWidth : 1280) - 280),
+            top: tip.y + 16,
+            background: 'rgba(14,16,19,0.94)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 14px 34px rgba(0,0,0,0.55), 0 0 24px rgba(0,130,202,0.16)',
+          }}>
+          {tip.text}
+        </div>
+      )}
     </main>
   );
 }

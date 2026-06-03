@@ -134,6 +134,15 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 1023px) {
   .glass-panel { background: rgba(11, 13, 16, 0.92); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+
+/* Print → PDF (the /plan page's Download button). Keep the dark theme, drop the
+   site chrome and interactive-only bits, and go landscape so the Gantt fits. */
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  html, body { background: #0B0C0E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  header, footer, .no-print { display: none !important; }
+  .plan-main > section:first-child { padding-top: 1.5rem !important; }
+}
 @keyframes blueDrift {
   0%   { transform: translate(-25%, 8%) scale(1);   opacity: 0.55; }
   50%  { transform: translate(25%, -8%) scale(1.25); opacity: 0.9; }
