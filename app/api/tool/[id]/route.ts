@@ -89,7 +89,27 @@ function knockoutRaw(d: Uint8Array, W: number, H: number): boolean {
 
   let removedCount = 0;
   for (let p = 0; p < N; p++) if (removed[p]) removedCount++;
-  if (removedCount < N * 0.03 || removedCount > N * 0.97) return false; // degenerate → leave intact
+  if (removedCount < N * 0.03 || removedCount > N * 0.97) {
+    // Degenerate flood — either a tiny product in a huge white field (fill
+    // removed "too much") or a pale product the fill bridged into. Fall back to
+    // a CONSERVATIVE distance-only clear: only pixels close to the backdrop
+    // colour go transparent, so a pale product keeps its body and a tiny
+    // product still loses its white field.
+    const FAR = NEAR + 40;
+    let cleared = 0;
+    for (let p = 0; p < N; p++) {
+      const i = p * 4;
+      const dd = dist(i);
+      if (dd >= FAR) continue;
+      const f = Math.min(1, Math.max(0, (FAR - dd) / 46)); // 1 = looks like backdrop
+      d[i] = Math.max(0, Math.min(255, (d[i] - bg[0] * f) / (1 - f * 0.85)));
+      d[i + 1] = Math.max(0, Math.min(255, (d[i + 1] - bg[1] * f) / (1 - f * 0.85)));
+      d[i + 2] = Math.max(0, Math.min(255, (d[i + 2] - bg[2] * f) / (1 - f * 0.85)));
+      d[i + 3] = Math.round(d[i + 3] * (1 - f));
+      if (d[i + 3] < 12) cleared++;
+    }
+    return cleared >= N * 0.02; // nothing meaningful cleared → leave intact
+  }
 
   // apply + soften the rim so the silhouette has no bright fringe
   for (let p = 0; p < N; p++) {
