@@ -208,8 +208,10 @@ export default function BagJourney() {
         <img src={FRONT_PANEL} alt="" className="absolute select-none"
           style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
-        {/* price tag — rides along on the bag */}
-        <div className="absolute" style={{ right: '-6%', bottom: '20%', zIndex: 50 }}>
+        {/* price tag — rides along on the bag. On small screens the bag spans the
+            whole viewport, so the tag tucks INSIDE the bag instead of hanging off
+            its right edge (where it ends up half off-screen). */}
+        <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
           <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
             style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)' }}>

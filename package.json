@@ -18,7 +18,8 @@
     "@react-three/rapier": "1.4.0",
     "lenis": "1.1.9",
     "gsap": "3.12.5",
-    "lucide-react": "0.460.0"
+    "lucide-react": "0.460.0",
+    "sharp": "0.33.4"
   },
   "devDependencies": {
     "typescript": "5.5.4",
