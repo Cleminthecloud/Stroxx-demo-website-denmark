@@ -7,7 +7,7 @@ import ParticleImage from '@/components/ParticleImage';
 import CursorGlow from '@/components/CursorGlow';
 import GlassButton from '@/components/GlassButton';
 import { ArrowRight } from 'lucide-react';
-import { products, categories, categoryBySlug, categoryBuyUrl, toolTexture, particleImgId } from '@/lib/data';
+import { products, categories, categoryBySlug, categoryBuyUrl, particleSrc } from '@/lib/data';
 
 const parsePrice = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
 
@@ -69,7 +69,7 @@ export default function ProductExplorer() {
             </div>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
-            <ParticleImage key={activeCat.slug} src={toolTexture(particleImgId(activeCat.slug, catHero.imgId))} className="h-full w-full" />
+            <ParticleImage key={activeCat.slug} src={particleSrc(activeCat.slug, catHero.imgId)} className="h-full w-full" />
           </Reveal>
         </div>
       ) : (

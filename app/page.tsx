@@ -16,7 +16,7 @@ import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   specialists,
   featuredCategories,
-  toolTexture,
+  particleSrc,
   categoryBuyUrl,
   brandImages,
   UTM,
@@ -212,7 +212,7 @@ export default function Home() {
             {/* floating hero product — particle reveal */}
             <Reveal from={idx % 2 ? 'far-right' : 'far-left'} className={idx % 2 ? 'lg:order-2' : ''}>
               <div className="relative aspect-[5/4]">
-                <ParticleImage src={toolTexture(f.particleImgId)} className="h-full w-full" />
+                <ParticleImage src={particleSrc(f.cat.slug, f.particleImgId)} className="h-full w-full" />
                 <div className="absolute top-2 left-2 text-fog/50 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} — {f.cat.name}</div>
               </div>
             </Reveal>

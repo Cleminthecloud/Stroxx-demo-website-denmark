@@ -39,7 +39,9 @@ export default function CampaignBand() {
     >
       {/* carry the photos' real 16:9 ratio so the full frame shows (no head-crop);
           min-height keeps it substantial on short/!mobile, where it covers-crops */}
-      <div className="relative w-full aspect-[16/9] min-h-[72vh] max-h-[112vh]">
+      {/* phones: a full-screen poster (image covers, copy bottom-left on the
+          scrim); desktop: the photos' real 16:9 ratio so the full frame shows */}
+      <div className="relative w-full h-[92svh] lg:h-auto lg:aspect-[16/9] lg:min-h-[72vh] lg:max-h-[112vh]">
         {/* image series */}
         {SLIDES.map((s, idx) => {
           const active = idx === i;

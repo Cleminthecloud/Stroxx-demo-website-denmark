@@ -534,10 +534,22 @@ export const featuredCategorySlugs = ['lasere', 'rundsavklinger', 'knive', 'maal
  *  silhouette reads far better than a bundle/exploded shot. Falls back to the
  *  category's hero image when no override is set. */
 const PARTICLE_IMG: Record<string, number> = {
-  lasere: 159146,        // Krydslaser cube — one clean object
-  maalevaerktoej: 159146,
+  // 159146 (krydslaser) is a corrupt 18MB DAM export — never use it as a
+  // particle source. These two are verified clean transparent renditions.
+  lasere: 114346,         // Rotationslaser rød — one clean object
+  maalevaerktoej: 134353, // Torpedo vaterpas — one clean object
 };
 export const particleImgId = (slug: string, fallback: number) => PARTICLE_IMG[slug] ?? fallback;
+
+/** Some categories use a LOCAL pre-cut PNG (hand-exported from the DAM) as the
+ *  particle source instead of the proxy — e.g. the krydslaser, whose CDN
+ *  rendition is a corrupt 18MB export. */
+const PARTICLE_SRC: Record<string, string> = {
+  lasere: '/Images/bag-tools/159146.png',
+  maalevaerktoej: '/Images/bag-tools/159146.png',
+};
+export const particleSrc = (slug: string, imgId: number) =>
+  PARTICLE_SRC[slug] ?? toolTexture(particleImgId(slug, imgId));
 
 export const featuredCategories = featuredCategorySlugs
   .map((slug) => {
