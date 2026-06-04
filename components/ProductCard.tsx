@@ -18,8 +18,8 @@ const badgeStyle: Record<string, string> = {
 export default function ProductCard({ product }: { product: Product }) {
   const buyUrl = productBuyUrl(product.code);
   return (
-    <div className="relative group">
-      <GlassCardGlow className="relative glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
+    <div className="relative group h-full">
+      <GlassCardGlow className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
         {product.badges.length > 0 && (
           <div className="absolute top-3 left-3 z-20 flex gap-1.5">
             {product.badges.slice(0, 2).map((b) => (
@@ -40,16 +40,17 @@ export default function ProductCard({ product }: { product: Product }) {
           />
         </Link>
 
-        <div className="relative z-10 flex flex-col p-5">
+        <div className="relative z-10 flex flex-col flex-1 p-5">
           <div className="text-[11px] uppercase tracking-wider text-fog mb-1">STROXX</div>
-          <Link href={`/produkt/${product.slug}`} className="text-[15px] font-medium text-white leading-snug mb-4 line-clamp-2 hover:text-stroxx-blue transition-colors">
+          {/* min-h reserves two title lines so 1-line names don't shrink the card */}
+          <Link href={`/produkt/${product.slug}`} className="text-[15px] font-medium text-white leading-snug mb-4 line-clamp-2 min-h-[2.75em] hover:text-stroxx-blue transition-colors">
             {product.name}
           </Link>
           <div className="mb-4">
             <span className="h-display text-xl text-white">{product.price}</span>
             <span className="text-[10px] text-fog ml-1.5">DKK / {product.unit}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 mt-auto">
             <GlassButton href={buyUrl} external size="sm" className="flex-1">Køb</GlassButton>
             <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Udforsk</GlassButton>
           </div>
