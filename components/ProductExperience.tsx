@@ -234,7 +234,7 @@ export default function ProductExperience({
   return (
     <main className="bg-ink">
       {/* fixed traveling product (desktop) — the light trails the product */}
-      <div className="fixed inset-0 z-[20] pointer-events-none hidden lg:block" aria-hidden>
+      <div className="fixed inset-0 z-[20] overflow-hidden pointer-events-none hidden lg:block" aria-hidden>
         <div ref={glowRef} className="absolute left-1/2 top-1/2 w-[60vw] h-[64vh] will-change-transform"
           style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)', background: 'radial-gradient(38% 38% at 50% 48%, rgba(0,130,202,0.34), transparent 66%)' }} />
         <div ref={prodRef} className="absolute left-1/2 top-1/2 w-[48vw] max-w-[820px] will-change-transform" style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)' }}>

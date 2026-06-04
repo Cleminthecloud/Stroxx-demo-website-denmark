@@ -58,6 +58,9 @@ export default function BagJourney() {
     // WHITE rectangles when they exceed GPU memory — so on small screens the
     // bag gets NO css filter at all (the pool div already provides a shadow).
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
+    // On phones the bag is smaller and anchored at the BASE of the viewport, so
+    // the content reads above it instead of colliding with it mid-screen.
+    const mobileY = noFilter ? 27 : 0; // vh shift down for the whole bag scene
     const t0 = performance.now();
     const ENTER = 850;
     const N = TOOLS.length;
@@ -69,7 +72,7 @@ export default function BagJourney() {
     sizeDust();
     addEventListener('resize', sizeDust);
 
-    const bagBaseH = () => Math.min(0.70 * innerHeight, 980);
+    const bagBaseH = () => (noFilter ? Math.min(0.34 * innerHeight, 400) : Math.min(0.70 * innerHeight, 980));
     // The bag PNG is padded: the visible tote bottom sits at 0.767 of the image
     // height (measured from alpha bounds), so the impact dust must spawn at that
     // base — not at the box bottom — or it kicks up in the empty padding below.
@@ -78,7 +81,7 @@ export default function BagJourney() {
       const c = cur.current;
       const bagH = bagBaseH() * c.s, bagW = bagH * BAG_AR;
       const cx = innerWidth / 2 + (c.x / 100) * innerWidth;
-      const baseY = innerHeight / 2 + (c.y / 100) * innerHeight + bagH * (TOTE_BASE - 0.5);
+      const baseY = innerHeight / 2 + ((c.y + mobileY) / 100) * innerHeight + bagH * (TOTE_BASE - 0.5);
       for (let i = 0; i < 54; i++) {
         const sp = 2 + Math.random() * 6;
         const dir = Math.random() < 0.5 ? -1 : 1;
@@ -116,7 +119,7 @@ export default function BagJourney() {
       const jolt = `translate(${shX.toFixed(2)}px, ${shY.toFixed(2)}px) `;
 
       if (group.current) {
-        group.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + entY}vh) scale(${c.s}) rotate(${c.r}deg)`;
+        group.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + entY + mobileY}vh) scale(${c.s}) rotate(${c.r}deg)`;
         group.current.style.opacity = String(c.o);
       }
       if (bag.current && !noFilter) {
@@ -148,13 +151,13 @@ export default function BagJourney() {
 
       if (pool.current) {
         const ps = c.s;
-        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 16}vh) scale(${ps}, ${ps * 0.5})`;
+        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 16 + mobileY}vh) scale(${ps}, ${ps * 0.5})`;
         pool.current.style.opacity = String(0.5 * c.o);
       }
       gl.vx += (c.x - gl.x) * 0.03; gl.vy += (c.y - gl.y) * 0.03 + 0.012;
       gl.vx *= 0.92; gl.vy *= 0.92; gl.x += gl.vx; gl.y += gl.vy;
       if (spill.current) {
-        spill.current.style.transform = `translate(-50%,-50%) translate(${gl.x}vw, ${gl.y}vh)`;
+        spill.current.style.transform = `translate(-50%,-50%) translate(${gl.x}vw, ${gl.y + mobileY}vh)`;
         spill.current.style.opacity = String(c.o);
       }
 
@@ -180,7 +183,7 @@ export default function BagJourney() {
   const total = TOOLS.slice(0, landed).reduce((s, t) => s + (bagTools.find((b) => b.id === t.id)?.price ?? 0), 0);
 
   return (
-    <div className="fixed inset-0 z-[45] pointer-events-none select-none" aria-hidden>
+    <div className="fixed inset-0 z-[45] overflow-hidden pointer-events-none select-none" aria-hidden>
       {/* elastic blue light that trails the bag */}
       <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
         width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
@@ -192,8 +195,8 @@ export default function BagJourney() {
         transform: 'translate(-50%,-50%)' }} />
 
       {/* the travelling + filling bag group */}
-      <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform"
-        style={{ height: 'min(70vh, 980px)', aspectRatio: String(BAG_AR), transform: 'translate(-50%,-50%)' }}>
+      <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform h-[min(34vh,400px)] lg:h-[min(70vh,980px)]"
+        style={{ aspectRatio: String(BAG_AR), transform: 'translate(-50%,-50%)' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img ref={bag} src={BAG_BACK} alt="" className="absolute inset-0 h-full w-full object-contain" />
 
