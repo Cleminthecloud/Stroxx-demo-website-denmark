@@ -11,11 +11,35 @@ import { products, CR_BRAND, UTM } from '@/lib/data';
 export const metadata: Metadata = {
   title: 'Få råd til andet end værktøj — STROXX',
   description:
-    'Dyrt værktøj til udyr pris. STROXX er professionel kvalitet uden mærke-tillægget, og med 100% tilfredsgaranti. Prøv det.',
+    'Du betaler for logoet, ikke for stålet. STROXX er professionel kvalitet uden mærke-tillæg, med 100% tilfredshedsgaranti. Prøv det i 30 dage.',
 };
+
+/* Landing structure follows the conversion narrative:
+   1 hero hook → 2 name the frustration → 3 the habit (why the brain picks the
+   expensive brand) → 4 the reframe (how it's possible) → 5 proof (products +
+   prices) → 6 what changes (payoff image) → 7 risk reversal + clear next step.
+   One full-bleed photo only; the rest carries the argument. */
 
 // the proof: four workhorses with real prices
 const PROOF_CODES = ['34011573', '34009021', '35011812', '35011846'];
+
+const STEPS = [
+  {
+    n: '01',
+    t: 'Find din butik',
+    d: '26 butikker i hele landet, eller køb online hos Carl Ras. Tag værktøjet i hånden først, hvis du vil.',
+  },
+  {
+    n: '02',
+    t: 'Brug det på rigtigt arbejde',
+    d: 'Ikke fem minutter i indkørslen. 30 dage på pladsen, hvor det gælder.',
+  },
+  {
+    n: '03',
+    t: 'Glad? Ellers pengene tilbage',
+    d: 'Er du ikke tilfreds, får du pengene igen. Ingen krav om fejl, din vurdering er nok.',
+  },
+];
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-6">{children}</div>;
@@ -27,7 +51,7 @@ export default function ProevDetPage() {
 
   return (
     <main className="bg-ink">
-      {/* ── HERO — the campaign poster ─────────────────────────────────── */}
+      {/* ── 1 · HERO — the hook ────────────────────────────────────────── */}
       <section className="relative h-[100svh] min-h-[560px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/Images/campaign/rings.jpg" srcSet="/Images/campaign/rings-sm.jpg 1280w, /Images/campaign/rings.jpg 2200w"
@@ -44,39 +68,67 @@ export default function ProevDetPage() {
           <div className="max-w-2xl">
             <Eyebrow>Kampagne · Prøv det</Eyebrow>
             <h1 className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-6">
-              Få råd til andet end værktøj
+              Dyrt værktøj.<br />Til udyr pris.
             </h1>
             <p className="text-fog text-base md:text-xl leading-relaxed mb-8 max-w-lg">
-              Dyrt værktøj til udyr pris. Det er hele pointen.
+              Professionelt værktøj uden logo-tillæg. Og ja, det lyder for godt
+              til at være sandt. Derfor får du 30 dage til at modbevise os.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
-              <a href="#hvorfor" className="link-arrow text-sm">Se hvorfor <ArrowDown size={15} /></a>
+              <a href="#fornemmelsen" className="link-arrow text-sm">Hvorfor så billigt? <ArrowDown size={15} /></a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── THE CLAIM ──────────────────────────────────────────────────── */}
-      <section id="hvorfor" className="relative scroll-mt-24">
+      {/* ── 2 · THE FRUSTRATION — name what they feel ──────────────────── */}
+      <section id="fornemmelsen" className="relative scroll-mt-24">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-40">
           <div className="max-w-4xl">
-            <Reveal><Eyebrow>Påstanden</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Kvalitet handler ikke om prisen. \n Den handler om arbejdet.'}
+            <Reveal><Eyebrow>Fornemmelsen</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Du betaler ikke for værktøjet. \n Du betaler for navnet.'}
               className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.96] mb-10" />
             <Reveal delay={120}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl">
-                Tolerancerne er stramme. Holdbarheden er ikke til forhandling.
-                STROXX er lavet til at præstere, ikke til at prale. Sort, solidt
-                og bygget til at falde i ét med arbejdet, så det er dit håndværk,
-                der står frem.
+                En ny maskine, et sæt bits, en kniv. Du lægger den på disken og
+                betaler en pris, du har lært at acceptere. Men et sted bagerst
+                i hovedet ved du det godt: en del af beløbet går ikke til
+                stålet i din hånd. Det går til reklamerne, sponsoraterne og
+                logoet på siden.
               </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ── HOW IT'S POSSIBLE ──────────────────────────────────────────── */}
+      {/* ── 3 · THE HABIT — why the brain picks the expensive brand ───── */}
+      <section className="relative">
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 30% 50%, rgba(0,130,202,0.07), transparent 70%)' }} />
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
+          <div className="max-w-4xl lg:ml-auto lg:text-right">
+            <Reveal><Eyebrow>Vanen</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Dyrt føles sikkert. \n Det er hele tricket.'}
+              className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-10" />
+            <Reveal delay={100}>
+              <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl lg:ml-auto mb-6">
+                Når du står med to stykker værktøj, vælger hjernen det dyre.
+                Ikke fordi du har testet det, men fordi prisen føles som en
+                garanti. Og fordi ingen bliver til grin for at købe det kendte
+                mærke.
+              </p>
+            </Reveal>
+            <Reveal delay={180}>
+              <p className="text-white text-lg md:text-xl leading-relaxed max-w-2xl lg:ml-auto">
+                Men pris måler ikke kvalitet. Tolerancer, materialer og
+                holdbarhed gør. Og de står ikke på prisskiltet.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4 · THE REFRAME — how it's possible ────────────────────────── */}
       <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 50%, rgba(0,130,202,0.10), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
@@ -115,47 +167,7 @@ export default function ProevDetPage() {
         </div>
       </section>
 
-      {/* ── CHAPTER: THE TEA ───────────────────────────────────────────── */}
-      <section className="relative h-[88svh] min-h-[520px] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/Images/campaign/tea.jpg" srcSet="/Images/campaign/tea-sm.jpg 1280w, /Images/campaign/tea.jpg 2200w"
-          sizes="100vw" alt="Håndværker drikker af fint porcelæn" draggable={false}
-          className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '66% 40%' }} />
-        <div className="pointer-events-none absolute inset-0" style={{
-          background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.2) 60%, #0B0C0E 100%)' }} />
-        <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-14">
-          <Reveal>
-            <h3 className="h-display text-white text-[clamp(1.9rem,4.5vw,3.6rem)] leading-[0.96] mb-3">
-              Råd til det fine porcelæn.
-            </h3>
-            <p className="text-fog text-base md:text-lg max-w-md">
-              Samme følelse som de dyre mærker. Bare uden prisen.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── CHAPTER: THE GLASSES ───────────────────────────────────────── */}
-      <section className="relative h-[88svh] min-h-[520px] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/Images/campaign/glasses.jpg" srcSet="/Images/campaign/glasses-sm.jpg 1280w, /Images/campaign/glasses.jpg 2200w"
-          sizes="100vw" alt="Smilende håndværker med solbriller med sten" draggable={false}
-          className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '70% 42%' }} />
-        <div className="pointer-events-none absolute inset-0" style={{
-          background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.2) 60%, #0B0C0E 100%)' }} />
-        <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end justify-start lg:justify-end pb-14">
-          <Reveal className="lg:text-right">
-            <h3 className="h-display text-white text-[clamp(1.9rem,4.5vw,3.6rem)] leading-[0.96] mb-3">
-              Råd til briller med sten på.
-            </h3>
-            <p className="text-fog text-base md:text-lg max-w-md">
-              Spar på værktøjet. Aldrig på arbejdet.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── THE PROOF — real products, real prices ─────────────────────── */}
+      {/* ── 5 · THE PROOF — real products, real prices ─────────────────── */}
       <section className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-3xl mb-12">
@@ -184,26 +196,65 @@ export default function ProevDetPage() {
         </div>
       </section>
 
-      {/* ── THE ASK — PRØV DET ─────────────────────────────────────────── */}
-      <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.13), transparent 70%)' }} />
-        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-44 text-center">
-          <Reveal><Eyebrow>Og hvis vi tager fejl?</Eyebrow></Reveal>
-          <ScrollText as="h2" text={'100% glad. Eller \n pengene tilbage.'}
-            className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-8" />
-          <Reveal delay={120}>
-            <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
-              Lyder det for godt til at være sandt? Det er præcis derfor, vi
-              siger: Prøv det. Er det ikke lige dig, eller er du ikke tilfreds,
-              så får du pengene igen. Simpelthen.
+      {/* ── 6 · WHAT CHANGES — the payoff ──────────────────────────────── */}
+      <section className="relative h-[88svh] min-h-[520px] overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/Images/campaign/tea.jpg" srcSet="/Images/campaign/tea-sm.jpg 1280w, /Images/campaign/tea.jpg 2200w"
+          sizes="100vw" alt="Håndværker drikker af fint porcelæn" draggable={false}
+          className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '66% 40%' }} />
+        <div className="pointer-events-none absolute inset-0" style={{
+          background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.25) 60%, #0B0C0E 100%)' }} />
+        <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-14">
+          <Reveal>
+            <div className="eyebrow mb-4">Det, der ændrer sig</div>
+            <h3 className="h-display text-white text-[clamp(1.9rem,4.5vw,3.6rem)] leading-[0.96] mb-3">
+              Råd til det fine porcelæn.
+            </h3>
+            <p className="text-fog text-base md:text-lg max-w-md">
+              Samme arbejde. Samme kvalitet. Men der er penge tilbage til
+              resten af livet.
             </p>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ── 7 · RISK REVERSAL + THE ASK ────────────────────────────────── */}
+      <section className="relative">
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,130,202,0.13), transparent 70%)' }} />
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-44">
+          <div className="text-center mb-14 md:mb-20">
+            <Reveal><Eyebrow>Og hvis vi tager fejl?</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'100% glad. Eller \n pengene tilbage.'}
+              className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-8" />
+            <Reveal delay={120}>
+              <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+                Lyder det stadig for godt til at være sandt? Det er præcis
+                derfor, vi siger: Prøv det. Sådan her gør du.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* the three steps */}
+          <div className="grid gap-5 md:grid-cols-3 max-w-5xl mx-auto mb-14 md:mb-16">
+            {STEPS.map((s, i) => (
+              <Reveal key={s.n} delay={i * 90}>
+                <div className="glass glass-card rounded-xl p-7 h-full">
+                  <div className="h-display text-stroxx-blue text-3xl mb-4">{s.n}</div>
+                  <div className="text-white font-medium mb-2">{s.t}</div>
+                  <p className="text-fog text-sm leading-relaxed">{s.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
           <Reveal delay={200}>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
-              <GlassButton href="/produkter" variant="ghost">Find dit værktøj</GlassButton>
+            <div className="text-center">
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+                <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
+                <GlassButton href="/butikker" variant="ghost">Find din butik</GlassButton>
+              </div>
+              <GuaranteeModal />
             </div>
-            <GuaranteeModal />
           </Reveal>
         </div>
       </section>

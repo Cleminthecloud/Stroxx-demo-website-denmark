@@ -9,26 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "9.108.3",
+    "@react-three/fiber": "8.16.8",
+    "@react-three/rapier": "1.4.0",
+    "@types/leaflet": "^1.9.21",
+    "gsap": "3.12.5",
+    "leaflet": "^1.9.4",
+    "lenis": "1.1.9",
+    "lucide-react": "0.460.0",
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "three": "0.160.1",
-    "@react-three/fiber": "8.16.8",
-    "@react-three/drei": "9.108.3",
-    "@react-three/rapier": "1.4.0",
-    "lenis": "1.1.9",
-    "gsap": "3.12.5",
-    "lucide-react": "0.460.0",
-    "sharp": "0.33.4"
+    "sharp": "0.33.4",
+    "three": "0.160.1"
   },
   "devDependencies": {
-    "typescript": "5.5.4",
     "@types/node": "20.14.12",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@types/three": "0.160.0",
-    "tailwindcss": "3.4.7",
+    "autoprefixer": "10.4.19",
     "postcss": "8.4.40",
-    "autoprefixer": "10.4.19"
+    "tailwindcss": "3.4.7",
+    "typescript": "5.5.4"
   }
 }

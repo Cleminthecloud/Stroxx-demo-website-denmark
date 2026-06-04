@@ -281,3 +281,51 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* rebuild 1780151979 */
+
+/* ── store finder (Leaflet) ─────────────────────────────────────────── */
+.sf-pin {
+  position: relative; width: 26px; height: 26px;
+  display: grid; place-items: center; cursor: pointer;
+}
+.sf-pin span {
+  width: 12px; height: 12px; border-radius: 9999px;
+  background: #0082CA;
+  box-shadow: 0 0 0 3px rgba(0,130,202,0.25), 0 0 14px rgba(0,130,202,0.65);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.sf-pin:hover span { transform: scale(1.25); }
+.sf-pin--active span {
+  background: #fff; transform: scale(1.3);
+  box-shadow: 0 0 0 4px rgba(0,130,202,0.85), 0 0 26px rgba(0,130,202,0.9);
+}
+.sf-pin--active::after {
+  content: ''; position: absolute; inset: -6px; border-radius: 9999px;
+  border: 1px solid rgba(0,130,202,0.5);
+  animation: sf-ping 1.6s ease-out infinite;
+}
+@keyframes sf-ping {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.sf-me {
+  width: 18px; height: 18px; border-radius: 9999px;
+  background: #fff; border: 3px solid #0082CA;
+  box-shadow: 0 0 16px rgba(0,130,202,0.8);
+}
+/* dark-theme the Leaflet chrome */
+.leaflet-container { background: #101216; font: inherit; }
+.leaflet-control-attribution {
+  background: rgba(11,13,16,0.7) !important; color: #5E646D !important;
+  font-size: 9px !important; backdrop-filter: blur(6px);
+}
+.leaflet-control-attribution a { color: #7d848e !important; }
+.leaflet-bar a {
+  background: rgba(16,18,22,0.92) !important; color: #cfd3d8 !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.leaflet-bar a:hover { background: rgba(30,34,40,0.95) !important; color: #fff !important; }
+/* slim scrollbar for the store list */
+.sf-scroll::-webkit-scrollbar { width: 6px; }
+.sf-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+.sf-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+.sf-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent; }

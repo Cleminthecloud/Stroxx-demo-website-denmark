@@ -35,7 +35,7 @@ export default function Footer() {
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Køb</div>
             <div className="space-y-3">
               <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Køb STROXX</a>
-              <a href={`https://www.carl-ras.dk/om-carl-ras/butikker/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Find butik</a>
+              <Link href="/butikker" className="block text-fog hover:text-white">Find butik</Link>
             </div>
           </div>
         </div>
