@@ -68,24 +68,30 @@ export default function CampaignBand() {
           );
         })}
 
-        {/* scrims: dark left for text, soft top/bottom to melt into the page */}
-        <div className="pointer-events-none absolute inset-0" style={{
+        {/* scrims: dark left for text (desktop), soft top/bottom to melt into the
+            page. On phones the text sits bottom-left, so the strong scrim is a
+            bottom gradient instead of a left one. */}
+        <div className="pointer-events-none absolute inset-0 hidden lg:block" style={{
           background:
             'linear-gradient(90deg, rgba(8,9,11,0.94) 0%, rgba(8,9,11,0.72) 30%, rgba(8,9,11,0.28) 58%, rgba(8,9,11,0) 80%)',
+        }} />
+        <div className="pointer-events-none absolute inset-0 lg:hidden" style={{
+          background:
+            'linear-gradient(180deg, rgba(8,9,11,0.3) 0%, rgba(8,9,11,0) 30%, rgba(8,9,11,0.45) 55%, rgba(8,9,11,0.96) 100%)',
         }} />
         <div className="pointer-events-none absolute inset-0" style={{
           background:
             'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 14%, rgba(11,12,14,0) 78%, #0B0C0E 100%)',
         }} />
 
-        {/* text */}
-        <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-center">
+        {/* text — bottom-left on phones, centered-left on desktop */}
+        <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-12 lg:items-center lg:pb-0">
           <div className="max-w-xl">
             <div className="eyebrow mb-5">Kampagne</div>
-            <h2 className="h-display text-white text-[clamp(2.3rem,5.6vw,4.8rem)] leading-[0.95] mb-7">
+            <h2 className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
               Få råd til andet<br className="hidden sm:block" /> end værktøj
             </h2>
-            <p className="text-fog text-base md:text-lg leading-relaxed mb-8 max-w-lg">
+            <p className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
               STROXX er fuldstændigt ligesom dit dyre værktøj og gode gear. Det koster bare
               ikke nær så meget. Og hvis du synes det lyder for godt til at være sandt, så
               siger vi bare:{' '}
@@ -101,7 +107,7 @@ export default function CampaignBand() {
             </div>
 
             {/* progress indicator */}
-            <div className="mt-10 flex gap-2.5" role="tablist" aria-label="Vælg kampagnebillede">
+            <div className="mt-7 md:mt-10 flex gap-2.5" role="tablist" aria-label="Vælg kampagnebillede">
               {SLIDES.map((s, idx) => (
                 <button
                   key={s.src}

@@ -58,7 +58,7 @@ export default function Home() {
           Dyrt værktøj
           <br />til <span className="text-stroxx-blue">udyr</span> pris
         </h1>
-        <div className="absolute inset-x-0 bottom-8 flex justify-center">
+        <div className="absolute inset-x-0 bottom-8 hidden lg:flex justify-center">
           <ScrollHint />
         </div>
       </section>
