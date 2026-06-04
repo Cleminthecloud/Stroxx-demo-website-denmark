@@ -329,3 +329,7 @@ html.lenis, html.lenis body { height: auto; }
 .sf-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
 .sf-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
 .sf-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent; }
+
+/* always-on variant of the travelling border (map, featured video) */
+.glass-card--on::after { opacity: 1; }
+.glass-card--on::before { opacity: 0.85; }

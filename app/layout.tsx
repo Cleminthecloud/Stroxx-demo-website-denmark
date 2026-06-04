@@ -3,6 +3,7 @@ import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import SpecialistFab from '@/components/SpecialistFab';
 
 export const metadata: Metadata = {
   title: 'STROXX — Dyrt værktøj til udyr pris',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Nav />
           {children}
           <Footer />
+          <SpecialistFab />
         </SmoothScroll>
       </body>
     </html>

@@ -3,6 +3,7 @@ import KnockoutImage from '@/components/KnockoutImage';
 import GlassButton from '@/components/GlassButton';
 import GlassCardGlow from '@/components/GlassCardGlow';
 import { Product, toolTexture, productBuyUrl } from '@/lib/data';
+import { getCompare } from '@/lib/compare';
 
 // Carl Ras splash colours — match the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
@@ -17,6 +18,7 @@ const badgeStyle: Record<string, string> = {
 
 export default function ProductCard({ product }: { product: Product }) {
   const buyUrl = productBuyUrl(product.code);
+  const cmp = getCompare(product.code);
   return (
     <div className="relative group h-full">
       <GlassCardGlow className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
@@ -46,10 +48,17 @@ export default function ProductCard({ product }: { product: Product }) {
           <Link href={`/produkt/${product.slug}`} className="text-[15px] font-medium text-white leading-snug mb-4 line-clamp-2 min-h-[2.75em] hover:text-stroxx-blue transition-colors">
             {product.name}
           </Link>
-          <div className="mb-4">
+          <div className={cmp ? 'mb-1.5' : 'mb-4'}>
             <span className="h-display text-xl text-white">{product.price}</span>
             <span className="text-[10px] text-fog ml-1.5">DKK / {product.unit}</span>
           </div>
+          {cmp && (
+            <div className="mb-4 text-[11px] text-fog leading-snug">
+              Tilsvarende A-mærke fra{' '}
+              <span className="line-through decoration-fog/50">{cmp.ref},-</span>{' '}
+              <span className="text-stroxx-blue font-semibold whitespace-nowrap">spar {cmp.savePct}%</span>
+            </div>
+          )}
           <div className="flex gap-2 mt-auto">
             <GlassButton href={buyUrl} external size="sm" className="flex-1">Køb</GlassButton>
             <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Udforsk</GlassButton>

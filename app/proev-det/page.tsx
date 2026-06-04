@@ -5,6 +5,7 @@ import ScrollText from '@/components/ScrollText';
 import GlassButton from '@/components/GlassButton';
 import ProductCard from '@/components/ProductCard';
 import GuaranteeModal from '@/components/GuaranteeModal';
+import VideoProof from '@/components/VideoProof';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
 
@@ -191,6 +192,29 @@ export default function ProevDetPage() {
               <Link href="/produkter" className="link-arrow">
                 Se alle produkterne <ArrowRight size={16} strokeWidth={2} />
               </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 5b · SEE IT IN ACTION — video proof ────────────────────────── */}
+      <section className="relative">
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,130,202,0.08), transparent 70%)' }} />
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
+          <div className="max-w-3xl mb-12">
+            <Reveal><Eyebrow>Se det i aktion</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Ord er billige. \n Se selv efter.'}
+              className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-6" />
+            <Reveal delay={100}>
+              <p className="text-fog text-lg leading-relaxed max-w-xl">
+                Værktøjet på arbejde, optaget af vores europæiske partnere.
+                Ingen studielys, ingen filtre.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal delay={140}>
+            <div className="max-w-5xl">
+              <VideoProof />
             </div>
           </Reveal>
         </div>

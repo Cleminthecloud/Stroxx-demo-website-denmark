@@ -288,14 +288,16 @@ export default function StoreFinder() {
         </div>
       </div>
 
-      {/* ── right: map ── */}
+      {/* ── right: map (travelling blue border always on) ── */}
       <div className="lg:sticky lg:top-24">
-        <div
-          ref={mapEl}
-          data-lenis-prevent
-          aria-label="Kort over butikker"
-          className="h-[46svh] lg:h-[calc(100svh-160px)] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#101216] shadow-[0_30px_80px_rgba(0,0,0,0.5)]"
-        />
+        <div className="glass-card glass-card--on rounded-2xl">
+          <div
+            ref={mapEl}
+            data-lenis-prevent
+            aria-label="Kort over butikker"
+            className="isolate h-[46svh] lg:h-[calc(100svh-160px)] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#101216] shadow-[0_30px_80px_rgba(0,0,0,0.5)]"
+          />
+        </div>
       </div>
     </div>
   );
