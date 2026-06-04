@@ -54,6 +54,10 @@ export default function BagJourney() {
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // iOS Safari rasterises large blur/drop-shadow-filtered layers as OPAQUE
+    // WHITE rectangles when they exceed GPU memory — so on small screens the
+    // bag gets NO css filter at all (the pool div already provides a shadow).
+    const noFilter = window.matchMedia('(max-width: 1023px)').matches;
     const t0 = performance.now();
     const ENTER = 850;
     const N = TOOLS.length;
@@ -115,7 +119,7 @@ export default function BagJourney() {
         group.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + entY}vh) scale(${c.s}) rotate(${c.r}deg)`;
         group.current.style.opacity = String(c.o);
       }
-      if (bag.current) {
+      if (bag.current && !noFilter) {
         const off = 18 + lift * 34, bl = 20 + lift * 34;
         const a1 = (0.55 - lift * 0.18).toFixed(2), a2 = (0.4 - lift * 0.14).toFixed(2);
         bag.current.style.filter =
@@ -182,10 +186,10 @@ export default function BagJourney() {
         width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
         background: 'radial-gradient(42% 42% at 50% 50%, rgba(0,130,202,0.28), transparent 70%)', transform: 'translate(-50%,-50%)' }} />
       {/* soft shadow pool under the bag */}
-      <div ref={pool} className="absolute left-1/2 top-1/2" style={{
+      <div ref={pool} className="absolute left-1/2 top-1/2 lg:blur-[20px]" style={{
         width: 'min(46vh, 680px)', height: 'min(46vh, 680px)',
         background: 'radial-gradient(ellipse 50% 36% at 50% 50%, rgba(120,170,210,0.16), rgba(120,170,210,0) 64%)',
-        filter: 'blur(20px)', transform: 'translate(-50%,-50%)' }} />
+        transform: 'translate(-50%,-50%)' }} />
 
       {/* the travelling + filling bag group */}
       <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform"
@@ -203,8 +207,7 @@ export default function BagJourney() {
                 needs no canvas work, so it renders identically on every device */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`/Images/bag-tools/${t.id}.png`} alt="" draggable={false}
-              className="h-full w-full object-contain select-none"
-              style={{ filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))' }} />
+              className="h-full w-full object-contain select-none lg:drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)]" />
           </div>
         ))}
 

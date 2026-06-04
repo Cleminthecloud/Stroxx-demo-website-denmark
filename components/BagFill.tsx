@@ -140,8 +140,7 @@ export default function BagFill() {
                 style={{ bottom: '-6%', width: '80%', height: '16%', opacity: 0, background: 'radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,0.55), transparent 70%)', filter: 'blur(7px)' }} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`/Images/bag-tools/${t.id}.png`} alt="" draggable={false}
-                className="h-full w-full object-contain select-none"
-                style={{ filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))' }} />
+                className="h-full w-full object-contain select-none lg:drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)]" />
             </div>
           ))}
 

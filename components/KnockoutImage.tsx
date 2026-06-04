@@ -171,8 +171,10 @@ export default function KnockoutImage({
       ref={canvas}
       role="img"
       aria-label={alt}
-      className={className}
-      style={{ objectFit: 'contain', filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))' }}
+      // drop-shadow only on desktop: iOS Safari rasterises large filtered
+      // layers as opaque white rectangles when GPU memory runs out.
+      className={`${className} lg:drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)]`}
+      style={{ objectFit: 'contain' }}
     />
   );
 }
