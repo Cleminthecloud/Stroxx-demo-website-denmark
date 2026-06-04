@@ -2,7 +2,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, Headset, MessageCircle } from 'lucide-react';
+import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react';
 import { stores, distanceKm, hoursLabel } from '@/lib/stores';
 import SpecialistChat from '@/components/SpecialistChat';
 
@@ -162,7 +162,7 @@ export default function SpecialistFab() {
           backdropFilter: 'blur(10px)',
         }}
       >
-        <Headset size={19} />
+        <MessageCircle size={19} />
         <span className="hidden md:inline text-sm font-medium tracking-wide">Snak med en specialist</span>
       </button>
     </div>
