@@ -25,6 +25,9 @@ export default function StoreFinder() {
   const [sikring, setSikring] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
+  // a postcode/place the user searched for that isn't a store city, geocoded
+  // via DAWA so the finder always has an answer ("nearest to 6100 Haderslev")
+  const [searchPos, setSearchPos] = useState<{ lat: number; lng: number; label: string } | null>(null);
   const [locating, setLocating] = useState(false);
   const [expanded, setExpanded] = useState(false); // mobile bottom sheet
   const [ready, setReady] = useState(false);
@@ -36,22 +39,49 @@ export default function StoreFinder() {
   const L = useRef<typeof import('leaflet') | null>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
+  const origin = searchPos ?? pos;
+
   const filtered = useMemo(() => {
     const nq = norm(q.trim());
-    let list = stores.filter((s) => {
+    const base = stores.filter((s) => {
       if (region !== 'Alle' && s.region !== region) return false;
       if (festool && !s.festool) return false;
       if (sikring && !s.sikring) return false;
-      if (!nq) return true;
-      return norm(`${s.name} ${s.address} ${s.zipCity}`).includes(nq);
+      return true;
     });
-    if (pos) {
+    const direct = nq
+      ? base.filter((s) => norm(`${s.name} ${s.address} ${s.zipCity}`).includes(nq))
+      : base;
+    // no text match, but the query resolved to a place → show all, nearest first
+    let list = direct.length === 0 && searchPos ? base : direct;
+    const o = searchPos ?? pos;
+    if (o) {
       list = [...list].sort(
-        (a, b) => distanceKm(pos.lat, pos.lng, a.lat, a.lng) - distanceKm(pos.lat, pos.lng, b.lat, b.lng)
+        (a, b) => distanceKm(o.lat, o.lng, a.lat, a.lng) - distanceKm(o.lat, o.lng, b.lat, b.lng)
       );
     }
     return list;
-  }, [q, region, festool, sikring, pos]);
+  }, [q, region, festool, sikring, pos, searchPos]);
+
+  /* ── geocode unmatched queries via DAWA (official DK postcode API, free) ── */
+  useEffect(() => {
+    const nq = q.trim();
+    if (!nq || nq.length < 3) { setSearchPos(null); return; }
+    const hasDirect = stores.some((s) => norm(`${s.name} ${s.address} ${s.zipCity}`).includes(norm(nq)));
+    if (hasDirect) { setSearchPos(null); return; }
+    const t = setTimeout(async () => {
+      try {
+        const r = await fetch(`https://api.dataforsyningen.dk/postnumre?q=${encodeURIComponent(nq)}&per_side=1`);
+        const j = await r.json();
+        const hit = Array.isArray(j) ? j[0] : null;
+        if (hit?.visueltcenter) {
+          const [lng, lat] = hit.visueltcenter as [number, number];
+          setSearchPos({ lat, lng, label: `${hit.nr} ${hit.navn}` });
+        } else setSearchPos(null);
+      } catch { setSearchPos(null); }
+    }, 350);
+    return () => clearTimeout(t);
+  }, [q]);
 
   /* ── map boot ── */
   useEffect(() => {
@@ -119,20 +149,19 @@ export default function StoreFinder() {
     });
   }, [filtered, selected, ready]);
 
-  /* ── user position marker ── */
+  /* ── origin markers: user position and/or searched place ── */
   useEffect(() => {
     const leaflet = L.current;
     if (!leaflet || !userMarker.current) return;
     userMarker.current.clearLayers();
-    if (!pos) return;
-    const icon = leaflet.divIcon({
-      className: '',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9],
-      html: '<div class="sf-me"></div>',
-    });
-    leaflet.marker([pos.lat, pos.lng], { icon, title: 'Din placering' }).addTo(userMarker.current);
-  }, [pos, ready]);
+    const mk = (lat: number, lng: number, title: string) =>
+      leaflet.marker([lat, lng], {
+        icon: leaflet.divIcon({ className: '', iconSize: [18, 18], iconAnchor: [9, 9], html: '<div class="sf-me"></div>' }),
+        title,
+      }).addTo(userMarker.current!);
+    if (pos) mk(pos.lat, pos.lng, 'Din placering');
+    if (searchPos) mk(searchPos.lat, searchPos.lng, searchPos.label);
+  }, [pos, searchPos, ready]);
 
   /** Fly to a store, offsetting the centre so it lands in the visible area
    *  next to the panel (desktop) or above the sheet (mobile). */
@@ -148,6 +177,12 @@ export default function StoreFinder() {
       : pt.add(leaflet.point(0, SHEET_H / 2));
     m.flyTo(m.unproject(centerPt, z), z, { duration: 0.9 });
   };
+
+  /* a searched place flies the map there so the answer is visible */
+  useEffect(() => {
+    if (searchPos) flyToStore(searchPos.lat, searchPos.lng, 9);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchPos]);
 
   const focusStore = (s: Store) => {
     setSelected(s.id);
@@ -242,8 +277,9 @@ export default function StoreFinder() {
           </div>
 
           <div className="text-[11px] text-fog">
-            {filtered.length} {filtered.length === 1 ? 'butik' : 'butikker'}
-            {region !== 'Alle' ? ` · ${region}` : ' i hele Danmark'}
+            {searchPos
+              ? <>Ingen butik i <span className="text-white">{searchPos.label}</span>, nærmeste vises først</>
+              : <>{filtered.length} {filtered.length === 1 ? 'butik' : 'butikker'}{region !== 'Alle' ? ` · ${region}` : ' i hele Danmark'}</>}
           </div>
         </div>
 
@@ -262,7 +298,7 @@ export default function StoreFinder() {
 
           {filtered.map((s) => {
             const active = s.id === selected;
-            const km = pos ? distanceKm(pos.lat, pos.lng, s.lat, s.lng) : null;
+            const km = origin ? distanceKm(origin.lat, origin.lng, s.lat, s.lng) : null;
             return (
               <div
                 key={s.id}

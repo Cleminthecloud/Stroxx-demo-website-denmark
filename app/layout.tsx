@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
@@ -14,6 +14,18 @@ export const metadata: Metadata = {
     description: 'Fedt værktøj til temmelig tynde priser. Kun hos Carl Ras.',
     type: 'website',
   },
+  icons: {
+    apple: '/icons/apple-touch-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'STROXX',
+    statusBarStyle: 'black-translucent',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0B0C0E',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
