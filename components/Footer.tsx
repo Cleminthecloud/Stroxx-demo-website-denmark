@@ -28,6 +28,8 @@ export default function Footer() {
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Sider</div>
             <div className="space-y-3">
               <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
+              <Link href="/butikker" className="block text-fog hover:text-white">Butikker</Link>
+              <Link href="/proev-det" className="block text-fog hover:text-white">Kampagne: Prøv det</Link>
               <a href="/#specialister" className="block text-fog hover:text-white">Specialister</a>
             </div>
           </div>
@@ -36,6 +38,7 @@ export default function Footer() {
             <div className="space-y-3">
               <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Køb STROXX</a>
               <Link href="/butikker" className="block text-fog hover:text-white">Find butik</Link>
+              <a href="/STROXX-tilfredshedsgaranti.pdf" target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Tilfredshedsgaranti (PDF)</a>
             </div>
           </div>
         </div>

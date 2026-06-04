@@ -333,3 +333,6 @@ html.lenis, html.lenis body { height: auto; }
 /* always-on variant of the travelling border (map, featured video) */
 .glass-card--on::after { opacity: 1; }
 .glass-card--on::before { opacity: 0.85; }
+
+/* app-like full-screen routes (store finder): the map is the page, no footer */
+body:has(main.fullscreen-map) footer { display: none; }

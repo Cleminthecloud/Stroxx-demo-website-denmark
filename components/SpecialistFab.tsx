@@ -2,8 +2,9 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, Mail, X, LocateFixed, ArrowRight, Headset } from 'lucide-react';
+import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, Headset, MessageCircle } from 'lucide-react';
 import { stores, distanceKm, hoursLabel } from '@/lib/stores';
+import SpecialistChat from '@/components/SpecialistChat';
 
 /** Phone-first "talk to a specialist" FAB. Pros ring, they rarely chat, and we
  *  have every butikschef's direct number from the CMS. Geolocation offers the
@@ -13,6 +14,7 @@ const SERVICE_TEL = '+4544855511';
 
 export default function SpecialistFab() {
   const [open, setOpen] = useState(false);
+  const [view, setView] = useState<'home' | 'chat'>('home');
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [denied, setDenied] = useState(false);
@@ -54,7 +56,9 @@ export default function SpecialistFab() {
         role="dialog" aria-label="Snak med en specialist" aria-hidden={!open}
         className={`fixed z-[89] right-5 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 p-6 transition-all duration-300 ${
           onProduct ? 'bottom-[10.5rem]' : 'bottom-[5.5rem]'
-        } lg:bottom-24 ${open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'}`}
+        } lg:bottom-24 ${view === 'chat' ? 'flex flex-col h-[min(72svh,580px)]' : ''} ${
+          open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'
+        }`}
         style={{
           background: 'rgba(13,15,19,0.97)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
@@ -65,12 +69,34 @@ export default function SpecialistFab() {
           <X size={14} />
         </button>
 
+        {view === 'chat' ? (
+          <>
+            <div className="flex items-center gap-2.5 mb-4 shrink-0 pr-10">
+              <button onClick={() => setView('home')} aria-label="Tilbage"
+                className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white transition-colors">
+                <ArrowLeft size={14} />
+              </button>
+              <div className="min-w-0">
+                <div className="text-white text-sm font-medium leading-tight">STROXX-assistenten</div>
+                <div className="text-[10px] text-fog uppercase tracking-wider">AI · demo</div>
+              </div>
+            </div>
+            <SpecialistChat nearest={nearest} />
+          </>
+        ) : (
+        <>
         <div className="eyebrow mb-3">Specialisterne</div>
         <h3 className="h-display text-white text-2xl leading-tight mb-2">Snak med en specialist.</h3>
         <p className="text-fog text-[13px] leading-relaxed mb-5">
           Vores butikschefer er håndværkets egne folk. Ring direkte, ingen
           telefonkø, ingen omstilling.
         </p>
+
+        <button onClick={() => setView('chat')}
+          className="glass-cta glass-cta--sm w-full justify-center text-white mb-3">
+          <MessageCircle size={13} /> Start chat
+          <span className="text-[9px] uppercase tracking-wider rounded-full border border-white/25 px-1.5 py-0.5 ml-1 text-white/80">AI · demo</span>
+        </button>
 
         {nearest ? (
           <div className="rounded-xl bg-white/[0.04] border border-white/10 p-4 mb-4">
@@ -120,6 +146,8 @@ export default function SpecialistFab() {
             Alle butikker <ArrowRight size={13} />
           </Link>
         </div>
+        </>
+        )}
       </div>
 
       {/* the FAB itself */}

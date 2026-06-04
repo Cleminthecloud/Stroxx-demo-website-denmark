@@ -5,14 +5,18 @@ import 'leaflet/dist/leaflet.css';
 import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X } from 'lucide-react';
 import { stores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores';
 
-/** Modern STROXX store finder: live-filterable list synced with a dark
- *  interactive map (Leaflet + Carto dark tiles). Data: Webflow CMS snapshot. */
+/** Full-screen, app-like store finder: the map fills the viewport and the
+ *  search/list floats over it as a dark glass panel (left card on desktop,
+ *  bottom sheet on mobile). Data: Webflow CMS snapshot in lib/stores. */
 
 const REGIONS: ('Alle' | StoreRegion)[] = ['Alle', 'Sjælland', 'Fyn', 'Jylland'];
-const DK_CENTER: [number, number] = [56.05, 10.6];
+const PANEL_W = 464; // desktop panel + margin, used to offset map focus
+const SHEET_H = 240; // collapsed mobile sheet height, used to offset map focus
 
 const norm = (s: string) =>
   s.toLowerCase().replace(/ø/g, 'o').replace(/å/g, 'a').replace(/æ/g, 'ae');
+
+const isLg = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
 export default function StoreFinder() {
   const [q, setQ] = useState('');
@@ -22,6 +26,7 @@ export default function StoreFinder() {
   const [selected, setSelected] = useState<string | null>(null);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
+  const [expanded, setExpanded] = useState(false); // mobile bottom sheet
   const [ready, setReady] = useState(false);
 
   const mapEl = useRef<HTMLDivElement>(null);
@@ -29,7 +34,6 @@ export default function StoreFinder() {
   const markers = useRef<LayerGroup | null>(null);
   const userMarker = useRef<LayerGroup | null>(null);
   const L = useRef<typeof import('leaflet') | null>(null);
-  const listEl = useRef<HTMLDivElement>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
   const filtered = useMemo(() => {
@@ -56,14 +60,16 @@ export default function StoreFinder() {
       const leaflet = await import('leaflet');
       if (dead || !mapEl.current || map.current) return;
       L.current = leaflet;
+      const lg = isLg();
       const m = leaflet.map(mapEl.current, {
-        center: DK_CENTER,
+        center: [56.05, 10.6],
         zoom: 7,
         zoomControl: false,
         attributionControl: true,
         scrollWheelZoom: true,
       });
-      leaflet.control.zoom({ position: 'bottomright' }).addTo(m);
+      if (lg) leaflet.control.zoom({ position: 'bottomright' }).addTo(m);
+      else m.attributionControl.setPosition('topright');
       leaflet
         .tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -71,10 +77,16 @@ export default function StoreFinder() {
           maxZoom: 19,
         })
         .addTo(m);
+      // frame all of Denmark next to the floating panel
+      const b = leaflet.latLngBounds(stores.map((s) => [s.lat, s.lng] as [number, number]));
+      m.fitBounds(b, {
+        paddingTopLeft: lg ? [PANEL_W + 30, 110] : [34, 100],
+        paddingBottomRight: lg ? [60, 60] : [34, SHEET_H + 30],
+      });
       markers.current = leaflet.layerGroup().addTo(m);
       userMarker.current = leaflet.layerGroup().addTo(m);
       map.current = m;
-      setReady(true); // triggers the first marker render
+      setReady(true);
     })();
     return () => {
       dead = true;
@@ -99,6 +111,7 @@ export default function StoreFinder() {
       const mk = leaflet.marker([s.lat, s.lng], { icon, title: s.name });
       mk.on('click', () => {
         setSelected(s.id);
+        if (!isLg()) setExpanded(true);
         const el = cardEls.current[s.id];
         el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
@@ -119,11 +132,27 @@ export default function StoreFinder() {
       html: '<div class="sf-me"></div>',
     });
     leaflet.marker([pos.lat, pos.lng], { icon, title: 'Din placering' }).addTo(userMarker.current);
-  }, [pos]);
+  }, [pos, ready]);
+
+  /** Fly to a store, offsetting the centre so it lands in the visible area
+   *  next to the panel (desktop) or above the sheet (mobile). */
+  const flyToStore = (lat: number, lng: number, z = 11) => {
+    const m = map.current;
+    const leaflet = L.current;
+    if (!m || !leaflet) return;
+    // shift the centre so the store lands in the visible area: right of the
+    // panel on desktop, above the collapsed sheet on mobile
+    const pt = m.project([lat, lng], z);
+    const centerPt = isLg()
+      ? pt.subtract(leaflet.point(PANEL_W / 2, 0))
+      : pt.add(leaflet.point(0, SHEET_H / 2));
+    m.flyTo(m.unproject(centerPt, z), z, { duration: 0.9 });
+  };
 
   const focusStore = (s: Store) => {
     setSelected(s.id);
-    map.current?.flyTo([s.lat, s.lng], 11, { duration: 0.9 });
+    if (!isLg()) setExpanded(false); // drop the sheet so the map is visible
+    flyToStore(s.lat, s.lng);
   };
 
   const locate = () => {
@@ -134,7 +163,7 @@ export default function StoreFinder() {
         const u = { lat: p.coords.latitude, lng: p.coords.longitude };
         setPos(u);
         setLocating(false);
-        map.current?.flyTo([u.lat, u.lng], 9, { duration: 0.9 });
+        flyToStore(u.lat, u.lng, 9);
       },
       () => setLocating(false),
       { enableHighAccuracy: false, timeout: 8000 }
@@ -142,60 +171,84 @@ export default function StoreFinder() {
   };
 
   const chip = (on: boolean) =>
-    `px-3.5 py-1.5 rounded-full text-[12px] tracking-wide transition-all cursor-pointer border ${
+    `shrink-0 px-3.5 py-1.5 rounded-full text-[12px] tracking-wide transition-all cursor-pointer border ${
       on
         ? 'bg-stroxx-blue text-white border-stroxx-blue shadow-[0_0_18px_rgba(0,130,202,0.35)]'
         : 'bg-white/[0.04] text-fog border-white/10 hover:text-white hover:border-white/25'
     }`;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[440px,1fr] lg:items-start">
-      {/* ── left: search + list ── */}
-      <div>
-        {/* search */}
-        <div className="relative mb-4">
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-fog pointer-events-none" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Søg by, postnummer eller butik"
-            aria-label="Søg butik"
-            className="w-full rounded-full bg-white/[0.05] border border-white/10 pl-11 pr-11 py-3 text-[14px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 focus:bg-white/[0.07] transition-colors"
-          />
-          {q && (
-            <button onClick={() => setQ('')} aria-label="Ryd søgning"
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fog hover:text-white transition-colors">
-              <X size={15} />
+    <div className="relative h-[100svh] w-full overflow-hidden bg-ink">
+      {/* full-bleed map */}
+      <div ref={mapEl} data-lenis-prevent aria-label="Kort over butikker" className="absolute inset-0 isolate" />
+
+      {/* scrim so the fixed nav stays legible over map tiles */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 z-[5]" style={{
+        background: 'linear-gradient(180deg, rgba(11,12,14,0.88) 0%, rgba(11,12,14,0) 100%)' }} />
+
+      {/* floating glass panel: left card on lg+, bottom sheet below */}
+      <div
+        className={`absolute z-[10] inset-x-0 bottom-0 lg:inset-x-auto lg:left-6 lg:top-24 lg:bottom-6 lg:w-[440px] glass-panel rounded-t-2xl lg:rounded-2xl border border-white/10 flex flex-col overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+          expanded ? 'max-h-[74svh]' : 'max-h-[240px]'
+        } lg:max-h-none`}
+        style={{ boxShadow: '0 -20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)' }}
+      >
+        {/* mobile grab handle */}
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          aria-label={expanded ? 'Skjul liste' : 'Vis liste'}
+          className="lg:hidden shrink-0 w-full pt-2.5 pb-1.5 grid place-items-center cursor-pointer"
+        >
+          <span className="h-1 w-10 rounded-full bg-white/25" />
+        </button>
+
+        <div className="px-5 lg:px-6 lg:pt-6 pb-3 shrink-0">
+          <div className="hidden lg:block eyebrow mb-2">Butikker · Danmark</div>
+          <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
+            Tag værktøjet i hånden, før du køber det.
+          </h1>
+
+          {/* search */}
+          <div className="relative mb-3">
+            <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-fog pointer-events-none" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onFocus={() => { if (!isLg()) setExpanded(true); }}
+              placeholder="Søg by, postnummer eller butik"
+              aria-label="Søg butik"
+              className="w-full rounded-full bg-white/[0.05] border border-white/10 pl-10 pr-10 py-2.5 text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 focus:bg-white/[0.07] transition-colors"
+            />
+            {q && (
+              <button onClick={() => setQ('')} aria-label="Ryd søgning"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fog hover:text-white transition-colors">
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          {/* filters */}
+          <div data-lenis-prevent className="flex items-center gap-2 overflow-x-auto sf-scroll pb-1 mb-1.5">
+            {REGIONS.map((r) => (
+              <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{r}</button>
+            ))}
+            <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
+            <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Sikring</button>
+            <button onClick={locate} disabled={locating}
+              className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
+              <LocateFixed size={12} className={locating ? 'animate-spin' : ''} />
+              {pos ? 'Nærmeste først' : locating ? 'Finder dig…' : 'Nær mig'}
             </button>
-          )}
-        </div>
+          </div>
 
-        {/* filters */}
-        <div className="flex flex-wrap items-center gap-2 mb-5">
-          {REGIONS.map((r) => (
-            <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{r}</button>
-          ))}
-          <span className="mx-1 h-4 w-px bg-white/10 hidden sm:block" />
-          <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool shop</button>
-          <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Sikring</button>
-          <button onClick={locate} disabled={locating}
-            className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
-            <LocateFixed size={13} className={locating ? 'animate-spin' : ''} />
-            {pos ? 'Nærmeste først' : locating ? 'Finder dig…' : 'Nær mig'}
-          </button>
-        </div>
-
-        <div className="text-[12px] text-fog mb-3">
-          {filtered.length} {filtered.length === 1 ? 'butik' : 'butikker'}
-          {region !== 'Alle' ? ` · ${region}` : ' i hele Danmark'}
+          <div className="text-[11px] text-fog">
+            {filtered.length} {filtered.length === 1 ? 'butik' : 'butikker'}
+            {region !== 'Alle' ? ` · ${region}` : ' i hele Danmark'}
+          </div>
         </div>
 
         {/* list */}
-        <div
-          ref={listEl}
-          data-lenis-prevent
-          className="space-y-3 lg:max-h-[calc(100svh-330px)] lg:min-h-[420px] lg:overflow-y-auto lg:pr-2 sf-scroll"
-        >
+        <div data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto sf-scroll px-4 lg:px-5 pb-5 space-y-3">
           {filtered.length === 0 && (
             <div className="glass rounded-xl p-8 text-center">
               <p className="text-white mb-2">Ingen butikker matcher.</p>
@@ -215,13 +268,13 @@ export default function StoreFinder() {
                 key={s.id}
                 ref={(el) => { cardEls.current[s.id] = el; }}
                 onClick={() => focusStore(s)}
-                className={`glass rounded-xl p-5 cursor-pointer transition-all duration-300 border ${
+                className={`rounded-xl p-4 lg:p-5 cursor-pointer transition-all duration-300 border bg-white/[0.03] ${
                   active
-                    ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,130,202,0.22)] bg-white/[0.05]'
-                    : 'border-transparent hover:border-white/15 hover:bg-white/[0.04]'
+                    ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,130,202,0.22)] bg-white/[0.06]'
+                    : 'border-white/[0.06] hover:border-white/20 hover:bg-white/[0.05]'
                 }`}
               >
-                <div className="flex items-start justify-between gap-3 mb-2.5">
+                <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
                     <div className="text-white font-medium leading-snug">{s.name}</div>
                     <div className="text-fog text-[13px] mt-0.5">
@@ -241,13 +294,13 @@ export default function StoreFinder() {
                   </a>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-[12px] text-fog mb-3">
+                <div className="flex items-center gap-1.5 text-[12px] text-fog mb-2.5">
                   <Clock size={12} className="shrink-0" />
                   <span>{hoursLabel(s)}</span>
                 </div>
 
                 {(s.festool || s.sikring || s.aktive3) && (
-                  <div className="flex flex-wrap gap-1.5 mb-3">
+                  <div className="flex flex-wrap gap-1.5 mb-2.5">
                     {s.festool && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Festool shop i shop</span>}
                     {s.sikring && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Sikring</span>}
                     {s.aktive3 && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">3Aktive</span>}
@@ -285,18 +338,6 @@ export default function StoreFinder() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ── right: map (travelling blue border always on) ── */}
-      <div className="lg:sticky lg:top-24">
-        <div className="glass-card glass-card--on rounded-2xl">
-          <div
-            ref={mapEl}
-            data-lenis-prevent
-            aria-label="Kort over butikker"
-            className="isolate h-[46svh] lg:h-[calc(100svh-160px)] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#101216] shadow-[0_30px_80px_rgba(0,0,0,0.5)]"
-          />
         </div>
       </div>
     </div>
