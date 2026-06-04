@@ -85,7 +85,8 @@ export default function ProductExplorer() {
             </p>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
-            <ParticleImage key="alle" src="/Images/bag_top_clean.png" className="h-full w-full" />
+            {/* gradient-gray wordmark → particles span the whole blue ramp */}
+            <ParticleImage key="alle" src="/Images/particle-logo.png" className="h-full w-full" />
           </Reveal>
         </div>
       )}

@@ -69,11 +69,11 @@ export default function ProevDetPage() {
           <div className="max-w-2xl">
             <Eyebrow>Kampagne · Prøv det</Eyebrow>
             <h1 className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-6">
-              Dyrt værktøj.<br />Til udyr pris.
+              Dyrt værktøj.<br />Til <span className="text-stroxx-blue">udyr</span> pris.
             </h1>
             <p className="text-fog text-base md:text-xl leading-relaxed mb-8 max-w-lg">
               Professionelt værktøj uden logo-tillæg. Og ja, det lyder for godt
-              til at være sandt. Derfor får du 30 dage til at modbevise os.
+              til at være sandt. Derfor får du <span className="text-stroxx-blue font-semibold">30 dage</span> til at modbevise os.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
@@ -88,7 +88,7 @@ export default function ProevDetPage() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-40">
           <div className="max-w-4xl">
             <Reveal><Eyebrow>Fornemmelsen</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Du betaler ikke for værktøjet. \n Du betaler for navnet.'}
+            <ScrollText as="h2" text={'Du betaler ikke for værktøjet. \n Du betaler for *navnet.*'}
               className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.96] mb-10" />
             <Reveal delay={120}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl">
@@ -109,7 +109,7 @@ export default function ProevDetPage() {
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-4xl lg:ml-auto lg:text-right">
             <Reveal><Eyebrow>Vanen</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Dyrt føles sikkert. \n Det er hele tricket.'}
+            <ScrollText as="h2" text={'Dyrt føles sikkert. \n Det er hele *tricket.*'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-10" />
             <Reveal delay={100}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl lg:ml-auto mb-6">
@@ -135,7 +135,7 @@ export default function ProevDetPage() {
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
           <div>
             <Reveal><Eyebrow>Sådan kan det lade sig gøre</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Samme stål. \n Uden mærke-tillæg.'}
+            <ScrollText as="h2" text={'*Samme* stål. \n Uden mærke-tillæg.'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-8" />
             <Reveal delay={100}>
               <p className="text-fog text-lg leading-relaxed max-w-xl mb-6">
@@ -173,7 +173,7 @@ export default function ProevDetPage() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-3xl mb-12">
             <Reveal><Eyebrow>Beviserne</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Lavet til at præstere. \n Ikke til at skinne.'}
+            <ScrollText as="h2" text={'Lavet til at *præstere.* \n Ikke til at skinne.'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-6" />
             <Reveal delay={100}>
               <p className="text-fog text-lg leading-relaxed max-w-xl">
@@ -232,7 +232,7 @@ export default function ProevDetPage() {
           <Reveal>
             <div className="eyebrow mb-4">Det, der ændrer sig</div>
             <h3 className="h-display text-white text-[clamp(1.9rem,4.5vw,3.6rem)] leading-[0.96] mb-3">
-              Råd til det fine porcelæn.
+              Råd til det <span className="text-stroxx-blue">fine porcelæn.</span>
             </h3>
             <p className="text-fog text-base md:text-lg max-w-md">
               Samme arbejde. Samme kvalitet. Men der er penge tilbage til
@@ -248,12 +248,14 @@ export default function ProevDetPage() {
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-44">
           <div className="text-center mb-14 md:mb-20">
             <Reveal><Eyebrow>Og hvis vi tager fejl?</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'100% glad. Eller \n pengene tilbage.'}
+            <ScrollText as="h2" text={'100% *glad.* Eller \n pengene tilbage.'}
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-8" />
             <Reveal delay={120}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
                 Lyder det stadig for godt til at være sandt? Det er præcis
-                derfor, vi siger: Prøv det. Sådan her gør du.
+                derfor, vi siger:{' '}
+                <span className="text-stroxx-blue font-semibold tracking-wide">PRØV DET.</span>{' '}
+                Sådan her gør du.
               </p>
             </Reveal>
           </div>

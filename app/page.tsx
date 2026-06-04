@@ -137,17 +137,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SPECIALISTS — testimonial row (bag has faded) */}
-      <section id="specialister" className="relative z-40">
+      {/* SPECIALISTS — glass quote cards so the travelling bag blurs BEHIND
+          them (section z above the fixed bag layer z-45, far below nav z-100) */}
+      <section id="specialister" className="relative z-[46]">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-40">
           <div className="mb-20 max-w-3xl">
             <Eyebrow>Specialisterne</Eyebrow>
             <ScrollText as="h2" text="Cand. værktøj med speciale i STROXX"
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
-          <div className="grid gap-x-10 gap-y-16 md:grid-cols-3">
+          <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
             {specialists.slice(0, 6).map((s, i) => (
-              <Reveal key={s.name} delay={(i % 3) * 80} className="flex flex-col h-full">
+              <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
+                <div className="glass-panel rounded-2xl p-7 flex flex-col h-full">
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
                 </div>
@@ -167,6 +169,7 @@ export default function Home() {
                       <Mail size={15} strokeWidth={2} className="relative" />
                     </GlassLink>
                   </div>
+                </div>
                 </div>
               </Reveal>
             ))}

@@ -9,7 +9,8 @@ if (typeof window !== 'undefined') {
 }
 
 /** Splits text into words that start dim and lighten to full as the block
- *  scrolls through the viewport (scrubbed). Use '\n' to force a line break. */
+ *  scrolls through the viewport (scrubbed). Use '\n' to force a line break.
+ *  Wrap a word in asterisks (*navnet.*) to render it in STROXX blue. */
 export default function ScrollText({
   text,
   as: Tag = 'p',
@@ -43,16 +44,17 @@ export default function ScrollText({
   const tokens = text.split(' ');
   return (
     <Tag ref={ref as any} className={className}>
-      {tokens.map((t, i) =>
-        t === '\n' ? (
-          <br key={i} />
-        ) : (
-          <span key={i} data-w className="inline-block">
-            {t}
+      {tokens.map((t, i) => {
+        if (t === '\n') return <br key={i} />;
+        const accent = t.length > 2 && t.startsWith('*') && t.endsWith('*');
+        const word = accent ? t.slice(1, -1) : t;
+        return (
+          <span key={i} data-w className={`inline-block${accent ? ' text-stroxx-blue' : ''}`}>
+            {word}
             {i < tokens.length - 1 && tokens[i + 1] !== '\n' ? ' ' : ''}
           </span>
-        )
-      )}
+        );
+      })}
     </Tag>
   );
 }
