@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react';
@@ -21,6 +21,13 @@ export default function SpecialistFab() {
   const pathname = usePathname();
   // product pages have a sticky mobile buy bar at the bottom; float above it
   const onProduct = pathname?.startsWith('/produkt/');
+
+  // other components (e.g. the specialist map cards) can open the chat directly
+  useEffect(() => {
+    const openChat = () => { setView('chat'); setOpen(true); };
+    window.addEventListener('stroxx:open-chat', openChat);
+    return () => window.removeEventListener('stroxx:open-chat', openChat);
+  }, []);
 
   const nearest = useMemo(() => {
     if (!pos) return null;

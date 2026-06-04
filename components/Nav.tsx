@@ -29,7 +29,7 @@ export default function Nav() {
         <div className="flex items-center gap-7 text-[13px] text-fog">
           <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
           <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Butikker</Link>
-          <a href="/#specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</a>
+          <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</Link>
           <BuyButton href="https://www.carl-ras.dk/maerker/stroxx/" />
         </div>
       </nav>

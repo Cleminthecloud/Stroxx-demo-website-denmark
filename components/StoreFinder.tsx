@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Map as LeafletMap, LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X } from 'lucide-react';
+import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X, MessageCircle } from 'lucide-react';
 import { stores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores';
 
 /** Full-screen, app-like store finder: the map fills the viewport and the
@@ -19,6 +19,7 @@ const norm = (s: string) =>
 const isLg = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
 export default function StoreFinder() {
+  const [tab, setTab] = useState<'butikker' | 'specialister'>('butikker');
   const [q, setQ] = useState('');
   const [region, setRegion] = useState<'Alle' | StoreRegion>('Alle');
   const [festool, setFestool] = useState(false);
@@ -38,6 +39,11 @@ export default function StoreFinder() {
   const userMarker = useRef<LayerGroup | null>(null);
   const L = useRef<typeof import('leaflet') | null>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
+
+  /* deep-linkable tab: /butikker?tab=specialister (nav + footer use this) */
+  useEffect(() => {
+    if (window.location.search.includes('tab=specialister')) setTab('specialister');
+  }, []);
 
   const origin = searchPos ?? pos;
 
@@ -132,12 +138,20 @@ export default function StoreFinder() {
     markers.current.clearLayers();
     filtered.forEach((s) => {
       const active = s.id === selected;
-      const icon = leaflet.divIcon({
-        className: '',
-        iconSize: [26, 26],
-        iconAnchor: [13, 13],
-        html: `<div class="sf-pin${active ? ' sf-pin--active' : ''}"><span></span></div>`,
-      });
+      // specialist mode: the pin IS the person (circular photo marker)
+      const icon = tab === 'specialister'
+        ? leaflet.divIcon({
+            className: '',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            html: `<div class="sf-face${active ? ' sf-face--active' : ''}"><img src="${s.manager.photo}" alt="${s.manager.name}" /></div>`,
+          })
+        : leaflet.divIcon({
+            className: '',
+            iconSize: [26, 26],
+            iconAnchor: [13, 13],
+            html: `<div class="sf-pin${active ? ' sf-pin--active' : ''}"><span></span></div>`,
+          });
       const mk = leaflet.marker([s.lat, s.lng], { icon, title: s.name });
       mk.on('click', () => {
         setSelected(s.id);
@@ -147,7 +161,7 @@ export default function StoreFinder() {
       });
       mk.addTo(markers.current!);
     });
-  }, [filtered, selected, ready]);
+  }, [filtered, selected, ready, tab]);
 
   /* ── origin markers: user position and/or searched place ── */
   useEffect(() => {
@@ -240,8 +254,27 @@ export default function StoreFinder() {
         <div className="px-5 lg:px-6 lg:pt-6 pb-3 shrink-0">
           <div className="hidden lg:block eyebrow mb-2">Butikker · Danmark</div>
           <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
-            Tag værktøjet i hånden, før du køber det.
+            {tab === 'specialister'
+              ? 'Snak med folk, der selv bruger værktøjet.'
+              : 'Tag værktøjet i hånden, før du køber det.'}
           </h1>
+
+          {/* tabs */}
+          <div className="flex gap-1 p-1 rounded-full bg-white/[0.05] border border-white/10 mb-3">
+            {(['butikker', 'specialister'] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`flex-1 px-4 py-2 rounded-full text-[12px] tracking-wide transition-all cursor-pointer ${
+                  tab === t
+                    ? 'bg-stroxx-blue text-white shadow-[0_0_18px_rgba(0,130,202,0.35)]'
+                    : 'text-fog hover:text-white'
+                }`}
+              >
+                {t === 'butikker' ? 'Butikker' : 'Specialister'}
+              </button>
+            ))}
+          </div>
 
           {/* search */}
           <div className="relative mb-3">
@@ -267,8 +300,12 @@ export default function StoreFinder() {
             {REGIONS.map((r) => (
               <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{r}</button>
             ))}
-            <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
-            <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Sikring</button>
+            {tab === 'butikker' && (
+              <>
+                <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
+                <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Sikring</button>
+              </>
+            )}
             <button onClick={locate} disabled={locating}
               className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
               <LocateFixed size={12} className={locating ? 'animate-spin' : ''} />
@@ -299,6 +336,54 @@ export default function StoreFinder() {
           {filtered.map((s) => {
             const active = s.id === selected;
             const km = origin ? distanceKm(origin.lat, origin.lng, s.lat, s.lng) : null;
+
+            // ── specialist card: the person first, the place second ──
+            if (tab === 'specialister') {
+              return (
+                <div
+                  key={s.id}
+                  ref={(el) => { cardEls.current[s.id] = el; }}
+                  onClick={() => focusStore(s)}
+                  className={`rounded-xl p-4 lg:p-5 cursor-pointer transition-all duration-300 border bg-white/[0.03] ${
+                    active
+                      ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,130,202,0.22)] bg-white/[0.06]'
+                      : 'border-white/[0.06] hover:border-white/20 hover:bg-white/[0.05]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5 mb-3.5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.manager.photo} alt={s.manager.name} loading="lazy"
+                      className="h-14 w-14 rounded-full object-cover border border-white/15 shrink-0" />
+                    <div className="min-w-0">
+                      <div className="text-white font-medium leading-snug">{s.manager.name}</div>
+                      <div className="text-fog text-[12px]">Butikschef · {s.name}</div>
+                      <div className="text-fog text-[12px] mt-0.5">
+                        {s.address}, {s.zipCity}
+                        {km !== null && (
+                          <span className="text-stroxx-blue ml-2 font-medium">{km < 10 ? km.toFixed(1) : Math.round(km)} km</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()}
+                      className="glass-cta glass-cta--sm flex-1 justify-center text-white">
+                      <Phone size={12} /> Ring
+                    </a>
+                    <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()}
+                      className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white">
+                      <Mail size={12} /> Mail
+                    </a>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('stroxx:open-chat')); }}
+                      className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white cursor-pointer">
+                      <MessageCircle size={12} /> Chat
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
             return (
               <div
                 key={s.id}

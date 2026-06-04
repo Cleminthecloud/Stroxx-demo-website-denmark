@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  eslint: { ignoreDuringBuilds: true },
+  // lint is a build gate: broken or sloppy code can't reach a push
+  eslint: { ignoreDuringBuilds: false },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.carl-ras.dk' },

@@ -30,7 +30,7 @@ export default function Footer() {
               <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
               <Link href="/butikker" className="block text-fog hover:text-white">Butikker</Link>
               <Link href="/proev-det" className="block text-fog hover:text-white">Kampagne: Prøv det</Link>
-              <a href="/#specialister" className="block text-fog hover:text-white">Specialister</a>
+              <Link href="/butikker?tab=specialister" className="block text-fog hover:text-white">Specialister</Link>
             </div>
           </div>
           <div className="text-sm">
