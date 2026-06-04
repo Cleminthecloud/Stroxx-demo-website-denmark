@@ -1,7 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Send, Phone, ArrowUpRight } from 'lucide-react';
-import { products } from '@/lib/data';
+import { products, toolTexture, Product } from '@/lib/data';
+import KnockoutImage from '@/components/KnockoutImage';
 import { Store } from '@/lib/stores';
 
 /** Demo AI chat: a scripted assistant that answers from the site's real data
@@ -11,7 +13,7 @@ import { Store } from '@/lib/stores';
  *  production LLM + WhatsApp Business / Messenger integration would use. */
 
 interface BtnLink { label: string; href: string; external?: boolean }
-interface Msg { from: 'bot' | 'user'; text: string; links?: BtnLink[]; handoff?: boolean }
+interface Msg { from: 'bot' | 'user'; text: string; links?: BtnLink[]; products?: Product[]; handoff?: boolean }
 
 const DEFAULT_CHIPS = ['Hvordan virker garantien?', 'Find min butik', 'Har I en god kniv?', 'Snak med et menneske'];
 
@@ -77,10 +79,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
       text: hits.length === 1
         ? 'Det her er nok det, du leder efter:'
         : 'Jeg fandt et par bud i sortimentet:',
-      links: hits.map((p) => ({
-        label: `${p.name} · ${p.price} kr.`,
-        href: `/produkt/${p.slug}`,
-      })),
+      products: hits,
     }];
   }
 
@@ -148,6 +147,26 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                 : 'bg-white/[0.06] border border-white/10 text-white/90 rounded-bl-sm'
             }`}>
               {m.text}
+              {m.products && m.products.length > 0 && (
+                <div className="mt-2.5 flex flex-col gap-2">
+                  {m.products.map((p) => (
+                    <Link key={p.slug} href={`/produkt/${p.slug}`}
+                      className="group flex items-center gap-3 rounded-xl bg-ink/60 border border-white/10 p-2.5 hover:border-stroxx-blue/50 hover:bg-ink/80 transition-colors">
+                      <span className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-white/[0.04] border border-white/[0.06] overflow-hidden">
+                        <span className="absolute inset-1 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,130,202,0.18), rgba(0,130,202,0) 70%)' }} />
+                        <KnockoutImage src={toolTexture(p.imgId)} alt={p.name} className="relative z-10 h-11 w-11" />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[12px] text-white leading-snug line-clamp-2">{p.name}</span>
+                        <span className="block text-stroxx-blue text-[12px] font-semibold mt-0.5">
+                          {p.price} <span className="text-fog font-normal text-[10px]">DKK / {p.unit}</span>
+                        </span>
+                      </span>
+                      <ArrowUpRight size={13} className="shrink-0 text-fog group-hover:text-stroxx-blue transition-colors" />
+                    </Link>
+                  ))}
+                </div>
+              )}
               {m.links && m.links.length > 0 && (
                 <div className="mt-2.5 flex flex-col gap-1.5">
                   {m.links.map((l) => (
