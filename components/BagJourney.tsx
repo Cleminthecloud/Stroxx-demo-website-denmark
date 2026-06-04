@@ -60,7 +60,7 @@ export default function BagJourney() {
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
     // On phones the bag is smaller and anchored at the BASE of the viewport, so
     // the content reads above it instead of colliding with it mid-screen.
-    const mobileY = noFilter ? 27 : 0; // vh shift down for the whole bag scene
+    const mobileY = noFilter ? 20 : 0; // vh shift down — sits the bag low in the hero
     const t0 = performance.now();
     const ENTER = 850;
     const N = TOOLS.length;
@@ -94,7 +94,9 @@ export default function BagJourney() {
     const loop = (now: number) => {
       const max = document.documentElement.scrollHeight - innerHeight;
       const p = max > 0 ? clamp(scrollY / max) : 0;
-      const tgt = sample(p);
+      // phones: no journey — the bag holds its hero pose and scrolls away with
+      // the page; desktop travels the scroll-driven zig-zag as before
+      const tgt = sample(noFilter ? 0 : p);
       const c = cur.current;
       c.x = lerp(c.x, tgt.x, 0.1); c.y = lerp(c.y, tgt.y, 0.1);
       c.s = lerp(c.s, tgt.s, 0.1); c.r = lerp(c.r, tgt.r, 0.1); c.o = lerp(c.o, tgt.o, 0.12);
@@ -188,7 +190,9 @@ export default function BagJourney() {
   const total = TOOLS.slice(0, landed).reduce((s, t) => s + (bagTools.find((b) => b.id === t.id)?.price ?? 0), 0);
 
   return (
-    <div className="fixed inset-0 z-[45] overflow-hidden pointer-events-none select-none" aria-hidden>
+    {/* phones: the bag lives IN the hero (absolute, scrolls away with the page);
+        desktop: fixed full-viewport layer so it travels the whole journey */}
+    <div className="absolute inset-x-0 top-0 h-screen lg:fixed lg:inset-0 lg:h-auto z-[45] overflow-hidden pointer-events-none select-none" aria-hidden>
       {/* elastic blue light that trails the bag */}
       <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
         width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
