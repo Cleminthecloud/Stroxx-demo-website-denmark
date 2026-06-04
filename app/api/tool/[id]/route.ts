@@ -133,14 +133,20 @@ function knockoutRaw(d: Uint8Array, W: number, H: number): boolean {
   return true;
 }
 
-/** If the buffer is a light-studio shot, return it as a knocked-out PNG. */
-async function tryKnockout(buf: Buffer): Promise<Buffer | null> {
+/** Knock out white-studio backdrops, and normalise pathologically heavy
+ *  originals (some DAM exports are 16-bit / near-uncompressed, 18MB+). Returns
+ *  null when the image is fine as-is. `depth: 'uchar'` forces 8-bit raw pixels;
+ *  the length guard protects against any decode surprises. */
+async function processImage(buf: Buffer): Promise<Buffer | null> {
   const sharp = await getSharp();
   if (!sharp) return null;
   try {
-    const { data, info } = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(buf).ensureAlpha()
+      .raw({ depth: 'uchar' }).toBuffer({ resolveWithObject: true });
     if (info.channels !== 4 || info.width < 8 || info.height < 8) return null;
-    if (!knockoutRaw(data, info.width, info.height)) return null;
+    if (data.length !== info.width * info.height * 4) return null;
+    const knocked = knockoutRaw(data, info.width, info.height);
+    if (!knocked && buf.byteLength <= 1_500_000) return null; // small & fine → serve untouched
     return await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
       .png({ compressionLevel: 8 }).toBuffer();
   } catch {
@@ -176,10 +182,11 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     if (!r) continue;
     // If it's secretly a white-studio shot (an opaque "transparent" rendition,
     // or a JPG fallback), knock the background out here so every device gets a
-    // clean cut-out with zero client-side canvas work.
-    const knocked = await tryKnockout(r.buf);
-    if (knocked) {
-      return new Response(knocked, { headers: { ...CORS, 'Cache-Control': CACHE_LONG, 'Content-Type': 'image/png' } });
+    // clean cut-out with zero client-side canvas work. Heavy originals get
+    // re-encoded to a sane 8-bit PNG even when no knockout applies.
+    const processed = await processImage(r.buf);
+    if (processed) {
+      return new Response(processed, { headers: { ...CORS, 'Cache-Control': CACHE_LONG, 'Content-Type': 'image/png' } });
     }
     // Untouched pass-through. Genuinely transparent PNGs are the stable happy
     // path (long cache); a raw JPG fallback gets a short cache so a transient
