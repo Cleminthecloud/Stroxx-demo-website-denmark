@@ -135,7 +135,12 @@ export default function BagJourney() {
         const node = toolRefs.current[i];
         if (!node) continue;
         const start = FILL_START + (i / N) * (FILL_END - FILL_START);
-        const local = reduce ? 1 : clamp((p - start) / DROP);
+        // Phones: the fill is TIME-driven — the bag lands and all the tools
+        // cascade straight in (no scroll needed). Desktop keeps the
+        // scroll-driven fill along the journey.
+        const local = reduce ? 1
+          : noFilter ? clamp((now - t0 - 1150 - i * 150) / 480)
+          : clamp((p - start) / DROP);
         const e = local <= 0 ? 0 : easeOutBack(local);
         const fall = (1 - e) * DROP_FROM;
         const tblur = (1 - clamp(local / 0.6)) * 3;
