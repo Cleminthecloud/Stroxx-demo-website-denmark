@@ -9,13 +9,17 @@
 
 * { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 
-html { scroll-behavior: auto; }
+/* iOS Safari ignores overflow-x on <body> for viewport panning — the clip has
+   to live on <html>. `clip` (where supported) creates no scroll container, so
+   position: sticky keeps working; `hidden` is the fallback. */
+html { scroll-behavior: auto; overflow-x: hidden; overflow-x: clip; }
 
 body {
   background: #0B0C0E;
   color: #F6F5F3;
   font-family: var(--font-sans);
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 ::selection { background: #0082CA; color: #fff; }
