@@ -164,12 +164,15 @@ async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } 
   const ac = new AbortController();
   const timer = setTimeout(() => ac.abort(), 8000);
   try {
-    const res = await fetch(SRC(id, f), { headers: HEADERS, cache: 'force-cache', signal: ac.signal });
+    // no-store: bypass Next's data-cache layer, which buffers whole bodies (and
+    // chokes on >2MB entries / abort signals). Our own edge cache (s-maxage on
+    // the response) is the caching layer that matters here.
+    const res = await fetch(SRC(id, f), { headers: HEADERS, cache: 'no-store', signal: ac.signal });
     const ct = res.headers.get('content-type') || '';
-    // Monster renditions (some DAM exports are 18MB+) — don't even download
-    // them; returning null lets the caller fall through to the next format.
+    // Monster renditions (some DAM exports are 18MB+) — don't download them;
+    // abort the body and let the caller fall through to the next format.
     const len = parseInt(res.headers.get('content-length') || '0', 10);
-    if (len > 3_000_000) return null;
+    if (len > 3_000_000) { ac.abort(); return null; }
     if (res.ok && ct.startsWith('image/')) {
       const buf = Buffer.from(await res.arrayBuffer());
       // ignore the ~1x1 placeholder the CDN returns when a rendition is missing
