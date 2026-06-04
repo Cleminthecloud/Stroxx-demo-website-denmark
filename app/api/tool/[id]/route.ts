@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'nodejs';
 export const revalidate = 86400;
+export const maxDuration = 30;
 
 // Same-origin proxy for Carl-Ras (Digizuite) product images.
 //
@@ -160,9 +161,15 @@ async function processImage(buf: Buffer): Promise<Buffer | null> {
 }
 
 async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } | null> {
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 8000);
   try {
-    const res = await fetch(SRC(id, f), { headers: HEADERS, cache: 'force-cache' });
+    const res = await fetch(SRC(id, f), { headers: HEADERS, cache: 'force-cache', signal: ac.signal });
     const ct = res.headers.get('content-type') || '';
+    // Monster renditions (some DAM exports are 18MB+) — don't even download
+    // them; returning null lets the caller fall through to the next format.
+    const len = parseInt(res.headers.get('content-length') || '0', 10);
+    if (len > 3_000_000) return null;
     if (res.ok && ct.startsWith('image/')) {
       const buf = Buffer.from(await res.arrayBuffer());
       // ignore the ~1x1 placeholder the CDN returns when a rendition is missing
@@ -170,6 +177,8 @@ async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } 
     }
   } catch {
     /* ignore */
+  } finally {
+    clearTimeout(timer);
   }
   return null;
 }

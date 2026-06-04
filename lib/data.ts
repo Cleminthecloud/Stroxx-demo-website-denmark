@@ -16,7 +16,7 @@ export const crImage = (id: number | string) =>
  *  PNG cut-out (Digizuite rendition 50391), falling back to JPG. IMG_V is a
  *  cache-buster: bump it whenever the proxy's rendition logic changes so the
  *  CDN edge (s-maxage) serves fresh images instead of stale cached ones. */
-const IMG_V = '7'; // v7: unprocessable heavy originals fall through to the JPG rendition
+const IMG_V = '8'; // v8: skip monster renditions by content-length before download
 export const toolTexture = (id: number | string, f?: '50383' | '50384' | '50388') =>
   `/api/tool/${id}?v=${IMG_V}${f ? `&f=${f}` : ''}`;
 
