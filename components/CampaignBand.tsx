@@ -106,6 +106,7 @@ export default function CampaignBand() {
               <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
                 Køb hos Carl Ras <ArrowRight size={16} />
               </GlassButton>
+              <GlassButton href="/proev-det" variant="ghost">Læs mere</GlassButton>
             </div>
 
             {/* progress indicator */}
