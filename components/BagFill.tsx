@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import KnockoutImage from '@/components/KnockoutImage';
-import { bagTools, toolTexture, formatDKK } from '@/lib/data';
+import { bagTools, formatDKK } from '@/lib/data';
 
 /* ──────────────────────────────────────────────────────────────────────────
    Masked-reveal "fill the bag" rig (prototype).
@@ -139,7 +138,10 @@ export default function BagFill() {
               {/* per-tool drop shadow (fades in on land) */}
               <div data-shadow className="pointer-events-none absolute left-1/2 -translate-x-1/2"
                 style={{ bottom: '-6%', width: '80%', height: '16%', opacity: 0, background: 'radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,0.55), transparent 70%)', filter: 'blur(7px)' }} />
-              <KnockoutImage src={toolTexture(t.id)} alt="" maxSize={520} className="h-full w-full" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/Images/bag-tools/${t.id}.png`} alt="" draggable={false}
+                className="h-full w-full object-contain select-none"
+                style={{ filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))' }} />
             </div>
           ))}
 
