@@ -141,8 +141,13 @@ async function processImage(buf: Buffer): Promise<Buffer | null> {
   const sharp = await getSharp();
   if (!sharp) return null;
   try {
-    const { data, info } = await sharp(buf).ensureAlpha()
-      .raw({ depth: 'uchar' }).toBuffer({ resolveWithObject: true });
+    let res;
+    try {
+      res = await sharp(buf).ensureAlpha().raw({ depth: 'uchar' }).toBuffer({ resolveWithObject: true });
+    } catch {
+      res = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    }
+    const { data, info } = res;
     if (info.channels !== 4 || info.width < 8 || info.height < 8) return null;
     if (data.length !== info.width * info.height * 4) return null;
     const knocked = knockoutRaw(data, info.width, info.height);
@@ -188,6 +193,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     if (processed) {
       return new Response(processed, { headers: { ...CORS, 'Cache-Control': CACHE_LONG, 'Content-Type': 'image/png' } });
     }
+    // A heavy original we couldn't process (e.g. an 18MB 16-bit DAM export sharp
+    // can't digest) must never be served raw — fall through to the next
+    // rendition instead; the JPG route gets knocked out into a clean PNG above.
+    if (r.buf.byteLength > 3_000_000) continue;
     // Untouched pass-through. Genuinely transparent PNGs are the stable happy
     // path (long cache); a raw JPG fallback gets a short cache so a transient
     // upstream failure can't pin a white image at the edge for a day.
