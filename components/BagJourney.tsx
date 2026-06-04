@@ -60,7 +60,7 @@ export default function BagJourney() {
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
     // On phones the bag is smaller and anchored at the BASE of the viewport, so
     // the content reads above it instead of colliding with it mid-screen.
-    const mobileY = noFilter ? 20 : 0; // vh shift down — sits the bag low in the hero
+    const mobileY = noFilter ? 17 : 0; // vh shift down — sits the bag low in the hero
     const t0 = performance.now();
     const ENTER = 850;
     const N = TOOLS.length;
@@ -72,7 +72,7 @@ export default function BagJourney() {
     sizeDust();
     addEventListener('resize', sizeDust);
 
-    const bagBaseH = () => (noFilter ? Math.min(0.34 * innerHeight, 400) : Math.min(0.70 * innerHeight, 980));
+    const bagBaseH = () => (noFilter ? (innerWidth * 0.75) / BAG_AR : Math.min(0.70 * innerHeight, 980));
     // The bag PNG is padded: the visible tote bottom sits at 0.767 of the image
     // height (measured from alpha bounds), so the impact dust must spawn at that
     // base — not at the box bottom — or it kicks up in the empty padding below.
@@ -204,7 +204,7 @@ export default function BagJourney() {
         transform: 'translate(-50%,-50%)' }} />
 
       {/* the travelling + filling bag group */}
-      <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform h-[min(34vh,400px)] lg:h-[min(70vh,980px)]"
+      <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform w-[75vw] h-auto lg:w-auto lg:h-[min(70vh,980px)]"
         style={{ aspectRatio: String(BAG_AR), transform: 'translate(-50%,-50%)' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img ref={bag} src={BAG_BACK} alt="" className="absolute inset-0 h-full w-full object-contain" />
