@@ -189,9 +189,9 @@ export default function BagJourney() {
 
   const total = TOOLS.slice(0, landed).reduce((s, t) => s + (bagTools.find((b) => b.id === t.id)?.price ?? 0), 0);
 
+  // phones: the bag lives IN the hero (absolute, scrolls away with the page);
+  // desktop: fixed full-viewport layer so it travels the whole journey.
   return (
-    {/* phones: the bag lives IN the hero (absolute, scrolls away with the page);
-        desktop: fixed full-viewport layer so it travels the whole journey */}
     <div className="absolute inset-x-0 top-0 h-screen lg:fixed lg:inset-0 lg:h-auto z-[45] overflow-hidden pointer-events-none select-none" aria-hidden>
       {/* elastic blue light that trails the bag */}
       <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
