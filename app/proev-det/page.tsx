@@ -6,6 +6,7 @@ import GlassButton from '@/components/GlassButton';
 import ProductCard from '@/components/ProductCard';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import VideoProof from '@/components/VideoProof';
+import CountUp from '@/components/CountUp';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
 
@@ -154,12 +155,13 @@ export default function ProevDetPage() {
           <Reveal delay={140} from="right">
             <div className="grid grid-cols-3 gap-6 lg:gap-8">
               {[
-                { n: '4', l: 'lande bag udviklingen' },
-                { n: '227+', l: 'butikker i Europa' },
-                { n: '1.400+', l: 'varenumre' },
+                { v: 4, suf: '', l: 'lande bag udviklingen' },
+                { v: 227, suf: '+', l: 'butikker i Europa' },
+                { v: 1400, suf: '+', l: 'varenumre' },
               ].map((s) => (
                 <div key={s.l} className="text-center lg:text-left">
-                  <div className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-none mb-2">{s.n}</div>
+                  <CountUp value={s.v} suffix={s.suf}
+                    className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-none mb-2 block" />
                   <div className="text-fog text-xs md:text-sm leading-snug">{s.l}</div>
                 </div>
               ))}
