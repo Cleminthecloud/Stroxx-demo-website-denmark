@@ -9,10 +9,10 @@
   <title>Prøv STROXX i 30 dage</title>
   <!--
     STROXX Marketo email template: KAMPAGNE (Prøv det / 30 dages garanti)
-    Foreslået emnelinje: Prøv STROXX i 30 dage. Glad, eller pengene tilbage
-    Preheader: Du betaler for logoet, ikke for stålet. Prøv det selv, helt uden risiko.
-    Design: mørkt STROXX-univers, produktkort som sitets ProductCard, pille-knapper.
-    Editor 2.0: mktoContainer + mktoModule.
+    Foreslået emnelinje: Dyrt værktøj. Til udyr pris.
+    Preheader: Du betaler for logoet, ikke for stålet. Prøv det selv i 30 dage, helt uden risiko.
+    Fortælling som /proev-det: hook → fornemmelsen → vanen → reframe → bevis → sticker + garanti.
+    Kun brandfarver: sort + blå (Process Blue C #0082CA). Editor 2.0: mktoContainer + mktoModule.
   -->
   <!--[if mso]>
   <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
@@ -23,14 +23,15 @@
     table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; border-collapse:collapse !important; }
     img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
     a { text-decoration:none; }
-    .btn-red:hover { background-color:#D10024 !important; }
     .btn:hover { background-color:#0E7DB8 !important; }
+    .btn-ghost:hover { border-color:#5A6168 !important; }
     @media screen and (max-width:640px) {
       .container { width:100% !important; max-width:100% !important; }
       .px { padding-left:24px !important; padding-right:24px !important; }
       .stack { display:block !important; width:100% !important; }
       .stack-pad { padding-left:0 !important; padding-top:16px !important; }
-      .h1 { font-size:30px !important; line-height:36px !important; }
+      .h1 { font-size:32px !important; line-height:36px !important; }
+      .h2 { font-size:24px !important; line-height:28px !important; }
       .hide-mobile { display:none !important; }
     }
   </style>
@@ -39,7 +40,7 @@
 
   <!-- Preheader (skjult) -->
   <div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">
-    Du betaler for logoet, ikke for st&aring;let. Pr&oslash;v det selv, helt uden risiko.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+    Du betaler for logoet, ikke for st&aring;let. Pr&oslash;v det selv i 30 dage, helt uden risiko.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#060708;">
@@ -60,7 +61,7 @@
                     </a>
                   </td>
                   <td align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;" class="hide-mobile">
-                    Kampagne
+                    Kampagne &middot; Pr&oslash;v det
                   </td>
                 </tr>
               </table>
@@ -72,74 +73,98 @@
             <td style="border-left:1px solid #23272E; border-right:1px solid #23272E;">
               <table class="mktoContainer" id="emailContainer" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 
-                <!-- MODUL: Kampagne-hero -->
-                <tr class="mktoModule" id="campaignHeroModule" mktoName="Kampagne hero">
-                  <td style="background-color:#0B0C0E; padding:50px 32px 46px;" class="px">
-                    <div class="mktoText" id="heroText" mktoName="Hero tekst">
-                      <p style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#EB0029;">30 dages tilfredshedsgaranti</p>
-                      <h1 class="h1" style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:38px; line-height:44px; font-weight:bold; letter-spacing:-1.5px; color:#FFFFFF;">F&aring; r&aring;d til andet end v&aelig;rkt&oslash;j.</h1>
-                      <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:17px; line-height:26px; color:#B9BFC6;">Du betaler for logoet, ikke for st&aring;let. STROXX er professionel kvalitet uden m&aelig;rke-till&aelig;g. P&aring;standen er stor, s&aring; vi lader dig teste den. I 30 dage. P&aring; rigtigt arbejde.</p>
-                    </div>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;">
-                      <tr>
-                        <td>
-                          <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" style="height:48px;v-text-anchor:middle;width:225px;" arcsize="50%" fillcolor="#B8001F" strokecolor="#EB0029">
-                          <w:anchorlock/>
-                          <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">Pr&oslash;v det i 30 dage</center>
-                          </v:roundrect>
-                          <![endif]-->
-                          <!--[if !mso]><!-->
-                          <a class="btn-red" href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" target="_blank" style="background-color:#B8001F; border:1px solid #EB0029; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:223px;">Pr&oslash;v det i 30 dage</a>
-                          <!--<![endif]-->
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-
-                <!-- MODUL: Tre trin -->
-                <tr class="mktoModule" id="stepsModule" mktoName="Tre trin">
-                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:40px 32px;" class="px">
-                    <div class="mktoText" id="stepsTitle" mktoName="Trin titel">
-                      <p style="margin:0 0 8px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">S&aring;dan virker det</p>
-                      <h2 style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:24px; line-height:30px; font-weight:bold; letter-spacing:-0.5px; color:#FFFFFF;">Tre trin. Ingen fiduser.</h2>
+                <!-- MODUL 1: Hook (kampagnebillede + tekst under) -->
+                <tr class="mktoModule" id="hookModule" mktoName="Hook (billede + tekst)">
+                  <td style="background-color:#0B0C0E;">
+                    <div class="mktoImg" id="heroImage" mktoName="Kampagnebillede" mktoImgLink="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det">
+                      <a><img src="https://www.stroxx.dk/emails/img/rings.jpg" alt="H&aring;ndv&aelig;rker med guldringe p&aring; alle fingre, holder en hammer" width="600" style="display:block; width:100%; max-width:600px;"></a>
                     </div>
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="padding:16px 0; border-bottom:1px solid #23272E;">
-                          <div class="mktoText" id="step1" mktoName="Trin 1">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#EB0029;">01</span> &nbsp;Find din butik</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">26 butikker i hele landet, eller k&oslash;b online hos Carl Ras. Tag v&aelig;rkt&oslash;jet i h&aring;nden f&oslash;rst, hvis du vil.</p>
+                        <td style="padding:38px 32px 46px;" class="px">
+                          <div class="mktoText" id="hookText" mktoName="Hook tekst">
+                            <p style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#2BA6E8;">Kampagne &middot; Pr&oslash;v det</p>
+                            <h1 class="h1" style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:40px; line-height:42px; font-weight:bold; letter-spacing:-1.5px; color:#FFFFFF;">Dyrt v&aelig;rkt&oslash;j.<br>Til <span style="color:#0082CA;">udyr</span> pris.</h1>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:17px; line-height:26px; color:#B9BFC6;">Professionelt v&aelig;rkt&oslash;j uden logo-till&aelig;g. Og ja, det lyder for godt til at v&aelig;re sandt. Derfor f&aring;r du <span style="color:#2BA6E8; font-weight:bold;">30 dage</span> til at modbevise os.</p>
                           </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:16px 0; border-bottom:1px solid #23272E;">
-                          <div class="mktoText" id="step2" mktoName="Trin 2">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#EB0029;">02</span> &nbsp;Brug det p&aring; rigtigt arbejde</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Ikke fem minutter i indk&oslash;rslen. 30 dage p&aring; pladsen, hvor det g&aelig;lder.</p>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:16px 0;">
-                          <div class="mktoText" id="step3" mktoName="Trin 3">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#EB0029;">03</span> &nbsp;Glad? Ellers pengene tilbage</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Er du ikke tilfreds, f&aring;r du pengene igen. Ingen krav om fejl, din vurdering er nok. <a href="https://www.stroxx.dk/STROXX-tilfredshedsgaranti.pdf" target="_blank" style="color:#2BA6E8; text-decoration:underline;">L&aelig;s garantien (PDF)</a>.</p>
-                          </div>
+                          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
+                            <tr>
+                              <td>
+                                <!--[if mso]>
+                                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" style="height:48px;v-text-anchor:middle;width:225px;" arcsize="50%" fillcolor="#0B69A3" strokecolor="#2BA6E8">
+                                <w:anchorlock/>
+                                <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">Hvorfor s&aring; billigt?</center>
+                                </v:roundrect>
+                                <![endif]-->
+                                <!--[if !mso]><!-->
+                                <a class="btn" href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" target="_blank" style="background-color:#0B69A3; border:1px solid #2BA6E8; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:223px;">Hvorfor s&aring; billigt?</a>
+                                <!--<![endif]-->
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>
                   </td>
                 </tr>
 
-                <!-- MODUL: Beviset (produktkort som p&aring; sitet) -->
+                <!-- MODUL 2: Fornemmelsen -->
+                <tr class="mktoModule" id="frustrationModule" mktoName="Fornemmelsen">
+                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:42px 32px;" class="px">
+                    <div class="mktoText" id="frustrationText" mktoName="Fornemmelsen tekst">
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Fornemmelsen</p>
+                      <h2 class="h2" style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; line-height:32px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">Du betaler ikke for v&aelig;rkt&oslash;jet.<br>Du betaler for <span style="color:#0082CA;">navnet.</span></h2>
+                      <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#8A9199;">En ny maskine, et s&aelig;t bits, en kniv. Du l&aelig;gger den p&aring; disken og betaler en pris, du har l&aelig;rt at acceptere. Men et sted bagerst i hovedet ved du det godt: en del af bel&oslash;bet g&aring;r ikke til st&aring;let i din h&aring;nd. Det g&aring;r til reklamerne, sponsoraterne og logoet p&aring; siden.</p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- MODUL 3: Vanen -->
+                <tr class="mktoModule" id="habitModule" mktoName="Vanen">
+                  <td style="background-color:#0B0C0E; border-top:1px solid #23272E; padding:42px 32px;" class="px">
+                    <div class="mktoText" id="habitText" mktoName="Vanen tekst">
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Vanen</p>
+                      <h2 class="h2" style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; line-height:32px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">Dyrt f&oslash;les sikkert.<br>Det er hele <span style="color:#0082CA;">tricket.</span></h2>
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#8A9199;">N&aring;r du st&aring;r med to stykker v&aelig;rkt&oslash;j, v&aelig;lger hjernen det dyre. Ikke fordi du har testet det, men fordi prisen f&oslash;les som en garanti. Og fordi ingen bliver til grin for at k&oslash;be det kendte m&aelig;rke.</p>
+                      <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#FFFFFF;">Men pris m&aring;ler ikke kvalitet. Tolerancer, materialer og holdbarhed g&oslash;r. Og de st&aring;r ikke p&aring; prisskiltet.</p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- MODUL 4: Sådan kan det lade sig gøre -->
+                <tr class="mktoModule" id="reframeModule" mktoName="Reframe + tal">
+                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:42px 32px;" class="px">
+                    <div class="mktoText" id="reframeText" mktoName="Reframe tekst">
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">S&aring;dan kan det lade sig g&oslash;re</p>
+                      <h2 class="h2" style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; line-height:32px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;"><span style="color:#0082CA;">Samme</span> st&aring;l.<br>Uden m&aelig;rke-till&aelig;g.</h2>
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#8A9199;">STROXX udvikles i et t&aelig;t samarbejde mellem fagfolk i Danmark, Tyskland, Frankrig og Belgien. Vi s&aelig;tter selv specifikationerne, v&aelig;lger selv materialerne og dropper alle un&oslash;dvendige led, logo-pr&aelig;mier og fordyrende mellemregninger.</p>
+                      <p style="margin:0 0 22px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#FFFFFF;">Det, du betaler for, er v&aelig;rkt&oslash;jet. Ikke reklamerne for det.</p>
+                    </div>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#14171C; border:1px solid #23272E; border-radius:12px;">
+                      <tr>
+                        <td align="center" width="33%" style="padding:18px 8px;">
+                          <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:26px; font-weight:bold; color:#FFFFFF;">4</p>
+                          <p style="margin:4px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:16px; color:#8A9199;">lande bag udviklingen</p>
+                        </td>
+                        <td align="center" width="33%" style="padding:18px 8px; border-left:1px solid #23272E; border-right:1px solid #23272E;">
+                          <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:26px; font-weight:bold; color:#FFFFFF;">227+</p>
+                          <p style="margin:4px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:16px; color:#8A9199;">butikker i Europa</p>
+                        </td>
+                        <td align="center" width="33%" style="padding:18px 8px;">
+                          <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:26px; font-weight:bold; color:#FFFFFF;">1400+</p>
+                          <p style="margin:4px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:16px; color:#8A9199;">varenumre</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- MODUL 5: Beviset (produktkort) -->
                 <tr class="mktoModule" id="proofModule" mktoName="Beviset (produkter)">
-                  <td style="background-color:#0B0C0E; border-top:1px solid #23272E; padding:38px 32px;" class="px">
+                  <td style="background-color:#0B0C0E; border-top:1px solid #23272E; padding:42px 32px;" class="px">
                     <div class="mktoText" id="proofTitle" mktoName="Bevis titel">
-                      <p style="margin:0 0 8px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Beviset</p>
-                      <h2 style="margin:0 0 18px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:22px; line-height:28px; font-weight:bold; letter-spacing:-0.5px; color:#FFFFFF;">To arbejdsheste, to priser du skal se igen</h2>
+                      <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Beviserne</p>
+                      <h2 class="h2" style="margin:0 0 18px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; line-height:32px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">Lavet til at <span style="color:#0082CA;">pr&aelig;stere.</span><br>Ikke til at skinne.</h2>
                     </div>
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
@@ -186,24 +211,58 @@
                   </td>
                 </tr>
 
-                <!-- MODUL: Afsluttende CTA -->
-                <tr class="mktoModule" id="closingModule" mktoName="Afsluttende CTA">
-                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:38px 32px;" class="px" align="center">
-                    <div class="mktoText" id="closingText" mktoName="Afslutning tekst">
-                      <p style="margin:0 0 22px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:18px; line-height:27px; font-weight:bold; color:#FFFFFF;">V&aelig;rste udfald: du f&aring;r pengene tilbage.<br>Bedste udfald: du f&aring;r r&aring;d til andet end v&aelig;rkt&oslash;j.</p>
+                <!-- MODUL 6: Sticker + garanti + de tre trin -->
+                <tr class="mktoModule" id="guaranteeModule" mktoName="Sticker + garanti">
+                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:44px 32px;" class="px" align="center">
+                    <div class="mktoImg" id="stickerImage" mktoName="Garanti-sticker (GIF)">
+                      <a><img src="https://www.stroxx.dk/emails/img/sticker.gif" alt="Bl&aring; sticker: Tilfreds eller tilbage. Ikke tilfreds med STROXX? Pengene tilbage straks." width="230" style="display:block; margin:0 auto; width:230px;"></a>
                     </div>
+                    <div class="mktoText" id="guaranteeText" mktoName="Garanti tekst">
+                      <p style="margin:26px 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Og hvis vi tager fejl?</p>
+                      <h2 class="h2" style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:30px; line-height:34px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">100% <span style="color:#0082CA;">glad.</span> Eller pengene tilbage.</h2>
+                      <p style="margin:0 0 26px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#8A9199;">Lyder det stadig for godt til at v&aelig;re sandt? Det er pr&aelig;cis derfor, vi siger: <span style="color:#2BA6E8; font-weight:bold; letter-spacing:1px;">PR&Oslash;V DET.</span> S&aring;dan her g&oslash;r du.</p>
+                    </div>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align:left;">
+                      <tr>
+                        <td style="padding:14px 0; border-top:1px solid #23272E;">
+                          <div class="mktoText" id="step1" mktoName="Trin 1">
+                            <p style="margin:0 0 3px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">01</span> &nbsp;Find din butik</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">26 butikker i hele landet, eller k&oslash;b online hos Carl Ras. Tag v&aelig;rkt&oslash;jet i h&aring;nden f&oslash;rst, hvis du vil.</p>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:14px 0; border-top:1px solid #23272E;">
+                          <div class="mktoText" id="step2" mktoName="Trin 2">
+                            <p style="margin:0 0 3px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">02</span> &nbsp;Brug det p&aring; rigtigt arbejde</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">Ikke fem minutter i indk&oslash;rslen. 30 dage p&aring; pladsen, hvor det g&aelig;lder.</p>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:14px 0 22px; border-top:1px solid #23272E;">
+                          <div class="mktoText" id="step3" mktoName="Trin 3">
+                            <p style="margin:0 0 3px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">03</span> &nbsp;Glad? Ellers pengene tilbage</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">Er du ikke tilfreds, f&aring;r du pengene igen. Ingen krav om fejl, din vurdering er nok. <a href="https://www.stroxx.dk/STROXX-tilfredshedsgaranti.pdf" target="_blank" style="color:#2BA6E8; text-decoration:underline;">L&aelig;s garantien (PDF)</a>.</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                       <tr>
-                        <td>
+                        <td style="padding-right:10px;">
                           <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.stroxx.dk/butikker?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" style="height:48px;v-text-anchor:middle;width:200px;" arcsize="50%" fillcolor="#0B69A3" strokecolor="#2BA6E8">
+                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.carl-ras.dk/maerker/stroxx/?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" style="height:48px;v-text-anchor:middle;width:195px;" arcsize="50%" fillcolor="#0B69A3" strokecolor="#2BA6E8">
                           <w:anchorlock/>
-                          <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">Find din butik</center>
+                          <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">K&oslash;b hos Carl Ras</center>
                           </v:roundrect>
                           <![endif]-->
                           <!--[if !mso]><!-->
-                          <a class="btn" href="https://www.stroxx.dk/butikker?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" target="_blank" style="background-color:#0B69A3; border:1px solid #2BA6E8; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:198px;">Find din butik</a>
+                          <a class="btn" href="https://www.carl-ras.dk/maerker/stroxx/?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" target="_blank" style="background-color:#0B69A3; border:1px solid #2BA6E8; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:193px;">K&oslash;b hos Carl Ras</a>
                           <!--<![endif]-->
+                        </td>
+                        <td>
+                          <a class="btn-ghost" href="https://www.stroxx.dk/butikker?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_proev_det" target="_blank" style="background-color:#14171C; border:1px solid #3A4047; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:150px;">Find din butik</a>
                         </td>
                       </tr>
                     </table>

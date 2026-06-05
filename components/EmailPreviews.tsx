@@ -51,11 +51,11 @@ const TEMPLATES: Template[] = [
     file: 'stroxx-kampagne-proev-det.html',
     no: '03',
     name: 'Kampagne',
-    subject: 'Prøv STROXX i 30 dage. Glad, eller pengene tilbage',
-    preheader: 'Du betaler for logoet, ikke for stålet. Prøv det selv, helt uden risiko.',
+    subject: 'Dyrt værktøj. Til udyr pris.',
+    preheader: 'Du betaler for logoet, ikke for stålet. Prøv det selv i 30 dage, helt uden risiko.',
     purpose:
-      'Driver trafik til kampagnesiden /proev-det. Følger sidens fortælling: hook, tre trin, prisbevis som produktkort og risk reversal. To CTA-niveauer: kampagnesiden øverst, butiksfinderen til sidst.',
-    modules: ['Kampagne-hero + CTA', 'Tre trin', 'Beviset (produktkort)', 'Afsluttende CTA'],
+      'Følger kampagnesidens fortælling 1:1: hook med ringe-billedet, fornemmelsen (du betaler for navnet), vanen (dyrt føles sikkert), reframe med tal, prisbevis som produktkort, og til sidst garanti-stickeren (animeret GIF) før risk reversal og de tre trin. Kun sort og blå, som brandbogen foreskriver.',
+    modules: ['Hook (billede + tekst)', 'Fornemmelsen', 'Vanen', 'Reframe + tal', 'Beviset (produktkort)', 'Sticker + garanti'],
   },
 ];
 
