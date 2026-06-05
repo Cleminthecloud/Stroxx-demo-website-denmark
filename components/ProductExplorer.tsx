@@ -11,7 +11,7 @@ import { products, categories, categoryBySlug, categoryBuyUrl, particleSrc } fro
 
 const parsePrice = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
 
-type Sort = 'pop' | 'low' | 'high';
+type Sort = 'pop' | 'new' | 'low' | 'high';
 
 export default function ProductExplorer() {
   const params = useSearchParams();
@@ -36,14 +36,18 @@ export default function ProductExplorer() {
   }, []);
 
   const filtered = useMemo(() => {
+    const nq = q.trim().toLowerCase();
     let list = products.filter((p) => {
       const inCat = !active || p.tags.includes(active);
-      const inQ = !q || p.name.toLowerCase().includes(q.toLowerCase());
+      // match name OR varenummer (pros reorder by item number)
+      const inQ = !nq || p.name.toLowerCase().includes(nq) || (p.code ?? '').includes(nq);
       return inCat && inQ;
     });
     if (sort === 'low') list = [...list].sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
     if (sort === 'high') list = [...list].sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
     if (sort === 'pop') list = [...list].sort((a, b) => b.badges.length - a.badges.length);
+    // Carl Ras item numbers ascend over time → highest code = newest product
+    if (sort === 'new') list = [...list].sort((a, b) => Number(b.code ?? 0) - Number(a.code ?? 0));
     return list;
   }, [active, q, sort]);
 
@@ -123,12 +127,12 @@ export default function ProductExplorer() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Søg i produkter…"
+              placeholder="Søg på navn eller varenummer…"
               className="flex-1 min-w-[200px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
             />
             <div className="flex items-center gap-2 text-sm">
               <span className="text-fog">Sortér:</span>
-              {([['pop', 'Populært'], ['low', 'Pris ↑'], ['high', 'Pris ↓']] as [Sort, string][]).map(([k, l]) => (
+              {([['pop', 'Populært'], ['new', 'Nyeste'], ['low', 'Pris ↑'], ['high', 'Pris ↓']] as [Sort, string][]).map(([k, l]) => (
                 <button
                   key={k}
                   onClick={() => setSort(k)}

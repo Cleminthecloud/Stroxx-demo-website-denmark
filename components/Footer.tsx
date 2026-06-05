@@ -31,9 +31,11 @@ export default function Footer() {
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Sider</div>
             <div className="space-y-3">
               <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
+              <Link href="/fag" className="block text-fog hover:text-white">Fagområder</Link>
               <Link href="/butikker" className="block text-fog hover:text-white">Butikker</Link>
               <Link href="/proev-det" className="block text-fog hover:text-white">Kampagne: Prøv det</Link>
               <Link href="/butikker?tab=specialister" className="block text-fog hover:text-white">Specialister</Link>
+              <Link href="/service" className="block text-fog hover:text-white">Service og support</Link>
             </div>
           </div>
           <div className="text-sm">
