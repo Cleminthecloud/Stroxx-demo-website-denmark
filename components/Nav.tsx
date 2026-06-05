@@ -21,10 +21,19 @@ export default function Nav() {
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <nav className="mx-auto max-w-[1600px] px-6 md:px-10 h-20 flex items-center justify-between">
+      {/* nav tightens as the page scrolls: one height step, in sync with the blur */}
+      <nav
+        className={`mx-auto max-w-[1600px] px-6 md:px-10 flex items-center justify-between transition-[height] duration-300 ease-out ${
+          scrolled ? 'h-14' : 'h-20'
+        }`}
+      >
         <Link href="/" aria-label="STROXX" className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={brandImages.logoWhite} alt="STROXX" className="h-7 md:h-8 w-auto" />
+          <img
+            src={brandImages.logoWhite}
+            alt="STROXX"
+            className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
+          />
         </Link>
         <div className="flex items-center gap-7 text-[13px] text-fog">
           <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
