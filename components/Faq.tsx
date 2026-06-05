@@ -19,14 +19,16 @@ export default function Faq({ items }: { items: FaqItem[] }) {
             <button
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-6 py-6 text-left"
+              className="group flex w-full items-center justify-between gap-6 py-6 text-left"
             >
-              <span className={`text-base font-medium transition-colors md:text-lg ${isOpen ? 'text-white' : 'text-white/80 hover:text-white'}`}>
+              <span className={`text-base font-medium transition-colors md:text-lg ${isOpen ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
                 {item.q}
               </span>
               <span
                 className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 ${
-                  isOpen ? 'rotate-45 border-stroxx-blue/60 text-stroxx-blue' : 'border-line text-fog'
+                  isOpen
+                    ? 'rotate-45 border-stroxx-blue/60 text-stroxx-blue shadow-[0_0_18px_rgba(0,130,202,0.35)]'
+                    : 'border-line text-fog group-hover:border-stroxx-blue/60 group-hover:text-stroxx-blueGlow group-hover:shadow-[0_0_18px_rgba(0,130,202,0.3)]'
                 }`}
               >
                 <Plus size={15} />
