@@ -74,6 +74,7 @@ const MARKETO_STEPS = [
 
 function previewify(html: string) {
   return html
+    .replaceAll('https://stroxx-demo-website-denmark.vercel.app', '')
     .replaceAll('https://www.stroxx.dk', '')
     .replace(/\{\{lead\.[^:}]+:default=([^}]*)\}\}/g, '$1')
     .replace(/\{\{system\.[^}]+\}\}/g, '#');

@@ -22,6 +22,10 @@ export default function ProductExplorer() {
   useEffect(() => {
     const c = params.get('cat');
     if (c) setActive(c);
+    // deep-linkable search: /produkter?q=... (also used by the WebSite
+    // SearchAction schema so answer engines can construct search URLs)
+    const qq = params.get('q');
+    if (qq) setQ(qq);
   }, [params]);
 
   // categories that actually have products in this demo dataset

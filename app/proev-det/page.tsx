@@ -7,8 +7,34 @@ import ProductCard from '@/components/ProductCard';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import VideoProof from '@/components/VideoProof';
 import CountUp from '@/components/CountUp';
+import Faq from '@/components/Faq';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
+
+/* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
+   Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
+const FAQ_ITEMS = [
+  {
+    q: 'Hvordan virker STROXX tilfredshedsgarantien?',
+    a: 'Du prøver værktøjet på rigtigt arbejde i 30 dage. Er du ikke tilfreds, får du pengene tilbage. Der er ingen krav om fejl eller mangler, din vurdering er nok. Garantien gælder erhvervskunder med konto hos Carl Ras.',
+  },
+  {
+    q: 'Hvad dækker garantien, og hvad gør den ikke?',
+    a: 'Den dækker alle STROXX-produkter undtagen adgangskontrol. Ved mængdekøb gælder garantien den først købte vare. Returnering sker i din Carl Ras butik med faktura eller følgeseddel, og ved onlinekøb via kundeservice på 44 85 55 11.',
+  },
+  {
+    q: 'Hvor kan jeg købe STROXX?',
+    a: 'I Danmark fås STROXX eksklusivt hos Carl Ras, i 26 butikker i hele landet og online på carl-ras.dk. I resten af Europa forhandles brandet gennem kæder som Meesenburg i Tyskland, Foussier i Frankrig og Lecot i Belgien.',
+  },
+  {
+    q: 'Hvordan kan STROXX være så billigt?',
+    a: 'STROXX udvikles af fagfolk i Danmark, Tyskland, Frankrig og Belgien, som selv sætter specifikationerne og vælger materialerne. Der er ingen logo-præmier, sponsorater eller fordyrende mellemled. Du betaler for værktøjet, ikke for reklamerne.',
+  },
+  {
+    q: 'Er STROXX professionel kvalitet?',
+    a: 'Ja. STROXX er bygget til professionel brug og dækker over 1400 varenumre, der sælges i mere end 227 butikker i Europa. Tolerancer, materialer og holdbarhed måler kvaliteten, ikke prisskiltet. Derfor tør vi give 30 dages tilfredshedsgaranti.',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Få råd til andet end værktøj — STROXX',
@@ -51,8 +77,35 @@ export default function ProevDetPage() {
   const proof = PROOF_CODES.map((c) => products.find((p) => p.code === c)).filter(Boolean);
   const buy = `${CR_BRAND}/?${UTM}`;
 
+  /* Structured data: FAQ + the 3 trial steps as HowTo, so answer engines can
+     quote the guarantee mechanics directly. */
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_ITEMS.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+  const howToLd = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'Sådan prøver du STROXX i 30 dage med tilfredshedsgaranti',
+    description:
+      'STROXX giver 30 dages tilfredshedsgaranti: prøv værktøjet på rigtigt arbejde, og få pengene tilbage, hvis du ikke er tilfreds.',
+    step: STEPS.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.t,
+      text: s.d,
+    })),
+  };
+
   return (
     <main className="bg-ink">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
       {/* ── 1 · HERO — the hook ────────────────────────────────────────── */}
       <section className="relative h-[100svh] min-h-[560px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -283,6 +336,20 @@ export default function ProevDetPage() {
               </div>
               <GuaranteeModal />
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 8 · FAQ — the objections, answered in plain words ──────────── */}
+      <section className="relative border-t border-line">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
+          <div className="text-center mb-12">
+            <Reveal><Eyebrow>Spørgsmål</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Det, du alligevel \n sidder og *tænker.*'}
+              className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.96]" />
+          </div>
+          <Reveal delay={100}>
+            <Faq items={FAQ_ITEMS} />
           </Reveal>
         </div>
       </section>

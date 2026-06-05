@@ -58,9 +58,21 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
     },
   };
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Hjem', item: 'https://stroxx-demo-website-denmark.vercel.app/' },
+      { '@type': 'ListItem', position: 2, name: 'Produkter', item: 'https://stroxx-demo-website-denmark.vercel.app/produkter' },
+      ...(cat ? [{ '@type': 'ListItem', position: 3, name: cat.name, item: `https://stroxx-demo-website-denmark.vercel.app/produkter?cat=${cat.slug}` }] : []),
+      { '@type': 'ListItem', position: cat ? 4 : 3, name: product.name },
+    ],
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ProductExperience
         product={product}
         related={related}
