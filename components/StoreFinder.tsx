@@ -40,9 +40,13 @@ export default function StoreFinder() {
   const L = useRef<typeof import('leaflet') | null>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
-  /* deep-linkable tab: /butikker?tab=specialister (nav + footer use this) */
+  /* deep-linkable: /butikker?tab=specialister (nav + footer) and ?q=<postnr/by>
+     (Marketo emails prefill the search with the lead's postal code) */
   useEffect(() => {
-    if (window.location.search.includes('tab=specialister')) setTab('specialister');
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get('tab') === 'specialister') setTab('specialister');
+    const qq = sp.get('q');
+    if (qq) setQ(qq);
   }, []);
 
   const origin = searchPos ?? pos;
