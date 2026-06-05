@@ -1,19 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Download, Code, Smartphone, Monitor } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Download, Code, Smartphone, Monitor, Info, X } from 'lucide-react';
 
-/* Hidden internal page: previews the Marketo email templates shipped in
-   /public/emails. For preview we rewrite a few things that only make sense
-   inside Marketo:
-   - absolute site links → relative (so images/links resolve locally)
-   - {{lead.X:default=Y}} → Y
-   - {{system.*}} → '#'
+/* Hidden internal page: presents the Marketo email templates from /public/emails
+   one at a time, full screen, inside real device mockups (public/mockups).
+   The mockup PNGs have transparent screen cut-outs, so the email iframe sits
+   BEHIND the device image and shows through the screen.
+
+   Measured screen holes (fractions of the PNG):
+   - macbook.png  4704x2836: x 480-4222, y 65-2496
+   - hand-holding-phone...png 2000x2000: x 613-1250, y 280-1697
+
+   For preview we rewrite things that only make sense inside Marketo:
+   absolute site links → relative, {{lead.X:default=Y}} → Y, {{system.*}} → '#'.
    The downloadable files are untouched and Marketo-ready. */
 
 type Template = {
   file: string;
-  title: string;
+  no: string;
+  name: string;
   subject: string;
   preheader: string;
   purpose: string;
@@ -23,8 +29,9 @@ type Template = {
 const TEMPLATES: Template[] = [
   {
     file: 'stroxx-velkomst.html',
-    title: '01 · Velkomst (Pro Club)',
-    subject: 'Velkommen i klubben, {{lead.First Name}}',
+    no: '01',
+    name: 'Velkomst',
+    subject: 'Velkommen i klubben',
     preheader: 'Tidlig adgang, specialist-tips og de skarpeste priser. Direkte i indbakken.',
     purpose:
       'Sendes ved tilmelding til Pro Club. Sætter forventninger (maks et par mails om måneden), viser de tre fordele og sender folk videre til produkterne, garantien og butikkerne.',
@@ -32,23 +39,41 @@ const TEMPLATES: Template[] = [
   },
   {
     file: 'stroxx-produkt-streglaser.html',
-    title: '02 · Hero-produkt (Streglaser 3D Green)',
+    no: '02',
+    name: 'Produkt',
     subject: 'Grønne linjer. Skarp pris. Streglaser 3D Green',
     preheader: 'Selvnivellerende 3D streglaser med 40 m rækkevidde. 2.498,75 kr. inkl. moms.',
     purpose:
-      'Produktfokus: billede, specs, pris og to varianter. En specialist lægger ansigt og citat til, med direkte telefonnummer og links til specialister og butiksfinder. Primær CTA går til køb hos Carl Ras.',
-    modules: ['Produkt-hero', 'Pris + CTA', 'Specs', 'Varianter', 'Specialist', 'Garanti-bånd'],
+      'Produktfokus: cut-out billede, specs, pris og to varianter som produktkort i sitets stil. En specialist lægger ansigt og citat til, med direkte telefonnummer og links til specialister og butiksfinder. Primær CTA går til køb hos Carl Ras.',
+    modules: ['Produkt-hero', 'Pris + CTA', 'Specs', 'Varianter (produktkort)', 'Specialist', 'Garanti-bånd'],
   },
   {
     file: 'stroxx-kampagne-proev-det.html',
-    title: '03 · Kampagne (Prøv det i 30 dage)',
+    no: '03',
+    name: 'Kampagne',
     subject: 'Prøv STROXX i 30 dage. Glad, eller pengene tilbage',
     preheader: 'Du betaler for logoet, ikke for stålet. Prøv det selv, helt uden risiko.',
     purpose:
-      'Driver trafik til kampagnesiden /proev-det. Følger sidens fortælling: hook, tre trin, prisbevis og risk reversal. To CTA-niveauer: kampagnesiden øverst, butiksfinderen til sidst.',
-    modules: ['Kampagne-hero + CTA', 'Tre trin', 'Beviset (2 produkter)', 'Afsluttende CTA'],
+      'Driver trafik til kampagnesiden /proev-det. Følger sidens fortælling: hook, tre trin, prisbevis som produktkort og risk reversal. To CTA-niveauer: kampagnesiden øverst, butiksfinderen til sidst.',
+    modules: ['Kampagne-hero + CTA', 'Tre trin', 'Beviset (produktkort)', 'Afsluttende CTA'],
   },
 ];
+
+/* Screen cut-outs as fractions of each mockup image. */
+const MACBOOK = {
+  src: '/mockups/macbook.png',
+  imgW: 4704,
+  imgH: 2836,
+  hole: { left: 480 / 4704, top: 65 / 2836, width: 3742 / 4704, height: 2431 / 2836 },
+  emailViewport: 1180, // CSS px the email "sees" → desktop layout
+};
+const IPHONE = {
+  src: '/mockups/hand-holding-phone-with-blank-screen.png',
+  imgW: 2000,
+  imgH: 2000,
+  hole: { left: 613 / 2000, top: 280 / 2000, width: 637 / 2000, height: 1417 / 2000 },
+  emailViewport: 390, // iPhone width → mobile layout
+};
 
 function previewify(html: string) {
   return html
@@ -57,198 +82,263 @@ function previewify(html: string) {
     .replace(/\{\{system\.[^}]+\}\}/g, '#');
 }
 
-function MacBookFrame({ html }: { html: string }) {
-  return (
-    <div className="w-full max-w-[760px]">
-      {/* lid */}
-      <div className="rounded-t-[14px] bg-gradient-to-b from-[#3A3C40] to-[#26282B] p-[7px] pb-0 shadow-2xl">
-        <div className="rounded-t-[8px] bg-black px-1.5 pt-1.5">
-          <div className="flex justify-center pb-1">
-            <span className="h-[5px] w-[5px] rounded-full bg-[#1f2227] ring-1 ring-[#34373c]" />
-          </div>
-          <iframe
-            title="Desktop preview"
-            srcDoc={html}
-            className="block h-[470px] w-full border-0 bg-[#EEEDEA]"
-          />
-        </div>
-      </div>
-      {/* base */}
-      <div className="relative h-[14px] rounded-b-[14px] bg-gradient-to-b from-[#46484C] to-[#222428]">
-        <div className="absolute left-1/2 top-0 h-[6px] w-[110px] -translate-x-1/2 rounded-b-[8px] bg-[#1B1D1F]" />
-      </div>
-    </div>
-  );
-}
-
-function IPhoneFrame({ html }: { html: string }) {
-  return (
-    <div className="w-[312px] shrink-0 rounded-[48px] bg-gradient-to-b from-[#3A3C40] to-[#222428] p-[10px] shadow-2xl">
-      <div className="relative overflow-hidden rounded-[38px] bg-[#EEEDEA]">
-        {/* dynamic island */}
-        <div className="pointer-events-none absolute left-1/2 top-2.5 z-10 h-[24px] w-[90px] -translate-x-1/2 rounded-full bg-black" />
-        <iframe
-          title="Mobile preview"
-          srcDoc={html}
-          className="block h-[620px] w-full border-0"
-        />
-        {/* home indicator */}
-        <div className="pointer-events-none absolute bottom-1.5 left-1/2 z-10 h-[4px] w-[110px] -translate-x-1/2 rounded-full bg-black/70" />
-      </div>
-    </div>
-  );
-}
-
-function TemplateSection({ t }: { t: Template }) {
-  const [html, setHtml] = useState<string | null>(null);
-  const [view, setView] = useState<'both' | 'desktop' | 'mobile'>('both');
+/** Device mockup with the email iframe showing through the transparent screen. */
+function Device({
+  spec,
+  html,
+  label,
+}: {
+  spec: typeof MACBOOK;
+  html: string;
+  label: string;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [w, setW] = useState(0);
 
   useEffect(() => {
-    let alive = true;
-    fetch(`/emails/${t.file}`)
-      .then((r) => r.text())
-      .then((raw) => alive && setHtml(previewify(raw)))
-      .catch(() => alive && setHtml(null));
-    return () => {
-      alive = false;
-    };
-  }, [t.file]);
+    const el = wrapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setW(el.clientWidth));
+    ro.observe(el);
+    setW(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
 
-  const showDesktop = view !== 'mobile';
-  const showMobile = view !== 'desktop';
+  const holePxW = w * spec.hole.width;
+  const scale = holePxW > 0 ? holePxW / spec.emailViewport : 0;
+  const holePxH = w * (spec.imgH / spec.imgW) * spec.hole.height;
 
   return (
-    <section className="border-t border-line py-16">
-      <div className="grid gap-10 lg:grid-cols-[340px_1fr]">
-        {/* meta */}
-        <div>
-          <h2 className="font-display text-2xl font-bold text-white">{t.title}</h2>
-          <p className="mt-3 text-sm leading-relaxed text-fog">{t.purpose}</p>
-
-          <dl className="mt-6 space-y-3 text-sm">
-            <div>
-              <dt className="text-[11px] uppercase tracking-wider text-fog/60">Emnelinje</dt>
-              <dd className="mt-0.5 text-white">{t.subject}</dd>
-            </div>
-            <div>
-              <dt className="text-[11px] uppercase tracking-wider text-fog/60">Preheader</dt>
-              <dd className="mt-0.5 text-fog">{t.preheader}</dd>
-            </div>
-            <div>
-              <dt className="text-[11px] uppercase tracking-wider text-fog/60">Moduler (flytbare i Marketo)</dt>
-              <dd className="mt-1.5 flex flex-wrap gap-1.5">
-                {t.modules.map((m) => (
-                  <span key={m} className="rounded-full border border-line px-2.5 py-1 text-xs text-fog">
-                    {m}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          </dl>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            <a
-              href={`/emails/${t.file}`}
-              download
-              className="inline-flex items-center gap-2 rounded-sm bg-stroxx-blue px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#0073B3]"
-            >
-              <Download size={15} /> Download HTML
-            </a>
-            <a
-              href={`/emails/${t.file}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-sm border border-line px-4 py-2.5 text-sm text-fog transition-colors hover:text-white"
-            >
-              <Code size={15} /> Rå fil
-            </a>
-          </div>
-
-          {/* view toggle */}
-          <div className="mt-6 inline-flex rounded-sm border border-line p-1 text-xs">
-            {(
-              [
-                ['both', 'Begge'],
-                ['desktop', 'Desktop'],
-                ['mobile', 'Mobil'],
-              ] as const
-            ).map(([v, label]) => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                className={`rounded-[2px] px-3 py-1.5 transition-colors ${
-                  view === v ? 'bg-steel text-white' : 'text-fog hover:text-white'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+    <div ref={wrapRef} className="relative w-full" style={{ aspectRatio: `${spec.imgW} / ${spec.imgH}` }} aria-label={label}>
+      {/* email behind the screen cut-out */}
+      {scale > 0 && (
+        <div
+          className="absolute overflow-hidden bg-[#060708]"
+          style={{
+            left: `${spec.hole.left * 100}%`,
+            top: `${spec.hole.top * 100}%`,
+            width: `${spec.hole.width * 100}%`,
+            height: `${spec.hole.height * 100}%`,
+          }}
+        >
+          <iframe
+            title={label}
+            srcDoc={html}
+            style={{
+              width: spec.emailViewport,
+              height: holePxH / scale,
+              transform: `scale(${scale})`,
+              transformOrigin: '0 0',
+              border: 0,
+              display: 'block',
+            }}
+          />
         </div>
-
-        {/* devices */}
-        <div className="flex flex-wrap items-start justify-center gap-10 xl:justify-start">
-          {html === null ? (
-            <div className="text-sm text-fog">Indlæser forhåndsvisning…</div>
-          ) : (
-            <>
-              {showDesktop && (
-                <div>
-                  <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-fog/60">
-                    <Monitor size={13} /> Desktop · 600px e-mail
-                  </div>
-                  <MacBookFrame html={html} />
-                </div>
-              )}
-              {showMobile && (
-                <div>
-                  <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wider text-fog/60">
-                    <Smartphone size={13} /> Mobil · responsivt layout
-                  </div>
-                  <IPhoneFrame html={html} />
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </section>
+      )}
+      {/* device on top, screen is transparent */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={spec.src}
+        alt=""
+        className="pointer-events-none absolute inset-0 z-10 h-full w-full select-none"
+        style={{ filter: 'drop-shadow(0 50px 70px rgba(0,0,0,0.65)) drop-shadow(0 16px 28px rgba(0,0,0,0.5))' }}
+        draggable={false}
+      />
+    </div>
   );
 }
 
 export default function EmailPreviews() {
+  const [idx, setIdx] = useState(0);
+  const [view, setView] = useState<'desktop' | 'mobile'>('desktop');
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [htmls, setHtmls] = useState<Record<string, string>>({});
+
+  const t = TEMPLATES[idx];
+  const html = htmls[t.file];
+
+  useEffect(() => {
+    let alive = true;
+    TEMPLATES.forEach(({ file }) => {
+      fetch(`/emails/${file}`)
+        .then((r) => r.text())
+        .then((raw) => alive && setHtmls((h) => ({ ...h, [file]: previewify(raw) })))
+        .catch(() => undefined);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
-    <div className="mx-auto max-w-[1600px] px-6 pb-24 pt-32 md:px-10">
-      <div className="max-w-3xl">
-        <div className="eyebrow mb-4">Intern side · Marketo Engage</div>
-        <h1 className="font-display text-4xl font-bold tracking-tightest text-white md:text-5xl">
-          E-mail skabeloner
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden">
+      {/* stage backdrop: keynote spotlight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(900px 540px at 50% 38%, rgba(0,130,202,0.13), rgba(11,12,14,0) 65%), radial-gradient(1400px 800px at 50% 110%, rgba(255,255,255,0.04), rgba(11,12,14,0) 60%)',
+        }}
+      />
+
+      {/* slide header */}
+      <div className="relative z-10 px-6 pt-28 text-center md:pt-32">
+        <div className="eyebrow mb-3">Marketo e-mail skabeloner</div>
+        <h1
+          key={`h-${idx}`}
+          className="email-fade font-display text-3xl font-bold tracking-tightest text-white md:text-4xl"
+        >
+          {t.no} · {t.name}
         </h1>
-        <p className="mt-5 leading-relaxed text-fog">
-          Tre Marketo-klare skabeloner bygget på Email Editor 2.0 syntaks: ét{' '}
-          <code className="text-white/80">mktoContainer</code> med flytbare{' '}
-          <code className="text-white/80">mktoModule</code>-sektioner og redigerbare{' '}
-          <code className="text-white/80">mktoText</code>/<code className="text-white/80">mktoImg</code>-felter.
-          Header og legal footer ligger uden for containeren, så de ikke kan slettes ved en fejl.
-          Alle mails er 600px hybrid-layout med inline CSS, VML-knapper til Outlook og skjult preheader.
-        </p>
-        <p className="mt-3 leading-relaxed text-fog">
-          Det juridiske er på plads i hver mail: permission-tekst (hvorfor du modtager den), fysisk
-          adresse og CVR, afmeld-link via <code className="text-white/80">{'{{system.unsubscribeLink}}'}</code>,
-          vis-i-browser via <code className="text-white/80">{'{{system.viewAsWebpageLink}}'}</code> og link til
-          persondatapolitik. I forhåndsvisningen her er Marketo-tokens erstattet med deres standardværdier.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-fog/70">
-          Import: Marketo → Design Studio → Email Templates → New Template → indsæt HTML → Approve.
-          Billeder ligger på Carl Ras&apos; CDN og sitets eget domæne, så de virker direkte i udsendelser.
+        <p key={`s-${idx}`} className="email-fade mx-auto mt-2 max-w-xl text-sm text-fog">
+          Emne: {t.subject}
         </p>
       </div>
 
-      <div className="mt-16">
-        {TEMPLATES.map((t) => (
-          <TemplateSection key={t.file} t={t} />
-        ))}
+      {/* stage */}
+      <div className="relative z-10 flex flex-1 items-center justify-center px-4 pb-40 pt-8 md:px-10">
+        {!html ? (
+          <div className="text-sm text-fog">Indlæser…</div>
+        ) : view === 'desktop' ? (
+          <div key={`d-${idx}`} className="email-rise w-full max-w-[min(1100px,88vw,calc((100dvh-330px)*1.659))]">
+            <Device spec={MACBOOK} html={html} label={`${t.name}, desktop`} />
+          </div>
+        ) : (
+          <div key={`m-${idx}`} className="email-rise w-full max-w-[min(560px,80vw,calc(100dvh-330px))]">
+            <Device spec={IPHONE} html={html} label={`${t.name}, mobil`} />
+          </div>
+        )}
       </div>
+
+      {/* floating control bar */}
+      <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2">
+        <div className="glass-panel flex items-center gap-1 rounded-full px-2 py-2">
+          {TEMPLATES.map((tpl, i) => (
+            <button
+              key={tpl.file}
+              onClick={() => setIdx(i)}
+              className={`rounded-full px-3.5 py-2 text-xs font-semibold transition-colors md:px-4 md:text-sm ${
+                i === idx ? 'bg-stroxx-blue text-white' : 'text-fog hover:text-white'
+              }`}
+              aria-pressed={i === idx}
+            >
+              <span className="opacity-60">{tpl.no}</span>
+              <span className="ml-1.5 hidden sm:inline">{tpl.name}</span>
+            </button>
+          ))}
+
+          <span className="mx-1 h-6 w-px bg-white/10" aria-hidden />
+
+          <button
+            onClick={() => setView('desktop')}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold transition-colors md:text-sm ${
+              view === 'desktop' ? 'bg-white/10 text-white' : 'text-fog hover:text-white'
+            }`}
+            aria-pressed={view === 'desktop'}
+          >
+            <Monitor size={15} /> <span className="hidden sm:inline">Desktop</span>
+          </button>
+          <button
+            onClick={() => setView('mobile')}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold transition-colors md:text-sm ${
+              view === 'mobile' ? 'bg-white/10 text-white' : 'text-fog hover:text-white'
+            }`}
+            aria-pressed={view === 'mobile'}
+          >
+            <Smartphone size={15} /> <span className="hidden sm:inline">Mobil</span>
+          </button>
+
+          <span className="mx-1 h-6 w-px bg-white/10" aria-hidden />
+
+          <button
+            onClick={() => setInfoOpen(true)}
+            className="flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold text-fog transition-colors hover:text-white md:text-sm"
+          >
+            <Info size={15} /> <span className="hidden sm:inline">Info</span>
+          </button>
+        </div>
+      </div>
+
+      {/* info panel */}
+      {infoOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
+          <button aria-label="Luk" className="absolute inset-0 bg-black/60" onClick={() => setInfoOpen(false)} />
+          <div className="glass-panel email-rise relative m-0 max-h-[85dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl p-7 sm:m-6 sm:rounded-2xl md:p-9">
+            <button
+              onClick={() => setInfoOpen(false)}
+              className="absolute right-5 top-5 text-fog transition-colors hover:text-white"
+              aria-label="Luk info"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="eyebrow mb-2">
+              {t.no} · {t.name}
+            </div>
+            <h2 className="font-display text-2xl font-bold text-white">{t.subject}</h2>
+            <p className="mt-1.5 text-sm text-fog">Preheader: {t.preheader}</p>
+            <p className="mt-4 text-sm leading-relaxed text-fog">{t.purpose}</p>
+
+            <div className="mt-5 flex flex-wrap gap-1.5">
+              {t.modules.map((m) => (
+                <span key={m} className="rounded-full border border-line px-2.5 py-1 text-xs text-fog">
+                  {m}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              <a
+                href={`/emails/${t.file}`}
+                download
+                className="inline-flex items-center gap-2 rounded-full bg-stroxx-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0073B3]"
+              >
+                <Download size={15} /> Download HTML
+              </a>
+              <a
+                href={`/emails/${t.file}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm text-fog transition-colors hover:text-white"
+              >
+                <Code size={15} /> Rå fil
+              </a>
+            </div>
+
+            <div className="mt-7 border-t border-line pt-5 text-[13px] leading-relaxed text-fog/80">
+              <p>
+                Skabelonerne er bygget til Marketo Email Editor 2.0: ét{' '}
+                <code className="text-white/80">mktoContainer</code> med flytbare{' '}
+                <code className="text-white/80">mktoModule</code>-sektioner og redigerbare{' '}
+                <code className="text-white/80">mktoText</code>/<code className="text-white/80">mktoImg</code>-felter.
+                Header og legal footer ligger uden for containeren, så de ikke kan slettes ved en fejl. 600px
+                hybrid-layout, inline CSS og VML-knapper til Outlook.
+              </p>
+              <p className="mt-3">
+                Jura i hver mail: permission-tekst, fysisk adresse og CVR, afmeld via{' '}
+                <code className="text-white/80">{'{{system.unsubscribeLink}}'}</code>, vis-i-browser via{' '}
+                <code className="text-white/80">{'{{system.viewAsWebpageLink}}'}</code> og link til
+                persondatapolitik. I forhåndsvisningen er tokens erstattet med standardværdier.
+              </p>
+              <p className="mt-3">
+                Produktbilleder bruger sitets cut-out proxy (<code className="text-white/80">/api/tool/&#123;id&#125;</code>),
+                som skiftes til rigtige DAM-PNG&apos;er, når API-adgangen lander. Import: Marketo → Design Studio →
+                Email Templates → New Template → indsæt HTML → Approve.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* slide transitions */}
+      <style>{`
+        @keyframes emailFade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+        @keyframes emailRise { from { opacity:0; transform: translateY(18px) scale(.985); } to { opacity:1; transform:none; } }
+        .email-fade { animation: emailFade .45s cubic-bezier(.16,1,.3,1) both; }
+        .email-rise { animation: emailRise .6s cubic-bezier(.16,1,.3,1) both; }
+        @media (prefers-reduced-motion: reduce) { .email-fade, .email-rise { animation: none; } }
+      `}</style>
     </div>
   );
 }

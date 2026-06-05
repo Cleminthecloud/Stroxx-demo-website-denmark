@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="color-scheme" content="light">
-  <meta name="supported-color-schemes" content="light">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
   <title>Velkommen til STROXX Pro Club</title>
   <!--
     STROXX Marketo email template: VELKOMST (Pro Club signup)
-    Foreslået emnelinje: Velkommen i klubben, {{lead.First Name:default=makker}}
+    Foreslået emnelinje: Velkommen i klubben
     Preheader: Tidlig adgang, specialist-tips og de skarpeste priser. Direkte i indbakken.
-    Editor 2.0: mktoContainer + mktoModule + mktoText/mktoImg.
+    Design: mørkt STROXX-univers (ink/carbon/steel), pille-knapper som sitets glass-CTA,
+    cut-out produktbilleder via /api/tool/{id}. Editor 2.0: mktoContainer + mktoModule.
   -->
   <!--[if mso]>
   <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
@@ -22,7 +23,8 @@
     table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; border-collapse:collapse !important; }
     img { -ms-interpolation-mode:bicubic; border:0; height:auto; line-height:100%; outline:none; text-decoration:none; }
     a { text-decoration:none; }
-    .btn:hover { background:#0073B3 !important; }
+    .btn:hover { background-color:#0E7DB8 !important; }
+    .btn-ghost:hover { border-color:#5A6168 !important; }
     @media screen and (max-width:640px) {
       .container { width:100% !important; max-width:100% !important; }
       .px { padding-left:24px !important; padding-right:24px !important; }
@@ -33,23 +35,23 @@
     }
   </style>
 </head>
-<body style="margin:0; padding:0; background-color:#EEEDEA;">
+<body style="margin:0; padding:0; background-color:#060708;">
 
   <!-- Preheader (skjult) -->
   <div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">
     Tidlig adgang, specialist-tips og de skarpeste priser. Direkte i indbakken.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EEEDEA;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#060708;">
     <tr>
-      <td align="center" style="padding:24px 12px;">
+      <td align="center" style="padding:28px 12px;">
 
         <!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" class="container" style="max-width:600px; margin:0 auto;">
 
           <!-- HEADER (fast, kan ikke slettes i editoren) -->
           <tr>
-            <td style="background-color:#0B0C0E; border-radius:8px 8px 0 0; padding:20px 32px;" class="px">
+            <td style="background-color:#0B0C0E; border:1px solid #23272E; border-bottom:0; border-radius:14px 14px 0 0; padding:22px 32px;" class="px">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td align="left">
@@ -57,7 +59,7 @@
                       <img src="https://www.stroxx.dk/brand/logo-white.png" alt="STROXX" width="116" style="display:block; width:116px;">
                     </a>
                   </td>
-                  <td align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#8A9199;" class="hide-mobile">
+                  <td align="right" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;" class="hide-mobile">
                     Pro Club
                   </td>
                 </tr>
@@ -67,28 +69,28 @@
 
           <!-- EDITERBART INDHOLD -->
           <tr>
-            <td>
+            <td style="border-left:1px solid #23272E; border-right:1px solid #23272E;">
               <table class="mktoContainer" id="emailContainer" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 
                 <!-- MODUL: Hero -->
                 <tr class="mktoModule" id="heroModule" mktoName="Hero">
-                  <td style="background-color:#111317; padding:44px 32px 40px;" class="px">
+                  <td style="background-color:#0B0C0E; padding:46px 32px 42px;" class="px">
                     <div class="mktoText" id="heroText" mktoName="Hero tekst">
-                      <p style="margin:0 0 14px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#2BA6E8;">Velkommen til Pro Club</p>
-                      <h1 class="h1" style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:34px; line-height:40px; font-weight:bold; color:#FFFFFF;">Velkommen i klubben, {{lead.First Name:default=makker}}.</h1>
-                      <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:25px; color:#B9BFC6;">Du får nu nyheder, specialist-tips og de skarpeste priser, før alle andre. Maks et par mails om måneden. Ingen spam, kun værktøj.</p>
+                      <p style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#2BA6E8;">Velkommen til Pro Club</p>
+                      <h1 class="h1" style="margin:0 0 16px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:34px; line-height:40px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">Velkommen i klubben.</h1>
+                      <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:25px; color:#B9BFC6;">Godt at have dig med. Du får nu nyheder, specialist-tips og de skarpeste priser, før alle andre. Maks et par mails om måneden. Ingen spam, kun værktøj.</p>
                     </div>
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:30px;">
                       <tr>
                         <td>
                           <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.stroxx.dk/produkter?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" style="height:50px;v-text-anchor:middle;width:230px;" arcsize="10%" fillcolor="#0082CA" strokecolor="#0082CA">
+                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.stroxx.dk/produkter?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" style="height:48px;v-text-anchor:middle;width:225px;" arcsize="50%" fillcolor="#0B69A3" strokecolor="#2BA6E8">
                           <w:anchorlock/>
-                          <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Se produkterne</center>
+                          <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">Se produkterne</center>
                           </v:roundrect>
                           <![endif]-->
                           <!--[if !mso]><!-->
-                          <a class="btn" href="https://www.stroxx.dk/produkter?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="background-color:#0082CA; border-radius:5px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; line-height:50px; text-align:center; width:230px;">Se produkterne</a>
+                          <a class="btn" href="https://www.stroxx.dk/produkter?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="background-color:#0B69A3; border:1px solid #2BA6E8; border-radius:999px; color:#FFFFFF; display:inline-block; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; width:223px;">Se produkterne</a>
                           <!--<![endif]-->
                         </td>
                       </tr>
@@ -98,33 +100,33 @@
 
                 <!-- MODUL: Fordele -->
                 <tr class="mktoModule" id="benefitsModule" mktoName="Fordele">
-                  <td style="background-color:#FFFFFF; padding:40px 32px 16px;" class="px">
+                  <td style="background-color:#111317; border-top:1px solid #23272E; padding:40px 32px 18px;" class="px">
                     <div class="mktoText" id="benefitsIntro" mktoName="Fordele intro">
-                      <p style="margin:0 0 6px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#0082CA;">Det får du</p>
-                      <h2 style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:24px; line-height:30px; font-weight:bold; color:#0B0C0E;">Tre gode grunde til at blive hængende</h2>
+                      <p style="margin:0 0 8px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#7D8387;">Det får du</p>
+                      <h2 style="margin:0 0 8px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:24px; line-height:30px; font-weight:bold; letter-spacing:-0.5px; color:#FFFFFF;">Tre gode grunde til at blive hængende</h2>
                     </div>
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="padding:18px 0; border-bottom:1px solid #E8E6E2;">
+                        <td style="padding:18px 0; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="benefit1" mktoName="Fordel 1">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#0B0C0E;">01 &nbsp;Tidlig adgang</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#5C636B;">Nyheder og kampagner lander i din indbakke, før de rammer butikkerne.</p>
+                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">01</span> &nbsp;Tidlig adgang</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Nyheder og kampagner lander i din indbakke, før de rammer butikkerne.</p>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td style="padding:18px 0; border-bottom:1px solid #E8E6E2;">
+                        <td style="padding:18px 0; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="benefit2" mktoName="Fordel 2">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#0B0C0E;">02 &nbsp;Specialist-tips</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#5C636B;">Rigtige folk med rigtige svar. Vores specialister deler tricks fra pladsen, og du kan altid <a href="https://www.stroxx.dk/butikker?tab=specialister&utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="color:#0082CA; text-decoration:underline;">ringe direkte til dem</a>.</p>
+                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">02</span> &nbsp;Specialist-tips</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Rigtige folk med rigtige svar. Vores specialister deler tricks fra pladsen, og du kan altid <a href="https://www.stroxx.dk/butikker?tab=specialister&utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="color:#2BA6E8; text-decoration:underline;">ringe direkte til dem</a>.</p>
                           </div>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding:18px 0;">
                           <div class="mktoText" id="benefit3" mktoName="Fordel 3">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#0B0C0E;">03 &nbsp;Skarpe priser</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#5C636B;">Samme følelse som de dyre mærker, langt fra prisen. Hold øje med Blå Pris.</p>
+                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:bold; color:#FFFFFF;"><span style="color:#2BA6E8;">03</span> &nbsp;Skarpe priser</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Samme følelse som de dyre mærker, langt fra prisen. Hold øje med Blå Pris.</p>
                           </div>
                         </td>
                       </tr>
@@ -134,13 +136,13 @@
 
                 <!-- MODUL: Garanti -->
                 <tr class="mktoModule" id="guaranteeModule" mktoName="Garanti">
-                  <td style="background-color:#FFFFFF; padding:8px 32px 36px;" class="px">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F6F5F3; border-left:4px solid #E30613; border-radius:0 6px 6px 0;">
+                  <td style="background-color:#111317; padding:10px 32px 38px;" class="px">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#171B21; border:1px solid #23272E; border-left:4px solid #E30613; border-radius:0 12px 12px 0;">
                       <tr>
                         <td style="padding:20px 24px;">
                           <div class="mktoText" id="guaranteeText" mktoName="Garanti tekst">
-                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; color:#0B0C0E;">100% tilfredshedsgaranti</p>
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#5C636B;">Prøv STROXX på rigtigt arbejde i 30 dage. Er du ikke tilfreds, får du pengene tilbage. <a href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="color:#0082CA; text-decoration:underline;">Læs hvordan det virker</a>.</p>
+                            <p style="margin:0 0 4px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:bold; color:#FFFFFF;">100% tilfredshedsgaranti</p>
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">Prøv STROXX på rigtigt arbejde i 30 dage. Er du ikke tilfreds, får du pengene tilbage. <a href="https://www.stroxx.dk/proev-det?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="color:#2BA6E8; text-decoration:underline;">Læs hvordan det virker</a>.</p>
                           </div>
                         </td>
                       </tr>
@@ -150,7 +152,7 @@
 
                 <!-- MODUL: Find butik -->
                 <tr class="mktoModule" id="storesModule" mktoName="Find butik">
-                  <td style="background-color:#0B0C0E; padding:32px;" class="px">
+                  <td style="background-color:#0B0C0E; border-top:1px solid #23272E; padding:32px;" class="px">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td class="stack" valign="middle">
@@ -159,8 +161,8 @@
                             <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">STROXX står klar i 26 Carl Ras butikker i hele landet.</p>
                           </div>
                         </td>
-                        <td class="stack stack-pad" align="right" valign="middle" width="150">
-                          <a href="https://www.stroxx.dk/butikker?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="display:inline-block; border:1px solid #3A4047; border-radius:5px; padding:12px 22px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:#FFFFFF;">Find butik &rarr;</a>
+                        <td class="stack stack-pad" align="right" valign="middle" width="160">
+                          <a class="btn-ghost" href="https://www.stroxx.dk/butikker?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_velkomst" target="_blank" style="background-color:#14171C; border:1px solid #3A4047; border-radius:999px; display:inline-block; padding:0 24px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; line-height:42px; color:#FFFFFF;">Find butik &rarr;</a>
                         </td>
                       </tr>
                     </table>
@@ -173,18 +175,18 @@
 
           <!-- LEGAL FOOTER (fast, kan ikke slettes i editoren) -->
           <tr>
-            <td style="padding:28px 32px 8px;" class="px">
-              <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6B7280;">
+            <td style="background-color:#060708; border:1px solid #23272E; border-top:1px solid #23272E; border-radius:0 0 14px 14px; padding:26px 32px;" class="px">
+              <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6E747C;">
                 Du modtager denne mail, fordi du har tilmeldt dig STROXX Pro Club. STROXX forhandles i Danmark eksklusivt af Carl Ras.
               </p>
-              <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6B7280;">
-                Carl Ras A/S &middot; Mileparken 31 &middot; 2730 Herlev &middot; Danmark &middot; CVR: DK 70 58 71 14 &middot; Tlf. <a href="tel:+4544855511" style="color:#6B7280; text-decoration:underline;">+45 44 85 55 11</a>
+              <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6E747C;">
+                Carl Ras A/S &middot; Mileparken 31 &middot; 2730 Herlev &middot; Danmark &middot; CVR: DK 70 58 71 14 &middot; Tlf. <a href="tel:+4544855511" style="color:#6E747C; text-decoration:underline;">+45 44 85 55 11</a>
               </p>
-              <p style="margin:0 0 24px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6B7280;">
-                <a href="{{system.unsubscribeLink}}" style="color:#0082CA; text-decoration:underline;">Afmeld nyhedsbrevet</a>
-                &nbsp;&middot;&nbsp; <a href="{{system.viewAsWebpageLink}}" style="color:#0082CA; text-decoration:underline;">Vis i browser</a>
-                &nbsp;&middot;&nbsp; <a href="https://www.carl-ras.dk/kundeservice/persondatapolitik/" target="_blank" style="color:#0082CA; text-decoration:underline;">Persondatapolitik</a>
-                &nbsp;&middot;&nbsp; <a href="https://www.stroxx.dk/STROXX-tilfredshedsgaranti.pdf" target="_blank" style="color:#0082CA; text-decoration:underline;">Tilfredshedsgaranti (PDF)</a>
+              <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#6E747C;">
+                <a href="{{system.unsubscribeLink}}" style="color:#2BA6E8; text-decoration:underline;">Afmeld nyhedsbrevet</a>
+                &nbsp;&middot;&nbsp; <a href="{{system.viewAsWebpageLink}}" style="color:#2BA6E8; text-decoration:underline;">Vis i browser</a>
+                &nbsp;&middot;&nbsp; <a href="https://www.carl-ras.dk/kundeservice/persondatapolitik/" target="_blank" style="color:#2BA6E8; text-decoration:underline;">Persondatapolitik</a>
+                &nbsp;&middot;&nbsp; <a href="https://www.stroxx.dk/STROXX-tilfredshedsgaranti.pdf" target="_blank" style="color:#2BA6E8; text-decoration:underline;">Tilfredshedsgaranti (PDF)</a>
               </p>
             </td>
           </tr>
