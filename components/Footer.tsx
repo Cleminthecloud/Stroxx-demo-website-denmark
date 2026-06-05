@@ -13,7 +13,10 @@ export default function Footer() {
             <p className="text-fog leading-relaxed">
               <span className="text-white font-medium">STROXX fås eksklusivt hos Carl Ras i Danmark.</span> Men
               brandet er udviklet i samarbejde med stærke partnere i Tyskland, Frankrig og Belgien og
-              forhandles også gennem kæder som Meesenburg, Foussier og Lecot.
+              forhandles også gennem kæder som{' '}
+              <a href="https://www.meesenburg.com" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Meesenburg</a>,{' '}
+              <a href="https://www.foussier.fr" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Foussier</a> og{' '}
+              <a href="https://lecot.be" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Lecot</a>.
             </p>
             <a href="tel:+4544855511" className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
               <Phone size={18} strokeWidth={2} /> +45 44 85 55 11
