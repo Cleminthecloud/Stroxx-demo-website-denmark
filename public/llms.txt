@@ -25,6 +25,8 @@
 - /produkt/{slug} — product pages with specs, price (DKK incl. moms), item number and buy link to Carl Ras
 - /butikker — store and specialist finder (map, 26 stores, direct phone numbers); /butikker?tab=specialister for the people
 - /proev-det — the 30-day guarantee campaign, including FAQ
+- /fag — trade landing pages: /fag/toemrer (carpenters), /fag/elektriker (electricians), /fag/vvs (plumbing), /fag/maler (painters), /fag/murer (masonry/concrete), each with the trade's most-bought products and trade-specific FAQ
+- /service — service & support hub: guarantee terms, returns, commerce documents (Carl Ras salgs- og leveringsbetingelser, persondatapolitik), contact
 
 ## Categories
 

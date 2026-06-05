@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import GlassButton from '@/components/GlassButton';
 import GuaranteeModal from '@/components/GuaranteeModal';
+import Faq from '@/components/Faq';
 import { ArrowRight, FileText, Phone, RotateCcw, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -15,6 +15,39 @@ export const metadata: Metadata = {
    brands forget. Everything is grounded in the real guarantee terms
    (public/STROXX-tilfredshedsgaranti.pdf). Datasheets for kemi arrive with the
    DAM integration. */
+
+/* Handel sker altid hos Carl Ras → de juridiske dokumenter bor dér. */
+const DOCS = [
+  { label: 'Tilfredshedsgaranti, fulde vilkår (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
+  { label: 'Salgs- og leveringsbetingelser (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
+  { label: 'Persondatapolitik (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/persondatapolitik/' },
+  { label: 'Cookiepolitik (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/cookiepolitik/' },
+];
+
+/* FAQ: same answers rendered as accordion AND as FAQPage JSON-LD. Plain-text
+   versions feed the schema; the accordion may add links. */
+const SERVICE_FAQ = [
+  {
+    q: 'Hvem kan bruge tilfredshedsgarantien?',
+    a: 'Erhvervskunder med konto hos Carl Ras. Har du ikke en konto endnu, opretter du den hos Carl Ras under "Bliv kunde", og så gælder de 30 dage også for dig.',
+  },
+  {
+    q: 'Skal varen være ubrugt, når jeg returnerer den?',
+    a: 'Nej, det er hele pointen. Garantien er til 30 dage på rigtigt arbejde, ikke fem minutter i indkørslen. Tag varen med i din Carl Ras butik sammen med faktura eller følgeseddel. Ved mængdekøb gælder garantien den først købte vare.',
+  },
+  {
+    q: 'Hvad gør jeg, hvis varen er defekt?',
+    a: 'Fejl og mangler er ikke en garantisag men en reklamation, og den klarer Carl Ras efter deres salgs- og leveringsbetingelser. Tag varen med i butikken eller ring til kundeservice på 44 85 55 11.',
+  },
+  {
+    q: 'Hvordan foregår levering og fragt?',
+    a: 'Alt køb sker hos Carl Ras, i butik eller på carl-ras.dk, og leveringsmuligheder og priser vises ved bestillingen. De fulde vilkår står i Carl Ras salgs- og leveringsbetingelser.',
+  },
+  {
+    q: 'Hvor finder jeg sikkerhedsdatablade for kemi-produkter?',
+    a: 'De er på vej til denne side. Indtil da udleverer Carl Ras kundeservice dem på 44 85 55 11 eller i din lokale butik.',
+  },
+];
 
 const RETURN_STEPS = [
   {
@@ -32,8 +65,19 @@ const RETURN_STEPS = [
 ];
 
 export default function ServicePage() {
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: SERVICE_FAQ.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+
   return (
     <main className="bg-ink min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <div className="mx-auto max-w-[1400px] px-5 md:px-8 pb-28 pt-32 md:pt-40">
         {/* hero */}
         <div className="max-w-2xl">
@@ -100,11 +144,13 @@ export default function ServicePage() {
                 <h2 className="text-white font-display font-bold text-2xl">Dokumenter</h2>
               </div>
               <div className="space-y-3">
-                <a href="/STROXX-tilfredshedsgaranti.pdf" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-lg border border-line px-5 py-4 text-sm text-white transition-colors hover:border-stroxx-blue/50">
-                  Tilfredshedsgaranti, fulde vilkår (PDF)
-                  <ArrowRight size={15} className="text-stroxx-blue" />
-                </a>
+                {DOCS.map((d) => (
+                  <a key={d.href} href={d.href} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-between gap-4 rounded-lg border border-line px-5 py-4 text-sm text-white transition-colors hover:border-stroxx-blue/50">
+                    {d.label}
+                    <ArrowRight size={15} className="shrink-0 text-stroxx-blue" />
+                  </a>
+                ))}
                 <div className="rounded-lg border border-dashed border-line px-5 py-4 text-sm text-fog">
                   Produktkataloger og sikkerhedsdatablade for kemi kommer her, når DAM-integrationen
                   er på plads.
@@ -134,12 +180,44 @@ export default function ServicePage() {
           </Reveal>
         </section>
 
-        {/* faq pointer */}
-        <Reveal delay={120}>
-          <div className="mt-14 text-fog text-sm">
-            Flere spørgsmål? Se <Link href="/proev-det" className="text-stroxx-blue hover:underline">de oftest stillede spørgsmål på kampagnesiden</Link>.
+        {/* FAQ */}
+        <section className="mt-24 border-t border-line pt-16">
+          <div className="text-center mb-10">
+            <Reveal>
+              <div className="eyebrow mb-3">Spørgsmål og svar</div>
+              <h2 className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.96]">
+                Det praktiske, helt kort.
+              </h2>
+            </Reveal>
           </div>
-        </Reveal>
+          <Reveal delay={100}>
+            <Faq
+              items={SERVICE_FAQ.map((f) => ({
+                q: f.q,
+                a:
+                  f.q === 'Hvem kan bruge tilfredshedsgarantien?' ? (
+                    <>
+                      Erhvervskunder med konto hos Carl Ras. Har du ikke en konto endnu, opretter du den hos{' '}
+                      <a href="https://www.carl-ras.dk/kundeservice/bliv-kunde/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
+                        Carl Ras under &ldquo;Bliv kunde&rdquo;
+                      </a>
+                      , og så gælder de 30 dage også for dig.
+                    </>
+                  ) : f.q === 'Hvad gør jeg, hvis varen er defekt?' ? (
+                    <>
+                      Fejl og mangler er ikke en garantisag men en reklamation, og den klarer Carl Ras efter deres{' '}
+                      <a href="https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
+                        salgs- og leveringsbetingelser
+                      </a>
+                      . Tag varen med i butikken eller ring til kundeservice på <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>.
+                    </>
+                  ) : (
+                    f.a
+                  ),
+              }))}
+            />
+          </Reveal>
+        </section>
       </div>
     </main>
   );
