@@ -8,6 +8,7 @@ import {
   crImage,
   specialists,
 } from '@/lib/data';
+import { testimonials } from '@/lib/testimonials';
 
 const priceNum = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
 
@@ -56,6 +57,25 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
       url: buyUrl,
       seller: { '@type': 'Organization', name: 'Carl Ras' },
     },
+    // Real customer reviews for THIS product (from Pro Club, verified against
+    // sales data in production). Only attached when a quote names this product.
+    ...(() => {
+      const revs = testimonials.filter((t) => t.productCode === product.code);
+      if (!revs.length) return {};
+      return {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: (revs.reduce((s, r) => s + r.rating, 0) / revs.length).toFixed(1),
+          reviewCount: revs.length,
+        },
+        review: revs.map((r) => ({
+          '@type': 'Review',
+          reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+          author: { '@type': 'Person', name: r.name },
+          reviewBody: r.quote,
+        })),
+      };
+    })(),
   };
 
   const breadcrumbLd = {

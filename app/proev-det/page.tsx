@@ -8,8 +8,10 @@ import GuaranteeModal from '@/components/GuaranteeModal';
 import VideoProof from '@/components/VideoProof';
 import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
+import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
+import { testimonials } from '@/lib/testimonials';
 
 /* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
    Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
@@ -272,6 +274,18 @@ export default function ProevDetPage() {
               <VideoProof />
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ── 5c · WHAT THEY SAY — peer proof ────────────────────────────── */}
+      <section className="relative">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
+          <div className="max-w-3xl mb-12">
+            <Reveal><Eyebrow>Fra dem, der bruger det</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Du skal ikke tro os. \n Tro *kollegerne.*'}
+              className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96]" />
+          </div>
+          <Testimonials items={testimonials} />
         </div>
       </section>
 

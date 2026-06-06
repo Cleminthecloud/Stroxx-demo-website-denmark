@@ -7,9 +7,11 @@ import Reveal from '@/components/Reveal';
 import ProductCard from '@/components/ProductCard';
 import GlassButton from '@/components/GlassButton';
 import Faq from '@/components/Faq';
+import Testimonials from '@/components/Testimonials';
 import { ArrowRight } from 'lucide-react';
 import { products, categoryBySlug } from '@/lib/data';
 import { trades, tradeBySlug } from '@/lib/trades';
+import { testimonialsForTrade } from '@/lib/testimonials';
 
 const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
 
@@ -50,6 +52,7 @@ export default function TradePage({ params }: { params: { slug: string } }) {
     .sort((a, b) => b.badges.length - a.badges.length)
     .slice(0, 8);
   const hero = heroSources(trade.slug);
+  const voices = testimonialsForTrade(trade.slug).slice(0, 3);
 
   const breadcrumbLd = {
     '@context': 'https://schema.org',
@@ -163,6 +166,17 @@ export default function TradePage({ params }: { params: { slug: string } }) {
             </Link>
           </div>
         </Reveal>
+
+        {/* peer proof */}
+        <section className="mt-24">
+          <Reveal>
+            <div className="eyebrow mb-3">Fra faget</div>
+            <h2 className="h-display text-white text-[clamp(1.6rem,3.5vw,2.6rem)] leading-[0.96] mb-10">
+              Kollegerne har prøvet det.
+            </h2>
+          </Reveal>
+          <Testimonials items={voices} />
+        </section>
 
         {/* trade FAQ */}
         <section className="mt-24 border-t border-line pt-14">
