@@ -131,10 +131,13 @@ export default function BagJourney() {
         group.current.style.opacity = String(c.o);
       }
       if (bag.current && !noFilter) {
-        const off = 18 + lift * 34, bl = 20 + lift * 34;
-        const a1 = (0.55 - lift * 0.18).toFixed(2), a2 = (0.4 - lift * 0.14).toFixed(2);
+        // ONE soft contact shadow — a second offset drop-shadow doubled the bag
+        // silhouette and read as ghosting/emboss beneath the bag and behind the
+        // price tag. Larger blur keeps it soft without the doubled edge.
+        const off = 16 + lift * 30, bl = 34 + lift * 40;
+        const a1 = (0.5 - lift * 0.16).toFixed(2);
         bag.current.style.filter =
-          `blur(${Math.max(0, blur).toFixed(2)}px) drop-shadow(0px ${(off * 0.5).toFixed(0)}px ${(bl * 0.6).toFixed(0)}px rgba(0,0,0,${a1})) drop-shadow(0px ${off.toFixed(0)}px ${bl.toFixed(0)}px rgba(0,0,0,${a2}))`;
+          `blur(${Math.max(0, blur).toFixed(2)}px) drop-shadow(0px ${off.toFixed(0)}px ${bl.toFixed(0)}px rgba(0,0,0,${a1}))`;
       }
 
       // tools fall into the bag (local space) as it travels
