@@ -146,6 +146,12 @@ export default function Home() {
             <ScrollText as="h2" text="Cand. værktøj med speciale i STROXX"
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
+          <div className="relative">
+            {/* blue light pooling behind the cards */}
+            <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{
+              background: 'radial-gradient(50% 55% at 28% 32%, rgba(0,130,202,0.18), transparent 60%), radial-gradient(45% 50% at 80% 75%, rgba(43,166,232,0.12), transparent 62%)',
+              filter: 'blur(20px)',
+            }} />
           <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
             {specialists.slice(0, 6).map((s, i) => (
               <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
@@ -173,6 +179,7 @@ export default function Home() {
                 </div>
               </Reveal>
             ))}
+          </div>
           </div>
         </div>
       </section>

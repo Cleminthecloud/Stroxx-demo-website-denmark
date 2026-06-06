@@ -100,7 +100,7 @@ export default function ProductExplorer() {
       )}
 
       {/* controls */}
-      <div className="sticky top-16 z-30 -mx-5 md:-mx-8 px-5 md:px-8 py-4 bg-ink/85 backdrop-blur-md border-y border-line mb-10">
+      <div className="sticky top-14 z-30 -mx-5 md:-mx-8 px-5 md:px-8 pt-5 pb-4 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-2">
             <button
