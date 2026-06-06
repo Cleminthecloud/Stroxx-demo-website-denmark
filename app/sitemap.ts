@@ -4,8 +4,8 @@ import { trades } from '@/lib/trades';
 
 const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
 
-/** Public pages only: hidden internals (/plan, /email-skabeloner, /bag-test)
- *  and the /kategori redirects are deliberately left out. */
+/** Public pages only: hidden internals (/plan, /email-skabeloner) and the
+ *  /kategori redirects are deliberately left out. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   return [

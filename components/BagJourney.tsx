@@ -9,8 +9,8 @@ import { TOOLS, PANEL, FRONT_PANEL, BAG_BACK, BAG_AR } from '@/components/BagFil
    zig-zags down the page the tools FALL INTO it (staggered on scroll). The bag,
    tools, front-panel occluder, price tag, shadow and blue light are one group
    that follows the path; the tool-drops happen in the bag's local space so they
-   always land inside it, wherever it has swung. Geometry is shared with the
-   /bag-test rig (BagFill) so both stay in sync.
+   always land inside it, wherever it has swung. Geometry (BAG_AR, TOOLS,
+   panel positions) is shared from BagFill so the bag stays consistent.
    ────────────────────────────────────────────────────────────────────────── */
 
 type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };
