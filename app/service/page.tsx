@@ -84,7 +84,7 @@ export default function ServicePage() {
           <Reveal>
             <div className="eyebrow mb-4">Service og support</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95]">
-              Hjælpen er lige så ligetil som prisen.
+              Hjælpen er lige så ligetil <span className="text-stroxx-blue">som prisen.</span>
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
               Ingen formularer i ti trin og ingen ventemusik. Her er garantien, returneringen,

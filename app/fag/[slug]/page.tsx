@@ -88,7 +88,7 @@ export default function TradePage({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       {/* ── hero: full-bleed b/w trade image when present ────────────────── */}
-      <section className={`relative overflow-hidden ${hero.main ? 'min-h-[78svh] flex items-end' : ''}`}>
+      <section className={`relative overflow-hidden ${hero.main ? 'min-h-[64svh] flex items-center' : ''}`}>
         {hero.main && (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -110,11 +110,12 @@ export default function TradePage({ params }: { params: { slug: string } }) {
           <div className="pointer-events-none absolute inset-0" style={{
             background: 'radial-gradient(60% 50% at 30% 40%, rgba(0,130,202,0.10), transparent 70%)' }} />
         )}
-        <div className={`relative mx-auto w-full max-w-[1400px] px-5 md:px-8 ${hero.main ? 'pb-16 pt-40' : 'pt-32 md:pt-40'}`}>
+        <div className={`relative mx-auto w-full max-w-[1400px] px-5 md:px-8 ${hero.main ? 'pb-10 pt-28' : 'pt-32 md:pt-40'}`}>
           <Reveal>
             <div className="eyebrow mb-4">Fagområde · {trade.name}</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-              {trade.title}
+              {trade.title.split(trade.accent)[0]}
+              <span className="text-stroxx-blue">{trade.accent}</span>
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">{trade.blurb}</p>
           </Reveal>
