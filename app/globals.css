@@ -138,6 +138,23 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 1023px) {
   .glass-panel { background: rgba(11, 13, 16, 0.92); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+/* Heavier frost — obscures busy art (e.g. the hero bag) behind the cards.
+   Desktop only; mobile glass-panel is already near-solid for perf. */
+@media (min-width: 1024px) {
+  .glass-panel--frost {
+    background: rgba(11, 13, 16, 0.62);
+    backdrop-filter: blur(64px) saturate(1.2);
+    -webkit-backdrop-filter: blur(64px) saturate(1.2);
+  }
+}
+/* Blue light on hover — STROXX blue rim + outer glow + slight lift. */
+.glass-panel--glow { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
+.glass-panel--glow:hover {
+  border-color: rgba(0, 130, 202, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(0, 0, 0, 0.42), 0 0 48px rgba(0, 130, 202, 0.30);
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) { .glass-panel--glow:hover { transform: none; } }
 
 /* Print → PDF (the /plan page's Download button). Keep the dark theme, drop the
    site chrome and interactive-only bits, and go landscape so the Gantt fits. */

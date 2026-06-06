@@ -155,7 +155,7 @@ export default function Home() {
           <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
             {specialists.slice(0, 6).map((s, i) => (
               <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
-                <div className="glass-panel rounded-2xl p-7 flex flex-col h-full">
+                <div className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex flex-col h-full">
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
                 </div>
