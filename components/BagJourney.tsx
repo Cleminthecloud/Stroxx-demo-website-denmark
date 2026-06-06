@@ -54,6 +54,12 @@ export default function BagJourney() {
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // The fall-in + dust puff is a first-impression effect: only play it on a
+    // genuine top-of-page landing. On back/forward navigation the browser
+    // restores the previous scroll position, so replaying the entrance kicked
+    // up a stray dust puff over the canvas mid-page — skip it when we don't
+    // start at the top.
+    const skipEntrance = reduce || window.scrollY > 4;
     // iOS Safari rasterises large blur/drop-shadow-filtered layers as OPAQUE
     // WHITE rectangles when they exceed GPU memory — so on small screens the
     // bag gets NO css filter at all (the pool div already provides a shadow).
@@ -102,7 +108,7 @@ export default function BagJourney() {
       c.s = lerp(c.s, tgt.s, 0.1); c.r = lerp(c.r, tgt.r, 0.1); c.o = lerp(c.o, tgt.o, 0.12);
 
       let entY = 0, blur = 0;
-      if (!reduce) {
+      if (!skipEntrance) {
         const et = Math.min(1, (now - t0) / ENTER);
         const eased = 1 - Math.pow(1 - et, 3);
         entY = (1 - eased) * -125;
