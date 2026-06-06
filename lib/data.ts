@@ -504,7 +504,20 @@ export const brandImages = {
 /** Real category lifestyle image shipped in /public/categories. */
 export const categoryImage = (slug: string) => `/categories/${slug}.jpg`;
 
-export type Specialist = { name: string; role: string; location: string; photo: string; quote: string; phone: string; email: string };
+// quoteTopic: a category slug means the quote names that product/category and
+// may ONLY be shown on matching products. Omitted = brand-generic, safe anywhere.
+export type Specialist = { name: string; role: string; location: string; photo: string; quote: string; phone: string; email: string; quoteTopic?: string };
+
+/** Pick the specialist to show on a product page: prefer one whose quote is
+ *  about this product's category, otherwise only a brand-generic quote — never
+ *  a quote that names an unrelated product. Deterministic per slug. */
+export const specialistForProduct = (p: Product): Specialist => {
+  const hash = p.slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const onTopic = specialists.filter((s) => s.quoteTopic && p.tags.includes(s.quoteTopic));
+  const generic = specialists.filter((s) => !s.quoteTopic);
+  const pool = onTopic.length ? onTopic : generic;
+  return pool[hash % pool.length];
+};
 
 export const specialists: Specialist[] = [
   { name: 'Niels Storm', role: 'Sourcing Manager', location: 'Herlev', photo: '/specialists/niels-storm.jpg', phone: '22767114', email: 'nst@carl-ras.dk',
@@ -514,7 +527,7 @@ export const specialists: Specialist[] = [
   { name: 'Susan Christensen', role: 'Intern Sælger', location: 'Næstved', photo: '/specialists/susan-christensen.jpg', phone: '81775550', email: 'susa@carl-ras.dk',
     quote: 'Håndværkere mærker forskel på godt og skidt. STROXX føles rigtigt i hånden.' },
   { name: 'Rudi Olesen', role: 'Intern Sælger', location: 'Århus', photo: '/specialists/rudi-olesen.jpg', phone: '81779180', email: 'ruol@carl-ras.dk',
-    quote: 'En streglaser til den pris? Jeg solgte tre i går.' },
+    quote: 'En streglaser til den pris? Jeg solgte tre i går.', quoteTopic: 'lasere' },
   { name: 'Ulrik Bjørnsson', role: 'Intern Sælger', location: 'Hørsholm', photo: '/specialists/ulrik-bjornsson.jpg', phone: '81775302', email: 'ub@carl-ras.dk',
     quote: 'Kunderne kommer tilbage og griner: “Hvorfor har jeg betalt dobbelt før?”' },
   { name: 'Martin Lübker', role: 'Intern Sælger', location: 'Århus N.', photo: '/specialists/martin-lubker.jpg', phone: '81778687', email: 'malu@carl-ras.dk',
@@ -522,7 +535,7 @@ export const specialists: Specialist[] = [
   { name: 'Lea Ahrnkiel', role: 'Intern Sælger', location: 'Sydhavnen', photo: '/specialists/lea-ahrnkiel.jpg', phone: '81775702', email: 'leah@carl-ras.dk',
     quote: 'Folk tror, der er en fidus. Der er bare ikke noget mærke-tillæg.' },
   { name: 'Theis Lindgren', role: 'Intern Sælger', location: 'Amager', photo: '/specialists/theis-lindgren.jpg', phone: '81779713', email: 'thli@carl-ras.dk',
-    quote: 'Knivene alene er grund nok. Skarpe, billige, altid på lager.' },
+    quote: 'Knivene alene er grund nok. Skarpe, billige, altid på lager.', quoteTopic: 'knive' },
   { name: 'Nikolaj Ungermand', role: 'Sourcing & ESG', location: 'Herlev', photo: '/specialists/nikolaj-ungermand.jpg', phone: '51221002', email: 'nn@carl-ras.dk',
     quote: 'Samme kvalitet som mærkerne — bare uden mærke-tillægget. Det er hele pointen.' },
 ];

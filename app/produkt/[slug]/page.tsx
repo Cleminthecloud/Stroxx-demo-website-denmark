@@ -6,7 +6,7 @@ import {
   categoryBySlug,
   productBuyUrl,
   crImage,
-  specialists,
+  specialistForProduct,
 } from '@/lib/data';
 import { testimonials } from '@/lib/testimonials';
 
@@ -37,7 +37,7 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
   const related = products
     .filter((p) => p.slug !== product.slug && p.tags.some((t) => product.tags.includes(t)))
     .slice(0, 4);
-  const sIdx = product.slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % specialists.length;
+  const spec = specialistForProduct(product);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -96,7 +96,7 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
       <ProductExperience
         product={product}
         related={related}
-        spec={specialists[sIdx]}
+        spec={spec}
         buyUrl={buyUrl}
         categoryName={cat?.name ?? 'STROXX'}
         categorySlug={cat?.slug ?? ''}
