@@ -7,7 +7,7 @@ export default function ProClubSignup() {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="glass-panel rounded-xl p-7">
+    <div className="glass-panel glass-panel--frost rounded-xl p-7">
       <div className="eyebrow mb-3">Pro Club</div>
       <h3 className="text-white font-display font-bold text-2xl mb-2">Bliv klogere før alle andre</h3>
       <p className="text-fog text-sm mb-5">

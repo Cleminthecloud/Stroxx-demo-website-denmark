@@ -19,14 +19,15 @@ const badgeStyle: Record<string, string> = {
 };
 
 type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };
-// zig-zag: the product crosses left → right → left → right as you scroll,
-// content always lands on the opposite side.
+// zig-zag: the product stays out in the side GUTTER opposite the content, and
+// shrinks + dims as it descends so the dense lower info (specs, Pro Club) reads
+// cleanly. It's a background actor, never crossing into the content column.
 const STOPS: Stop[] = [
-  { p: 0.00, x: -24, y: -2, s: 1.0, r: -4, o: 1 },
-  { p: 0.30, x: 24, y: 0, s: 0.9, r: 5, o: 1 },
-  { p: 0.57, x: -24, y: 0, s: 0.82, r: -4, o: 1 },
-  { p: 0.82, x: 24, y: 2, s: 0.78, r: 4, o: 1 },
-  { p: 0.93, x: 0, y: 8, s: 0.8, r: 0, o: 0 },
+  { p: 0.00, x: -27, y: -2, s: 0.96, r: -4, o: 1 },
+  { p: 0.30, x: 29, y: 0, s: 0.84, r: 5, o: 0.9 },
+  { p: 0.57, x: -30, y: 0, s: 0.74, r: -4, o: 0.74 },
+  { p: 0.82, x: 30, y: 2, s: 0.68, r: 4, o: 0.6 },
+  { p: 0.93, x: 0, y: 8, s: 0.7, r: 0, o: 0 },
 ];
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 function sample(p: number): Omit<Stop, 'p'> {
@@ -163,7 +164,7 @@ export default function ProductExperience({
 
   const Specs = (
     <Reveal from="left">
-      <div className="glass-panel rounded-xl overflow-hidden">
+      <div className="glass-panel glass-panel--frost rounded-xl overflow-hidden">
         {product.specs.length > 0 ? product.specs.map((s, i) => (
           <div key={s.label + i} className={`flex justify-between gap-6 px-5 py-3.5 text-sm ${i % 2 ? 'bg-white/[0.045]' : 'bg-transparent'}`}>
             <span className="text-fog">{s.label}</span><span className="text-white font-medium text-right">{s.value}</span>
@@ -202,7 +203,7 @@ export default function ProductExperience({
       <div className="grid gap-5">
         {usps.map((u, i) => (
           <Reveal key={u.title} delay={i * 90} from="left">
-            <div className="glass-card glass-panel rounded-2xl p-6 flex gap-4 items-start">
+            <div className="glass-card glass-panel glass-panel--frost rounded-2xl p-6 flex gap-4 items-start">
               <u.icon size={24} strokeWidth={1.6} className="text-stroxx-blue shrink-0 mt-0.5" />
               <div><div className="text-white text-lg font-medium mb-1.5">{u.title}</div><p className="text-fog text-sm leading-relaxed">{u.body}</p></div>
             </div>
@@ -237,8 +238,8 @@ export default function ProductExperience({
       <div className="fixed inset-0 z-[20] overflow-hidden pointer-events-none hidden lg:block" aria-hidden>
         <div ref={glowRef} className="absolute left-1/2 top-1/2 w-[60vw] h-[64vh] will-change-transform"
           style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)', background: 'radial-gradient(38% 38% at 50% 48%, rgba(0,130,202,0.34), transparent 66%)' }} />
-        <div ref={prodRef} className="absolute left-1/2 top-1/2 w-[48vw] max-w-[820px] will-change-transform" style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)' }}>
-          {Figure('h-[74vh] min-h-[440px]', false)}
+        <div ref={prodRef} className="absolute left-1/2 top-1/2 w-[42vw] max-w-[680px] will-change-transform" style={{ transform: 'translate(-50%,-50%) translate(-27vw,0)' }}>
+          {Figure('h-[66vh] min-h-[400px]', false)}
         </div>
       </div>
 
