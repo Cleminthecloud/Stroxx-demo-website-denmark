@@ -43,6 +43,7 @@ export default function ParticleImage({
     let px!: Float32Array, py!: Float32Array, vx!: Float32Array, vy!: Float32Array;
     let ox!: Float32Array, oy!: Float32Array, ix!: Float32Array, iy!: Float32Array;
     let kk!: Float32Array, dr!: Float32Array, wa!: Float32Array, ws!: Float32Array, wp!: Float32Array, sz!: Float32Array;
+    let gl!: Uint8Array; // highlight particles that carry a soft glow halo
     let cols: string[] = [];
 
     const size = () => {
@@ -102,6 +103,7 @@ export default function ParticleImage({
       ix = new Float32Array(n); iy = new Float32Array(n);
       kk = new Float32Array(n); dr = new Float32Array(n);
       wa = new Float32Array(n); ws = new Float32Array(n); wp = new Float32Array(n); sz = new Float32Array(n);
+      gl = new Uint8Array(n);
       cols = new Array(n);
 
       for (let m = 0; m < n; m++) {
@@ -121,7 +123,11 @@ export default function ParticleImage({
         wp[m] = Math.random() * Math.PI * 2;
         sz[m] = 0.7 + Math.random() * 0.55;
         const t = clamp01((L - 0.1) / 0.68);
-        cols[m] = BLUES[Math.min(BLUES.length - 1, Math.floor(t * BLUES.length))];
+        const ci = Math.min(BLUES.length - 1, Math.floor(t * BLUES.length));
+        cols[m] = BLUES[ci];
+        // a fraction of the brightest pixels become "light carriers": they get
+        // a soft halo so the assembled product reads lit from within
+        gl[m] = ci >= 4 && Math.random() < 0.45 ? 1 : 0;
       }
       built = true;
     };
@@ -185,9 +191,32 @@ export default function ParticleImage({
         px[m] += vx[m];
         py[m] += vy[m];
 
-        ctx.globalAlpha = 0.12 + p * 0.85;
         ctx.fillStyle = cols[m];
         const s = dot * sz[m];
+        // gentle twinkle: each particle breathes on its own wander clock, so
+        // the formed product shimmers like dust in light instead of sitting flat
+        const tw = reduce ? 1 : 0.82 + 0.18 * Math.sin(t * ws[m] * 1.9 + wp[m] * 3.1);
+        const base = (0.12 + p * 0.85) * tw;
+
+        // fast particles (scatter, cursor repulsion) leave a brief comet tail —
+        // two fading ghosts along the velocity, so movement reads as motion
+        const sp2 = vx[m] * vx[m] + vy[m] * vy[m];
+        if (sp2 > 5 && !reduce) {
+          ctx.globalAlpha = base * 0.32;
+          ctx.fillRect(px[m] - vx[m] * 1.6 - s / 2, py[m] - vy[m] * 1.6 - s / 2, s, s);
+          ctx.globalAlpha = base * 0.6;
+          ctx.fillRect(px[m] - vx[m] * 0.8 - s / 2, py[m] - vy[m] * 0.8 - s / 2, s, s);
+        }
+
+        // halo on the light-carrier particles: one larger, faint square under
+        // the core — cheap bloom that lets highlights glow on the dark stage
+        if (gl[m]) {
+          ctx.globalAlpha = base * 0.16;
+          const hs = s * 3.2;
+          ctx.fillRect(px[m] - hs / 2, py[m] - hs / 2, hs, hs);
+        }
+
+        ctx.globalAlpha = base;
         ctx.fillRect(px[m] - s / 2, py[m] - s / 2, s, s);
       }
       ctx.globalAlpha = 1;

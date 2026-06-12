@@ -459,12 +459,12 @@ export const products: Product[] = [
   p("Hue Beanie Strik Sort One-Size", "98,75", 103127, "arbejdstoej", {code:"63016630", tags:["arbejdstoej"], badges:["BLÅ PRIS"], specs:[{"label":"Størrelse","value":"Onesize"},{"label":"Farve","value":"Sort"}]}),
   p("Undertrøje L/Æ Sort/grå, str. M", "398,75", 122930, "arbejdstoej", {code:"63117583", tags:["arbejdstoej"], badges:["POPULÆR"], specs:[{"label":"Størrelse","value":"M"},{"label":"Farve","value":"Sort"},{"label":"Køn","value":"Herre"}]}),
   p("Underbuks Sort/grå, str. L", "336,25", 122797, "arbejdstoej", {code:"63117588", tags:["arbejdstoej"], unit:"Par", specs:[{"label":"Størrelse","value":"L"},{"label":"Farve","value":"Sort"},{"label":"Køn","value":"Herre"}]}),
-  p("Hue m/pandelampe Sort, One size", "86,25", 156523, "arbejdstoej", {code:"63143492", tags:["arbejdstoej"], specs:[{"label":"Størrelse","value":"Onesize"},{"label":"Farve","value":"Sort"}]}),
+  p("Hue m/pandelampe Sort, One size", "86,25", 156523, "arbejdstoej", {code:"63143492", tags:["arbejdstoej"], badges:["NYHED"], specs:[{"label":"Størrelse","value":"Onesize"},{"label":"Farve","value":"Sort"}]}),
   p("Hånddispenser m/ sensor + LED display 0,5L", "100,00", 103157, "skurvognsartikler", {code:"64011335", tags:["skurvognsartikler"], badges:["OUTLET","POPULÆR"], specs:[{"label":"Indhold","value":"0,5 L"},{"label":"Kode","value":"PW-MS"}]}),
   p("Termoflaske sort, 500 ml", "148,75", 129544, "skurvognsartikler", {code:"64011383", tags:["skurvognsartikler"], badges:["POPULÆR"], specs:[{"label":"Indhold","value":"500 ml"},{"label":"Kode","value":"101-158"}]}),
   p("Håndrens Extreme 250 ml", "65,00", 119292, "skurvognsartikler", {code:"64011709", tags:["skurvognsartikler"], badges:["POPULÆR"], specs:[{"label":"Indhold","value":"250 ml"},{"label":"Type","value":"Extreme"},{"label":"Kode","value":"101-392"}]}),
   p("Håndcreme lotion 250 ml", "48,75", 119283, "skurvognsartikler", {code:"64011710", tags:["skurvognsartikler"], specs:[{"label":"Indhold","value":"250 ml"},{"label":"Type","value":"Lotion"},{"label":"Kode","value":"101-394"}]}),
-  p("Køleboks m/kompressor 35 ltr, 60W", "1.873,75", 237616, "skurvognsartikler", {code:"64012039", tags:["skurvognsartikler"], badges:["POPULÆR"], specs:[{"label":"Indhold","value":"35 L"},{"label":"Kode","value":"102-766"}]}),
+  p("Køleboks m/kompressor 35 ltr, 60W", "1.873,75", 237616, "skurvognsartikler", {code:"64012039", tags:["skurvognsartikler"], badges:["NYHED","POPULÆR"], specs:[{"label":"Indhold","value":"35 L"},{"label":"Kode","value":"102-766"}]}),
   p("Termokop sort, 500 ml", "122,50", 243229, "skurvognsartikler", {code:"64012064", tags:["skurvognsartikler"], specs:[{"label":"Indhold","value":"500 ml"},{"label":"Kode","value":"102-976"}]}),
 ];
 

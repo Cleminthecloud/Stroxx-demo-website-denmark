@@ -23,6 +23,8 @@ const COMPARE: Record<string, Compare> = {
   '35011812': { ref: 259, savePct: 43 },
   // Speed vinkel 175mm (136,25) vs A-mærke speed square
   '35011846': { ref: 229, savePct: 41 },
+  // Streglaser 3D Green (2.498,75) vs A-mærke grøn 3D-streglaser — månedens hero
+  '35011932': { ref: 4495, savePct: 44 },
 };
 
 export const getCompare = (code?: string): Compare | null => (code && COMPARE[code]) || null;

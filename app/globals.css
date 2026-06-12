@@ -358,6 +358,26 @@ body:has(main.fullscreen-map) footer { display: none; }
   box-shadow: 0 0 0 4px rgba(0,130,202,0.85), 0 8px 22px rgba(0,0,0,0.6), 0 0 28px rgba(0,130,202,0.9);
 }
 
+/* hero load intro — the headline lines rise while the bag falls in, so the
+   first second feels composed rather than assembled. Blur only ≥lg (iOS GPU
+   rule); reduced-motion renders instantly. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(36px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-line { display: inline-block; opacity: 0; animation: hero-rise 1.15s cubic-bezier(.16,1,.3,1) 0.08s forwards; }
+.hero-line--2 { animation-delay: 0.22s; }
+@media (min-width: 1024px) {
+  @keyframes hero-rise-blur {
+    from { opacity: 0; transform: translateY(36px); filter: blur(12px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  .hero-line { animation-name: hero-rise-blur; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-line { animation: none; opacity: 1; }
+}
+
 /* scrollable chip rows (product finder on phones): scroll, no visible bar */
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }

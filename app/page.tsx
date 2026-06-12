@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import BagJourney from '@/components/BagJourney';
 import Reveal from '@/components/Reveal';
 import ScrollText from '@/components/ScrollText';
@@ -5,10 +6,13 @@ import ScrollHint from '@/components/ScrollHint';
 import LumaVideo from '@/components/LumaVideo';
 import ProductCard from '@/components/ProductCard';
 import BuyButton from '@/components/BuyButton';
+import GlassButton from '@/components/GlassButton';
 import GlassLink from '@/components/GlassLink';
 import CountUp from '@/components/CountUp';
 import CategoryList from '@/components/CategoryList';
 import ParticleImage from '@/components/ParticleImage';
+import CursorGlow from '@/components/CursorGlow';
+import KnockoutImage from '@/components/KnockoutImage';
 import ProvDet from '@/components/ProvDet';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import CampaignBand from '@/components/CampaignBand';
@@ -18,10 +22,12 @@ import {
   featuredCategories,
   particleSrc,
   categoryBuyUrl,
+  toolTexture,
   brandImages,
   UTM,
   CR_BRAND,
 } from '@/lib/data';
+import { SKA } from '@/lib/ska';
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-7">{children}</div>;
@@ -57,8 +63,9 @@ export default function Home() {
       <section className="relative h-[100svh] min-h-[640px]">
         <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
           <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
-            Dyrt værktøj
-            <br />til <span className="text-stroxx-blue">udyr</span> pris
+            <span className="hero-line">Dyrt værktøj</span>
+            <br />
+            <span className="hero-line hero-line--2">til <span className="text-stroxx-blue">udyr</span> pris</span>
           </h1>
         </div>
         <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">
@@ -213,6 +220,59 @@ export default function Home() {
 
       {/* CAMPAIGN — print campaign as a cinematic image series */}
       <CampaignBand />
+
+      {/* MÅNEDENS STROXX — the SKA engine: one hero story + the month's five
+          DB2-winners, same lineup as nyhedsbrev/SoMe/kampagner/salg. The hero
+          links to its dedicated landing page; everything else buys directly. */}
+      <section id="maanedens" className="relative">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-36">
+          <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center mb-20">
+            <CursorGlow size="42% 58%" intensity={0.14} className="-z-10" />
+            <Reveal from="left">
+              <Eyebrow>Månedens STROXX · {SKA.month} {SKA.year}</Eyebrow>
+              <h2 className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
+                Én historie.
+                <br /><span className="text-stroxx-blue">{SKA.hero.name}.</span>
+              </h2>
+              <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
+                Hver måned får ét stykke værktøj hele historien: hvorfor det vinder,
+                hvor det tjener sig hjem, og hvad kollegerne siger. Resten af måneden
+                klarer sig selv på prisen.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <GlassButton href="/maanedens">Hele historien <ArrowRight size={16} /></GlassButton>
+                <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">Køb hos Carl Ras</GlassButton>
+              </div>
+            </Reveal>
+            <Reveal delay={120} from="far-right">
+              <Link href="/maanedens" className="group relative block aspect-[5/4]">
+                <div className="pointer-events-none absolute inset-[8%]" style={{ background: 'radial-gradient(45% 42% at 50% 52%, rgba(0,130,202,0.26), transparent 70%)' }} />
+                <KnockoutImage
+                  src={toolTexture(SKA.hero.imgId, '50383')}
+                  alt={SKA.hero.name}
+                  maxSize={900}
+                  className="absolute inset-[6%] h-[88%] w-[88%] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                <div className="absolute bottom-3 left-3 text-fog/75 text-xs uppercase tracking-wider">
+                  {SKA.hero.price} DKK · 30 dages garanti
+                </div>
+              </Link>
+            </Reveal>
+          </div>
+
+          <Reveal className="mb-8 flex items-end justify-between gap-6">
+            <div className="text-fog/75 text-xs uppercase tracking-wider">Månedens fem DB2-vindere</div>
+            <Link href="/maanedens" className="link-arrow hidden sm:inline-flex shrink-0 text-sm">
+              Hele måneden <ArrowRight size={14} />
+            </Link>
+          </Reveal>
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
+            {SKA.cashCows.map((p, i) => (
+              <Reveal key={p.slug} delay={(i % 5) * 60}><ProductCard product={p} /></Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CATEGORIES */}
       <section id="kategorier" className="relative">

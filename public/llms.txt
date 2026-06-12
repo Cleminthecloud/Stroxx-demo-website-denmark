@@ -21,6 +21,7 @@
 ## Site pages
 
 - / — brand home
+- /maanedens — tool of the month (SKA program): one hero product with the full story (claims, use cases, video, comparison, FAQ) plus the month's five best-value products and news
 - /produkter — full product finder (filter by category, search with /produkter?q=...)
 - /produkt/{slug} — product pages with specs, price (DKK incl. moms), item number and buy link to Carl Ras
 - /butikker — store and specialist finder (map, 26 stores, direct phone numbers); /butikker?tab=specialister for the people

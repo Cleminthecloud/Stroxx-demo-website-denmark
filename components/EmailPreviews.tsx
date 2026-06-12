@@ -23,22 +23,29 @@ type Template = {
 
 const TEMPLATES: Template[] = [
   {
-    file: 'stroxx-velkomst.html',
+    file: 'stroxx-maanedens-juni.html',
     no: '01',
+    name: 'Månedens (SKA)',
+    subject: 'Én historie. Fem skarpe priser. To nyheder.',
+    preheader: 'Månedens STROXX: Streglaser 3D Green, plus fem priser kollegerne allerede kender.',
+  },
+  {
+    file: 'stroxx-velkomst.html',
+    no: '02',
     name: 'Velkomst',
     subject: 'Velkommen i klubben',
     preheader: 'Tidlig adgang, specialist-tips og de skarpeste priser. Direkte i indbakken.',
   },
   {
     file: 'stroxx-produkt-streglaser.html',
-    no: '02',
+    no: '03',
     name: 'Produkt',
     subject: 'Grønne linjer. Skarp pris. Streglaser 3D Green',
     preheader: 'Selvnivellerende 3D streglaser med 40 m rækkevidde. 2.498,75 kr. inkl. moms.',
   },
   {
     file: 'stroxx-kampagne-proev-det.html',
-    no: '03',
+    no: '04',
     name: 'Kampagne',
     subject: 'Dyrt værktøj. Til udyr pris.',
     preheader: 'Du betaler for logoet, ikke for stålet. Prøv det selv i 30 dage, helt uden risiko.',

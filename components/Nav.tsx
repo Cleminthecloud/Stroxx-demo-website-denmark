@@ -7,6 +7,7 @@ import BuyButton from '@/components/BuyButton';
 import { brandImages, CR_BRAND, UTM } from '@/lib/data';
 
 const LINKS = [
+  { href: '/maanedens', label: 'Månedens værktøj' },
   { href: '/produkter', label: 'Produkter' },
   { href: '/butikker', label: 'Butikker' },
   { href: '/butikker?tab=specialister', label: 'Specialister' },
@@ -48,9 +49,62 @@ export default function Nav() {
           : 'bg-transparent border-b border-transparent'
       }`}
     >
+      {/* mobile menu — rendered BEFORE the nav row and layered under it (the
+          old -z-10 + backdrop-blur variant silently lost both background and
+          blur on iOS Safari, leaving raw links over the hero). Near-solid ink,
+          no backdrop-filter: the documented mobile glass fallback. */}
+      <div
+        id="mobile-menu"
+        data-lenis-prevent
+        aria-hidden={!open}
+        className={`sm:hidden fixed inset-0 z-0 transition-opacity duration-300 ${
+          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        style={{
+          background:
+            'radial-gradient(120% 50% at 50% -10%, rgba(0,130,202,0.16), transparent 60%), rgba(9,10,12,0.985)',
+        }}
+      >
+        <div className="flex h-full flex-col px-6 pt-28 pb-10 overflow-y-auto">
+          <nav className="flex flex-col gap-1" aria-label="Mobilmenu">
+            {LINKS.map((l, i) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+                className="h-display text-white text-[2rem] leading-tight py-2.5 border-b border-white/[0.06] flex items-center justify-between hover:text-stroxx-blue transition-colors"
+                style={{
+                  // staggered rise: each link arrives a beat after the sheet
+                  opacity: open ? 1 : 0,
+                  transform: open ? 'none' : 'translateY(16px)',
+                  transition: `opacity .55s cubic-bezier(.16,1,.3,1) ${90 + i * 50}ms, transform .55s cubic-bezier(.16,1,.3,1) ${90 + i * 50}ms, color .2s`,
+                }}
+              >
+                {l.label}
+                <span className="text-fog/40 text-xs tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+              </Link>
+            ))}
+          </nav>
+          <div
+            className="mt-auto flex flex-col gap-5 pt-8"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? 'none' : 'translateY(16px)',
+              transition: `opacity .55s cubic-bezier(.16,1,.3,1) ${90 + LINKS.length * 50}ms, transform .55s cubic-bezier(.16,1,.3,1) ${90 + LINKS.length * 50}ms`,
+            }}
+          >
+            <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
+              <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Kundeservice 44 85 55 11
+            </a>
+            <BuyButton href={`${CR_BRAND}/?${UTM}`} className="w-full justify-center" />
+          </div>
+        </div>
+      </div>
+
       {/* nav tightens as the page scrolls: one height step, in sync with the blur */}
       <nav
-        className={`mx-auto max-w-[1600px] px-5 md:px-10 flex items-center justify-between transition-[height] duration-300 ease-out ${
+        className={`relative z-10 mx-auto max-w-[1600px] px-5 md:px-10 flex items-center justify-between transition-[height] duration-300 ease-out ${
           scrolled ? 'h-14' : 'h-20'
         }`}
       >
@@ -63,6 +117,7 @@ export default function Nav() {
           />
         </Link>
         <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">
+          <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Månedens værktøj</Link>
           <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
           <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Butikker</Link>
           <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</Link>
@@ -85,38 +140,6 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* mobile menu — frosted full-screen sheet under the header row */}
-      <div
-        id="mobile-menu"
-        data-lenis-prevent
-        className={`sm:hidden fixed inset-x-0 top-0 bottom-0 -z-10 bg-ink/90 backdrop-blur-2xl transition-opacity duration-300 ${
-          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        aria-hidden={!open}
-      >
-        <div className={`flex h-full flex-col px-6 pt-28 pb-10 transition-transform duration-300 ease-out ${open ? 'translate-y-0' : '-translate-y-3'}`}>
-          <nav className="flex flex-col gap-1" aria-label="Mobilmenu">
-            {LINKS.map((l, i) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                tabIndex={open ? 0 : -1}
-                className="h-display text-white text-[2rem] leading-tight py-2.5 border-b border-white/[0.06] flex items-center justify-between hover:text-stroxx-blue transition-colors"
-              >
-                {l.label}
-                <span className="text-fog/40 text-xs tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-              </Link>
-            ))}
-          </nav>
-          <div className="mt-auto flex flex-col gap-5">
-            <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
-              <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Kundeservice 44 85 55 11
-            </a>
-            <BuyButton href={`${CR_BRAND}/?${UTM}`} className="w-full justify-center" />
-          </div>
-        </div>
-      </div>
     </header>
   );
 }

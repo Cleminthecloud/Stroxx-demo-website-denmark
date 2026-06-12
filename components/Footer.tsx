@@ -30,6 +30,7 @@ export default function Footer() {
           <div className="text-sm">
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Sider</div>
             <div className="space-y-3">
+              <Link href="/maanedens" className="block text-fog hover:text-white">Månedens værktøj</Link>
               <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
               <Link href="/fag" className="block text-fog hover:text-white">Fagområder</Link>
               <Link href="/butikker" className="block text-fog hover:text-white">Butikker</Link>
