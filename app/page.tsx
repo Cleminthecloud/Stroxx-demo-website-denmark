@@ -48,23 +48,26 @@ function Marquee({ text }: { text: string }) {
 
 export default function Home() {
   return (
-    <main className="relative">
-      {/* the bag falls in, travels the page, and fills with tools as you scroll */}
+    <main className="relative overflow-x-clip">
+      {/* the bag falls into the hero, dust puffs, and the tools cascade in on load */}
       <BagJourney />
 
-      {/* HERO — giant wordmark, bag centred on top */}
-      <section className="relative z-10 h-screen flex items-center justify-center">
-        <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center px-5">
-          Dyrt værktøj
-          <br />til <span className="text-stroxx-blue">udyr</span> pris
-        </h1>
-        <div className="absolute inset-x-0 bottom-8 hidden lg:flex justify-center">
+      {/* HERO — giant wordmark sits high so it reads above the bag, which
+          overlaps it slightly. Bag layer (z-20) paints over the headline (z-10). */}
+      <section className="relative h-[100svh] min-h-[640px]">
+        <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
+          <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
+            Dyrt værktøj
+            <br />til <span className="text-stroxx-blue">udyr</span> pris
+          </h1>
+        </div>
+        <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">
           <ScrollHint />
         </div>
       </section>
 
-      {/* ACT 1 — brand claim, bag swings right */}
-      <section className="relative z-40 min-h-screen flex items-center">
+      {/* CLAIM — the promise, front and centre */}
+      <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
             <p className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
@@ -79,38 +82,41 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="relative z-40"><Marquee text="DYRT VÆRKTØJ TIL UDYR PRIS" /></div>
+      <Marquee text="DYRT VÆRKTØJ TIL UDYR PRIS" />
 
-      {/* ACT 2 — Vi har det, bag swings left, text right */}
-      <section className="relative z-40 min-h-screen flex items-center">
-        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 flex md:justify-end">
-          <div className="max-w-2xl">
+      {/* SORTIMENT — what we have, and we have your back */}
+      <section className="relative py-28 md:py-40">
+        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+          <div>
             <Eyebrow>Sortimentet</Eyebrow>
             <ScrollText as="h2" text={'Vi har det. \n Og vi har dig.'}
-              className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9] mb-14" />
-            <div className="grid gap-12 sm:grid-cols-2">
-              <div>
-                <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Udvalget</div>
-                <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Værktøj, udstyr, tilbehør og forbrugsartikler. Fra lasermålere og savklinger til håndværktøj, topnøglesæt og beskyttelsesudstyr — STROXX har det meste." />
-              </div>
-              <div>
-                <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Servicen</div>
-                <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Og vi har din ryg. Så du hverken går forgæves eller hjem med det forkerte. Det er ikke kun værktøjet, der er skarpt." />
-              </div>
+              className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9]" />
+          </div>
+          <div className="grid gap-12 sm:grid-cols-2">
+            <div>
+              <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Udvalget</div>
+              <ScrollText as="p" className="text-fog text-base leading-relaxed"
+                text="Værktøj, udstyr, tilbehør og forbrugsartikler. Fra lasermålere og savklinger til håndværktøj, topnøglesæt og beskyttelsesudstyr — STROXX har det meste." />
+            </div>
+            <div>
+              <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Servicen</div>
+              <ScrollText as="p" className="text-fog text-base leading-relaxed"
+                text="Og vi har din ryg. Så du hverken går forgæves eller hjem med det forkerte. Det er ikke kun værktøjet, der er skarpt." />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ACT 3 — 1.400 varenumre, bag swings right, text left */}
-      <section className="relative z-40 min-h-screen flex items-center">
-        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
-          <div className="max-w-2xl">
-            <Eyebrow>Skala</Eyebrow>
-            <ScrollText as="h2" text={'Mere end \n 1.400 varenumre.'}
-              className="h-display text-white text-[clamp(2.6rem,7vw,6.5rem)] leading-[0.9] mb-14" />
+      {/* SKALA — headline + the scale, capped by a bold stats band */}
+      <section className="relative py-28 md:py-36">
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 40%, rgba(0,130,202,0.07), transparent 70%)' }} />
+        <div className="relative mx-auto w-full max-w-[1600px] px-6 md:px-10">
+          <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-end">
+            <div>
+              <Eyebrow>Skala</Eyebrow>
+              <ScrollText as="h2" text={'Mere end \n 1.400 varenumre.'}
+                className="h-display text-white text-[clamp(2.6rem,7vw,6.5rem)] leading-[0.9]" />
+            </div>
             <div className="grid gap-12 sm:grid-cols-2">
               <div>
                 <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Hverdagen</div>
@@ -123,25 +129,26 @@ export default function Home() {
                   text="Nogle produkter er oplagte, når du bare ikke vil betale for meget. Andre er til dig, der sammenligner specs, ydelse og pris — og vil have det bedste." />
               </div>
             </div>
-            <Reveal delay={200}>
-              <div className="mt-16 flex flex-wrap gap-x-16 gap-y-8">
-                {[{ v: 1400, suf: '+', l: 'varenumre' }, { v: 23, suf: '', l: 'engroscentre' }, { v: 227, suf: '+', l: 'butikker i Europa' }].map((s) => (
-                  <div key={s.l}>
-                    <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl block" />
-                    <div className="text-fog text-sm mt-1">{s.l}</div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
           </div>
+
+          {/* stats band — full width, vertical dividers */}
+          <Reveal delay={120}>
+            <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
+              {[{ v: 1400, suf: '+', l: 'varenumre' }, { v: 23, suf: '', l: 'engroscentre i Danmark' }, { v: 227, suf: '+', l: 'butikker i Europa' }].map((s, i) => (
+                <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
+                  <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
+                  <div className="text-fog text-sm mt-2">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* SPECIALISTS — glass quote cards so the travelling bag blurs BEHIND
-          them (section z above the fixed bag layer z-45, far below nav z-100) */}
-      <section id="specialister" className="relative z-[46]">
-        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-40">
-          <div className="mb-20 max-w-3xl">
+      {/* SPECIALISTS */}
+      <section id="specialister" className="relative">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
+          <div className="mb-16 max-w-3xl">
             <Eyebrow>Specialisterne</Eyebrow>
             <ScrollText as="h2" text="Cand. værktøj med speciale i STROXX"
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
@@ -152,42 +159,42 @@ export default function Home() {
               background: 'radial-gradient(50% 55% at 28% 32%, rgba(0,130,202,0.18), transparent 60%), radial-gradient(45% 50% at 80% 75%, rgba(43,166,232,0.12), transparent 62%)',
               filter: 'blur(20px)',
             }} />
-          <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
-            {specialists.slice(0, 6).map((s, i) => (
-              <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
-                <div className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex flex-col h-full">
-                <div className="flex gap-1 mb-5">
-                  {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
-                </div>
-                <blockquote className="text-white text-xl leading-snug mb-7">“{s.quote}”</blockquote>
-                <div className="flex items-center gap-3 mt-auto">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <div className="text-white text-sm truncate">{s.name}</div>
-                    <div className="text-fog text-xs truncate">{s.role} · {s.location}</div>
+            <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
+              {specialists.slice(0, 6).map((s, i) => (
+                <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
+                  <div className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex flex-col h-full">
+                    <div className="flex gap-1 mb-5">
+                      {Array.from({ length: 3 }).map((_, k) => <span key={k} className="h-1.5 w-1.5 rounded-full bg-stroxx-blue" />)}
+                    </div>
+                    <blockquote className="text-white text-xl leading-snug mb-7">“{s.quote}”</blockquote>
+                    <div className="flex items-center gap-3 mt-auto">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={s.photo} alt={s.name} className="h-11 w-11 rounded-full object-cover grayscale shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <div className="text-white text-sm truncate">{s.name}</div>
+                        <div className="text-fog text-xs truncate">{s.role} · {s.location}</div>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <GlassLink href={`tel:+45${s.phone}`} label="Ring">
+                          <Phone size={15} strokeWidth={2} className="relative" />
+                        </GlassLink>
+                        <GlassLink href={`mailto:${s.email}`} label="Email">
+                          <Mail size={15} strokeWidth={2} className="relative" />
+                        </GlassLink>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex gap-2 shrink-0">
-                    <GlassLink href={`tel:+45${s.phone}`} label="Ring">
-                      <Phone size={15} strokeWidth={2} className="relative" />
-                    </GlassLink>
-                    <GlassLink href={`mailto:${s.email}`} label="Email">
-                      <Mail size={15} strokeWidth={2} className="relative" />
-                    </GlassLink>
-                  </div>
-                </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* GUARANTEE */}
-      <section className="relative z-40">
+      <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.12), transparent 70%)' }} />
-        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
           <div>
             <Eyebrow>Tilfredsgaranti</Eyebrow>
             <ScrollText as="h2" text={'100%. Eller \n pengene tilbage.'}
@@ -208,7 +215,7 @@ export default function Home() {
       <CampaignBand />
 
       {/* CATEGORIES */}
-      <section id="kategorier" className="relative z-40">
+      <section id="kategorier" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div className="max-w-3xl">
             <Eyebrow>Kategorierne</Eyebrow>
@@ -248,7 +255,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="relative z-40 h-[80vh] flex flex-col items-center justify-center text-center px-6">
+      <section className="relative h-[80vh] flex flex-col items-center justify-center text-center px-6">
         <ProvDet />
         <BuyButton href={`${CR_BRAND}/?${UTM}`}>Køb STROXX hos Carl Ras</BuyButton>
       </section>

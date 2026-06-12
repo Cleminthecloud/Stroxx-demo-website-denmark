@@ -4,41 +4,19 @@ import { bagTools, formatDKK } from '@/lib/data';
 import { TOOLS, PANEL, FRONT_PANEL, BAG_BACK, BAG_AR } from '@/components/BagFill';
 
 /* ──────────────────────────────────────────────────────────────────────────
-   The homepage hero bag — it FALLS in from the viewer's POV (dust + impact
-   shake), then TRAVELS the same zig-zag scroll path as before, and as it
-   zig-zags down the page the tools FALL INTO it (staggered on scroll). The bag,
-   tools, front-panel occluder, price tag, shadow and blue light are one group
-   that follows the path; the tool-drops happen in the bag's local space so they
-   always land inside it, wherever it has swung. Geometry (BAG_AR, TOOLS,
-   panel positions) is shared from BagFill so the bag stays consistent.
+   Homepage hero bag. It FALLS in from the viewer's POV (dust puff + impact
+   shake), settles in the hero, and ALL the tools cascade into it on load.
+   No scroll journey — the bag lives in the hero and scrolls away with the
+   page. Geometry (BAG_AR, TOOLS, panel positions, price) is shared from
+   BagFill so the bag stays consistent. The price tag tallies the tools as
+   they land.
    ────────────────────────────────────────────────────────────────────────── */
 
-type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };
-const STOPS: Stop[] = [
-  { p: 0.0, x: 0, y: 12, s: 1.02, r: 0, o: 1 },
-  { p: 0.11, x: 20, y: -2, s: 0.82, r: 5, o: 1 },
-  { p: 0.23, x: -20, y: 3, s: 0.84, r: -5, o: 1 },
-  { p: 0.35, x: 19, y: 2, s: 0.88, r: 5, o: 1 },
-  { p: 0.44, x: 8, y: 14, s: 0.94, r: 0, o: 0 },
-];
-
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeOutBack = (t: number) => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
-function sample(p: number): Omit<Stop, 'p'> {
-  if (p <= STOPS[0].p) return STOPS[0];
-  if (p >= STOPS[STOPS.length - 1].p) return STOPS[STOPS.length - 1];
-  let i = 0;
-  while (i < STOPS.length - 1 && p > STOPS[i + 1].p) i++;
-  const a = STOPS[i], b = STOPS[i + 1];
-  const t = (p - a.p) / (b.p - a.p);
-  const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-  return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), s: lerp(a.s, b.s, e), r: lerp(a.r, b.r, e), o: lerp(a.o, b.o, e) };
-}
 
-// tools fill while the bag travels — staggered between these scroll fractions,
-// finishing before the bag fades (~0.40)
-const FILL_START = 0.05, FILL_END = 0.33, DROP = 0.08, DROP_FROM = 78;
+// fill timing (ms from mount): a beat to let the bag land, then tools cascade
+const FILL_HOLD = 700, FILL_STAGGER = 130, FILL_DUR = 480, DROP_FROM = 82;
 
 type Pt = { x: number; y: number; vx: number; vy: number; life: number; max: number; r: number };
 
@@ -49,45 +27,36 @@ export default function BagJourney() {
   const pool = useRef<HTMLDivElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
   const toolRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const cur = useRef({ x: 0, y: 12, s: 1.02, r: 0, o: 1, lastY: 12 });
   const [landed, setLanded] = useState(0);
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // The fall-in + dust puff is a first-impression effect: only play it on a
-    // genuine top-of-page landing. On back/forward navigation the browser
-    // restores the previous scroll position, so replaying the entrance kicked
-    // up a stray dust puff over the canvas mid-page — skip it when we don't
-    // start at the top.
+    // Only play the fall-in/puff on a genuine top-of-page landing — on
+    // back/forward nav the browser restores scroll and a mid-page puff looked wrong.
     const skipEntrance = reduce || window.scrollY > 4;
-    // iOS Safari rasterises large blur/drop-shadow-filtered layers as OPAQUE
-    // WHITE rectangles when they exceed GPU memory — so on small screens the
-    // bag gets NO css filter at all (the pool div already provides a shadow).
+    // iOS Safari rasterises large blur/drop-shadow layers as opaque white when
+    // they exceed GPU memory — so phones get NO css filter (pool div = shadow).
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
-    // On phones the bag is smaller and anchored at the BASE of the viewport, so
-    // the content reads above it instead of colliding with it mid-screen.
-    const mobileY = noFilter ? 17 : 0; // vh shift down — sits the bag low in the hero
+    // Fixed hero pose. y nudges the bag down so the headline reads above it.
+    const POSE_Y = noFilter ? 18 : 16; // vh below centre
     const t0 = performance.now();
     const ENTER = 850;
     const N = TOOLS.length;
     let puffed = false;
     const parts: Pt[] = [];
-    const gl = { x: cur.current.x, y: cur.current.y, vx: 0, vy: 0 };
     const dctx = dust.current?.getContext('2d') || null;
     const sizeDust = () => { if (dust.current) { dust.current.width = innerWidth; dust.current.height = innerHeight; } };
     sizeDust();
     addEventListener('resize', sizeDust);
 
     const bagBaseH = () => (noFilter ? (innerWidth * 0.75) / BAG_AR : Math.min(0.70 * innerHeight, 980));
-    // The bag PNG is padded: the visible tote bottom sits at 0.767 of the image
-    // height (measured from alpha bounds), so the impact dust must spawn at that
-    // base — not at the box bottom — or it kicks up in the empty padding below.
+    const BAG_S = 1.0;
+    // visible tote bottom sits at 0.767 of the padded PNG height
     const TOTE_BASE = 0.767;
     const spawnPuff = () => {
-      const c = cur.current;
-      const bagH = bagBaseH() * c.s, bagW = bagH * BAG_AR;
-      const cx = innerWidth / 2 + (c.x / 100) * innerWidth;
-      const baseY = innerHeight / 2 + ((c.y + mobileY) / 100) * innerHeight + bagH * (TOTE_BASE - 0.5);
+      const bagH = bagBaseH() * BAG_S, bagW = bagH * BAG_AR;
+      const cx = innerWidth / 2;
+      const baseY = innerHeight / 2 + (POSE_Y / 100) * innerHeight + bagH * (TOTE_BASE - 0.5);
       for (let i = 0; i < 54; i++) {
         const sp = 2 + Math.random() * 6;
         const dir = Math.random() < 0.5 ? -1 : 1;
@@ -98,15 +67,7 @@ export default function BagJourney() {
     let shakeT0 = -1, raf = 0;
 
     const loop = (now: number) => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      const p = max > 0 ? clamp(scrollY / max) : 0;
-      // phones: no journey — the bag holds its hero pose and scrolls away with
-      // the page; desktop travels the scroll-driven zig-zag as before
-      const tgt = sample(noFilter ? 0 : p);
-      const c = cur.current;
-      c.x = lerp(c.x, tgt.x, 0.1); c.y = lerp(c.y, tgt.y, 0.1);
-      c.s = lerp(c.s, tgt.s, 0.1); c.r = lerp(c.r, tgt.r, 0.1); c.o = lerp(c.o, tgt.o, 0.12);
-
+      // entrance: bag drops in from above with a quick blur, then a puff + shake
       let entY = 0, blur = 0;
       if (!skipEntrance) {
         const et = Math.min(1, (now - t0) / ENTER);
@@ -115,8 +76,7 @@ export default function BagJourney() {
         blur = (1 - et) * 16;
         if (!puffed && et >= 0.9) { puffed = true; spawnPuff(); shakeT0 = now; }
       }
-      const vy = c.y - c.lastY; c.lastY = c.y;
-      const lift = clamp((c.s - 0.7) / 0.4 - vy * 0.1 + (-entY) * 0.012);
+      const lift = clamp((-entY) * 0.012); // brief lift while falling, settles to 0
 
       let shX = 0, shY = 0;
       if (shakeT0 >= 0) {
@@ -127,31 +87,21 @@ export default function BagJourney() {
       const jolt = `translate(${shX.toFixed(2)}px, ${shY.toFixed(2)}px) `;
 
       if (group.current) {
-        group.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + entY + mobileY}vh) scale(${c.s}) rotate(${c.r}deg)`;
-        group.current.style.opacity = String(c.o);
+        group.current.style.transform = `${jolt}translate(-50%,-50%) translate(0vw, ${(POSE_Y + entY).toFixed(2)}vh) scale(${BAG_S})`;
       }
       if (bag.current && !noFilter) {
-        // ONE soft contact shadow — a second offset drop-shadow doubled the bag
-        // silhouette and read as ghosting/emboss beneath the bag and behind the
-        // price tag. Larger blur keeps it soft without the doubled edge.
         const off = 16 + lift * 30, bl = 34 + lift * 40;
         const a1 = (0.5 - lift * 0.16).toFixed(2);
         bag.current.style.filter =
           `blur(${Math.max(0, blur).toFixed(2)}px) drop-shadow(0px ${off.toFixed(0)}px ${bl.toFixed(0)}px rgba(0,0,0,${a1}))`;
       }
 
-      // tools fall into the bag (local space) as it travels
+      // tools cascade into the bag on load (time-driven, all viewports)
       let count = 0;
       for (let i = 0; i < N; i++) {
         const node = toolRefs.current[i];
         if (!node) continue;
-        const start = FILL_START + (i / N) * (FILL_END - FILL_START);
-        // Phones: the fill is TIME-driven — the bag lands and all the tools
-        // cascade straight in (no scroll needed). Desktop keeps the
-        // scroll-driven fill along the journey.
-        const local = reduce ? 1
-          : noFilter ? clamp((now - t0 - 1150 - i * 150) / 480)
-          : clamp((p - start) / DROP);
+        const local = reduce ? 1 : clamp((now - t0 - FILL_HOLD - i * FILL_STAGGER) / FILL_DUR);
         const e = local <= 0 ? 0 : easeOutBack(local);
         const fall = (1 - e) * DROP_FROM;
         const tblur = (1 - clamp(local / 0.6)) * 3;
@@ -166,15 +116,10 @@ export default function BagJourney() {
       setLanded((prev) => (prev === count ? prev : count));
 
       if (pool.current) {
-        const ps = c.s;
-        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(${c.x}vw, ${c.y + 16 + mobileY}vh) scale(${ps}, ${ps * 0.5})`;
-        pool.current.style.opacity = String(0.5 * c.o);
+        pool.current.style.transform = `${jolt}translate(-50%,-50%) translate(0vw, ${(POSE_Y + 16).toFixed(2)}vh) scale(${BAG_S}, ${(BAG_S * 0.5).toFixed(2)})`;
       }
-      gl.vx += (c.x - gl.x) * 0.03; gl.vy += (c.y - gl.y) * 0.03 + 0.012;
-      gl.vx *= 0.92; gl.vy *= 0.92; gl.x += gl.vx; gl.y += gl.vy;
       if (spill.current) {
-        spill.current.style.transform = `translate(-50%,-50%) translate(${gl.x}vw, ${gl.y + mobileY}vh)`;
-        spill.current.style.opacity = String(c.o);
+        spill.current.style.transform = `translate(-50%,-50%) translate(0vw, ${(POSE_Y).toFixed(2)}vh)`;
       }
 
       if (dctx && dust.current) {
@@ -198,11 +143,11 @@ export default function BagJourney() {
 
   const total = TOOLS.slice(0, landed).reduce((s, t) => s + (bagTools.find((b) => b.id === t.id)?.price ?? 0), 0);
 
-  // phones: the bag lives IN the hero (absolute, scrolls away with the page);
-  // desktop: fixed full-viewport layer so it travels the whole journey.
+  // The bag lives IN the hero: absolute, full-height of the hero, scrolls away
+  // with the page. pointer-events-none so it never blocks the content.
   return (
-    <div className="absolute inset-x-0 top-0 h-screen lg:fixed lg:inset-0 lg:h-auto z-[45] overflow-hidden pointer-events-none select-none" aria-hidden>
-      {/* elastic blue light that trails the bag */}
+    <div className="absolute inset-x-0 top-0 h-screen z-20 overflow-hidden pointer-events-none select-none" aria-hidden>
+      {/* blue light glow under/behind the bag */}
       <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
         width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
         background: 'radial-gradient(42% 42% at 50% 50%, rgba(0,130,202,0.28), transparent 70%)', transform: 'translate(-50%,-50%)' }} />
@@ -212,7 +157,7 @@ export default function BagJourney() {
         background: 'radial-gradient(ellipse 50% 36% at 50% 50%, rgba(120,170,210,0.16), rgba(120,170,210,0) 64%)',
         transform: 'translate(-50%,-50%)' }} />
 
-      {/* the travelling + filling bag group */}
+      {/* the bag group */}
       <div ref={group} className="absolute left-1/2 top-1/2 will-change-transform w-[75vw] h-auto lg:w-auto lg:h-[min(70vh,980px)]"
         style={{ aspectRatio: String(BAG_AR), transform: 'translate(-50%,-50%)' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -221,11 +166,9 @@ export default function BagJourney() {
         {TOOLS.map((t, i) => (
           <div key={t.id + '-' + i} ref={(n) => { toolRefs.current[i] = n; }} className="absolute will-change-transform"
             style={{ left: `${t.x}%`, top: `${t.y}%`, width: `${t.w}%`, height: `${t.w / BAG_AR * 0.62}%`,
-              zIndex: 10 + i, opacity: 0, transform: 'translate(-50%,-50%) translateY(-78vh)' }}>
+              zIndex: 10 + i, opacity: 0, transform: 'translate(-50%,-50%) translateY(-82vh)' }}>
             <div data-shadow className="pointer-events-none absolute left-1/2 -translate-x-1/2"
               style={{ bottom: '-6%', width: '80%', height: '16%', opacity: 0, background: 'radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,0.55), transparent 70%)', filter: 'blur(7px)' }} />
-            {/* local pre-cut transparent PNG (exported from the DAM) — a plain img
-                needs no canvas work, so it renders identically on every device */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`/Images/bag-tools/${t.id}.png`} alt="" draggable={false}
               className="h-full w-full object-contain select-none lg:drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)]" />
@@ -236,9 +179,7 @@ export default function BagJourney() {
         <img src={FRONT_PANEL} alt="" className="absolute select-none"
           style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
-        {/* price tag — rides along on the bag. On small screens the bag spans the
-            whole viewport, so the tag tucks INSIDE the bag instead of hanging off
-            its right edge (where it ends up half off-screen). */}
+        {/* price tag — tallies the tools as they land */}
         <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
           <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
             style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
