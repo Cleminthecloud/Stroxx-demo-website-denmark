@@ -42,27 +42,25 @@ export default function Nav() {
   }, [open]);
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-[100] transition-colors duration-300 ${
-        scrolled || open
-          ? 'bg-ink/55 backdrop-blur-xl border-b border-white/[0.06]'
-          : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      {/* mobile menu — rendered BEFORE the nav row and layered under it (the
-          old -z-10 + backdrop-blur variant silently lost both background and
-          blur on iOS Safari, leaving raw links over the hero). Near-solid ink,
-          no backdrop-filter: the documented mobile glass fallback. */}
+    <>
+      {/* MOBILE MENU — a SIBLING of the header, never a child. HARD RULE:
+          the header gets backdrop-filter when scrolled/open, and a filter on
+          an ancestor makes it the CONTAINING BLOCK for position:fixed
+          descendants — a fixed menu inside the header collapses to the 80px
+          header box (background squashed into a strip, links overflow with no
+          sheet behind them). That was the "no background, one link" bug, on
+          every browser. z-[90] keeps it under the header row (z-100), so the
+          logo and the X stay visible on top of the sheet. */}
       <div
         id="mobile-menu"
         data-lenis-prevent
         aria-hidden={!open}
-        className={`sm:hidden fixed inset-0 z-0 transition-opacity duration-300 ${
+        className={`sm:hidden fixed inset-0 z-[90] transition-opacity duration-300 ${
           open ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
           background:
-            'radial-gradient(120% 50% at 50% -10%, rgba(0,130,202,0.16), transparent 60%), rgba(9,10,12,0.985)',
+            'radial-gradient(120% 50% at 50% -10%, rgba(0,130,202,0.16), transparent 60%), #0A0B0D',
         }}
       >
         <div className="flex h-full flex-col px-6 pt-28 pb-10 overflow-y-auto">
@@ -102,44 +100,51 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* nav tightens as the page scrolls: one height step, in sync with the blur */}
-      <nav
-        className={`relative z-10 mx-auto max-w-[1600px] px-5 md:px-10 flex items-center justify-between transition-[height] duration-300 ease-out ${
-          scrolled ? 'h-14' : 'h-20'
+      <header
+        className={`fixed top-0 inset-x-0 z-[100] transition-colors duration-300 ${
+          scrolled || open
+            ? 'bg-ink/55 backdrop-blur-xl border-b border-white/[0.06]'
+            : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <Link href="/" aria-label="STROXX" className="flex items-center" onClick={() => setOpen(false)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={brandImages.logoWhite}
-            alt="STROXX"
-            className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
-          />
-        </Link>
-        <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">
-          <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Månedens værktøj</Link>
-          <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
-          <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Butikker</Link>
-          <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</Link>
-          {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
-              utilities in the cascade, so `hidden` directly on it loses */}
-          <span className="hidden sm:inline-flex">
-            <BuyButton href={`${CR_BRAND}/?${UTM}`} />
-          </span>
-          {/* mobile: burger replaces the link row; the buy CTA lives inside the menu */}
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? 'Luk menu' : 'Åbn menu'}
-            className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.12] text-white bg-white/[0.04]"
-          >
-            {open ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
-          </button>
-        </div>
-      </nav>
-
-    </header>
+        {/* nav tightens as the page scrolls: one height step, in sync with the blur */}
+        <nav
+          className={`mx-auto max-w-[1600px] px-5 md:px-10 flex items-center justify-between transition-[height] duration-300 ease-out ${
+            scrolled ? 'h-14' : 'h-20'
+          }`}
+        >
+          <Link href="/" aria-label="STROXX" className="flex items-center" onClick={() => setOpen(false)}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={brandImages.logoWhite}
+              alt="STROXX"
+              className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
+            />
+          </Link>
+          <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">
+            <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Månedens værktøj</Link>
+            <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
+            <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Butikker</Link>
+            <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</Link>
+            {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
+                utilities in the cascade, so `hidden` directly on it loses */}
+            <span className="hidden sm:inline-flex">
+              <BuyButton href={`${CR_BRAND}/?${UTM}`} />
+            </span>
+            {/* mobile: burger replaces the link row; the buy CTA lives inside the menu */}
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? 'Luk menu' : 'Åbn menu'}
+              className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.12] text-white bg-white/[0.04]"
+            >
+              {open ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
+            </button>
+          </div>
+        </nav>
+      </header>
+    </>
   );
 }
