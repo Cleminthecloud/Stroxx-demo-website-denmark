@@ -20,12 +20,12 @@ export default function ProductExplorer() {
   const [sort, setSort] = useState<Sort>('pop');
 
   useEffect(() => {
-    const c = params.get('cat');
-    if (c) setActive(c);
+    // unconditional: navigating to plain /produkter must CLEAR a previous
+    // ?cat= / ?q= (conditional set left stale filters behind)
+    setActive(params.get('cat'));
     // deep-linkable search: /produkter?q=... (also used by the WebSite
     // SearchAction schema so answer engines can construct search URLs)
-    const qq = params.get('q');
-    if (qq) setQ(qq);
+    setQ(params.get('q') ?? '');
   }, [params]);
 
   // categories that actually have products in this demo dataset
@@ -89,7 +89,7 @@ export default function ProductExplorer() {
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">
               Filtrér i sortimentet og spring direkte til købet hos Carl Ras. Et udpluk
-              af de 1.400+ varenumre — købet sker altid på partnerens platform.
+              af de 1.400+ varenumre. Købet sker altid på partnerens platform.
             </p>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
@@ -99,13 +99,15 @@ export default function ProductExplorer() {
         </div>
       )}
 
-      {/* controls */}
-      <div className="sticky top-14 z-30 -mx-5 md:-mx-8 px-5 md:px-8 pt-5 pb-4 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center gap-2">
+      {/* controls — below lg the 21 chips collapse to ONE horizontally
+          scrollable row (13 wrapped rows of sticky chips ate the whole phone
+          viewport); lg+ keeps the wrapped layout */}
+      <div className="sticky top-14 z-30 -mx-5 md:-mx-8 px-5 md:px-8 pt-4 lg:pt-5 pb-3 lg:pb-4 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
+        <div className="flex flex-col gap-3 lg:gap-4">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-5 px-5 md:-mx-8 md:px-8 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <button
               onClick={() => setActive(null)}
-              className={`text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+              className={`shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
                 !active ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
               }`}
             >
@@ -115,7 +117,7 @@ export default function ProductExplorer() {
               <button
                 key={c.slug}
                 onClick={() => setActive(c.slug)}
-                className={`text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+                className={`shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
                   active === c.slug ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                 }`}
               >
@@ -123,20 +125,20 @@ export default function ProductExplorer() {
               </button>
             ))}
           </div>
-          <div className="flex flex-wrap items-center gap-3 justify-between">
+          <div className="flex items-center gap-3 justify-between overflow-x-auto no-scrollbar -mx-5 px-5 md:-mx-8 md:px-8 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Søg på navn eller varenummer…"
-              className="flex-1 min-w-[200px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
+              className="flex-1 min-w-[160px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
             />
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-fog">Sortér:</span>
+            <div className="flex items-center gap-2 text-sm shrink-0">
+              <span className="text-fog hidden sm:inline">Sortér:</span>
               {([['pop', 'Populært'], ['new', 'Nyeste'], ['low', 'Pris ↑'], ['high', 'Pris ↓']] as [Sort, string][]).map(([k, l]) => (
                 <button
                   key={k}
                   onClick={() => setSort(k)}
-                  className={`px-3.5 py-1.5 rounded-full border transition-colors ${
+                  className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full border transition-colors ${
                     sort === k ? 'border-white text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                   }`}
                 >

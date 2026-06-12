@@ -38,7 +38,9 @@ function searchProducts(q: string) {
 function botReply(raw: string, nearest: { store: Store; km: number } | null): Msg[] {
   const t = norm(raw);
 
-  if (/menneske|specialist|human|person|ring til|tal med|snak med/.test(t)) {
+  // "ja"/"ja tak"/"gerne" accepts the bot's own handoff offer — without this
+  // the fallback answer looped forever on an affirmative reply
+  if (/menneske|specialist|human|person|ring til|tal med|snak med|^ja\b|^jep\b|^jo\b|gerne|ok(ay)?\b/.test(t)) {
     return [{
       from: 'bot', handoff: true,
       text: 'Selvfølgelig. Jeg har skrevet et kort resumé af vores samtale, så du ikke skal starte forfra.',
@@ -95,7 +97,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
   }
   return [{
     from: 'bot',
-    text: 'Det vil jeg ikke gætte på, det fortjener et rigtigt svar. Skal jeg sætte dig i kontakt med en specialist?',
+    text: 'Det vil jeg ikke gætte på, det fortjener et rigtigt svar. Skal jeg sætte dig i kontakt med en specialist? Skriv "ja", så ordner jeg det.',
     links: [],
     handoff: false,
   }];

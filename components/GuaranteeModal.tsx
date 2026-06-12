@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Check, X, FileText, ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 
@@ -7,13 +7,15 @@ const PDF = '/STROXX-tilfredshedsgaranti.pdf';
 
 const POINTS = [
   'Er du ikke tilfreds, får du pengene tilbage.',
-  'Ingen krav om fejl — din vurdering er nok.',
+  'Ingen krav om fejl. Din vurdering er nok.',
   'Gælder alle STROXX-produkter (dog ikke adgangskontrol).',
 ];
 
 export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: { trigger?: string }) {
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false); // drives the enter/exit transition
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -22,7 +24,15 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
       window.addEventListener('keydown', onKey);
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => { cancelAnimationFrame(id); window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+      // move focus INTO the dialog, and give it back to the trigger on close
+      closeRef.current?.focus();
+      const trigger = triggerRef.current; // stable node for the cleanup
+      return () => {
+        cancelAnimationFrame(id);
+        window.removeEventListener('keydown', onKey);
+        document.body.style.overflow = prev;
+        trigger?.focus();
+      };
     }
   }, [open]);
 
@@ -30,7 +40,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="link-arrow mt-8">
+      <button ref={triggerRef} onClick={() => setOpen(true)} className="link-arrow mt-8">
         {trigger} <ArrowRight size={15} />
       </button>
 
@@ -57,6 +67,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
             }}
           >
             <button
+              ref={closeRef}
               onClick={close} aria-label="Luk"
               className="absolute top-4 right-4 grid h-9 w-9 place-items-center rounded-full text-fog hover:text-white border border-white/10 hover:border-white/25 transition-colors"
             >
@@ -65,7 +76,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
 
             <div className="eyebrow mb-3">30 dages tilfredshedsgaranti</div>
             <h2 className="h-display text-white text-[clamp(1.6rem,4vw,2.2rem)] leading-[1.02] mb-4">
-              Tilfreds — eller pengene tilbage.
+              Tilfreds, eller pengene tilbage.
             </h2>
             <p className="text-fog leading-relaxed mb-6">
               Vi står inde for vores værktøj. Som erhvervskunde med konto kan du prøve dit
@@ -84,7 +95,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
             </ul>
 
             <p className="text-fog/80 text-sm leading-relaxed mb-1">
-              Test varen, inden du køber stort ind — garantien gælder den først købte ved køb af
+              Test varen, inden du køber stort ind. Garantien gælder den først købte ved køb af
               ens varer i mængde.
             </p>
             <p className="text-fog/80 text-sm leading-relaxed mb-7">

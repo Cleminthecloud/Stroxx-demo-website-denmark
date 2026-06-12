@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react';
@@ -19,8 +19,15 @@ export default function SpecialistFab() {
   const [locating, setLocating] = useState(false);
   const [denied, setDenied] = useState(false);
   const pathname = usePathname();
+  const panelRef = useRef<HTMLDivElement>(null);
   // product pages have a sticky mobile buy bar at the bottom; float above it
   const onProduct = pathname?.startsWith('/produkt/');
+
+  // the closed panel is visually hidden but stays mounted (exit transition) —
+  // `inert` keeps its buttons/links out of the tab order and screen readers
+  useEffect(() => {
+    panelRef.current?.toggleAttribute('inert', !open);
+  }, [open]);
 
   // other components (e.g. the specialist map cards) can open the chat directly
   useEffect(() => {
@@ -60,6 +67,7 @@ export default function SpecialistFab() {
 
       {/* panel */}
       <div
+        ref={panelRef}
         role="dialog" aria-label="Snak med en specialist" aria-hidden={!open}
         className={`fixed z-[89] right-5 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 p-6 transition-all duration-300 ${
           onProduct ? 'bottom-[10.5rem]' : 'bottom-[5.5rem]'

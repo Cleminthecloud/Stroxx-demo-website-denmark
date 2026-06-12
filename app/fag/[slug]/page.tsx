@@ -12,8 +12,7 @@ import { ArrowRight } from 'lucide-react';
 import { products, categoryBySlug } from '@/lib/data';
 import { trades, tradeBySlug } from '@/lib/trades';
 import { testimonialsForTrade } from '@/lib/testimonials';
-
-const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
+import { SITE_URL as BASE } from '@/lib/site';
 
 export function generateStaticParams() {
   return trades.map((t) => ({ slug: t.slug }));
@@ -22,7 +21,7 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const t = tradeBySlug(params.slug);
   if (!t) return { title: 'STROXX' };
-  const title = `Værktøj til ${t.name.toLowerCase()} — uden mærke-tillæg`;
+  const title = `Værktøj til ${t.name.toLowerCase()} uden mærke-tillæg`;
   const description = `${t.blurb} 30 dages tilfredshedsgaranti, kun hos Carl Ras i Danmark.`;
   return {
     title,

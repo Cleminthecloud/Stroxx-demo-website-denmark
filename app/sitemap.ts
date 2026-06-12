@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
 import { trades } from '@/lib/trades';
-
-const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
+import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/plan, /email-skabeloner) and the
  *  /kategori redirects are deliberately left out. */

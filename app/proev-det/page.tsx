@@ -39,7 +39,7 @@ const FAQ_ITEMS = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Få råd til andet end værktøj — STROXX',
+  title: 'Få råd til andet end værktøj',
   description:
     'Du betaler for logoet, ikke for stålet. STROXX er professionel kvalitet uden mærke-tillæg, med 100% tilfredshedsgaranti. Prøv det i 30 dage.',
 };

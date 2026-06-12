@@ -77,7 +77,7 @@ export default function Home() {
               <ScrollText as="span" className="text-stroxx-blue" text="nær så meget." />
             </p>
             <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
-              text="Fedt værktøj til temmelig tynde priser. Fås kun hos Carl Ras BYG — og husk: altid 100% tilfredsgaranti, så der ikke er så meget at tænke over." />
+              text="Fedt værktøj til temmelig tynde priser. Fås kun hos Carl Ras BYG. Og husk: altid 100% tilfredsgaranti, så der ikke er så meget at tænke over." />
           </div>
         </div>
       </section>
@@ -94,12 +94,12 @@ export default function Home() {
           </div>
           <div className="grid gap-12 sm:grid-cols-2">
             <div>
-              <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Udvalget</div>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Udvalget</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                text="Værktøj, udstyr, tilbehør og forbrugsartikler. Fra lasermålere og savklinger til håndværktøj, topnøglesæt og beskyttelsesudstyr — STROXX har det meste." />
+                text="Værktøj, udstyr, tilbehør og forbrugsartikler. Fra lasermålere og savklinger til håndværktøj, topnøglesæt og beskyttelsesudstyr. STROXX har det meste." />
             </div>
             <div>
-              <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Servicen</div>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Servicen</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
                 text="Og vi har din ryg. Så du hverken går forgæves eller hjem med det forkerte. Det er ikke kun værktøjet, der er skarpt." />
             </div>
@@ -119,14 +119,14 @@ export default function Home() {
             </div>
             <div className="grid gap-12 sm:grid-cols-2">
               <div>
-                <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Hverdagen</div>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Hverdagen</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Uanset om du har brug for en vikingearm eller rene hænder, så har vi det, du skal bruge. I webshoppen på carl-ras.dk og i 23 engroscentre over hele landet." />
+                  text="Uanset om du har brug for en vikingearm eller rene hænder, så har vi det, du skal bruge. I webshoppen på carl-ras.dk og i 26 butikker over hele landet." />
               </div>
               <div>
-                <div className="text-fog/50 text-xs uppercase tracking-wider mb-3">Det bedste</div>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Det bedste</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Nogle produkter er oplagte, når du bare ikke vil betale for meget. Andre er til dig, der sammenligner specs, ydelse og pris — og vil have det bedste." />
+                  text="Nogle produkter er oplagte, når du bare ikke vil betale for meget. Andre er til dig, der sammenligner specs, ydelse og pris, og vil have det bedste." />
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function Home() {
           {/* stats band — full width, vertical dividers */}
           <Reveal delay={120}>
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
-              {[{ v: 1400, suf: '+', l: 'varenumre' }, { v: 23, suf: '', l: 'engroscentre i Danmark' }, { v: 227, suf: '+', l: 'butikker i Europa' }].map((s, i) => (
+              {[{ v: 1400, suf: '+', l: 'varenumre' }, { v: 26, suf: '', l: 'butikker i Danmark' }, { v: 227, suf: '+', l: 'butikker i Europa' }].map((s, i) => (
                 <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
                   <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
                   <div className="text-fog text-sm mt-2">{s.l}</div>
@@ -154,10 +154,10 @@ export default function Home() {
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
           <div className="relative">
-            {/* blue light pooling behind the cards */}
+            {/* blue light pooling behind the cards — pure gradients, NO css
+                filter: blur() on a big layer is the iOS white-box pattern */}
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{
-              background: 'radial-gradient(50% 55% at 28% 32%, rgba(0,130,202,0.18), transparent 60%), radial-gradient(45% 50% at 80% 75%, rgba(43,166,232,0.12), transparent 62%)',
-              filter: 'blur(20px)',
+              background: 'radial-gradient(55% 60% at 28% 32%, rgba(0,130,202,0.16), transparent 70%), radial-gradient(50% 55% at 80% 75%, rgba(43,166,232,0.10), transparent 72%)',
             }} />
             <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
               {specialists.slice(0, 6).map((s, i) => (
@@ -200,7 +200,7 @@ export default function Home() {
             <ScrollText as="h2" text={'100%. Eller \n pengene tilbage.'}
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
-              text="Vi tør godt. Er du ikke tilfreds med dit STROXX-værktøj, får du pengene igen. Så er der ikke så meget at tænke over — bare at komme i gang." />
+              text="Vi tør godt. Er du ikke tilfreds med dit STROXX-værktøj, får du pengene igen. Så er der ikke så meget at tænke over. Bare at komme i gang." />
             <GuaranteeModal />
           </div>
           <Reveal delay={120} from="far-right">
@@ -230,7 +230,7 @@ export default function Home() {
             <Reveal from={idx % 2 ? 'far-right' : 'far-left'} className={idx % 2 ? 'lg:order-2' : ''}>
               <div className="relative aspect-[5/4]">
                 <ParticleImage src={particleSrc(f.cat.slug, f.particleImgId)} className="h-full w-full" />
-                <div className="absolute top-2 left-2 text-fog/50 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} — {f.cat.name}</div>
+                <div className="absolute top-2 left-2 text-fog/75 text-xs uppercase tracking-wider">{String(idx + 1).padStart(2, '0')} · {f.cat.name}</div>
               </div>
             </Reveal>
             <Reveal delay={120} from={idx % 2 ? 'left' : 'right'} className={idx % 2 ? 'lg:order-1' : ''}>
@@ -249,7 +249,7 @@ export default function Home() {
 
         {/* full category list — typographic, no boxes */}
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28">
-          <Reveal><div className="text-fog/50 text-xs uppercase tracking-wider mb-8">Hele udvalget</div></Reveal>
+          <Reveal><div className="text-fog/75 text-xs uppercase tracking-wider mb-8">Hele udvalget</div></Reveal>
           <CategoryList />
         </div>
       </section>

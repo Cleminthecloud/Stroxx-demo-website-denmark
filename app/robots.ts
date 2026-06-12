@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 /** Allow everything; the hidden internal pages (/plan, /email-skabeloner)
  *  carry meta robots noindex instead of a Disallow here, because a Disallow
@@ -7,6 +8,6 @@ import type { MetadataRoute } from 'next';
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [{ userAgent: '*', allow: '/', disallow: ['/api/'] }],
-    sitemap: 'https://stroxx-demo-website-denmark.vercel.app/sitemap.xml',
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

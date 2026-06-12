@@ -202,12 +202,13 @@ export default function ParticleImage({
     // uses a distinct cache key — also keeps the CORS read from colliding with
     // the plain <img> (no-crossorigin) cache entry the product cards create.
     let tries = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
     const load = () => { tries++; img.src = src + (src.includes('?') ? '&' : '?') + 'pr=' + tries; };
     img.onload = () => {
       size(); build(); computeTarget();
-      if (!built && tries < 6) setTimeout(load, 350);
+      if (!built && tries < 6) retryTimer = setTimeout(load, 350);
     };
-    img.onerror = () => { if (tries < 6) setTimeout(load, 350); };
+    img.onerror = () => { if (tries < 6) retryTimer = setTimeout(load, 350); };
     load();
 
     const io = new IntersectionObserver(([en]) => {
@@ -222,6 +223,8 @@ export default function ParticleImage({
 
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(retryTimer);
+      img.onload = null; img.onerror = null;
       io.disconnect();
       window.removeEventListener('pointermove', onPointer);
       window.removeEventListener('scroll', onScroll);

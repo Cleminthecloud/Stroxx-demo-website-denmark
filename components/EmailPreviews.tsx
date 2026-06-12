@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Download, Code, Smartphone, Monitor, Info, X, ExternalLink } from 'lucide-react';
+import { SITE_URL } from '@/lib/site';
 
 /* Hidden internal page: presents the Marketo email templates from /public/emails
    one at a time, full screen, inside real device mockups (public/mockups).
@@ -74,7 +75,7 @@ const MARKETO_STEPS = [
 
 function previewify(html: string) {
   return html
-    .replaceAll('https://stroxx-demo-website-denmark.vercel.app', '')
+    .replaceAll(SITE_URL, '')
     .replaceAll('https://www.stroxx.dk', '')
     .replace(/\{\{lead\.[^:}]+:default=([^}]*)\}\}/g, '$1')
     .replace(/\{\{system\.[^}]+\}\}/g, '#');

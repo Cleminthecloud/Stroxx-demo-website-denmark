@@ -11,7 +11,7 @@ export default function ProClubSignup() {
       <div className="eyebrow mb-3">Pro Club</div>
       <h3 className="text-white font-display font-bold text-2xl mb-2">Bliv klogere før alle andre</h3>
       <p className="text-fog text-sm mb-5">
-        Tidlig adgang, specialist-tips og de skarpeste priser — direkte i indbakken. Maks et par mails
+        Tidlig adgang, specialist-tips og de skarpeste priser, direkte i indbakken. Maks et par mails
         om måneden. Ingen spam.
       </p>
       {done ? (
@@ -38,7 +38,7 @@ export default function ProClubSignup() {
         </form>
       )}
       <p className="text-fog/60 text-[11px] mt-3">
-        Demo — formularen kobles til Marketo Engage i den endelige løsning.
+        Demo: formularen kobles til Marketo Engage i den endelige løsning.
       </p>
     </div>
   );

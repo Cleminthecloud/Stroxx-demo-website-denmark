@@ -158,12 +158,13 @@ export default function KnockoutImage({
       return true;
     };
 
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const load = () => { tries++; img.src = src + (src.includes('?') ? '&' : '?') + 'ko=' + tries; };
-    img.onload = () => { done = process(); if (!done && tries < 6) setTimeout(load, 350); };
-    img.onerror = () => { if (tries < 6) setTimeout(load, 350); };
+    img.onload = () => { done = process(); if (!done && tries < 6) timer = setTimeout(load, 350); };
+    img.onerror = () => { if (tries < 6) timer = setTimeout(load, 350); };
     load();
 
-    return () => { img.onload = null; img.onerror = null; };
+    return () => { clearTimeout(timer); img.onload = null; img.onerror = null; };
   }, [src, maxSize]);
 
   return (

@@ -45,25 +45,25 @@ export type Category = {
 };
 
 export const categories: Category[] = [
-  { slug: 'adgangskontrol', name: 'Adgangskontrol', path: 'stroxx-adgangskontrol', blurb: 'Låse, beslag og adgang — styr på hvem der kommer ind.' },
+  { slug: 'adgangskontrol', name: 'Adgangskontrol', path: 'stroxx-adgangskontrol', blurb: 'Låse, beslag og adgang. Styr på hvem der kommer ind.' },
   { slug: 'arbejdstoej', name: 'Arbejdstøj', path: 'stroxx-arbejdstoej', blurb: 'Tøj der holder til en hård dag. Uden at koste en hel løn.' },
   { slug: 'batterier', name: 'Batterier', path: 'stroxx-batterier', blurb: 'Strøm når du har brug for det. Punktum.' },
-  { slug: 'belysning', name: 'Belysning og tilbehør', path: 'stroxx-belysning', blurb: 'Lys på sagen — arbejdslamper, pander og pærer.' },
+  { slug: 'belysning', name: 'Belysning og tilbehør', path: 'stroxx-belysning', blurb: 'Lys på sagen: arbejdslamper, pander og pærer.' },
   { slug: 'bits-skruetraekkere', name: 'Bits og skruetrækkere', path: 'stroxx-haandvaerktoej/stroxx-bits-skruetraekkere', blurb: 'Greb der sidder. Spidser der bider. Hver gang.' },
   { slug: 'bor-borsaet', name: 'Bor og borsæt', path: 'stroxx-bor-borsaet', blurb: 'Bor til træ, metal og beton. Rene huller, ren samvittighed.' },
-  { slug: 'fugemasse', name: 'Fugemasse og tilbehør', path: 'stroxx-fugemasse-tilbehoer', blurb: 'Fuger der tætner — og pistoler der ikke driller.' },
+  { slug: 'fugemasse', name: 'Fugemasse og tilbehør', path: 'stroxx-fugemasse-tilbehoer', blurb: 'Fuger der tætner, og pistoler der ikke driller.' },
   { slug: 'hulsave', name: 'Hulsave og tilbehør', path: 'stroxx-hulsave-tilbehoer', blurb: 'Det rette hul, første gang. Hver gang.' },
   { slug: 'kabeltromler', name: 'Kabeltromler', path: 'stroxx-kabeltromler', blurb: 'Strøm med længde nok. Og slidstyrke til pladsen.' },
-  { slug: 'kemi', name: 'Kemi og maleværktøj', path: 'stroxx-kemi', blurb: 'Lim, skum, rens og spray — kemien der bare virker.' },
+  { slug: 'kemi', name: 'Kemi og maleværktøj', path: 'stroxx-kemi', blurb: 'Lim, skum, rens og spray. Kemien der bare virker.' },
   { slug: 'knive', name: 'Knive og blade', path: 'stroxx-haandvaerktoej/stroxx-arbejdsknive', blurb: 'Skarpt fra start. Klar når du er.' },
-  { slug: 'lasere', name: 'Lasere og tilbehør', path: 'stroxx-lasere', blurb: 'Præcision til professionelle — til en skarp pris.' },
+  { slug: 'lasere', name: 'Lasere og tilbehør', path: 'stroxx-lasere', blurb: 'Præcision til professionelle, til en skarp pris.' },
   { slug: 'malergrej', name: 'Malergrej og tilbehør', path: 'stroxx-malergrej-tilbehoer', blurb: 'Ruller, pensler og tape til et rent resultat.' },
-  { slug: 'multicutterklinger', name: 'Multicutterklinger', path: 'stroxx-multicutterklinger', blurb: 'Klinger til multicutteren — til alt det skæve.' },
+  { slug: 'multicutterklinger', name: 'Multicutterklinger', path: 'stroxx-multicutterklinger', blurb: 'Klinger til multicutteren, til alt det skæve.' },
   { slug: 'maalevaerktoej', name: 'Måleværktøj', path: 'stroxx-maalevaerktoej', blurb: 'Mål rigtigt. Skær én gang. Vaterpas, vinkler og mere.' },
   { slug: 'rundsavklinger', name: 'Rundsavklinger', path: 'stroxx-rundsavklinger', blurb: 'Rene snit i træ, metal og laminat. Klinger der holder.' },
-  { slug: 'sikkerhed', name: 'Sikkerhed', path: 'stroxx-sikkerhed', blurb: 'Hjelm, briller, handsker — kom hel hjem.' },
+  { slug: 'sikkerhed', name: 'Sikkerhed', path: 'stroxx-sikkerhed', blurb: 'Hjelm, briller, handsker. Kom hel hjem.' },
   { slug: 'skurvognsartikler', name: 'Skurvognsartikler', path: 'stroxx-skurvognsartikler', blurb: 'Det skuret skal bruge. Til pausen og pladsen.' },
-  { slug: 'tape', name: 'Tape', path: 'stroxx-tape', blurb: 'Tape der klæber — og slipper når den skal.' },
+  { slug: 'tape', name: 'Tape', path: 'stroxx-tape', blurb: 'Tape der klæber, og slipper når den skal.' },
   { slug: 'topnoegler', name: 'Topnøglesæt, toppe og tilbehør', path: 'stroxx-topnoegler-tilbehoer', blurb: 'Topnøgler og sæt der griber om opgaven.' },
 ];
 
@@ -531,13 +531,13 @@ export const specialists: Specialist[] = [
   { name: 'Ulrik Bjørnsson', role: 'Intern Sælger', location: 'Hørsholm', photo: '/specialists/ulrik-bjornsson.jpg', phone: '81775302', email: 'ub@carl-ras.dk',
     quote: 'Kunderne kommer tilbage og griner: “Hvorfor har jeg betalt dobbelt før?”' },
   { name: 'Martin Lübker', role: 'Intern Sælger', location: 'Århus N.', photo: '/specialists/martin-lubker.jpg', phone: '81778687', email: 'malu@carl-ras.dk',
-    quote: 'Jeg anbefaler STROXX uden at blinke. Det holder — og det koster ingenting.' },
+    quote: 'Jeg anbefaler STROXX uden at blinke. Det holder, og det koster ingenting.' },
   { name: 'Lea Ahrnkiel', role: 'Intern Sælger', location: 'Sydhavnen', photo: '/specialists/lea-ahrnkiel.jpg', phone: '81775702', email: 'leah@carl-ras.dk',
     quote: 'Folk tror, der er en fidus. Der er bare ikke noget mærke-tillæg.' },
   { name: 'Theis Lindgren', role: 'Intern Sælger', location: 'Amager', photo: '/specialists/theis-lindgren.jpg', phone: '81779713', email: 'thli@carl-ras.dk',
     quote: 'Knivene alene er grund nok. Skarpe, billige, altid på lager.', quoteTopic: 'knive' },
   { name: 'Nikolaj Ungermand', role: 'Sourcing & ESG', location: 'Herlev', photo: '/specialists/nikolaj-ungermand.jpg', phone: '51221002', email: 'nn@carl-ras.dk',
-    quote: 'Samme kvalitet som mærkerne — bare uden mærke-tillægget. Det er hele pointen.' },
+    quote: 'Samme kvalitet som mærkerne, bare uden mærke-tillægget. Det er hele pointen.' },
 ];
 
 /** Featured categories for the homepage "bag fills" act — each with a hero product. */
@@ -558,8 +558,8 @@ export const particleImgId = (slug: string, fallback: number) => PARTICLE_IMG[sl
  *  particle source instead of the proxy — e.g. the krydslaser, whose CDN
  *  rendition is a corrupt 18MB export. */
 const PARTICLE_SRC: Record<string, string> = {
-  lasere: '/Images/bag-tools/159146.png',
-  maalevaerktoej: '/Images/bag-tools/159146.png',
+  lasere: '/Images/bag-tools/159146.png',         // krydslaser (CDN rendition is a corrupt 18MB export)
+  maalevaerktoej: '/Images/bag-tools/134353.png', // torpedo vaterpas — was wrongly the laser, so two homepage features assembled the same image
 };
 export const particleSrc = (slug: string, imgId: number) =>
   PARTICLE_SRC[slug] ?? toolTexture(particleImgId(slug, imgId));

@@ -5,16 +5,15 @@ import { ArrowRight, Hammer, Zap, Wrench, PaintRoller, HardHat, type LucideIcon 
 import { trades } from '@/lib/trades';
 import { products, toolTexture, type Product } from '@/lib/data';
 import { getCompare } from '@/lib/compare';
-
-const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
+import { SITE_URL as BASE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Fagområder — værktøj til tømrer, elektriker, VVS, maler og murer',
+  title: 'Fagområder: værktøj til tømrer, elektriker, VVS, maler og murer',
   description:
     'Find STROXX-værktøjet til dit fag: tømrer, elektriker, VVS, maler eller murer. Professionel kvalitet uden mærke-tillæg, 30 dages tilfredshedsgaranti, kun hos Carl Ras.',
   alternates: { canonical: '/fag' },
   openGraph: {
-    title: 'STROXX fagområder — værktøj til dit fag',
+    title: 'STROXX fagområder: værktøj til dit fag',
     description: 'Arbejdshestene til hvert fag, til priser uden mærke-tillæg.',
   },
 };

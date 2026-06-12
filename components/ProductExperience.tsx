@@ -26,8 +26,10 @@ const STOPS: Stop[] = [
   { p: 0.00, x: -27, y: -2, s: 0.96, r: -4, o: 1 },
   { p: 0.30, x: 29, y: 0, s: 0.84, r: 5, o: 0.9 },
   { p: 0.57, x: -30, y: 0, s: 0.74, r: -4, o: 0.74 },
-  { p: 0.82, x: 30, y: 2, s: 0.68, r: 4, o: 0.6 },
-  { p: 0.93, x: 0, y: 8, s: 0.7, r: 0, o: 0 },
+  { p: 0.78, x: 30, y: 2, s: 0.68, r: 4, o: 0.55 },
+  // gone BEFORE the Related grid + footer — the z-50 buy tag used to linger
+  // visibly over both near the bottom of the page
+  { p: 0.86, x: 30, y: 8, s: 0.66, r: 4, o: 0 },
 ];
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 function sample(p: number): Omit<Stop, 'p'> {
@@ -56,6 +58,8 @@ export default function ProductExperience({
   useEffect(() => {
     const pe = prodRef.current, ge = glowRef.current;
     if (!pe) return;
+    // the traveling layer is hidden below lg — don't burn a rAF loop on phones
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       pe.style.transform = 'translate(-50%,-50%) translate(-24vw,0) scale(0.9)';
       if (ge) ge.style.transform = 'translate(-50%,-50%) translate(-24vw,0)';
@@ -72,7 +76,15 @@ export default function ProductExperience({
       c.x = lerp(c.x, t.x, 0.17); c.y = lerp(c.y, t.y, 0.17); c.s = lerp(c.s, t.s, 0.15);
       c.r = lerp(c.r, t.r, 0.15); c.o = lerp(c.o, t.o, 0.2);
       pe.style.transform = `translate(-50%,-50%) translate(${c.x}vw, ${c.y}vh) scale(${c.s}) rotate(${c.r}deg)`;
-      pe.style.opacity = String(c.o);
+      // crossing the content zone: backdrop-filter on the glass panels can NOT
+      // blur this GPU-promoted fixed layer (documented limitation), so the
+      // product blurs + dims ITSELF while it transits the middle of the
+      // viewport — sharp when parked in the side gutter, a soft ghost while
+      // passing the info. Desktop-only layer (hidden lg:block), so the
+      // no-filters-below-lg iOS rule is respected.
+      const cross = Math.max(0, 1 - Math.abs(c.x) / 18); // 0 in gutter → 1 at centre
+      pe.style.filter = cross > 0.02 ? `blur(${(cross * 14).toFixed(1)}px)` : 'none';
+      pe.style.opacity = String(c.o * (1 - cross * 0.5));
       // buy tag — rides the product's x/y (no scale/rotate, so it stays upright &
       // legible), sitting just under its base. Fades in once the hero has left so
       // it doesn't duplicate the hero CTA, and fades out with the product.
@@ -81,7 +93,9 @@ export default function ProductExperience({
         // lower-right corner of the product (offsets scale with it), so it clears
         // the product's face instead of covering it
         te.style.transform = `translate(-50%,-50%) translate(${c.x + c.s * 13}vw, ${c.y + c.s * 25}vh)`;
-        const o = Math.min(1, Math.max(0, (p - 0.07) / 0.1)) * c.o;
+        // fade in after the hero, and OUT a beat before the product dies so the
+        // tag never ghosts over Related/footer (it sits at z-50, above content)
+        const o = Math.min(1, Math.max(0, (p - 0.07) / 0.1)) * Math.min(1, Math.max(0, (0.82 - p) / 0.05)) * c.o;
         te.style.opacity = String(o);
         te.style.pointerEvents = o > 0.6 ? 'auto' : 'none';
       }
@@ -157,9 +171,9 @@ export default function ProductExperience({
   );
 
   const usps = [
-    { icon: Hammer, title: 'Pro-kvalitet', body: 'Der er kælet for detaljerne — funktion, form, pålidelighed og effektivitet. Bygget til at blive brugt.' },
-    { icon: Wallet, title: 'Skarp pris', body: `${product.price} DKK. Samme følelse som de dyre mærker — bare uden mærke-tillægget.` },
-    { icon: ShieldCheck, title: '100% tilfredsgaranti', body: 'Ikke tilfreds? Pengene tilbage. Så er der ikke så meget at tænke over — bare at komme i gang.' },
+    { icon: Hammer, title: 'Pro-kvalitet', body: 'Der er kælet for detaljerne: funktion, form, pålidelighed og effektivitet. Bygget til at blive brugt.' },
+    { icon: Wallet, title: 'Skarp pris', body: `${product.price} DKK. Samme følelse som de dyre mærker, bare uden mærke-tillægget.` },
+    { icon: ShieldCheck, title: '100% tilfredsgaranti', body: 'Ikke tilfreds? Pengene tilbage. Så er der ikke så meget at tænke over. Bare at komme i gang.' },
   ];
 
   const Specs = (

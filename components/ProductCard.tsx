@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import KnockoutImage from '@/components/KnockoutImage';
 import GlassButton from '@/components/GlassButton';
 import GlassCardGlow from '@/components/GlassCardGlow';
 import { Product, toolTexture, productBuyUrl } from '@/lib/data';
@@ -35,10 +34,16 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* lit, floating product cut-out — white background knocked out */}
         <Link href={`/produkt/${product.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
           <div className="absolute inset-6 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,130,202,0.16), rgba(0,130,202,0) 70%)' }} />
-          <KnockoutImage
+          {/* the /api/tool proxy knocks the white studio bg out SERVER-SIDE
+              (sharp), so a plain lazy <img> is enough here — no client canvas
+              work for 358 cards. KnockoutImage stays for the PDP hero only. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={toolTexture(product.imgId)}
             alt={product.name}
-            className="relative z-10 h-[76%] w-[80%] group-hover:scale-[1.06] transition-transform duration-500"
+            loading="lazy"
+            decoding="async"
+            className="relative z-10 h-[76%] w-[80%] object-contain group-hover:scale-[1.06] transition-transform duration-500 lg:drop-shadow-[0_14px_22px_rgba(0,0,0,0.5)]"
           />
         </Link>
 

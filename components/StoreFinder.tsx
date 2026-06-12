@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { Map as LeafletMap, LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X, MessageCircle } from 'lucide-react';
@@ -41,13 +42,17 @@ export default function StoreFinder() {
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
   /* deep-linkable: /butikker?tab=specialister (nav + footer) and ?q=<postnr/by>
-     (Marketo emails prefill the search with the lead's postal code) */
+     (Marketo emails prefill the search with the lead's postal code).
+     useSearchParams (not a mount-only read of location.search) so clicking
+     "Specialister" in the nav WHILE already on /butikker switches the tab —
+     the route doesn't remount on a same-page param change. Requires the
+     <Suspense> wrapper in app/butikker/page.tsx. */
+  const params = useSearchParams();
   useEffect(() => {
-    const sp = new URLSearchParams(window.location.search);
-    if (sp.get('tab') === 'specialister') setTab('specialister');
-    const qq = sp.get('q');
+    setTab(params.get('tab') === 'specialister' ? 'specialister' : 'butikker');
+    const qq = params.get('q');
     if (qq) setQ(qq);
-  }, []);
+  }, [params]);
 
   const origin = searchPos ?? pos;
 
@@ -79,18 +84,26 @@ export default function StoreFinder() {
     if (!nq || nq.length < 3) { setSearchPos(null); return; }
     const hasDirect = stores.some((s) => norm(`${s.name} ${s.address} ${s.zipCity}`).includes(norm(nq)));
     if (hasDirect) { setSearchPos(null); return; }
+    // abort in-flight lookups on retype: a slow response for an OLD query must
+    // never overwrite the newer one's position
+    const ctrl = new AbortController();
     const t = setTimeout(async () => {
       try {
-        const r = await fetch(`https://api.dataforsyningen.dk/postnumre?q=${encodeURIComponent(nq)}&per_side=1`);
+        const r = await fetch(
+          `https://api.dataforsyningen.dk/postnumre?q=${encodeURIComponent(nq)}&per_side=1`,
+          { signal: ctrl.signal },
+        );
         const j = await r.json();
         const hit = Array.isArray(j) ? j[0] : null;
         if (hit?.visueltcenter) {
           const [lng, lat] = hit.visueltcenter as [number, number];
           setSearchPos({ lat, lng, label: `${hit.nr} ${hit.navn}` });
         } else setSearchPos(null);
-      } catch { setSearchPos(null); }
+      } catch (e) {
+        if ((e as Error).name !== 'AbortError') setSearchPos(null);
+      }
     }, 350);
-    return () => clearTimeout(t);
+    return () => { clearTimeout(t); ctrl.abort(); };
   }, [q]);
 
   /* ── map boot ── */

@@ -16,10 +16,7 @@ const config: Config = {
         display: ['var(--font-display)', 'Helvetica Neue', 'Arial', 'sans-serif'],
         sans: ['var(--font-sans)', 'Helvetica Neue', 'Arial', 'sans-serif']
       },
-      letterSpacing: { tightest: '-0.04em' },
-      keyframes: {
-        grain: { '0%,100%': { transform: 'translate(0,0)' }, '50%': { transform: 'translate(-2%,1%)' } }
-      }
+      letterSpacing: { tightest: '-0.04em' }
     }
   },
   plugins: []

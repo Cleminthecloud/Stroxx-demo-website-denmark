@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import StoreFinder from '@/components/StoreFinder';
 
 export const metadata: Metadata = {
-  title: 'Find butik — STROXX',
+  title: 'Find butik',
   description:
     'Find din nærmeste STROXX-forhandler. 26 butikker i hele Danmark med adresser, åbningstider og direkte kontakt til butikschefen.',
 };
@@ -12,7 +13,10 @@ export const metadata: Metadata = {
 export default function ButikkerPage() {
   return (
     <main className="fullscreen-map bg-ink">
-      <StoreFinder />
+      {/* StoreFinder reads useSearchParams (tab/q deep links) → needs Suspense */}
+      <Suspense fallback={<div className="pt-40 text-center text-fog">Indlæser…</div>}>
+        <StoreFinder />
+      </Suspense>
     </main>
   );
 }

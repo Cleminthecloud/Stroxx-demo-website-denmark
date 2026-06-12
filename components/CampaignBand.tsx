@@ -53,6 +53,9 @@ export default function CampaignBand() {
               srcSet={`${s.sm} 1280w, ${s.src} 2200w`}
               sizes="100vw"
               alt={s.alt}
+              // slide 1 paints the band; 2 and 3 can arrive when the rotation needs them
+              loading={idx === 0 ? 'eager' : 'lazy'}
+              decoding="async"
               draggable={false}
               className="absolute inset-0 h-full w-full object-cover select-none grayscale"
               style={{

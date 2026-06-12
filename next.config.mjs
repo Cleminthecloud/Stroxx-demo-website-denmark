@@ -9,7 +9,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'assets.carl-ras.dk' },
       { protocol: 'https', hostname: 'cdn.prod.website-files.com' }
     ]
-  },
-  transpilePackages: ['three']
+  }
 };
 export default nextConfig;

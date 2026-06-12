@@ -10,9 +10,6 @@
     "check": "tsc --noEmit && next lint"
   },
   "dependencies": {
-    "@react-three/drei": "9.108.3",
-    "@react-three/fiber": "8.16.8",
-    "@react-three/rapier": "1.4.0",
     "@types/leaflet": "^1.9.21",
     "gsap": "3.12.5",
     "leaflet": "^1.9.4",
@@ -21,14 +18,12 @@
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "sharp": "0.33.4",
-    "three": "0.160.1"
+    "sharp": "0.33.4"
   },
   "devDependencies": {
     "@types/node": "20.14.12",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@types/three": "0.160.0",
     "autoprefixer": "10.4.19",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.5",

@@ -5,11 +5,12 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import CommandMenu from '@/components/CommandMenu';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  // Demo domain; swap when production domain lands. Makes all OG/twitter image
-  // and canonical URLs absolute.
-  metadataBase: new URL('https://stroxx-demo-website-denmark.vercel.app'),
+  // Demo domain; swap lib/site.ts when the production domain lands. Makes all
+  // OG/twitter image and canonical URLs absolute.
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'STROXX — Dyrt værktøj til udyr pris',
     template: '%s — STROXX',
@@ -44,7 +45,7 @@ export const viewport: Viewport = {
   themeColor: '#0B0C0E',
 };
 
-const BASE = 'https://stroxx-demo-website-denmark.vercel.app';
+const BASE = SITE_URL;
 
 /* Site-wide structured data: who STROXX is (Organization, with Carl Ras as
    the exclusive Danish retailer) and how to search the site (WebSite +
@@ -92,9 +93,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
+        {/* keyboard users skip the fixed nav straight to the page content */}
+        <a href="#indhold" className="skip-link">Spring til indhold</a>
         <SmoothScroll>
           <Nav />
-          {children}
+          <div id="indhold">{children}</div>
           <Footer />
           <SpecialistFab />
           <CommandMenu />

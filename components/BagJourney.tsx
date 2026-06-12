@@ -135,6 +135,15 @@ export default function BagJourney() {
           dctx.fillStyle = grd; dctx.beginPath(); dctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2); dctx.fill();
         }
       }
+      // the whole performance is a load-time intro: once the entrance, the
+      // tool cascade and the dust are done, every frame is identical — stop
+      // the loop instead of clearing a full-screen canvas forever.
+      const FINISH = FILL_HOLD + N * FILL_STAGGER + FILL_DUR + 600;
+      const finished =
+        (skipEntrance || (puffed && shakeT0 < 0)) &&
+        (reduce || now - t0 > FINISH) &&
+        parts.length === 0;
+      if (finished) { raf = 0; return; }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);

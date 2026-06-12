@@ -52,9 +52,28 @@ export default function LumaVideo({
     };
 
     const start = () => { v.play().catch(() => {}); if (!raf) raf = requestAnimationFrame(draw); };
+    const stop = () => { v.pause(); cancelAnimationFrame(raf); raf = 0; };
+
+    // reduced motion: render ONE keyed frame as a poster instead of looping
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const once = () => {
+        raf = requestAnimationFrame(() => { draw(); stop(); });
+      };
+      v.addEventListener('loadeddata', once);
+      v.load();
+      return () => { cancelAnimationFrame(raf); v.removeEventListener('loadeddata', once); };
+    }
+
+    // per-frame getImageData is the most expensive loop on the page — only run
+    // it while the sticker is actually on screen
+    const io = new IntersectionObserver(([en]) => {
+      if (en.isIntersecting) start(); else stop();
+    }, { rootMargin: '80px' });
+    io.observe(c);
+
     v.addEventListener('loadeddata', start);
-    start();
     return () => {
+      io.disconnect();
       cancelAnimationFrame(raf);
       v.removeEventListener('loadeddata', start);
     };
