@@ -25,6 +25,12 @@ const mmss = (s: number) => {
   return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
 };
 
+// Global flag the homepage hero (BagJourney) reads so it can hold its bag-fill
+// intro until this overlay is dismissed, then play it on a clear screen. Set
+// true at module load so it is ready before any component effect runs.
+type OverlayWindow = Window & { __stroxxOverlayOpen?: boolean };
+if (typeof window !== 'undefined') (window as OverlayWindow).__stroxxOverlayOpen = true;
+
 export default function SiteOverlay() {
   const [open, setOpen] = useState(true);
   const [remaining, setRemaining] = useState(TOTAL);
@@ -53,6 +59,17 @@ export default function SiteOverlay() {
 
   const pct = Math.max(0, Math.min(100, (remaining / TOTAL) * 100));
 
+  // Dismiss: tell the homepage hero it can now play its bag-fill intro.
+  const dismiss = () => {
+    (window as OverlayWindow).__stroxxOverlayOpen = false;
+    window.dispatchEvent(new Event('stroxx:reveal'));
+    setOpen(false);
+  };
+  const reopen = () => {
+    (window as OverlayWindow).__stroxxOverlayOpen = true;
+    setOpen(true);
+  };
+
   return (
     <>
       <style>{`
@@ -67,7 +84,7 @@ export default function SiteOverlay() {
       {/* ── corner badge (visible once the notice is dismissed) ── */}
       {!open && (
         <button
-          onClick={() => setOpen(true)}
+          onClick={reopen}
           aria-label="Reopen the placeholder notice"
           style={{
             position: 'fixed', left: 16, bottom: 16, zIndex: 2147483000,
@@ -143,7 +160,7 @@ export default function SiteOverlay() {
               font: '400 15px/1.55 system-ui, sans-serif',
             }}>
               Everything you see here is placeholder content while we build the
-              site and shape the brand platform. Prices, copy and products are not
+              site and shape the brand platform. The copy and products are not
               final, so please do not take any of it as gospel just yet.
             </p>
 
@@ -212,7 +229,7 @@ export default function SiteOverlay() {
             </div>
 
             <button
-              onClick={() => setOpen(false)}
+              onClick={dismiss}
               style={{
                 marginTop: 22, width: '100%', padding: '13px 18px', borderRadius: 12,
                 border: 'none', cursor: 'pointer',

@@ -26,19 +26,20 @@ export default function BagJourney() {
   const pool = useRef<HTMLDivElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
   const toolRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const startedRef = useRef(false);
   const [landed, setLanded] = useState(0);
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // Only play the fall-in/puff on a genuine top-of-page landing — on
-    // back/forward nav the browser restores scroll and a mid-page puff looked wrong.
-    const skipEntrance = reduce || window.scrollY > 4;
+    // Whether to skip the fall-in/puff. Computed at start() time, since the
+    // intro can be deferred until the placeholder overlay is dismissed.
+    let skipEntrance = false;
     // iOS Safari rasterises large blur/drop-shadow layers as opaque white when
-    // they exceed GPU memory — so phones get NO css filter (pool div = shadow).
+    // they exceed GPU memory, so phones get NO css filter (pool div = shadow).
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
     // Fixed hero pose. y nudges the bag down so the headline reads above it.
     const POSE_Y = noFilter ? 18 : 16; // vh below centre
-    const t0 = performance.now();
+    let t0 = 0; // set when the intro actually starts
     const ENTER = 850;
     const N = TOOLS.length;
     let puffed = false;
@@ -145,8 +146,31 @@ export default function BagJourney() {
       if (finished) { raf = 0; return; }
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); removeEventListener('resize', sizeDust); };
+    const start = () => {
+      if (startedRef.current) return;
+      startedRef.current = true;
+      // back/forward nav restores scroll: skip the fall-in if not at the top
+      skipEntrance = reduce || window.scrollY > 4;
+      t0 = performance.now();
+      raf = requestAnimationFrame(loop);
+    };
+
+    // Hold the hero intro until the placeholder overlay is dismissed, so the
+    // bag fill plays on a clear screen. If the overlay is not open (e.g. a
+    // client-side nav back to the homepage after it was already dismissed),
+    // start straight away.
+    const overlayOpen = (window as unknown as { __stroxxOverlayOpen?: boolean }).__stroxxOverlayOpen;
+    if (overlayOpen) {
+      window.addEventListener('stroxx:reveal', start, { once: true });
+    } else {
+      start();
+    }
+
+    return () => {
+      cancelAnimationFrame(raf);
+      removeEventListener('resize', sizeDust);
+      window.removeEventListener('stroxx:reveal', start);
+    };
   }, []);
 
   // The bag lives IN the hero: absolute, full-height of the hero, scrolls away
