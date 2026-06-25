@@ -68,7 +68,7 @@ export default function SpecialistFab() {
       {/* panel */}
       <div
         ref={panelRef}
-        role="dialog" aria-label="Snak med en specialist" aria-hidden={!open}
+        role="dialog" aria-label="Talk to a specialist" aria-hidden={!open}
         className={`fixed z-[89] right-5 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 p-6 transition-all duration-300 ${
           onProduct ? 'bottom-[10.5rem]' : 'bottom-[5.5rem]'
         } lg:bottom-24 ${view === 'chat' ? 'flex flex-col h-[min(72svh,580px)]' : ''} ${
@@ -79,7 +79,7 @@ export default function SpecialistFab() {
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
         }}
       >
-        <button onClick={() => setOpen(false)} aria-label="Luk"
+        <button onClick={() => setOpen(false)} aria-label="Close"
           className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white transition-colors">
           <X size={14} />
         </button>
@@ -87,12 +87,12 @@ export default function SpecialistFab() {
         {view === 'chat' ? (
           <>
             <div className="flex items-center gap-2.5 mb-4 shrink-0 pr-10">
-              <button onClick={() => setView('home')} aria-label="Tilbage"
+              <button onClick={() => setView('home')} aria-label="Back"
                 className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white transition-colors">
                 <ArrowLeft size={14} />
               </button>
               <div className="min-w-0">
-                <div className="text-white text-sm font-medium leading-tight">STROXX-assistenten</div>
+                <div className="text-white text-sm font-medium leading-tight">STROXX assistant</div>
                 <div className="text-[10px] text-fog uppercase tracking-wider">AI · demo</div>
               </div>
             </div>
@@ -100,11 +100,11 @@ export default function SpecialistFab() {
           </>
         ) : (
         <>
-        <div className="eyebrow mb-3">Specialisterne</div>
-        <h3 className="h-display text-white text-2xl leading-tight mb-2">Snak med en specialist.</h3>
+        <div className="eyebrow mb-3">The specialists</div>
+        <h3 className="h-display text-white text-2xl leading-tight mb-2">Talk to a specialist.</h3>
         <p className="text-fog text-[13px] leading-relaxed mb-5">
-          Vores butikschefer er håndværkets egne folk. Ring direkte, ingen
-          telefonkø, ingen omstilling.
+          Our store managers are tradespeople themselves. Call direct, no phone
+          queue, no switchboard.
         </p>
 
         <button onClick={() => setView('chat')}
@@ -131,9 +131,9 @@ export default function SpecialistFab() {
             <div className="flex gap-2">
               <a href={`tel:${nearest.store.manager.phone}`}
                 className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                <Phone size={13} /> Ring til {nearest.store.manager.name.split(' ')[0]}
+                <Phone size={13} /> Call {nearest.store.manager.name.split(' ')[0]}
               </a>
-              <a href={`mailto:${nearest.store.manager.email}`} aria-label="Send mail"
+              <a href={`mailto:${nearest.store.manager.email}`} aria-label="Send email"
                 className="glass-cta glass-cta--ghost glass-cta--sm justify-center text-white">
                 <Mail size={13} />
               </a>
@@ -143,22 +143,22 @@ export default function SpecialistFab() {
           <button onClick={locate} disabled={locating}
             className="glass-cta glass-cta--sm w-full justify-center text-white mb-4 disabled:opacity-60">
             <LocateFixed size={13} className={locating ? 'animate-spin' : ''} />
-            {locating ? 'Finder din nærmeste butik…' : 'Find min nærmeste specialist'}
+            {locating ? 'Finding your nearest store…' : 'Find my nearest specialist'}
           </button>
         )}
         {denied && (
           <p className="text-[11px] text-fog mb-4">
-            Vi kunne ikke få din placering. Brug butiksoversigten i stedet, eller ring til kundeservice.
+            We could not get your location. Use the store finder instead, or call customer service.
           </p>
         )}
 
         <div className="flex items-center justify-between gap-3 pt-4 border-t border-white/[0.08]">
           <a href={`tel:${SERVICE_TEL}`} className="text-[12px] text-fog hover:text-white transition-colors leading-snug">
-            Carl Ras kundeservice<br />
+            Carl Ras customer service<br />
             <span className="text-white font-medium">44 85 55 11</span>
           </a>
           <Link href="/butikker" onClick={() => setOpen(false)} className="link-arrow text-[12px] whitespace-nowrap">
-            Alle butikker <ArrowRight size={13} />
+            All stores <ArrowRight size={13} />
           </Link>
         </div>
         </>
@@ -168,7 +168,7 @@ export default function SpecialistFab() {
       {/* the FAB itself */}
       <button
         onClick={() => setOpen((o) => !o)}
-        aria-label="Snak med en specialist"
+        aria-label="Talk to a specialist"
         aria-expanded={open}
         className={`fixed z-[89] right-5 ${onProduct ? 'bottom-24' : 'bottom-5'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] cursor-pointer`}
         style={{
@@ -178,7 +178,7 @@ export default function SpecialistFab() {
         }}
       >
         <MessageCircle size={19} />
-        <span className="hidden md:inline text-sm font-medium tracking-wide">Snak med en specialist</span>
+        <span className="hidden md:inline text-sm font-medium tracking-wide">Talk to a specialist</span>
       </button>
     </div>
   );

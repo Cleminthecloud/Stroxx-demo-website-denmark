@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import StoreFinder from '@/components/StoreFinder';
 
 export const metadata: Metadata = {
-  title: 'Find butik',
+  title: 'Find your store',
   description:
-    'Find din nærmeste STROXX-forhandler. 26 butikker i hele Danmark med adresser, åbningstider og direkte kontakt til butikschefen.',
+    'Find your nearest STROXX stockist. 26 stores across Denmark with addresses, opening hours and a direct line to the store manager.',
 };
 
 /** Full-screen, app-like finder: the map IS the page. The global footer is
@@ -14,7 +14,7 @@ export default function ButikkerPage() {
   return (
     <main className="fullscreen-map bg-ink">
       {/* StoreFinder reads useSearchParams (tab/q deep links) → needs Suspense */}
-      <Suspense fallback={<div className="pt-40 text-center text-fog">Indlæser…</div>}>
+      <Suspense fallback={<div className="pt-40 text-center text-fog">Loading...</div>}>
         <StoreFinder />
       </Suspense>
     </main>

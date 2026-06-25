@@ -11,8 +11,6 @@ import {
 import { testimonials } from '@/lib/testimonials';
 import { SITE_URL } from '@/lib/site';
 
-const priceNum = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
-
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
@@ -21,7 +19,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   const p = productBySlug(params.slug);
   if (!p) return { title: 'STROXX' };
   const cat = categoryBySlug(p.category);
-  const desc = `${p.name} fra STROXX${cat ? ` · ${cat.name}` : ''}. ${p.price} DKK inkl. moms. Pro-kvalitet til en skarp pris, kun hos Carl Ras. 100% tilfredsgaranti.`;
+  const desc = `${p.name} from STROXX${cat ? ` · ${cat.name}` : ''}. Pro quality, only at Carl Ras. 100% satisfaction guarantee.`;
   // OG image via our own proxy: the Carl Ras CDN fetch needs a Referer header,
   // which OG scrapers don't send — the proxy is same-origin and always works.
   const og = `${SITE_URL}${toolTexture(p.imgId, '50383')}`;
@@ -57,8 +55,6 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
     ...(product.specs.length ? { additionalProperty: product.specs.map((s) => ({ '@type': 'PropertyValue', name: s.label, value: s.value })) } : {}),
     offers: {
       '@type': 'Offer',
-      priceCurrency: 'DKK',
-      price: priceNum(product.price).toFixed(2),
       availability: 'https://schema.org/InStock',
       url: buyUrl,
       seller: { '@type': 'Organization', name: 'Carl Ras' },
@@ -88,8 +84,8 @@ export default function FocusProduct({ params }: { params: { slug: string } }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Hjem', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Produkter', item: `${SITE_URL}/produkter` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/produkter` },
       ...(cat ? [{ '@type': 'ListItem', position: 3, name: cat.name, item: `${SITE_URL}/produkter?cat=${cat.slug}` }] : []),
       { '@type': 'ListItem', position: cat ? 4 : 3, name: product.name },
     ],

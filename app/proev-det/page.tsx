@@ -17,57 +17,57 @@ import { testimonials } from '@/lib/testimonials';
    Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
 const FAQ_ITEMS = [
   {
-    q: 'Hvordan virker STROXX tilfredshedsgarantien?',
-    a: 'Du prøver værktøjet på rigtigt arbejde i 30 dage. Er du ikke tilfreds, får du pengene tilbage. Der er ingen krav om fejl eller mangler, din vurdering er nok. Garantien gælder erhvervskunder med konto hos Carl Ras.',
+    q: 'How does the STROXX satisfaction guarantee work?',
+    a: 'You try the tool on real work for 30 days. If you\'re not happy, you get your money back. No need for faults or defects, your judgment is enough. The guarantee applies to business customers with an account at Carl Ras.',
   },
   {
-    q: 'Hvad dækker garantien, og hvad gør den ikke?',
-    a: 'Den dækker alle STROXX-produkter undtagen adgangskontrol. Ved mængdekøb gælder garantien den først købte vare. Returnering sker i din Carl Ras butik med faktura eller følgeseddel, og ved onlinekøb via kundeservice på 44 85 55 11.',
+    q: 'What does the guarantee cover, and what does it not?',
+    a: 'It covers all STROXX products except access control. For bulk purchases, the guarantee applies to the first item bought. Returns are handled at your Carl Ras store with an invoice or delivery note, and for online orders via customer service on 44 85 55 11.',
   },
   {
-    q: 'Hvor kan jeg købe STROXX?',
-    a: 'I Danmark fås STROXX eksklusivt hos Carl Ras, i 26 butikker i hele landet og online på carl-ras.dk. I resten af Europa forhandles brandet gennem kæder som Meesenburg i Tyskland, Foussier i Frankrig og Lecot i Belgien.',
+    q: 'Where can I buy STROXX?',
+    a: 'In Denmark, STROXX is available exclusively at Carl Ras, in 26 stores across the country and online at carl-ras.dk. Across the rest of Europe, the brand is sold through chains like Meesenburg in Germany, Foussier in France and Lecot in Belgium.',
   },
   {
-    q: 'Hvordan kan STROXX være så billigt?',
-    a: 'STROXX udvikles af fagfolk i Danmark, Tyskland, Frankrig og Belgien, som selv sætter specifikationerne og vælger materialerne. Der er ingen logo-præmier, sponsorater eller fordyrende mellemled. Du betaler for værktøjet, ikke for reklamerne.',
+    q: 'How can STROXX be so affordable?',
+    a: 'STROXX is developed by trade pros in Denmark, Germany, France and Belgium, who set the specifications and choose the materials themselves. There are no logo premiums, sponsorships or costly middlemen. You pay for the tool, not for the advertising.',
   },
   {
-    q: 'Er STROXX professionel kvalitet?',
-    a: 'Ja. STROXX er bygget til professionel brug og dækker over 1400 varenumre, der sælges i mere end 227 butikker i Europa. Tolerancer, materialer og holdbarhed måler kvaliteten, ikke prisskiltet. Derfor tør vi give 30 dages tilfredshedsgaranti.',
+    q: 'Is STROXX professional quality?',
+    a: 'Yes. STROXX is built for professional use and spans over 1,400 item numbers, sold in more than 227 stores across Europe. Tolerances, materials and durability measure quality, not the price tag. That\'s why we back it with a 30-day satisfaction guarantee.',
   },
 ];
 
 export const metadata: Metadata = {
-  title: 'Få råd til andet end værktøj',
+  title: 'Afford more than just tools',
   description:
-    'Du betaler for logoet, ikke for stålet. STROXX er professionel kvalitet uden mærke-tillæg, med 100% tilfredshedsgaranti. Prøv det i 30 dage.',
+    'You pay for the logo, not the steel. STROXX is professional quality without the brand markup, backed by a 100% satisfaction guarantee. Try it for 30 days.',
 };
 
 /* Landing structure follows the conversion narrative:
    1 hero hook → 2 name the frustration → 3 the habit (why the brain picks the
-   expensive brand) → 4 the reframe (how it's possible) → 5 proof (products +
-   prices) → 6 what changes (payoff image) → 7 risk reversal + clear next step.
+   expensive brand) → 4 the reframe (how it's possible) → 5 proof (products)
+   → 6 what changes (payoff image) → 7 risk reversal + clear next step.
    One full-bleed photo only; the rest carries the argument. */
 
-// the proof: four workhorses with real prices
+// the proof: four workhorses
 const PROOF_CODES = ['34011573', '34009021', '35011812', '35011846'];
 
 const STEPS = [
   {
     n: '01',
-    t: 'Find din butik',
-    d: '26 butikker i hele landet, eller køb online hos Carl Ras. Tag værktøjet i hånden først, hvis du vil.',
+    t: 'Find your store',
+    d: '26 stores across the country, or buy online at Carl Ras. Get the tool in your hand first, if you like.',
   },
   {
     n: '02',
-    t: 'Brug det på rigtigt arbejde',
-    d: 'Ikke fem minutter i indkørslen. 30 dage på pladsen, hvor det gælder.',
+    t: 'Use it on real work',
+    d: 'Not five minutes in the driveway. 30 days on site, where it counts.',
   },
   {
     n: '03',
-    t: 'Glad? Ellers pengene tilbage',
-    d: 'Er du ikke tilfreds, får du pengene igen. Ingen krav om fejl, din vurdering er nok.',
+    t: 'Happy? Or your money back',
+    d: 'If you\'re not satisfied, you get your money back. No need for faults, your judgment is enough.',
   },
 ];
 
@@ -93,9 +93,9 @@ export default function ProevDetPage() {
   const howToLd = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: 'Sådan prøver du STROXX i 30 dage med tilfredshedsgaranti',
+    name: 'How to try STROXX for 30 days with the satisfaction guarantee',
     description:
-      'STROXX giver 30 dages tilfredshedsgaranti: prøv værktøjet på rigtigt arbejde, og få pengene tilbage, hvis du ikke er tilfreds.',
+      'STROXX gives you a 30-day satisfaction guarantee: try the tool on real work, and get your money back if you\'re not happy.',
     step: STEPS.map((s, i) => ({
       '@type': 'HowToStep',
       position: i + 1,
@@ -112,7 +112,7 @@ export default function ProevDetPage() {
       <section className="relative h-[100svh] min-h-[560px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/Images/campaign/rings.jpg" srcSet="/Images/campaign/rings-sm.jpg 1280w, /Images/campaign/rings.jpg 2200w"
-          sizes="100vw" alt="Håndværker med ringe og hammer" draggable={false}
+          sizes="100vw" alt="Tradesperson with rings and a hammer" draggable={false}
           className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '62% 35%' }} />
         <div className="pointer-events-none absolute inset-0 hidden lg:block" style={{
           background: 'linear-gradient(90deg, rgba(8,9,11,0.93) 0%, rgba(8,9,11,0.66) 34%, rgba(8,9,11,0.18) 62%, rgba(8,9,11,0) 82%)' }} />
@@ -123,17 +123,17 @@ export default function ProevDetPage() {
 
         <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-14 lg:items-center lg:pb-0">
           <div className="max-w-2xl">
-            <Eyebrow>Kampagne · Prøv det</Eyebrow>
+            <Eyebrow>Campaign · Try It</Eyebrow>
             <h1 className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-6">
-              Dyrt værktøj.<br />Til <span className="text-stroxx-blue">udyr</span> pris.
+              Pro-grade tools.<br />Without the <span className="text-stroxx-blue">brand</span> tax.
             </h1>
             <p className="text-fog text-base md:text-xl leading-relaxed mb-8 max-w-lg">
-              Professionelt værktøj uden logo-tillæg. Og ja, det lyder for godt
-              til at være sandt. Derfor får du <span className="text-stroxx-blue font-semibold">30 dage</span> til at modbevise os.
+              Professional tools without the logo markup. And yes, it sounds too good
+              to be true. That's why you get <span className="text-stroxx-blue font-semibold">30 days</span> to prove us wrong.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
-              <a href="#fornemmelsen" className="link-arrow text-sm">Hvorfor så billigt? <ArrowDown size={15} /></a>
+              <GlassButton href={buy} external>Buy at Carl Ras <ArrowRight size={16} /></GlassButton>
+              <a href="#fornemmelsen" className="link-arrow text-sm">Why so affordable? <ArrowDown size={15} /></a>
             </div>
           </div>
         </div>
@@ -143,16 +143,16 @@ export default function ProevDetPage() {
       <section id="fornemmelsen" className="relative scroll-mt-24">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-40">
           <div className="max-w-4xl">
-            <Reveal><Eyebrow>Fornemmelsen</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Du betaler ikke for værktøjet. \n Du betaler for *navnet.*'}
+            <Reveal><Eyebrow>The feeling</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'You\'re not paying for the tool. \n You\'re paying for *the name.*'}
               className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.96] mb-10" />
             <Reveal delay={120}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl">
-                En ny maskine, et sæt bits, en kniv. Du lægger den på disken og
-                betaler en pris, du har lært at acceptere. Men et sted bagerst
-                i hovedet ved du det godt: en del af beløbet går ikke til
-                stålet i din hånd. Det går til reklamerne, sponsoraterne og
-                logoet på siden.
+                A new machine, a set of bits, a knife. You put it on the counter
+                and pay a price you've learned to accept. But somewhere in the
+                back of your mind, you know it: part of that amount doesn't go to
+                the steel in your hand. It goes to the advertising, the
+                sponsorships and the logo on the side.
               </p>
             </Reveal>
           </div>
@@ -164,21 +164,21 @@ export default function ProevDetPage() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 30% 50%, rgba(0,130,202,0.07), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-4xl lg:ml-auto lg:text-right">
-            <Reveal><Eyebrow>Vanen</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Dyrt føles sikkert. \n Det er hele *tricket.*'}
+            <Reveal><Eyebrow>The habit</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Expensive feels safe. \n That\'s the whole *trick.*'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-10" />
             <Reveal delay={100}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl lg:ml-auto mb-6">
-                Når du står med to stykker værktøj, vælger hjernen det dyre.
-                Ikke fordi du har testet det, men fordi prisen føles som en
-                garanti. Og fordi ingen bliver til grin for at købe det kendte
-                mærke.
+                When you're holding two tools, the brain picks the expensive one.
+                Not because you've tested it, but because the price feels like a
+                guarantee. And because nobody looks foolish for buying the
+                well-known brand.
               </p>
             </Reveal>
             <Reveal delay={180}>
               <p className="text-white text-lg md:text-xl leading-relaxed max-w-2xl lg:ml-auto">
-                Men pris måler ikke kvalitet. Tolerancer, materialer og
-                holdbarhed gør. Og de står ikke på prisskiltet.
+                But price doesn't measure quality. Tolerances, materials and
+                durability do. And those aren't printed on the price tag.
               </p>
             </Reveal>
           </div>
@@ -190,29 +190,29 @@ export default function ProevDetPage() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 50%, rgba(0,130,202,0.10), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
           <div>
-            <Reveal><Eyebrow>Sådan kan det lade sig gøre</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'*Samme* stål. \n Uden mærke-tillæg.'}
+            <Reveal><Eyebrow>How it's possible</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'*Same* steel. \n Without the brand tax.'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-8" />
             <Reveal delay={100}>
               <p className="text-fog text-lg leading-relaxed max-w-xl mb-6">
-                STROXX udvikles i et tæt samarbejde mellem fagfolk i Danmark,
-                Tyskland, Frankrig og Belgien. Vi sætter selv specifikationerne,
-                vælger selv materialerne og dropper alle unødvendige led,
-                logo-præmier og fordyrende mellemregninger.
+                STROXX is developed in close collaboration between trade pros in
+                Denmark, Germany, France and Belgium. We set the specifications
+                ourselves, choose the materials ourselves and cut every
+                unnecessary step, logo premium and costly markup.
               </p>
             </Reveal>
             <Reveal delay={180}>
               <p className="text-white text-lg leading-relaxed max-w-xl">
-                Det, du betaler for, er værktøjet. Ikke reklamerne for det.
+                What you pay for is the tool. Not the advertising for it.
               </p>
             </Reveal>
           </div>
           <Reveal delay={140} from="right">
             <div className="grid grid-cols-3 gap-6 lg:gap-8">
               {[
-                { v: 4, suf: '', l: 'lande bag udviklingen' },
-                { v: 227, suf: '+', l: 'butikker i Europa' },
-                { v: 1400, suf: '+', l: 'varenumre' },
+                { v: 4, suf: '', l: 'countries behind it' },
+                { v: 227, suf: '+', l: 'stores in Europe' },
+                { v: 1400, suf: '+', l: 'item numbers' },
               ].map((s) => (
                 <div key={s.l} className="text-center lg:text-left">
                   <CountUp value={s.v} suffix={s.suf}
@@ -225,17 +225,17 @@ export default function ProevDetPage() {
         </div>
       </section>
 
-      {/* ── 5 · THE PROOF — real products, real prices ─────────────────── */}
+      {/* ── 5 · THE PROOF — real products ──────────────────────────────── */}
       <section className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-3xl mb-12">
-            <Reveal><Eyebrow>Beviserne</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Lavet til at *præstere.* \n Ikke til at skinne.'}
+            <Reveal><Eyebrow>The proof</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Built to *perform.* \n Not to shine.'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-6" />
             <Reveal delay={100}>
               <p className="text-fog text-lg leading-relaxed max-w-xl">
-                Bygget til at klare mosten. Til at stå distancen. Til at tage
-                presset. Se selv, priserne står lige nedenunder.
+                Built to take the beating. To go the distance. To handle the
+                pressure. See for yourself, right below.
               </p>
             </Reveal>
           </div>
@@ -247,7 +247,7 @@ export default function ProevDetPage() {
           <Reveal delay={120}>
             <div className="mt-10">
               <Link href="/produkter" className="link-arrow">
-                Se alle produkterne <ArrowRight size={16} strokeWidth={2} />
+                See all the products <ArrowRight size={16} strokeWidth={2} />
               </Link>
             </div>
           </Reveal>
@@ -259,13 +259,13 @@ export default function ProevDetPage() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,130,202,0.08), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-3xl mb-12">
-            <Reveal><Eyebrow>Se det i aktion</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Ord er billige. \n Se selv efter.'}
+            <Reveal><Eyebrow>See it in action</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Words are cheap. \n See for yourself.'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96] mb-6" />
             <Reveal delay={100}>
               <p className="text-fog text-lg leading-relaxed max-w-xl">
-                Værktøjet på arbejde, optaget af vores europæiske partnere.
-                Ingen studielys, ingen filtre.
+                The tools at work, filmed by our European partners. No studio
+                lights, no filters.
               </p>
             </Reveal>
           </div>
@@ -281,8 +281,8 @@ export default function ProevDetPage() {
       <section className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
           <div className="max-w-3xl mb-12">
-            <Reveal><Eyebrow>Fra dem, der bruger det</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Du skal ikke tro os. \n Tro *kollegerne.*'}
+            <Reveal><Eyebrow>From the people who use it</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'Don\'t take our word. \n Take *the trade\'s.*'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96]" />
           </div>
           <Testimonials items={testimonials} />
@@ -293,19 +293,19 @@ export default function ProevDetPage() {
       <section className="relative h-[88svh] min-h-[520px] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/Images/campaign/tea.jpg" srcSet="/Images/campaign/tea-sm.jpg 1280w, /Images/campaign/tea.jpg 2200w"
-          sizes="100vw" alt="Håndværker drikker af fint porcelæn" draggable={false}
+          sizes="100vw" alt="Tradesperson drinking from fine china" draggable={false}
           className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '66% 40%' }} />
         <div className="pointer-events-none absolute inset-0" style={{
           background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.25) 60%, #0B0C0E 100%)' }} />
         <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-14">
           <Reveal>
-            <div className="eyebrow mb-4">Det, der ændrer sig</div>
+            <div className="eyebrow mb-4">What changes</div>
             <h3 className="h-display text-white text-[clamp(1.9rem,4.5vw,3.6rem)] leading-[0.96] mb-3">
-              Råd til det <span className="text-stroxx-blue">fine porcelæn.</span>
+              Room for the <span className="text-stroxx-blue">fine china.</span>
             </h3>
             <p className="text-fog text-base md:text-lg max-w-md">
-              Samme arbejde. Samme kvalitet. Men der er penge tilbage til
-              resten af livet.
+              Same work. Same quality. But there's money left over for the rest
+              of life.
             </p>
           </Reveal>
         </div>
@@ -316,15 +316,15 @@ export default function ProevDetPage() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,130,202,0.13), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-44">
           <div className="text-center mb-14 md:mb-20">
-            <Reveal><Eyebrow>Og hvis vi tager fejl?</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'100% *glad.* Eller \n pengene tilbage.'}
+            <Reveal><Eyebrow>And if we're wrong?</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'100% *happy.* Or \n your money back.'}
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-8" />
             <Reveal delay={120}>
               <p className="text-fog text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
-                Lyder det stadig for godt til at være sandt? Det er præcis
-                derfor, vi siger:{' '}
-                <span className="text-stroxx-blue font-semibold tracking-wide">PRØV DET.</span>{' '}
-                Sådan her gør du.
+                Still sounds too good to be true? That's exactly
+                why we say:{' '}
+                <span className="text-stroxx-blue font-semibold tracking-wide">TRY IT.</span>{' '}
+                Here's how.
               </p>
             </Reveal>
           </div>
@@ -345,8 +345,8 @@ export default function ProevDetPage() {
           <Reveal delay={200}>
             <div className="text-center">
               <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-                <GlassButton href={buy} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
-                <GlassButton href="/butikker" variant="ghost">Find din butik</GlassButton>
+                <GlassButton href={buy} external>Buy at Carl Ras <ArrowRight size={16} /></GlassButton>
+                <GlassButton href="/butikker" variant="ghost">Find your store</GlassButton>
               </div>
               <GuaranteeModal />
             </div>
@@ -358,8 +358,8 @@ export default function ProevDetPage() {
       <section className="relative border-t border-line">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
           <div className="text-center mb-12">
-            <Reveal><Eyebrow>Spørgsmål</Eyebrow></Reveal>
-            <ScrollText as="h2" text={'Det, du alligevel \n sidder og *tænker.*'}
+            <Reveal><Eyebrow>Questions</Eyebrow></Reveal>
+            <ScrollText as="h2" text={'What you\'re probably \n *thinking* anyway.'}
               className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.96]" />
           </div>
           <Reveal delay={100}>

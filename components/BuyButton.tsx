@@ -1,10 +1,10 @@
 import { ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 
-/** Primary buy CTA — Apple-glass with blue light, animated edge + cursor glow. */
+/** Primary buy CTA, Apple-glass with blue light, animated edge + cursor glow. */
 export default function BuyButton({
   href,
-  children = 'Køb hos Carl Ras',
+  children = 'Buy at Carl Ras',
   className = '',
 }: {
   href: string;

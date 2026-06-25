@@ -5,6 +5,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import CommandMenu from '@/components/CommandMenu';
+import SiteOverlay from '@/components/SiteOverlay';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -12,23 +13,23 @@ export const metadata: Metadata = {
   // OG/twitter image and canonical URLs absolute.
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'STROXX — Dyrt værktøj til udyr pris',
-    template: '%s — STROXX',
+    default: 'STROXX | Premium tools, beastly low prices',
+    template: '%s | STROXX',
   },
   description:
-    'STROXX er fuldstændigt ligesom alt dit dyre værktøj og gode gear. Det koster bare ikke nær så meget. Value for money, som man siger på godt dansk.',
+    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.',
   openGraph: {
-    title: 'STROXX — Dyrt værktøj til udyr pris',
-    description: 'Fedt værktøj til temmelig tynde priser. Kun hos Carl Ras.',
+    title: 'STROXX | Premium tools, beastly low prices',
+    description: 'Great tools at refreshingly low prices. Only at Carl Ras.',
     type: 'website',
     siteName: 'STROXX',
-    locale: 'da_DK',
-    images: [{ url: '/brand/og.jpg', width: 1200, height: 630, alt: 'STROXX værktøj' }],
+    locale: 'en',
+    images: [{ url: '/brand/og.jpg', width: 1200, height: 630, alt: 'STROXX tools' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'STROXX — Dyrt værktøj til udyr pris',
-    description: 'Fedt værktøj til temmelig tynde priser. Kun hos Carl Ras.',
+    title: 'STROXX | Premium tools, beastly low prices',
+    description: 'Great tools at refreshingly low prices. Only at Carl Ras.',
     images: ['/brand/og.jpg'],
   },
   icons: {
@@ -57,9 +58,9 @@ const orgLd = {
   name: 'STROXX',
   url: BASE,
   logo: `${BASE}/icons/icon-512.png`,
-  slogan: 'Dyrt værktøj til udyr pris',
+  slogan: 'Premium tools, beastly low prices',
   description:
-    'STROXX er professionelt værktøj uden mærke-tillæg, udviklet af fagfolk i Danmark, Tyskland, Frankrig og Belgien. Forhandles i Danmark eksklusivt af Carl Ras, med 30 dages tilfredshedsgaranti.',
+    'STROXX is professional tools without the brand markup, developed by trade experts in Denmark, Germany, France and Belgium. Sold in Denmark exclusively by Carl Ras, with a 30-day satisfaction guarantee.',
   sameAs: ['https://www.carl-ras.dk/maerker/stroxx'],
   parentOrganization: {
     '@type': 'Organization',
@@ -79,7 +80,7 @@ const siteLd = {
   '@type': 'WebSite',
   name: 'STROXX',
   url: BASE,
-  inLanguage: 'da',
+  inLanguage: 'en',
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/produkter?q={search_term_string}` },
@@ -89,12 +90,13 @@ const siteLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="da">
+    <html lang="en">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}
-        <a href="#indhold" className="skip-link">Spring til indhold</a>
+        <a href="#indhold" className="skip-link">Skip to content</a>
+        <SiteOverlay />
         <SmoothScroll>
           <Nav />
           <div id="indhold">{children}</div>

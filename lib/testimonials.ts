@@ -18,48 +18,48 @@ export type Testimonial = {
 
 export const testimonials: Testimonial[] = [
   {
-    quote: 'Jeg troede, der var en fidus. Der var bare ikke noget mærke-tillæg. Klingen holder lige så længe som den dyre.',
+    quote: 'I thought there had to be a catch. There just was not any badge premium. The blade lasts just as long as the expensive one.',
     name: 'Martin K.',
-    role: 'Tømrer, Aarhus',
+    role: 'Carpenter, Aarhus',
     rating: 5,
     productCode: '34011573', // Rundsavklinge Ø160 Z42W Træ
     trades: ['toemrer'],
   },
   {
-    quote: 'Brugte kniven hver dag i en måned før jeg gad tro på den. Nu har hele sjakket dem.',
+    quote: 'I used the knife every day for a month before I bothered to believe in it. Now the whole crew has them.',
     name: 'Dennis P.',
-    role: 'Montør, Odense',
+    role: 'Fitter, Odense',
     rating: 5,
     productCode: '34009021', // Kniv Black 25 mm med autolås
     trades: ['toemrer', 'elektriker', 'vvs'],
   },
   {
-    quote: 'En streglaser til den pris lød for godt til at være sandt. Den står knivskarpt, også i dagslys.',
+    quote: 'A line laser at that price sounded too good to be true. It stays razor sharp, even in daylight.',
     name: 'Søren B.',
-    role: 'Murer, Vejle',
+    role: 'Bricklayer, Vejle',
     rating: 5,
     productCode: '35011932', // Streglaser 3D Green
     trades: ['murer', 'toemrer'],
   },
   {
-    quote: 'Hulsavsættet klarede 40 dåser uden at blinke. Jeg har betalt det dobbelte for det samme før.',
+    quote: 'The hole saw set handled 40 back boxes without blinking. I have paid double for the same thing before.',
     name: 'Henrik L.',
-    role: 'Elektriker, København',
+    role: 'Electrician, København',
     rating: 5,
     productCode: '32012588', // Hulsavsæt Elektriker
     trades: ['elektriker'],
   },
   {
-    quote: 'Garantien gjorde, at jeg turde prøve. Jeg fik aldrig brug for den. Det siger vist alt.',
+    quote: 'The guarantee gave me the nerve to try it. I never needed it. That says it all.',
     name: 'Jonas M.',
-    role: 'VVS, Aalborg',
+    role: 'Plumber, Aalborg',
     rating: 5,
     trades: ['vvs', 'maler', 'murer'],
   },
   {
-    quote: 'Tapen klæber rent og slipper rent. Ingen lim tilbage på listerne. Simpelt, men det er det, der tæller.',
+    quote: 'The tape sticks clean and releases clean. No glue left on the trim. Simple, but that is what counts.',
     name: 'Camilla R.',
-    role: 'Maler, Roskilde',
+    role: 'Painter, Roskilde',
     rating: 5,
     trades: ['maler'],
   },

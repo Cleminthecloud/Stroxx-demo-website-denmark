@@ -9,9 +9,7 @@ import GlassButton from '@/components/GlassButton';
 import { ArrowRight } from 'lucide-react';
 import { products, categories, categoryBySlug, categoryBuyUrl, particleSrc } from '@/lib/data';
 
-const parsePrice = (s: string) => parseFloat(s.replace(/\./g, '').replace(',', '.'));
-
-type Sort = 'pop' | 'new' | 'low' | 'high';
+type Sort = 'pop' | 'new';
 
 export default function ProductExplorer() {
   const params = useSearchParams();
@@ -43,8 +41,6 @@ export default function ProductExplorer() {
       const inQ = !nq || p.name.toLowerCase().includes(nq) || (p.code ?? '').includes(nq);
       return inCat && inQ;
     });
-    if (sort === 'low') list = [...list].sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-    if (sort === 'high') list = [...list].sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
     if (sort === 'pop') list = [...list].sort((a, b) => b.badges.length - a.badges.length);
     // Carl Ras item numbers ascend over time → highest code = newest product
     if (sort === 'new') list = [...list].sort((a, b) => Number(b.code ?? 0) - Number(a.code ?? 0));
@@ -65,14 +61,14 @@ export default function ProductExplorer() {
         <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
           <CursorGlow size="40% 60%" intensity={0.16} className="-z-10" />
           <Reveal from="left">
-            <div className="eyebrow mb-4">Kategori</div>
+            <div className="eyebrow mb-4">Category</div>
             <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
               {activeCat.name}
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">{activeCat.blurb}</p>
             <div className="mt-7">
               <GlassButton href={categoryBuyUrl(activeCat.path)} external>
-                Se hele {activeCat.name.toLowerCase()} hos Carl Ras <ArrowRight size={16} />
+                See all {activeCat.name.toLowerCase()} at Carl Ras <ArrowRight size={16} />
               </GlassButton>
             </div>
           </Reveal>
@@ -83,13 +79,13 @@ export default function ProductExplorer() {
       ) : (
         <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
           <Reveal from="left">
-            <div className="eyebrow mb-4">Produkter</div>
+            <div className="eyebrow mb-4">Products</div>
             <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
-              Find dit STROXX-værktøj
+              Find your STROXX tool
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">
-              Filtrér i sortimentet og spring direkte til købet hos Carl Ras. Et udpluk
-              af de 1.400+ varenumre. Købet sker altid på partnerens platform.
+              Filter the range and jump straight to the buy at Carl Ras. A selection
+              of the 1,400+ item numbers. The purchase always happens on the partner platform.
             </p>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
@@ -111,7 +107,7 @@ export default function ProductExplorer() {
                 !active ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
               }`}
             >
-              Alle
+              All
             </button>
             {populated.map((c) => (
               <button
@@ -129,12 +125,12 @@ export default function ProductExplorer() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Søg på navn eller varenummer…"
+              placeholder="Search by name or item number…"
               className="flex-1 min-w-[160px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
             />
             <div className="flex items-center gap-2 text-sm shrink-0">
-              <span className="text-fog hidden sm:inline">Sortér:</span>
-              {([['pop', 'Populært'], ['new', 'Nyeste'], ['low', 'Pris ↑'], ['high', 'Pris ↓']] as [Sort, string][]).map(([k, l]) => (
+              <span className="text-fog hidden sm:inline">Sort:</span>
+              {([['pop', 'Popular'], ['new', 'Newest']] as [Sort, string][]).map(([k, l]) => (
                 <button
                   key={k}
                   onClick={() => setSort(k)}
@@ -150,10 +146,10 @@ export default function ProductExplorer() {
         </div>
       </div>
 
-      <div className="text-fog text-sm mb-6">{filtered.length} produkter</div>
+      <div className="text-fog text-sm mb-6">{filtered.length} products</div>
 
       {filtered.length === 0 ? (
-        <div className="text-fog py-20 text-center">Ingen produkter matcher. Prøv en anden kategori.</div>
+        <div className="text-fog py-20 text-center">No products match. Try another category.</div>
       ) : (
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
           {filtered.map((p) => (

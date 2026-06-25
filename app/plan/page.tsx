@@ -27,7 +27,7 @@ const DK_ROWS: Row[] = [
   { label: 'PIM + DAM integration', sub: 'live data · real images', phase: 'kickoff', s: 2, e: 5, kind: 'b1', text: 'Live product data & imagery', tip: 'Connect live Carl Ras product data and pull real transparent imagery from the DAM — replacing the demo data and the temporary image workaround.' },
   { label: 'Headless CMS', sub: 'marketing edits, no code', phase: 'build', s: 3, e: 5, kind: 'b1', text: 'Integrate & migrate', tip: 'Stand up the CMS and migrate content so marketing can edit pages & campaigns with preview — no developer needed.' },
   { label: 'Responsive build', sub: 'phone · tablet · desktop', phase: 'build', s: 3, e: 5, kind: 'b1', text: 'Responsive', tip: 'A first-class experience on every screen size.' },
-  { label: 'Content', sub: 'copy · imagery · approvals', phase: 'build', s: 3, e: 6, kind: 'b2', text: 'Load & approve', tip: 'Final Danish copy, DAM product shots, campaign & specialist imagery — loaded and brand-approved.' },
+  { label: 'Content', sub: 'copy · imagery · approvals', phase: 'build', s: 3, e: 6, kind: 'b2', text: 'Load & approve', tip: 'Final copy, DAM product shots, campaign and specialist imagery, loaded and brand-approved.' },
   { label: 'Hardening', sub: 'perf · a11y · analytics · consent', phase: 'build', s: 3, e: 6, kind: 'b2', text: 'Harden', tip: 'Performance, accessibility (WCAG AA), analytics, cookie consent, and the Pro Club sign-up.' },
   { label: 'Review & corrections', phase: 'review', s: 4, e: 6, kind: 'b1', text: 'Present → correct', tip: 'Present the working site; capture all feedback in one structured pass.' },
   { label: 'Fine-tune · QA · sign-off', phase: 'release', s: 5, e: 7, kind: 'b1', text: 'Polish & sign-off', tip: 'Action corrections, final QA, and brand / legal / IT sign-off.' },
@@ -95,9 +95,9 @@ export default function PlanPage() {
     <main className="plan-main bg-ink min-h-screen">
       {/* hero */}
       <section className="mx-auto max-w-[1180px] px-6 md:px-10 pt-32 md:pt-40 pb-10">
-        <div className="eyebrow mb-5">Projektplan</div>
+        <div className="eyebrow mb-5">Project plan</div>
         <h1 className="h-display text-white text-[clamp(2.2rem,5.4vw,4.4rem)] leading-[0.98] mb-5">
-          Fra demo til live.<br /><span className="text-fog">Bygget til at skalere.</span>
+          From demo to live.<br /><span className="text-fog">Built to scale.</span>
         </h1>
         <p className="text-fog text-base md:text-lg leading-relaxed max-w-2xl mb-9">
           A focused kickoff week to build and decide together, a stable build with a marketing-friendly CMS,
@@ -206,7 +206,7 @@ export default function PlanPage() {
       <section className="no-print mx-auto max-w-[1180px] px-6 md:px-10 py-16">
         <div className="rounded-2xl border border-line p-8 md:p-12 text-center relative overflow-hidden"
           style={{ background: 'radial-gradient(120% 140% at 50% 0%, rgba(0,130,202,0.14), transparent 60%), #14161A' }}>
-          <div className="eyebrow mb-4">Det levende site</div>
+          <div className="eyebrow mb-4">The live site</div>
           <h2 className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.98] mb-6">See it for yourself.</h2>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <GlassButton href="/">Open the STROXX demo <ArrowUpRight size={16} /></GlassButton>

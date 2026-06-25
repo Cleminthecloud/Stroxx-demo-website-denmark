@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { bagTools, formatDKK } from '@/lib/data';
 
 /* ──────────────────────────────────────────────────────────────────────────
    Masked-reveal "fill the bag" rig (prototype).
@@ -97,11 +96,6 @@ export default function BagFill() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const total = TOOLS.slice(0, landed).reduce((s, t) => {
-    const bt = bagTools.find((b) => b.id === t.id);
-    return s + (bt?.price ?? 0);
-  }, 0);
-
   return (
     <section ref={wrap} className="relative" style={{ height: '360vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
@@ -150,21 +144,20 @@ export default function BagFill() {
             className="absolute select-none"
             style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
-          {/* price tag — compact glass chip, anchored to the bag so it travels
-              with it; the running total + count tick up as tools land */}
+          {/* count chip, compact glass tag, anchored to the bag so it travels
+              with it; the tool count ticks up as tools land */}
           <div className="absolute" style={{ right: '-3%', bottom: '22%', zIndex: 50 }}>
             <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
               style={{
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)',
               }}>
-              <div className="text-[9px] uppercase tracking-[0.18em] text-fog mb-1">I posen</div>
+              <div className="text-[9px] uppercase tracking-[0.18em] text-fog mb-1">In the bag</div>
               <div className="h-display text-white text-xl leading-none tabular-nums">
-                {formatDKK(total)}<span className="text-fog text-[11px] ml-1 align-baseline">kr</span>
+                {landed}<span className="text-fog text-[11px] ml-1 align-baseline">/ {TOOLS.length}</span>
               </div>
               <div className="mt-1.5 text-[10px] tracking-wide">
-                <span className="text-stroxx-blue font-semibold tabular-nums">{landed}</span>
-                <span className="text-fog/60"> / {TOOLS.length} værktøjer</span>
+                <span className="text-fog/60">tools loaded</span>
               </div>
             </div>
           </div>

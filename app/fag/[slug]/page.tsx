@@ -21,13 +21,13 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const t = tradeBySlug(params.slug);
   if (!t) return { title: 'STROXX' };
-  const title = `Værktøj til ${t.name.toLowerCase()} uden mærke-tillæg`;
-  const description = `${t.blurb} 30 dages tilfredshedsgaranti, kun hos Carl Ras i Danmark.`;
+  const title = `Tools for ${t.name.toLowerCase()} without the brand markup`;
+  const description = `${t.blurb} 30-day satisfaction guarantee, only at Carl Ras in Denmark.`;
   return {
     title,
     description,
     alternates: { canonical: `/fag/${t.slug}` },
-    openGraph: { title: `STROXX til ${t.name.toLowerCase()}`, description },
+    openGraph: { title: `STROXX for ${t.name.toLowerCase()}`, description },
   };
 }
 
@@ -57,15 +57,15 @@ export default function TradePage({ params }: { params: { slug: string } }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Hjem', item: `${BASE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Fagområder', item: `${BASE}/fag` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Trades', item: `${BASE}/fag` },
       { '@type': 'ListItem', position: 3, name: trade.name },
     ],
   };
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: `STROXX værktøj til ${trade.name.toLowerCase()}`,
+    name: `STROXX tools for ${trade.name.toLowerCase()}`,
     itemListElement: picks.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -98,7 +98,7 @@ export default function TradePage({ params }: { params: { slug: string } }) {
               src={hero.main}
               srcSet={hero.sm ? `${hero.sm} 1280w, ${hero.main} 2200w` : undefined}
               sizes="100vw"
-              alt={`${trade.name} på arbejde med STROXX værktøj`}
+              alt={`${trade.name} on the job with STROXX tools`}
               draggable={false}
               className="absolute inset-0 h-full w-full select-none object-cover grayscale"
             />
@@ -114,7 +114,7 @@ export default function TradePage({ params }: { params: { slug: string } }) {
         )}
         <div className={`relative mx-auto w-full max-w-[1400px] px-5 md:px-8 ${hero.main ? 'pb-16 pt-40' : 'pt-32 md:pt-40'}`}>
           <Reveal>
-            <div className="eyebrow mb-4">Fagområde · {trade.name}</div>
+            <div className="eyebrow mb-4">Trade · {trade.name}</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
               {trade.title.split(trade.accent)[0]}
               <span className="text-stroxx-blue">{trade.accent}</span>
@@ -141,9 +141,9 @@ export default function TradePage({ params }: { params: { slug: string } }) {
         {/* the workhorses */}
         <div className="mt-20">
           <Reveal>
-            <div className="eyebrow mb-3">Arbejdshestene</div>
+            <div className="eyebrow mb-3">The workhorses</div>
             <h2 className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.96] mb-10">
-              Det, kollegerne køber igen.
+              What the crew buys again.
             </h2>
           </Reveal>
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -158,10 +158,10 @@ export default function TradePage({ params }: { params: { slug: string } }) {
         {/* next step */}
         <Reveal delay={120}>
           <div className="mt-16 flex flex-wrap items-center gap-3">
-            <GlassButton href="/produkter">Se hele sortimentet <ArrowRight size={15} /></GlassButton>
-            <GlassButton href="/butikker?tab=specialister" variant="ghost">Spørg en specialist</GlassButton>
+            <GlassButton href="/produkter">See the full range <ArrowRight size={15} /></GlassButton>
+            <GlassButton href="/butikker?tab=specialister" variant="ghost">Ask a specialist</GlassButton>
             <Link href="/proev-det" className="link-arrow text-sm ml-1">
-              30 dages tilfredshedsgaranti <ArrowRight size={15} strokeWidth={2} />
+              30-day satisfaction guarantee <ArrowRight size={15} strokeWidth={2} />
             </Link>
           </div>
         </Reveal>
@@ -169,9 +169,9 @@ export default function TradePage({ params }: { params: { slug: string } }) {
         {/* peer proof */}
         <section className="mt-24">
           <Reveal>
-            <div className="eyebrow mb-3">Fra faget</div>
+            <div className="eyebrow mb-3">From the trade</div>
             <h2 className="h-display text-white text-[clamp(1.6rem,3.5vw,2.6rem)] leading-[0.96] mb-10">
-              Kollegerne har prøvet det.
+              The crew has put it to work.
             </h2>
           </Reveal>
           <Testimonials items={voices} />
@@ -180,9 +180,9 @@ export default function TradePage({ params }: { params: { slug: string } }) {
         {/* trade FAQ */}
         <section className="mt-24 border-t border-line pt-14">
           <Reveal>
-            <div className="eyebrow mb-3">Spørgsmål fra faget</div>
+            <div className="eyebrow mb-3">Questions from the trade</div>
             <h2 className="h-display text-white text-[clamp(1.6rem,3.5vw,2.6rem)] leading-[0.96] mb-8">
-              Det, {trade.name.toLowerCase()} spørger os om.
+              What {trade.name.toLowerCase()} ask us.
             </h2>
           </Reveal>
           <Reveal delay={80}>

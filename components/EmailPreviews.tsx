@@ -25,30 +25,30 @@ const TEMPLATES: Template[] = [
   {
     file: 'stroxx-maanedens-juni.html',
     no: '01',
-    name: 'Månedens (SKA)',
-    subject: 'Én historie. Fem skarpe priser. To nyheder.',
-    preheader: 'Månedens STROXX: Streglaser 3D Green, plus fem priser kollegerne allerede kender.',
+    name: 'Tool of the Month (SKA)',
+    subject: 'One story. Five sharp deals. Two new arrivals.',
+    preheader: 'STROXX Tool of the Month: Line Laser 3D Green, plus five deals the crew already knows.',
   },
   {
     file: 'stroxx-velkomst.html',
     no: '02',
-    name: 'Velkomst',
-    subject: 'Velkommen i klubben',
-    preheader: 'Tidlig adgang, specialist-tips og de skarpeste priser. Direkte i indbakken.',
+    name: 'Welcome',
+    subject: 'Welcome to the club',
+    preheader: 'Early access, specialist tips and the sharpest deals. Straight to your inbox.',
   },
   {
     file: 'stroxx-produkt-streglaser.html',
     no: '03',
-    name: 'Produkt',
-    subject: 'Grønne linjer. Skarp pris. Streglaser 3D Green',
-    preheader: 'Selvnivellerende 3D streglaser med 40 m rækkevidde. 2.498,75 kr. inkl. moms.',
+    name: 'Product',
+    subject: 'Green lines. Sharp value. Line Laser 3D Green',
+    preheader: 'Self-leveling 3D line laser with 40 m range.',
   },
   {
     file: 'stroxx-kampagne-proev-det.html',
     no: '04',
-    name: 'Kampagne',
-    subject: 'Dyrt værktøj. Til udyr pris.',
-    preheader: 'Du betaler for logoet, ikke for stålet. Prøv det selv i 30 dage, helt uden risiko.',
+    name: 'Campaign',
+    subject: 'Premium tools. At a beastly price.',
+    preheader: 'You pay for the logo, not the steel. Try it yourself for 30 days, completely risk-free.',
   },
 ];
 
@@ -72,12 +72,12 @@ const IPHONE = {
 };
 
 const MARKETO_STEPS = [
-  'Download HTML-filen herover.',
-  'Log ind i Marketo Engage og gå til Design Studio → Email Templates.',
-  'Vælg New → New Email Template, giv den et navn, og vælg Code Editor.',
-  'Erstat al koden med indholdet fra den downloadede fil, og gem.',
-  'Klik Preview for at tjekke den, og derefter Approve.',
-  'Opret mailen under Marketing Activities → New Email og vælg skabelonen. Indsæt emnelinje og preheader herunder. Modulerne kan flyttes, dubleres og slettes, og al tekst og alle billeder redigeres direkte i editoren.',
+  'Download the HTML file above.',
+  'Log in to Marketo Engage and go to Design Studio → Email Templates.',
+  'Choose New → New Email Template, give it a name, and select Code Editor.',
+  'Replace all the code with the contents of the downloaded file, and save.',
+  'Click Preview to check it, then Approve.',
+  'Create the email under Marketing Activities → New Email and pick the template. Paste in the subject line and preheader below. Modules can be moved, duplicated and deleted, and all text and images are edited directly in the editor.',
 ];
 
 function previewify(html: string) {
@@ -184,10 +184,10 @@ function CopyField({ label, value }: { label: string; value: string }) {
         });
       }}
       className="block w-full rounded-lg border border-line bg-ink/60 px-4 py-3 text-left transition-colors hover:border-fog/50"
-      title="Klik for at kopiere"
+      title="Click to copy"
     >
       <span className="block text-[11px] uppercase tracking-wider text-fog/60">
-        {label} {copied && <span className="text-stroxx-blue normal-case tracking-normal">· kopieret</span>}
+        {label} {copied && <span className="text-stroxx-blue normal-case tracking-normal">· copied</span>}
       </span>
       <span className="mt-0.5 block text-sm text-white">{value}</span>
     </button>
@@ -230,7 +230,7 @@ export default function EmailPreviews() {
 
       {/* slide header */}
       <div className="relative z-10 px-6 pt-28 text-center md:pt-32">
-        <div className="eyebrow mb-3">Marketo e-mail skabeloner</div>
+        <div className="eyebrow mb-3">Marketo email templates</div>
         <h1
           key={`h-${idx}`}
           className="email-fade font-display text-3xl font-bold tracking-tightest text-white md:text-4xl"
@@ -238,21 +238,21 @@ export default function EmailPreviews() {
           {t.no} · {t.name}
         </h1>
         <p key={`s-${idx}`} className="email-fade mx-auto mt-2 max-w-xl text-sm text-fog">
-          Emne: {t.subject}
+          Subject: {t.subject}
         </p>
       </div>
 
       {/* stage */}
       <div className="relative z-10 flex flex-1 items-center justify-center px-4 pb-44 pt-10 md:px-10">
         {!html ? (
-          <div className="text-sm text-fog">Indlæser…</div>
+          <div className="text-sm text-fog">Loading…</div>
         ) : view === 'desktop' ? (
           <div key={`d-${idx}`} className="email-rise w-full max-w-[min(1100px,88vw,calc((100dvh-330px)*1.659))]">
             <Device spec={MACBOOK} html={html} label={`${t.name}, desktop`} />
           </div>
         ) : (
           <div key={`m-${idx}`} className="email-rise w-full max-w-[min(640px,50vw,calc((100dvh-320px)*0.797))] max-sm:max-w-[88vw]">
-            <Device spec={IPHONE} html={html} label={`${t.name}, mobil`} />
+            <Device spec={IPHONE} html={html} label={`${t.name}, mobile`} />
           </div>
         )}
       </div>
@@ -292,7 +292,7 @@ export default function EmailPreviews() {
             }`}
             aria-pressed={view === 'mobile'}
           >
-            <Smartphone size={15} /> <span className="hidden sm:inline">Mobil</span>
+            <Smartphone size={15} /> <span className="hidden sm:inline">Mobile</span>
           </button>
 
           <span className="mx-1 h-6 w-px bg-white/10" aria-hidden />
@@ -309,12 +309,12 @@ export default function EmailPreviews() {
       {/* info panel: grab the files + add them to Marketo */}
       {infoOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
-          <button aria-label="Luk" className="absolute inset-0 bg-black/60" onClick={() => setInfoOpen(false)} />
+          <button aria-label="Close" className="absolute inset-0 bg-black/60" onClick={() => setInfoOpen(false)} />
           <div className="glass-panel email-rise relative m-0 max-h-[85dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl p-7 sm:m-6 sm:rounded-2xl md:p-9">
             <button
               onClick={() => setInfoOpen(false)}
               className="absolute right-5 top-5 text-fog transition-colors hover:text-white"
-              aria-label="Luk info"
+              aria-label="Close info"
             >
               <X size={18} />
             </button>
@@ -322,7 +322,7 @@ export default function EmailPreviews() {
             <div className="eyebrow mb-2">
               {t.no} · {t.name}
             </div>
-            <h2 className="font-display text-2xl font-bold text-white">Brug skabelonen i Marketo</h2>
+            <h2 className="font-display text-2xl font-bold text-white">Use the template in Marketo</h2>
 
             <div className="mt-5 flex flex-wrap gap-2">
               <a
@@ -338,7 +338,7 @@ export default function EmailPreviews() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm text-fog transition-colors hover:text-white"
               >
-                <Code size={15} /> Se r&aring; fil
+                <Code size={15} /> View raw file
               </a>
             </div>
 
@@ -352,21 +352,21 @@ export default function EmailPreviews() {
             </ol>
 
             <div className="mt-6 space-y-2">
-              <CopyField label="Emnelinje" value={t.subject} />
+              <CopyField label="Subject line" value={t.subject} />
               <CopyField label="Preheader" value={t.preheader} />
             </div>
 
             <p className="mt-6 border-t border-line pt-5 text-[13px] leading-relaxed text-fog/70">
-              Alle billeder ligger p&aring; faste URL&apos;er (sitet og Carl Ras&apos; CDN), s&aring; de virker direkte i
-              udsendelser uden upload. Afmeld-link, vis-i-browser og firmaoplysninger er indbygget i footeren og
-              kan ikke slettes ved en fejl.{' '}
+              All images sit on fixed URLs (the site and Carl Ras&apos; CDN), so they work directly in
+              sends with no upload. The unsubscribe link, view-in-browser and company details are built into the footer and
+              cannot be deleted by mistake.{' '}
               <a
                 href="https://business.adobe.com/products/marketo/adobe-marketo.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-stroxx-blue hover:underline"
               >
-                Om Adobe Marketo Engage <ExternalLink size={11} />
+                About Adobe Marketo Engage <ExternalLink size={11} />
               </a>
             </p>
           </div>

@@ -18,47 +18,47 @@ const byCode = (code: string): Product => {
 };
 
 export const SKA = {
-  month: 'Juni',
+  month: 'June',
   year: '2026',
 
   /** HERO — månedens hovedhistorie. Kvalitet og værdi, ikke pris. */
   hero: byCode('35011932'), // Streglaser 3D Green
   heroClaims: [
     {
-      title: 'Grønne linjer. Hele dagen.',
-      body: 'Grøn diode er op til fire gange mere synlig end rød i dagslys. Linjerne står skarpt på 40 meter, og 70 med modtagerboks.',
+      title: 'Green lines. All day long.',
+      body: 'A green diode is up to four times more visible than red in daylight. The lines stay sharp at 40 metres, and 70 with a receiver.',
     },
     {
-      title: '±1,5 mm på 5 meter.',
-      body: 'Selvnivellerende 3D-linjer i tre planer, 360 grader rundt. Nøjagtigheden står på databladet, ikke kun i reklamen.',
+      title: '±1.5 mm at 5 metres.',
+      body: 'Self-levelling 3D lines across three planes, a full 360 degrees. The accuracy is on the data sheet, not just in the ad.',
     },
     {
-      title: 'Sæt den. Glem den.',
-      body: 'Én mand sætter laseren, samme mand monterer. Det sparer en kollega på opmålingen, hver eneste gang.',
+      title: 'Set it. Forget it.',
+      body: 'One person sets the laser, the same person fits. It saves you a colleague on the layout, every single time.',
     },
   ],
   /** anvendelsescases — hvor den tjener sig hjem */
   heroCases: [
-    { trade: 'Tømrer', use: 'Lofter, skillevægge og gulvopretning i ét opslag. 3D-planerne rammer alle fire vægge på én gang.' },
-    { trade: 'Elektriker', use: 'Dåser og føringsveje i samme højde gennem hele lejligheden, uden snor og uden hjælper.' },
-    { trade: 'VVS', use: 'Fald og faste højder på rørtræk. Linjen står, mens du arbejder, også i skarpt lys.' },
+    { trade: 'Carpenter', use: 'Ceilings, partitions and floor levelling in one setup. The 3D planes hit all four walls at once.' },
+    { trade: 'Electrician', use: 'Boxes and runs at the same height through the whole flat, no string and no helper.' },
+    { trade: 'Plumber', use: 'Falls and fixed heights on pipe runs. The line holds while you work, even in bright light.' },
   ],
   heroFaq: [
     {
-      q: 'Hvor god er den grønne laser i dagslys?',
-      a: 'Grøn diode opfattes op til fire gange tydeligere end rød. Indendørs i normalt arbejdslys står linjerne skarpt på hele rækkevidden, 40 meter, og udendørs eller i skarpt lys bruger du modtagerboksen og kommer op på 70 meter.',
+      q: 'How good is the green laser in daylight?',
+      a: 'A green diode reads up to four times clearer than red. Indoors in normal work light the lines stay sharp across the full range, 40 metres, and outdoors or in bright light you use the receiver and reach 70 metres.',
     },
     {
-      q: 'Hvad betyder 3D, helt konkret?',
-      a: 'Tre selvnivellerende 360-graders planer: ét vandret og to lodrette, vinkelret på hinanden. Du kan altså sætte vaterpaslinje, lodlinje og vinkel på samme tid, hele vejen rundt i rummet.',
+      q: 'What does 3D actually mean here?',
+      a: 'Three self-levelling 360-degree planes: one horizontal and two vertical, perpendicular to each other. So you can set a level line, a plumb line and a square all at once, the whole way around the room.',
     },
     {
-      q: 'Hvor præcis er den i praksis?',
-      a: '±1,5 mm på 5 meter. Det er samme klasse som A-mærkernes grønne 3D-lasere, og rigeligt til aptering, lofter, fliser og el-arbejde.',
+      q: 'How accurate is it in practice?',
+      a: '±1.5 mm at 5 metres. That is the same class as the A-brand green 3D lasers, and plenty for fit-out, ceilings, tiling and electrical work.',
     },
     {
-      q: 'Hvad hvis den ikke holder, hvad jeg forventer?',
-      a: 'Så gælder tilfredshedsgarantien: prøv den på rigtigt arbejde i 30 dage, og er du ikke tilfreds, får du pengene tilbage hos Carl Ras. Ingen krav om fejl, din vurdering er nok.',
+      q: 'What if it does not hold up to what I expect?',
+      a: 'Then the satisfaction guarantee kicks in: try it on real jobs for 30 days, and if you are not happy, you get your money back at Carl Ras. No fault required, your judgement is enough.',
     },
   ],
 
@@ -73,8 +73,8 @@ export const SKA = {
 
   /** NYHEDER — fordelt mellem premium / problemløser / kommerciel. */
   nyheder: [
-    { type: 'Premium nyhed', product: byCode('64012039'), pitch: 'Kompressor-køleboks til skurvognen. Kold frokost i juli, uden is.' },
-    { type: 'Problemløser', product: byCode('63143492'), pitch: 'Hue med indbygget pandelampe. Lys på sagen, hænderne fri.' },
+    { type: 'Premium new arrival', product: byCode('64012039'), pitch: 'Compressor cool box for the site hut. Cold lunch in July, no ice needed.' },
+    { type: 'Problem solver', product: byCode('63143492'), pitch: 'Beanie with a built-in head torch. Light on the job, hands free.' },
   ],
 };
 

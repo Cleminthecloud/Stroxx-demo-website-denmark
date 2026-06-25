@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-/** Final CTA headline. Starts as "Prøv det." and — once it scrolls near the
- *  middle of the viewport — a STROXX-blue " Nu." slides out; because the line
+/** Final CTA headline. Starts as "Try it." and, once it scrolls near the
+ *  middle of the viewport, a STROXX-blue " Now." slides out; because the line
  *  is centre-justified, the whole thing recentres as the word appears. */
 export default function ProvDet() {
   const ref = useRef<HTMLHeadingElement>(null);
@@ -27,7 +27,7 @@ export default function ProvDet() {
       ref={ref}
       className="h-display text-white text-[clamp(3rem,11vw,11rem)] leading-[0.86] mb-12 flex items-baseline justify-center whitespace-nowrap"
     >
-      <span>Prøv det.</span>
+      <span>Try it.</span>
       <span
         className="text-stroxx-blue inline-block overflow-hidden transition-all duration-700 ease-out"
         style={{
@@ -37,7 +37,7 @@ export default function ProvDet() {
           transform: on ? 'translateX(0)' : 'translateX(-0.35em)',
         }}
       >
-        Nu.
+        Now.
       </span>
     </h2>
   );

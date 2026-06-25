@@ -9,9 +9,9 @@ import { CR_BRAND, UTM } from '@/lib/data';
  *  body stay pinned on a dark left scrim. Auto-advances, pauses on hover, and
  *  falls back to a single still for reduced-motion. */
 const SLIDES = [
-  { src: '/Images/campaign/rings.jpg', sm: '/Images/campaign/rings-sm.jpg', pos: '60% 40%', alt: 'Håndværker med ringe og hammer' },
-  { src: '/Images/campaign/tea.jpg', sm: '/Images/campaign/tea-sm.jpg', pos: '68% 50%', alt: 'Håndværker i smækbukser drikker af fint porcelæn' },
-  { src: '/Images/campaign/glasses.jpg', sm: '/Images/campaign/glasses-sm.jpg', pos: '72% 50%', alt: 'Smilende håndværker med bling-solbriller og vinkelsliber' },
+  { src: '/Images/campaign/rings.jpg', sm: '/Images/campaign/rings-sm.jpg', pos: '60% 40%', alt: 'Tradesperson with rings and a hammer' },
+  { src: '/Images/campaign/tea.jpg', sm: '/Images/campaign/tea-sm.jpg', pos: '68% 50%', alt: 'Tradesperson in bib overalls drinking from fine porcelain' },
+  { src: '/Images/campaign/glasses.jpg', sm: '/Images/campaign/glasses-sm.jpg', pos: '72% 50%', alt: 'Smiling tradesperson with bling sunglasses and an angle grinder' },
 ];
 const DWELL = 3400; // ms per slide
 
@@ -35,7 +35,7 @@ export default function CampaignBand() {
       className="relative z-[46] w-full overflow-hidden bg-ink"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
-      aria-label="STROXX-kampagne"
+      aria-label="STROXX campaign"
     >
       {/* carry the photos' real 16:9 ratio so the full frame shows (no head-crop);
           min-height keeps it substantial on short/!mobile, where it covers-crops */}
@@ -92,35 +92,34 @@ export default function CampaignBand() {
         {/* text — bottom-left on phones, centered-left on desktop */}
         <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-12 lg:items-center lg:pb-0">
           <div className="max-w-xl">
-            <div className="eyebrow mb-5">Kampagne</div>
+            <div className="eyebrow mb-5">Campaign</div>
             <h2 className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
-              Få råd til andet<br className="hidden sm:block" /> end værktøj
+              Room in the budget<br className="hidden sm:block" /> for more than tools
             </h2>
             <p className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
-              STROXX er fuldstændigt ligesom dit dyre værktøj og gode gear. Det koster bare
-              ikke nær så meget. Og hvis du synes det lyder for godt til at være sandt, så
-              siger vi bare:{' '}
-              <span className="text-stroxx-blue font-semibold tracking-wide">PRØV DET.</span>{' '}
-              Er det ikke lige dig, eller er du ikke tilfreds, så får du pengene tilbage.
-              Simpelthen.
+              STROXX is exactly like your pricey tools and good gear. It just does not cost
+              nearly as much. And if you think that sounds too good to be true, we simply
+              say:{' '}
+              <span className="text-stroxx-blue font-semibold tracking-wide">TRY IT.</span>{' '}
+              Not for you, or not happy? You get your money back. Simple as that.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
-                Køb hos Carl Ras <ArrowRight size={16} />
+                Buy at Carl Ras <ArrowRight size={16} />
               </GlassButton>
-              <GlassButton href="/proev-det" variant="ghost">Læs mere</GlassButton>
+              <GlassButton href="/proev-det" variant="ghost">Read more</GlassButton>
             </div>
 
             {/* progress indicator */}
-            <div className="mt-7 md:mt-10 flex gap-2.5" role="tablist" aria-label="Vælg kampagnebillede">
+            <div className="mt-7 md:mt-10 flex gap-2.5" role="tablist" aria-label="Choose campaign image">
               {SLIDES.map((s, idx) => (
                 <button
                   key={s.src}
                   type="button"
                   role="tab"
                   aria-selected={idx === i}
-                  aria-label={`Billede ${idx + 1}`}
+                  aria-label={`Image ${idx + 1}`}
                   onClick={() => setI(idx)}
                   className="group relative h-1 w-12 rounded-full bg-white/15 overflow-hidden cursor-pointer"
                 >

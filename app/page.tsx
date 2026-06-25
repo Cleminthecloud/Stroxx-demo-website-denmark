@@ -63,9 +63,9 @@ export default function Home() {
       <section className="relative h-[100svh] min-h-[640px]">
         <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
           <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
-            <span className="hero-line">Dyrt værktøj</span>
+            <span className="hero-line">Pro-grade tools</span>
             <br />
-            <span className="hero-line hero-line--2">til <span className="text-stroxx-blue">udyr</span> pris</span>
+            <span className="hero-line hero-line--2">without the <span className="text-stroxx-blue">brand</span> tax</span>
           </h1>
         </div>
         <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">
@@ -78,37 +78,37 @@ export default function Home() {
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
             <p className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
-              <ScrollText as="span" className="text-white" text="Ligesom alt dit dyre værktøj." />
+              <ScrollText as="span" className="text-white" text="Just like all your pricey gear." />
               <br />
-              <ScrollText as="span" className="text-fog" text="Det koster bare ikke" />{' '}
-              <ScrollText as="span" className="text-stroxx-blue" text="nær så meget." />
+              <ScrollText as="span" className="text-fog" text="It just doesn't cost" />{' '}
+              <ScrollText as="span" className="text-stroxx-blue" text="anywhere near as much." />
             </p>
             <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
-              text="Fedt værktøj til temmelig tynde priser. Fås kun hos Carl Ras BYG. Og husk: altid 100% tilfredsgaranti, så der ikke er så meget at tænke over." />
+              text="Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about." />
           </div>
         </div>
       </section>
 
-      <Marquee text="DYRT VÆRKTØJ TIL UDYR PRIS" />
+      <Marquee text="PRO-GRADE TOOLS WITHOUT THE BRAND TAX" />
 
       {/* SORTIMENT — what we have, and we have your back */}
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
-            <Eyebrow>Sortimentet</Eyebrow>
-            <ScrollText as="h2" text={'Vi har det. \n Og vi har dig.'}
+            <Eyebrow>The range</Eyebrow>
+            <ScrollText as="h2" text={'We have it. \n And we have you.'}
               className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9]" />
           </div>
           <div className="grid gap-12 sm:grid-cols-2">
             <div>
-              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Udvalget</div>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The selection</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                text="Værktøj, udstyr, tilbehør og forbrugsartikler. Fra lasermålere og savklinger til håndværktøj, topnøglesæt og beskyttelsesudstyr. STROXX har det meste." />
+                text="Tools, equipment, accessories and consumables. From laser measures and saw blades to hand tools, socket sets and protective gear. STROXX has most of it." />
             </div>
             <div>
-              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Servicen</div>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The service</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                text="Og vi har din ryg. Så du hverken går forgæves eller hjem med det forkerte. Det er ikke kun værktøjet, der er skarpt." />
+                text="And we have your back. So you never walk away empty-handed or with the wrong thing. It's not just the tools that are sharp." />
             </div>
           </div>
         </div>
@@ -120,20 +120,20 @@ export default function Home() {
         <div className="relative mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-end">
             <div>
-              <Eyebrow>Skala</Eyebrow>
-              <ScrollText as="h2" text={'Mere end \n 1.400 varenumre.'}
+              <Eyebrow>Scale</Eyebrow>
+              <ScrollText as="h2" text={'More than \n 1,400 item numbers.'}
                 className="h-display text-white text-[clamp(2.6rem,7vw,6.5rem)] leading-[0.9]" />
             </div>
             <div className="grid gap-12 sm:grid-cols-2">
               <div>
-                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Hverdagen</div>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Every day</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Uanset om du har brug for en vikingearm eller rene hænder, så har vi det, du skal bruge. I webshoppen på carl-ras.dk og i 26 butikker over hele landet." />
+                  text="Whether you need a Viking arm or clean hands, we've got what you're after. In the webshop at carl-ras.dk and in 26 stores across the country." />
               </div>
               <div>
-                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Det bedste</div>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The best</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Nogle produkter er oplagte, når du bare ikke vil betale for meget. Andre er til dig, der sammenligner specs, ydelse og pris, og vil have det bedste." />
+                  text="Some products are an easy call when you just don't want to overpay. Others are for those who compare specs, performance and value, and want the best." />
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function Home() {
           {/* stats band — full width, vertical dividers */}
           <Reveal delay={120}>
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
-              {[{ v: 1400, suf: '+', l: 'varenumre' }, { v: 26, suf: '', l: 'butikker i Danmark' }, { v: 227, suf: '+', l: 'butikker i Europa' }].map((s, i) => (
+              {[{ v: 1400, suf: '+', l: 'item numbers' }, { v: 26, suf: '', l: 'stores in Denmark' }, { v: 227, suf: '+', l: 'stores in Europe' }].map((s, i) => (
                 <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
                   <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
                   <div className="text-fog text-sm mt-2">{s.l}</div>
@@ -156,8 +156,8 @@ export default function Home() {
       <section id="specialister" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
           <div className="mb-16 max-w-3xl">
-            <Eyebrow>Specialisterne</Eyebrow>
-            <ScrollText as="h2" text="Cand. værktøj med speciale i STROXX"
+            <Eyebrow>The specialists</Eyebrow>
+            <ScrollText as="h2" text="Masters of the trade, majoring in STROXX"
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
           <div className="relative">
@@ -182,7 +182,7 @@ export default function Home() {
                         <div className="text-fog text-xs truncate">{s.role} · {s.location}</div>
                       </div>
                       <div className="flex gap-2 shrink-0">
-                        <GlassLink href={`tel:+45${s.phone}`} label="Ring">
+                        <GlassLink href={`tel:+45${s.phone}`} label="Call">
                           <Phone size={15} strokeWidth={2} className="relative" />
                         </GlassLink>
                         <GlassLink href={`mailto:${s.email}`} label="Email">
@@ -203,11 +203,11 @@ export default function Home() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
           <div>
-            <Eyebrow>Tilfredsgaranti</Eyebrow>
-            <ScrollText as="h2" text={'100%. Eller \n pengene tilbage.'}
+            <Eyebrow>Satisfaction guarantee</Eyebrow>
+            <ScrollText as="h2" text={'100%. Or your \n money back.'}
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
-              text="Vi tør godt. Er du ikke tilfreds med dit STROXX-værktøj, får du pengene igen. Så er der ikke så meget at tænke over. Bare at komme i gang." />
+              text="We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started." />
             <GuaranteeModal />
           </div>
           <Reveal delay={120} from="far-right">
@@ -229,19 +229,19 @@ export default function Home() {
           <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center mb-20">
             <CursorGlow size="42% 58%" intensity={0.14} className="-z-10" />
             <Reveal from="left">
-              <Eyebrow>Månedens STROXX · {SKA.month} {SKA.year}</Eyebrow>
+              <Eyebrow>STROXX of the Month · {SKA.month} {SKA.year}</Eyebrow>
               <h2 className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
-                Én historie.
+                One story.
                 <br /><span className="text-stroxx-blue">{SKA.hero.name}.</span>
               </h2>
               <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
-                Hver måned får ét stykke værktøj hele historien: hvorfor det vinder,
-                hvor det tjener sig hjem, og hvad kollegerne siger. Resten af måneden
-                klarer sig selv på prisen.
+                Every month, one tool gets the full story: why it wins,
+                where it earns its keep, and what the trade says. The rest of
+                the month takes care of itself.
               </p>
               <div className="flex flex-wrap gap-3">
-                <GlassButton href="/maanedens">Hele historien <ArrowRight size={16} /></GlassButton>
-                <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">Køb hos Carl Ras</GlassButton>
+                <GlassButton href="/maanedens">The full story <ArrowRight size={16} /></GlassButton>
+                <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">Buy at Carl Ras</GlassButton>
               </div>
             </Reveal>
             <Reveal delay={120} from="far-right">
@@ -254,16 +254,16 @@ export default function Home() {
                   className="absolute inset-[6%] h-[88%] w-[88%] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
                 <div className="absolute bottom-3 left-3 text-fog/75 text-xs uppercase tracking-wider">
-                  {SKA.hero.price} DKK · 30 dages garanti
+                  30-day guarantee
                 </div>
               </Link>
             </Reveal>
           </div>
 
           <Reveal className="mb-8 flex items-end justify-between gap-6">
-            <div className="text-fog/75 text-xs uppercase tracking-wider">Månedens fem DB2-vindere</div>
+            <div className="text-fog/75 text-xs uppercase tracking-wider">This month's five DB2 winners</div>
             <Link href="/maanedens" className="link-arrow hidden sm:inline-flex shrink-0 text-sm">
-              Hele måneden <ArrowRight size={14} />
+              The whole month <ArrowRight size={14} />
             </Link>
           </Reveal>
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
@@ -278,8 +278,8 @@ export default function Home() {
       <section id="kategorier" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div className="max-w-3xl">
-            <Eyebrow>Kategorierne</Eyebrow>
-            <ScrollText as="h2" text={'Fyld posen. Kategori \n for kategori.'}
+            <Eyebrow>The categories</Eyebrow>
+            <ScrollText as="h2" text={'Fill the bag. Category \n by category.'}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
         </div>
@@ -300,7 +300,7 @@ export default function Home() {
                 {f.items.slice(0, 2).map((p) => (<ProductCard key={p.slug} product={p} />))}
               </div>
               <a href={categoryBuyUrl(f.cat.path)} target="_blank" rel="noopener noreferrer" className="link-arrow">
-                Se hele {f.cat.name.toLowerCase()} hos Carl Ras
+                See all {f.cat.name.toLowerCase()} at Carl Ras
                 <ArrowRight size={16} strokeWidth={2} />
               </a>
             </Reveal>
@@ -309,7 +309,7 @@ export default function Home() {
 
         {/* full category list — typographic, no boxes */}
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28">
-          <Reveal><div className="text-fog/75 text-xs uppercase tracking-wider mb-8">Hele udvalget</div></Reveal>
+          <Reveal><div className="text-fog/75 text-xs uppercase tracking-wider mb-8">The full range</div></Reveal>
           <CategoryList />
         </div>
       </section>
@@ -317,7 +317,7 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="relative h-[80vh] flex flex-col items-center justify-center text-center px-6">
         <ProvDet />
-        <BuyButton href={`${CR_BRAND}/?${UTM}`}>Køb STROXX hos Carl Ras</BuyButton>
+        <BuyButton href={`${CR_BRAND}/?${UTM}`}>Buy STROXX at Carl Ras</BuyButton>
       </section>
     </main>
   );

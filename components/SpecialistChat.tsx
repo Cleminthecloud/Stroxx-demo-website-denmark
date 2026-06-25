@@ -15,14 +15,15 @@ import { Store } from '@/lib/stores';
 interface BtnLink { label: string; href: string; external?: boolean }
 interface Msg { from: 'bot' | 'user'; text: string; links?: BtnLink[]; products?: Product[]; handoff?: boolean }
 
-const DEFAULT_CHIPS = ['Hvordan virker garantien?', 'Find min butik', 'Har I en god kniv?', 'Snak med et menneske'];
+const DEFAULT_CHIPS = ['How does the guarantee work?', 'Find my store', 'Got a good knife?', 'Talk to a human'];
 
 const norm = (s: string) =>
   s.toLowerCase().replace(/ø/g, 'o').replace(/å/g, 'a').replace(/æ/g, 'ae');
 
 function searchProducts(q: string) {
   const tokens = norm(q).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 &&
-    !['har', 'jeg', 'med', 'til', 'den', 'det', 'der', 'hvad', 'koster', 'pris', 'find', 'skal', 'bruge', 'bruger', 'noget', 'nogle', 'god', 'godt', 'jeres', 'vores', 'eller', 'ikke'].includes(t));
+    !['har', 'jeg', 'med', 'til', 'den', 'det', 'der', 'hvad', 'koster', 'pris', 'find', 'skal', 'bruge', 'bruger', 'noget', 'nogle', 'god', 'godt', 'jeres', 'vores', 'eller', 'ikke',
+      'the', 'and', 'you', 'your', 'have', 'has', 'got', 'need', 'want', 'some', 'good', 'cost', 'costs', 'price', 'with', 'for', 'find'].includes(t));
   if (!tokens.length) return [];
   const scored = products
     .map((p) => {
@@ -40,37 +41,37 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
 
   // "ja"/"ja tak"/"gerne" accepts the bot's own handoff offer — without this
   // the fallback answer looped forever on an affirmative reply
-  if (/menneske|specialist|human|person|ring til|tal med|snak med|^ja\b|^jep\b|^jo\b|gerne|ok(ay)?\b/.test(t)) {
+  if (/menneske|specialist|human|person|ring til|tal med|snak med|talk|call|chat with|yes|yep|sure|please|^ja\b|^jep\b|^jo\b|gerne|ok(ay)?\b/.test(t)) {
     return [{
       from: 'bot', handoff: true,
-      text: 'Selvfølgelig. Jeg har skrevet et kort resumé af vores samtale, så du ikke skal starte forfra.',
+      text: 'Of course. I have written a short summary of our chat, so you do not have to start over.',
     }];
   }
-  if (/garanti|tilfreds|penge.*tilbage|retur|fortryd|bytte/.test(t)) {
+  if (/garanti|tilfreds|penge.*tilbage|retur|fortryd|bytte|guarantee|warranty|money.*back|refund|return|exchange|satisf/.test(t)) {
     return [{
       from: 'bot',
-      text: 'STROXX har 30 dages tilfredshedsgaranti for erhvervskunder med konto. Er du ikke tilfreds, får du pengene tilbage. Ingen krav om fejl, din vurdering er nok. Gælder alle STROXX-produkter, dog ikke adgangskontrol, og ved mængdekøb den først købte vare.',
+      text: 'STROXX comes with a 30-day satisfaction guarantee for business customers with an account. Not happy? You get your money back. No need to prove a fault, your judgment is enough. It covers all STROXX products except access control, and on bulk orders the first item bought.',
       links: [
-        { label: 'Læs om garantien', href: '/proev-det' },
-        { label: 'Garantien (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf', external: true },
+        { label: 'About the guarantee', href: '/proev-det' },
+        { label: 'The guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf', external: true },
       ],
     }];
   }
-  if (/butik|aabn|abningstid|adresse|naermest|hvor kan|hvor koeber|afhent/.test(t)) {
+  if (/butik|aabn|abningstid|adresse|naermest|hvor kan|hvor koeber|afhent|store|shop|open|hours|address|nearest|near me|where can|where do|pick ?up|buy/.test(t)) {
     if (nearest) {
       return [{
         from: 'bot',
-        text: `Din nærmeste butik er ${nearest.store.name}, ${nearest.store.address}, ${nearest.store.zipCity}, cirka ${nearest.km < 10 ? nearest.km.toFixed(1) : Math.round(nearest.km)} km fra dig. Butikschefen hedder ${nearest.store.manager.name}.`,
+        text: `Your nearest store is ${nearest.store.name}, ${nearest.store.address}, ${nearest.store.zipCity}, about ${nearest.km < 10 ? nearest.km.toFixed(1) : Math.round(nearest.km)} km from you. The store manager is ${nearest.store.manager.name}.`,
         links: [
-          { label: 'Se på kortet', href: '/butikker' },
-          { label: 'Rutevejledning', href: nearest.store.maps, external: true },
+          { label: 'See on the map', href: '/butikker' },
+          { label: 'Directions', href: nearest.store.maps, external: true },
         ],
       }];
     }
     return [{
       from: 'bot',
-      text: 'STROXX sælges i 26 butikker over hele Danmark. Butiksoversigten kan finde den nærmeste for dig og vise åbningstider og direkte kontakt til butikschefen.',
-      links: [{ label: 'Find din butik', href: '/butikker' }],
+      text: 'STROXX is sold in 26 stores across Denmark. The store finder locates the nearest one and shows opening hours and a direct line to the store manager.',
+      links: [{ label: 'Find your store', href: '/butikker' }],
     }];
   }
 
@@ -79,25 +80,25 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
     return [{
       from: 'bot',
       text: hits.length === 1
-        ? 'Det her er nok det, du leder efter:'
-        : 'Jeg fandt et par bud i sortimentet:',
+        ? 'This is probably what you are after:'
+        : 'I found a few picks in the range:',
       products: hits,
     }];
   }
 
-  if (/pris|billig|spar|dyrt|koster/.test(t)) {
+  if (/pris|billig|spar|dyrt|koster|price|cheap|expensive|value|worth/.test(t)) {
     return [{
       from: 'bot',
-      text: 'Kort version: du betaler for værktøjet, ikke for logoet. Samme stål og samme tolerancer som A-mærkerne, typisk 40 til 50% billigere. Og kan du ikke mærke forskellen, dækker garantien.',
-      links: [{ label: 'Se hvorfor', href: '/proev-det' }],
+      text: 'Short version: you pay for the tool, not for the logo. Same steel and the same tolerances as the A-brands. And if you cannot tell the difference, the guarantee has your back.',
+      links: [{ label: 'See why', href: '/proev-det' }],
     }];
   }
-  if (/^(hej|hejsa|goddag|hallo|hey|dav)\b/.test(t)) {
-    return [{ from: 'bot', text: 'Hej! Spørg mig om produkter, priser, garantien eller butikkerne. Jeg svarer kort, vi er begge på arbejde.' }];
+  if (/^(hej|hejsa|goddag|hallo|hey|dav|hi|hello|yo)\b/.test(t)) {
+    return [{ from: 'bot', text: 'Hi! Ask me about products, the guarantee or the stores. I keep it short, we are both on the clock.' }];
   }
   return [{
     from: 'bot',
-    text: 'Det vil jeg ikke gætte på, det fortjener et rigtigt svar. Skal jeg sætte dig i kontakt med en specialist? Skriv "ja", så ordner jeg det.',
+    text: 'I would rather not guess on that, it deserves a real answer. Want me to put you through to a specialist? Type "yes" and I will sort it.',
     links: [],
     handoff: false,
   }];
@@ -105,7 +106,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
 
 export default function SpecialistChat({ nearest }: { nearest: { store: Store; km: number } | null }) {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: 'bot', text: 'Hej! Jeg er STROXX-assistenten. Spørg mig om produkter, garantien eller butikkerne, eller bed om et menneske når som helst.' },
+    { from: 'bot', text: 'Hi! I am the STROXX assistant. Ask me about products, the guarantee or the stores, or ask for a human any time.' },
   ]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -131,7 +132,7 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
   const brief = () => {
     const userLines = msgs.filter((m) => m.from === 'user').map((m) => m.text).slice(-4);
     return encodeURIComponent(
-      `Henvendelse fra stroxx.dk chatten. Kunden spurgte om: ${userLines.join(' · ') || 'generel forespørgsel'}. Tager du den?`
+      `Enquiry from the stroxx.dk chat. The customer asked about: ${userLines.join(' · ') || 'general enquiry'}. Can you take it?`
     );
   };
 
@@ -160,9 +161,6 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-[12px] text-white leading-snug line-clamp-2">{p.name}</span>
-                        <span className="block text-stroxx-blue text-[12px] font-semibold mt-0.5">
-                          {p.price} <span className="text-fog font-normal text-[10px]">DKK / {p.unit}</span>
-                        </span>
                       </span>
                       <ArrowUpRight size={13} className="shrink-0 text-fog group-hover:text-stroxx-blue transition-colors" />
                     </Link>
@@ -195,7 +193,7 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                       </div>
                       <div className="flex gap-1.5">
                         <a href={`tel:${ho.manager.phone}`} className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                          <Phone size={12} /> Ring nu
+                          <Phone size={12} /> Call now
                         </a>
                         <a href={`https://wa.me/45${ho.manager.phone}?text=${brief()}`} target="_blank" rel="noopener noreferrer"
                           className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white">
@@ -206,12 +204,12 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                   ) : (
                     <div className="flex gap-1.5">
                       <a href="tel:+4544855511" className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                        <Phone size={12} /> Kundeservice 44 85 55 11
+                        <Phone size={12} /> Customer service 44 85 55 11
                       </a>
                     </div>
                   )}
                   <div className="mt-2 text-[10px] text-fog leading-snug">
-                    Demo: i produktion overleveres samtalen automatisk, og specialisten ser resuméet før chatten fortsætter.
+                    Demo: in production the conversation is handed over automatically, and the specialist sees the summary before the chat continues.
                   </div>
                 </div>
               )}
@@ -249,8 +247,8 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Skriv dit spørgsmål"
-          aria-label="Skriv til assistenten"
+          placeholder="Write your question"
+          aria-label="Write to the assistant"
           className="flex-1 rounded-full bg-white/[0.05] border border-white/10 px-4 py-2.5 text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 transition-colors"
         />
         <button type="submit" aria-label="Send"

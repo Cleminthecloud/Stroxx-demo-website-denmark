@@ -5,17 +5,17 @@ import type { MetadataRoute } from 'next';
  *  choice: offline support is a production decision, installability is free. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'STROXX — Dyrt værktøj til udyr pris',
+    name: 'STROXX | Premium tools, beastly low prices',
     short_name: 'STROXX',
     description:
-      'Professionelt værktøj uden mærke-tillæg. Find produkter, priser og din nærmeste butik.',
+      'Professional tools without the brand markup. Find products and your nearest store.',
     id: '/',
     start_url: '/',
     display: 'standalone',
     orientation: 'portrait',
     background_color: '#0B0C0E',
     theme_color: '#0B0C0E',
-    lang: 'da',
+    lang: 'en',
     categories: ['shopping', 'business'],
     icons: [
       { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
@@ -23,9 +23,9 @@ export default function manifest(): MetadataRoute.Manifest {
       { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
-      { name: 'Find butik', url: '/butikker', description: 'Nærmeste STROXX-forhandler' },
-      { name: 'Produkter', url: '/produkter', description: 'Hele sortimentet' },
-      { name: 'Prøv det', url: '/proev-det', description: 'Kampagne og garanti' },
+      { name: 'Find a store', url: '/butikker', description: 'Nearest STROXX dealer' },
+      { name: 'Products', url: '/produkter', description: 'The full range' },
+      { name: 'Try It', url: '/proev-det', description: 'Campaign and guarantee' },
     ],
   };
 }

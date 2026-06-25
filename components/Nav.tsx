@@ -7,13 +7,13 @@ import BuyButton from '@/components/BuyButton';
 import { brandImages, CR_BRAND, UTM } from '@/lib/data';
 
 const LINKS = [
-  { href: '/maanedens', label: 'Månedens værktøj' },
-  { href: '/produkter', label: 'Produkter' },
-  { href: '/butikker', label: 'Butikker' },
-  { href: '/butikker?tab=specialister', label: 'Specialister' },
-  { href: '/fag', label: 'Fagområder' },
-  { href: '/proev-det', label: 'Prøv det' },
-  { href: '/service', label: 'Service og support' },
+  { href: '/maanedens', label: 'Tool of the Month' },
+  { href: '/produkter', label: 'Products' },
+  { href: '/butikker', label: 'Stores' },
+  { href: '/butikker?tab=specialister', label: 'Specialists' },
+  { href: '/fag', label: 'Trades' },
+  { href: '/proev-det', label: 'Try It' },
+  { href: '/service', label: 'Service and Support' },
 ];
 
 export default function Nav() {
@@ -64,7 +64,7 @@ export default function Nav() {
         }}
       >
         <div className="flex h-full flex-col px-6 pt-28 pb-10 overflow-y-auto">
-          <nav className="flex flex-col gap-1" aria-label="Mobilmenu">
+          <nav className="flex flex-col gap-1" aria-label="Mobile menu">
             {LINKS.map((l, i) => (
               <Link
                 key={l.label}
@@ -93,7 +93,7 @@ export default function Nav() {
             }}
           >
             <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
-              <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Kundeservice 44 85 55 11
+              <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Customer service 44 85 55 11
             </a>
             <BuyButton href={`${CR_BRAND}/?${UTM}`} className="w-full justify-center" />
           </div>
@@ -122,10 +122,10 @@ export default function Nav() {
             />
           </Link>
           <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">
-            <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Månedens værktøj</Link>
-            <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Produkter</Link>
-            <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Butikker</Link>
-            <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialister</Link>
+            <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Tool of the Month</Link>
+            <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Products</Link>
+            <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Stores</Link>
+            <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialists</Link>
             {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
                 utilities in the cascade, so `hidden` directly on it loses */}
             <span className="hidden sm:inline-flex">
@@ -137,7 +137,7 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-menu"
-              aria-label={open ? 'Luk menu' : 'Åbn menu'}
+              aria-label={open ? 'Close menu' : 'Open menu'}
               className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.12] text-white bg-white/[0.04]"
             >
               {open ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}

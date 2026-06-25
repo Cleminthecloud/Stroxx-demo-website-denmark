@@ -11,6 +11,7 @@ import { stores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores
  *  bottom sheet on mobile). Data: Webflow CMS snapshot in lib/stores. */
 
 const REGIONS: ('Alle' | StoreRegion)[] = ['Alle', 'Sjælland', 'Fyn', 'Jylland'];
+const REGION_LABEL: Record<string, string> = { Alle: 'All', Sjælland: 'Zealand', Fyn: 'Funen', Jylland: 'Jutland' };
 const PANEL_W = 464; // desktop panel + margin, used to offset map focus
 const SHEET_H = 240; // collapsed mobile sheet height, used to offset map focus
 
@@ -190,7 +191,7 @@ export default function StoreFinder() {
         icon: leaflet.divIcon({ className: '', iconSize: [18, 18], iconAnchor: [9, 9], html: '<div class="sf-me"></div>' }),
         title,
       }).addTo(userMarker.current!);
-    if (pos) mk(pos.lat, pos.lng, 'Din placering');
+    if (pos) mk(pos.lat, pos.lng, 'Your location');
     if (searchPos) mk(searchPos.lat, searchPos.lng, searchPos.label);
   }, [pos, searchPos, ready]);
 
@@ -246,7 +247,7 @@ export default function StoreFinder() {
   return (
     <div className="relative h-[100svh] w-full overflow-hidden bg-ink">
       {/* full-bleed map */}
-      <div ref={mapEl} data-lenis-prevent aria-label="Kort over butikker" className="absolute inset-0 isolate" />
+      <div ref={mapEl} data-lenis-prevent aria-label="Map of stores" className="absolute inset-0 isolate" />
 
       {/* scrim so the fixed nav stays legible over map tiles */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 z-[5]" style={{
@@ -262,18 +263,18 @@ export default function StoreFinder() {
         {/* mobile grab handle */}
         <button
           onClick={() => setExpanded((e) => !e)}
-          aria-label={expanded ? 'Skjul liste' : 'Vis liste'}
+          aria-label={expanded ? 'Hide list' : 'Show list'}
           className="lg:hidden shrink-0 w-full pt-2.5 pb-1.5 grid place-items-center cursor-pointer"
         >
           <span className="h-1 w-10 rounded-full bg-white/25" />
         </button>
 
         <div className="px-5 lg:px-6 lg:pt-6 pb-3 shrink-0">
-          <div className="hidden lg:block eyebrow mb-2">Butikker · Danmark</div>
+          <div className="hidden lg:block eyebrow mb-2">Stores · Denmark</div>
           <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
             {tab === 'specialister'
-              ? 'Snak med folk, der selv bruger værktøjet.'
-              : 'Tag værktøjet i hånden, før du køber det.'}
+              ? 'Talk to people who use the tools themselves.'
+              : 'Get the tool in your hand before you buy it.'}
           </h1>
 
           {/* tabs */}
@@ -288,7 +289,7 @@ export default function StoreFinder() {
                     : 'text-fog hover:text-white'
                 }`}
               >
-                {t === 'butikker' ? 'Butikker' : 'Specialister'}
+                {t === 'butikker' ? 'Stores' : 'Specialists'}
               </button>
             ))}
           </div>
@@ -300,12 +301,12 @@ export default function StoreFinder() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onFocus={() => { if (!isLg()) setExpanded(true); }}
-              placeholder="Søg by, postnummer eller butik"
-              aria-label="Søg butik"
+              placeholder="Search city, postcode or store"
+              aria-label="Search store"
               className="w-full rounded-full bg-white/[0.05] border border-white/10 pl-10 pr-10 py-2.5 text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 focus:bg-white/[0.07] transition-colors"
             />
             {q && (
-              <button onClick={() => setQ('')} aria-label="Ryd søgning"
+              <button onClick={() => setQ('')} aria-label="Clear search"
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-fog hover:text-white transition-colors">
                 <X size={14} />
               </button>
@@ -315,25 +316,25 @@ export default function StoreFinder() {
           {/* filters */}
           <div data-lenis-prevent className="flex items-center gap-2 overflow-x-auto sf-scroll pb-1 mb-1.5">
             {REGIONS.map((r) => (
-              <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{r}</button>
+              <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{REGION_LABEL[r] ?? r}</button>
             ))}
             {tab === 'butikker' && (
               <>
                 <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
-                <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Sikring</button>
+                <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Security</button>
               </>
             )}
             <button onClick={locate} disabled={locating}
               className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
               <LocateFixed size={12} className={locating ? 'animate-spin' : ''} />
-              {pos ? 'Nærmeste først' : locating ? 'Finder dig…' : 'Nær mig'}
+              {pos ? 'Nearest first' : locating ? 'Finding you…' : 'Near me'}
             </button>
           </div>
 
           <div className="text-[11px] text-fog">
             {searchPos
-              ? <>Ingen butik i <span className="text-white">{searchPos.label}</span>, nærmeste vises først</>
-              : <>{filtered.length} {filtered.length === 1 ? 'butik' : 'butikker'}{region !== 'Alle' ? ` · ${region}` : ' i hele Danmark'}</>}
+              ? <>No store in <span className="text-white">{searchPos.label}</span>, nearest shown first</>
+              : <>{filtered.length} {filtered.length === 1 ? 'store' : 'stores'}{region !== 'Alle' ? ` · ${REGION_LABEL[region] ?? region}` : ' across Denmark'}</>}
           </div>
         </div>
 
@@ -341,11 +342,11 @@ export default function StoreFinder() {
         <div data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto sf-scroll px-4 lg:px-5 pb-5 space-y-3">
           {filtered.length === 0 && (
             <div className="glass rounded-xl p-8 text-center">
-              <p className="text-white mb-2">Ingen butikker matcher.</p>
+              <p className="text-white mb-2">No stores match.</p>
               <button
                 onClick={() => { setQ(''); setRegion('Alle'); setFestool(false); setSikring(false); }}
                 className="text-stroxx-blue text-sm hover:underline cursor-pointer">
-                Nulstil filtre
+                Reset filters
               </button>
             </div>
           )}
@@ -373,7 +374,7 @@ export default function StoreFinder() {
                       className="h-14 w-14 rounded-full object-cover border border-white/15 shrink-0" />
                     <div className="min-w-0">
                       <div className="text-white font-medium leading-snug">{s.manager.name}</div>
-                      <div className="text-fog text-[12px]">Butikschef · {s.name}</div>
+                      <div className="text-fog text-[12px]">Store manager · {s.name}</div>
                       <div className="text-fog text-[12px] mt-0.5">
                         {s.address}, {s.zipCity}
                         {km !== null && (
@@ -385,7 +386,7 @@ export default function StoreFinder() {
                   <div className="flex gap-2">
                     <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()}
                       className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                      <Phone size={12} /> Ring
+                      <Phone size={12} /> Call
                     </a>
                     <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()}
                       className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white">
@@ -425,7 +426,7 @@ export default function StoreFinder() {
                   <a
                     href={s.maps} target="_blank" rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    aria-label={`Rutevejledning til ${s.name}`}
+                    aria-label={`Directions to ${s.name}`}
                     className="shrink-0 grid h-9 w-9 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors"
                   >
                     <MapPin size={15} />
@@ -439,8 +440,8 @@ export default function StoreFinder() {
 
                 {(s.festool || s.sikring || s.aktive3) && (
                   <div className="flex flex-wrap gap-1.5 mb-2.5">
-                    {s.festool && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Festool shop i shop</span>}
-                    {s.sikring && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Sikring</span>}
+                    {s.festool && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Festool shop in shop</span>}
+                    {s.sikring && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">Security</span>}
                     {s.aktive3 && <span className="text-[10px] tracking-wide uppercase px-2 py-0.5 rounded-sm bg-white/[0.07] border border-white/10 text-fog">3Aktive</span>}
                   </div>
                 )}
@@ -454,20 +455,20 @@ export default function StoreFinder() {
                         className="h-11 w-11 rounded-full object-cover border border-white/15" />
                       <div className="min-w-0">
                         <div className="text-[13px] text-white leading-tight">{s.manager.name}</div>
-                        <div className="text-[11px] text-fog">Butikschef</div>
+                        <div className="text-[11px] text-fog">Store manager</div>
                       </div>
                       <div className="ml-auto flex items-center gap-2">
-                        <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()} aria-label={`Ring til ${s.manager.name}`}
+                        <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()} aria-label={`Call ${s.manager.name}`}
                           className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
                           <Phone size={13} />
                         </a>
-                        <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()} aria-label={`Skriv til ${s.manager.name}`}
+                        <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()} aria-label={`Email ${s.manager.name}`}
                           className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
                           <Mail size={13} />
                         </a>
                         <a href={s.maps} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center gap-1 text-[12px] text-stroxx-blue hover:underline pl-1">
-                          Rute <ArrowUpRight size={12} />
+                          Route <ArrowUpRight size={12} />
                         </a>
                       </div>
                     </div>

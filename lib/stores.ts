@@ -35,7 +35,7 @@ export const clock = (n: number) => {
 };
 
 export const hoursLabel = (s: Store) =>
-  `Man-tors ${clock(s.monThu[0])}-${clock(s.monThu[1])} · Fre ${clock(s.fri[0])}-${clock(s.fri[1])}`;
+  `Mon-Thu ${clock(s.monThu[0])}-${clock(s.monThu[1])} · Fri ${clock(s.fri[0])}-${clock(s.fri[1])}`;
 
 /** Great-circle distance in km */
 export const distanceKm = (aLat: number, aLng: number, bLat: number, bLng: number) => {

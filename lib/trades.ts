@@ -16,96 +16,96 @@ export type Trade = {
 export const trades: Trade[] = [
   {
     slug: 'toemrer',
-    name: 'Tømrer og snedker',
-    title: 'Til dig, der bygger i træ.',
-    accent: 'i træ.',
+    name: 'Carpenter and joiner',
+    title: 'For the ones who build in wood.',
+    accent: 'in wood.',
     blurb:
-      'Klinger der holder kanten, bor der ikke vandrer, og mål der passer i begge ender. Værktøjet til træfolket, uden mærke-tillæg.',
+      'Blades that hold their edge, drills that do not wander, and measurements that line up at both ends. The kit for woodworkers, with no badge premium.',
     categories: ['rundsavklinger', 'bor-borsaet', 'bits-skruetraekkere', 'maalevaerktoej', 'knive', 'lasere'],
     faq: [
       {
-        q: 'Hvilket STROXX-værktøj bruger tømrere mest?',
-        a: 'Rundsavklinger til træ og laminat, træbor og borsæt, slagfaste bits, vaterpas og vinkler samt knive med autolås. Alt sammen professionel kvalitet uden mærke-tillæg, til priser fra under 50 kr.',
+        q: 'Which STROXX tools do carpenters reach for most?',
+        a: 'Circular saw blades for wood and laminate, wood drills and drill sets, impact bits, levels and squares, plus knives with auto-lock. All professional quality, no badge premium.',
       },
       {
-        q: 'Holder en rundsavklinge til en lavere pris virkelig?',
-        a: 'Tolerancer, hårdmetal og tandgeometri afgør kvaliteten, ikke logoet. Derfor får du 30 dages tilfredshedsgaranti: brug klingen på rigtigt arbejde, og er du ikke tilfreds, får du pengene tilbage hos Carl Ras.',
+        q: 'Does a lower-priced circular saw blade really hold up?',
+        a: 'Tolerances, carbide and tooth geometry decide the quality, not the logo. That is why you get a 30-day satisfaction guarantee: put the blade to work on real jobs, and if you are not happy, you get your money back at Carl Ras.',
       },
     ],
   },
   {
     slug: 'elektriker',
-    name: 'Elektriker',
-    title: 'Strøm på arbejdet. Ikke på prisen.',
-    accent: 'Ikke på prisen.',
+    name: 'Electrician',
+    title: 'Power on the job. Not on the price.',
+    accent: 'Not on the price.',
     blurb:
-      'Hulsave til dåser, bits der bider, kabeltromler der holder til pladsen og lys, der gør natarbejde til dagarbejde.',
+      'Hole saws for back boxes, bits that bite, cable reels that survive the site, and light that turns night work into day work.',
     categories: ['hulsave', 'bits-skruetraekkere', 'kabeltromler', 'belysning', 'multicutterklinger', 'maalevaerktoej'],
     faq: [
       {
-        q: 'Hvilket STROXX-værktøj er mest relevant for elektrikere?',
-        a: 'Hulsavsæt til dåser og gennemføringer (19-83 mm), slagfaste bits og bitsholdere, kabeltromler, arbejdslamper og pandelamper samt multicutterklinger. Købes hos Carl Ras i 26 butikker eller online.',
+        q: 'Which STROXX tools matter most to electricians?',
+        a: 'Hole saw sets for back boxes and pass-throughs (19 to 83 mm), impact bits and bit holders, cable reels, work lights and head torches, plus multi-tool blades. Available at Carl Ras across 26 stores or online.',
       },
       {
-        q: 'Findes der et hulsavsæt målrettet el-arbejde?',
-        a: 'Ja, STROXX har et HSS bimetal hulsavsæt til elektrikere med 13 dele fra 19 til 83 mm, der dækker de gængse dåse- og rørdimensioner. Det er omfattet af 30 dages tilfredshedsgaranti.',
+        q: 'Is there a hole saw set built for electrical work?',
+        a: 'Yes. STROXX has an HSS bi-metal hole saw set for electricians with 13 pieces from 19 to 83 mm, covering the common box and conduit dimensions. It is backed by the 30-day satisfaction guarantee.',
       },
     ],
   },
   {
     slug: 'vvs',
-    name: 'VVS og blik',
-    title: 'Tæt arbejde. Tætte priser.',
-    accent: 'Tætte priser.',
+    name: 'Plumber',
+    title: 'Tight work. Tight prices.',
+    accent: 'Tight prices.',
     blurb:
-      'Topnøgler der griber, hulsave til gennemføringer, fugemasse der tætner og måleværktøj du kan stole på i en våd kælder.',
+      'Socket sets that grip, hole saws for pass-throughs, sealant that seals, and measuring tools you can trust in a wet basement.',
     categories: ['topnoegler', 'hulsave', 'bor-borsaet', 'fugemasse', 'maalevaerktoej', 'knive'],
     faq: [
       {
-        q: 'Hvad har STROXX til VVS og blik?',
-        a: 'Topnøglesæt i 1/4", 3/8" og 1/2", hulsave til gennemføringer, metalbor, fugemasse og fugepistoler samt torpedo-vaterpas, der kan stå fast på rør. Alt købes hos Carl Ras.',
+        q: 'What does STROXX have for plumbers?',
+        a: 'Socket sets in 1/4", 3/8" and 1/2", hole saws for pass-throughs, metal drills, sealant and caulk guns, plus torpedo levels that sit firm on pipe. All available at Carl Ras.',
       },
       {
-        q: 'Kan jeg prøve et topnøglesæt af, før jeg beslutter mig?',
-        a: 'Ja. Med 30 dages tilfredshedsgaranti kan du bruge sættet på rigtigt arbejde i en måned. Er grebet eller skraldet ikke som forventet, afleverer du det i din Carl Ras butik og får pengene tilbage.',
+        q: 'Can I try a socket set before I commit?',
+        a: 'Yes. With the 30-day satisfaction guarantee you can put the set to work on real jobs for a month. If the grip or the ratchet is not what you expected, hand it back at your Carl Ras store and get your money back.',
       },
     ],
   },
   {
     slug: 'maler',
-    name: 'Maler',
-    title: 'Rene linjer. Ren samvittighed.',
-    accent: 'Ren samvittighed.',
+    name: 'Painter',
+    title: 'Clean lines. Clear conscience.',
+    accent: 'Clear conscience.',
     blurb:
-      'Ruller, pensler, tape og kemi til et resultat, kunden kan spejle sig i. Og knive til alt det, der skal skæres rent først.',
+      'Rollers, brushes, tape and chemicals for a finish the customer can see themselves in. And knives for everything that needs a clean cut first.',
     categories: ['malergrej', 'tape', 'kemi', 'fugemasse', 'knive'],
     faq: [
       {
-        q: 'Hvad dækker STROXX malergrej over?',
-        a: 'Ruller, pensler, malertape, afdækning, fugemasse og kemi som rens og sprayprodukter, plus skarpe knive til tilskæring. Professionel kvalitet til en pris, der ikke æder dækningsbidraget.',
+        q: 'What does STROXX painting gear cover?',
+        a: 'Rollers, brushes, masking tape, sheeting, sealant and chemicals like cleaners and sprays, plus sharp knives for trimming. Professional quality at a price that does not eat your margin.',
       },
       {
-        q: 'Er billig malertape ikke lig med vedhæftningsproblemer?',
-        a: 'Prisen siger ikke noget om klæberen. STROXX tape er lavet til at klæbe rent og slippe rent, og du kan teste den på en hel opgave i 30 dage. Ikke tilfreds? Pengene tilbage hos Carl Ras.',
+        q: 'Does cheap masking tape not mean adhesion problems?',
+        a: 'Price says nothing about the adhesive. STROXX tape is made to stick clean and release clean, and you can test it on a whole job for 30 days. Not happy? Money back at Carl Ras.',
       },
     ],
   },
   {
     slug: 'murer',
-    name: 'Murer og beton',
-    title: 'Hårdt underlag. Blød pris.',
-    accent: 'Blød pris.',
+    name: 'Bricklayer',
+    title: 'Hard ground. Soft price.',
+    accent: 'Soft price.',
     blurb:
-      'Murbor og hammerbor der æder beton, lasere der sætter linjen, og sikkerhedsudstyr så du kommer hel hjem.',
+      'Masonry and hammer drills that chew through concrete, lasers that set the line, and safety gear so you get home in one piece.',
     categories: ['bor-borsaet', 'lasere', 'maalevaerktoej', 'sikkerhed', 'kemi'],
     faq: [
       {
-        q: 'Hvilket STROXX-værktøj passer til murer- og betonarbejde?',
-        a: 'SDS hammerbor med 2 og 4 skær, murbor og multiconstruction-bor, rotations- og streglasere til linjer og koter, vaterpas samt sikkerhedsudstyr som hjelme, briller og handsker.',
+        q: 'Which STROXX tools suit bricklaying and concrete work?',
+        a: 'SDS hammer drills with 2 and 4 cutting edges, masonry and multi-construction drills, rotary and line lasers for lines and levels, levels, plus safety gear like helmets, glasses and gloves.',
       },
       {
-        q: 'Holder budget-hammerbor i armeret beton?',
-        a: 'STROXX SDS-bor fås med 4 skær netop til armeret beton. Og du behøver ikke tro på det: brug dem i 30 dage på pladsen, og få pengene tilbage hos Carl Ras, hvis de ikke leverer.',
+        q: 'Do budget hammer drills hold up in reinforced concrete?',
+        a: 'STROXX SDS drills come with 4 cutting edges made for exactly that, reinforced concrete. And you do not have to take our word for it: run them on site for 30 days, and get your money back at Carl Ras if they do not deliver.',
       },
     ],
   },

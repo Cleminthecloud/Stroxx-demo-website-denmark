@@ -11,11 +11,11 @@ import ProClubSignup from '@/components/ProClubSignup';
 import { Hammer, Wallet, ShieldCheck, Phone, Mail, ArrowRight } from 'lucide-react';
 import { Product, Specialist, toolTexture } from '@/lib/data';
 
-// Carl Ras splash colours — match the real badges on carl-ras.dk
+// Carl Ras splash colours, matched to the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
-  'BLÅ PRIS': 'bg-[#0072BC] text-white', 'POPULÆR': 'bg-[#002C5F] text-white',
-  'KAMPAGNE': 'bg-[#EE7F00] text-white', 'BEST I TEST': 'bg-white text-ink',
-  'NYHED': 'bg-[#0072BC] text-white', 'OUTLET': 'bg-[#5A6473] text-white', 'MILJØ': 'bg-[#4C9A2A] text-white',
+  'VALUE': 'bg-[#0072BC] text-white', 'POPULAR': 'bg-[#002C5F] text-white',
+  'CAMPAIGN': 'bg-[#EE7F00] text-white', 'BEST IN TEST': 'bg-white text-ink',
+  'NEW': 'bg-[#0072BC] text-white', 'OUTLET': 'bg-[#5A6473] text-white', 'ECO': 'bg-[#4C9A2A] text-white',
 };
 
 type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };
@@ -156,24 +156,22 @@ export default function ProductExperience({
       <h1 className="h-display text-white text-[clamp(2rem,4.4vw,3.6rem)] leading-[0.98] mb-5">{product.name}</h1>
       {product.blurb && <p className="text-fog text-lg leading-relaxed mb-7 max-w-md">{product.blurb}</p>}
       <div className="mb-8">
-        <div className="h-display text-white text-4xl">{product.price}</div>
         <div className="mt-1.5 flex flex-wrap items-baseline gap-x-6 gap-y-1 text-fog text-sm">
-          <span>DKK inkl. moms / {product.unit}</span>
-          {product.code && <span>Varenr: <span className="text-white">{product.code}</span></span>}
+          {product.code && <span>Item no: <span className="text-white">{product.code}</span></span>}
         </div>
       </div>
       <div className="flex flex-wrap gap-3 mb-6">
-        <GlassButton href={buyUrl} external>Køb hos Carl Ras <ArrowRight size={16} /></GlassButton>
-        <GlassButton href="#specifikationer" variant="ghost">Tekniske specs</GlassButton>
+        <GlassButton href={buyUrl} external>Buy at Carl Ras <ArrowRight size={16} /></GlassButton>
+        <GlassButton href="#specifikationer" variant="ghost">Technical specs</GlassButton>
       </div>
-      <div className="flex items-center gap-2 text-sm text-fog"><span className="h-2 w-2 rounded-full bg-green-500" /> 100% tilfredsgaranti · købet sker hos Carl Ras</div>
+      <div className="flex items-center gap-2 text-sm text-fog"><span className="h-2 w-2 rounded-full bg-green-500" /> 100% satisfaction guarantee · purchase happens at Carl Ras</div>
     </>
   );
 
   const usps = [
-    { icon: Hammer, title: 'Pro-kvalitet', body: 'Der er kælet for detaljerne: funktion, form, pålidelighed og effektivitet. Bygget til at blive brugt.' },
-    { icon: Wallet, title: 'Skarp pris', body: `${product.price} DKK. Samme følelse som de dyre mærker, bare uden mærke-tillægget.` },
-    { icon: ShieldCheck, title: '100% tilfredsgaranti', body: 'Ikke tilfreds? Pengene tilbage. Så er der ikke så meget at tænke over. Bare at komme i gang.' },
+    { icon: Hammer, title: 'Pro quality', body: 'Every detail is dialed in: function, form, reliability and efficiency. Built to be used.' },
+    { icon: Wallet, title: 'Sharp value', body: 'The same feel as the premium brands, just without the brand markup.' },
+    { icon: ShieldCheck, title: '100% satisfaction guarantee', body: 'Not happy? Money back. So there is nothing to think over. Just get going.' },
   ];
 
   const Specs = (
@@ -183,18 +181,18 @@ export default function ProductExperience({
           <div key={s.label + i} className={`flex justify-between gap-6 px-5 py-3.5 text-sm ${i % 2 ? 'bg-white/[0.045]' : 'bg-transparent'}`}>
             <span className="text-fog">{s.label}</span><span className="text-white font-medium text-right">{s.value}</span>
           </div>
-        )) : <div className="px-5 py-4 text-fog text-sm">Specifikationer følger.</div>}
+        )) : <div className="px-5 py-4 text-fog text-sm">Specifications to follow.</div>}
         <div className="flex justify-between gap-6 px-5 py-3.5 text-sm bg-white/[0.02] border-t border-white/10">
-          <span className="text-fog">Varenummer</span><span className="text-white font-medium">{product.code}</span>
+          <span className="text-fog">Item number</span><span className="text-white font-medium">{product.code}</span>
         </div>
       </div>
-      <p className="text-fog/60 text-xs mt-3">Specs synkroniseres fra Carl Ras / Digizuite PIM i den endelige løsning.</p>
+      <p className="text-fog/60 text-xs mt-3">Specs sync from Carl Ras / Digizuite PIM in the final solution.</p>
     </Reveal>
   );
 
   const Review = (
     <div className="text-center">
-      <Reveal><div className="eyebrow mb-8">Anbefalet af specialisterne</div></Reveal>
+      <Reveal><div className="eyebrow mb-8">Recommended by the specialists</div></Reveal>
       <Reveal delay={80}><blockquote className="h-display text-white text-[clamp(1.6rem,3.4vw,2.6rem)] leading-[1.12] mb-10">“{spec.quote}”</blockquote></Reveal>
       <Reveal delay={160}>
         <div className="flex items-center justify-center gap-4">
@@ -202,7 +200,7 @@ export default function ProductExperience({
           <img src={spec.photo} alt={spec.name} className="h-12 w-12 rounded-full object-cover grayscale" />
           <div className="text-left"><div className="text-white text-sm">{spec.name}</div><div className="text-fog text-xs">{spec.role} · {spec.location}</div></div>
           <div className="flex gap-2 ml-2">
-            <GlassLink href={`tel:+45${spec.phone}`} label="Ring"><Phone size={15} strokeWidth={2} className="relative" /></GlassLink>
+            <GlassLink href={`tel:+45${spec.phone}`} label="Call"><Phone size={15} strokeWidth={2} className="relative" /></GlassLink>
             <GlassLink href={`mailto:${spec.email}`} label="Email"><Mail size={15} strokeWidth={2} className="relative" /></GlassLink>
           </div>
         </div>
@@ -212,8 +210,8 @@ export default function ProductExperience({
 
   const SellingPoints = (
     <>
-      <Reveal><div className="eyebrow mb-5">Hvorfor det er STROXX</div></Reveal>
-      <ScrollText as="h2" text={'Samme følelse.\nLangt fra prisen.'} className="h-display text-white text-[clamp(1.8rem,4vw,3.4rem)] leading-[0.95] mb-10" />
+      <Reveal><div className="eyebrow mb-5">Why it is STROXX</div></Reveal>
+      <ScrollText as="h2" text={'Same feel.\nFar from the price.'} className="h-display text-white text-[clamp(1.8rem,4vw,3.4rem)] leading-[0.95] mb-10" />
       <div className="grid gap-5">
         {usps.map((u, i) => (
           <Reveal key={u.title} delay={i * 90} from="left">
@@ -234,8 +232,8 @@ export default function ProductExperience({
       <div className="pointer-events-none absolute inset-x-0 top-0 -translate-y-full h-[55vh] bg-gradient-to-b from-transparent to-ink" />
       <div className="mx-auto max-w-[1400px] px-5 md:px-10 py-24">
         <Reveal className="mb-10 flex items-end justify-between gap-6">
-          <h2 className="h-display text-white text-[clamp(1.6rem,3vw,2.4rem)]">Relateret STROXX-værktøj</h2>
-          <Link href={`/produkter?cat=${categorySlug}`} className="link-arrow hidden sm:inline-flex shrink-0">Se hele kategorien <ArrowRight size={15} /></Link>
+          <h2 className="h-display text-white text-[clamp(1.6rem,3vw,2.4rem)]">Related STROXX tools</h2>
+          <Link href={`/produkter?cat=${categorySlug}`} className="link-arrow hidden sm:inline-flex shrink-0">See the whole category <ArrowRight size={15} /></Link>
         </Reveal>
         <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
           {related.map((p, i) => (<Reveal key={p.slug} delay={(i % 4) * 70}><ProductCard product={p} /></Reveal>))}
@@ -268,10 +266,9 @@ export default function ProductExperience({
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 14px 34px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.16)' }}>
           <span className="text-left leading-tight">
             <span className="block text-white text-[13px] font-medium truncate max-w-[190px]">{product.name}</span>
-            <span className="block h-display text-white text-lg leading-none tabular-nums mt-0.5">{product.price}<span className="text-fog text-xs ml-1">kr</span></span>
           </span>
           <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-stroxx-blue px-3.5 py-2.5 text-xs font-semibold text-white transition-colors group-hover:bg-[#006aa8]">
-            Køb <ArrowRight size={14} strokeWidth={2} />
+            Buy <ArrowRight size={14} strokeWidth={2} />
           </span>
         </a>
       </div>
@@ -287,7 +284,7 @@ export default function ProductExperience({
         <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
         <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
         <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>
-        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifikationer</div></Reveal><ScrollText as="h2" text="Tallene bag værktøjet." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup /></div></div></div></section>
+        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifications</div></Reveal><ScrollText as="h2" text="The numbers behind the tool." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup /></div></div></div></section>
       </div>
 
       {Related}
@@ -301,11 +298,10 @@ export default function ProductExperience({
         <div className="glass-panel rounded-2xl flex items-center gap-3 px-4 py-3">
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block text-white text-sm font-medium truncate">{product.name}</span>
-            <span className="block h-display text-white text-lg leading-none tabular-nums mt-0.5">{product.price}<span className="text-fog text-xs ml-1">kr</span></span>
           </span>
           <a href={buyUrl} target="_blank" rel="noopener noreferrer"
             className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-stroxx-blue px-5 py-2.5 text-sm font-semibold text-white">
-            Køb <ArrowRight size={15} strokeWidth={2} />
+            Buy <ArrowRight size={15} strokeWidth={2} />
           </a>
         </div>
       </div>

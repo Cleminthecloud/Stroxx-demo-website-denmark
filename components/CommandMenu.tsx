@@ -10,14 +10,14 @@ import { Mail, CalendarRange, ArrowRight } from 'lucide-react';
 const PAGES = [
   {
     href: '/email-skabeloner',
-    label: 'E-mail skabeloner',
-    desc: 'Marketo templates i device-mockups',
+    label: 'Email templates',
+    desc: 'Marketo templates in device mockups',
     icon: Mail,
   },
   {
     href: '/plan',
-    label: 'Projektplan',
-    desc: 'Leverancer og tidslinje',
+    label: 'Project plan',
+    desc: 'Deliverables and timeline',
     icon: CalendarRange,
   },
 ];
@@ -73,11 +73,11 @@ export default function CommandMenu() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[18vh]" role="dialog" aria-modal="true" aria-label="Interne sider">
-      <button aria-label="Luk" className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" onClick={() => setOpen(false)} />
+    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[18vh]" role="dialog" aria-modal="true" aria-label="Internal pages">
+      <button aria-label="Close" className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" onClick={() => setOpen(false)} />
       <div className="glass-panel relative w-full max-w-md rounded-2xl p-2 shadow-2xl">
         <div className="flex items-center justify-between px-4 pb-2 pt-3">
-          <span className="eyebrow">Interne sider</span>
+          <span className="eyebrow">Internal pages</span>
           <kbd className="rounded border border-line px-1.5 py-0.5 text-[10px] text-fog">esc</kbd>
         </div>
         {PAGES.map((p, i) => (
@@ -103,7 +103,7 @@ export default function CommandMenu() {
             <ArrowRight size={15} className={i === active ? 'text-stroxx-blue' : 'text-fog/40'} />
           </button>
         ))}
-        <div className="px-4 pb-2.5 pt-2 text-[11px] text-fog/50">↑↓ vælg · enter åbn · ⌘K luk</div>
+        <div className="px-4 pb-2.5 pt-2 text-[11px] text-fog/50">↑↓ select · enter open · ⌘K close</div>
       </div>
     </div>
   );

@@ -1,14 +1,13 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { bagTools, formatDKK } from '@/lib/data';
 import { TOOLS, PANEL, FRONT_PANEL, BAG_BACK, BAG_AR } from '@/components/BagFill';
 
 /* ──────────────────────────────────────────────────────────────────────────
    Homepage hero bag. It FALLS in from the viewer's POV (dust puff + impact
    shake), settles in the hero, and ALL the tools cascade into it on load.
    No scroll journey — the bag lives in the hero and scrolls away with the
-   page. Geometry (BAG_AR, TOOLS, panel positions, price) is shared from
-   BagFill so the bag stays consistent. The price tag tallies the tools as
+   page. Geometry (BAG_AR, TOOLS, panel positions) is shared from
+   BagFill so the bag stays consistent. The tag tallies the tools as
    they land.
    ────────────────────────────────────────────────────────────────────────── */
 
@@ -150,8 +149,6 @@ export default function BagJourney() {
     return () => { cancelAnimationFrame(raf); removeEventListener('resize', sizeDust); };
   }, []);
 
-  const total = TOOLS.slice(0, landed).reduce((s, t) => s + (bagTools.find((b) => b.id === t.id)?.price ?? 0), 0);
-
   // The bag lives IN the hero: absolute, full-height of the hero, scrolls away
   // with the page. pointer-events-none so it never blocks the content.
   return (
@@ -188,19 +185,16 @@ export default function BagJourney() {
         <img src={FRONT_PANEL} alt="" className="absolute select-none"
           style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
-        {/* price tag — tallies the tools as they land */}
+        {/* tool tag — tallies the tools as they land */}
         <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
           <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
             style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)' }}>
-            <div className="text-[10px] uppercase tracking-[0.16em] text-fog/90 mb-1">I posen</div>
+            <div className="text-[10px] uppercase tracking-[0.16em] text-fog/90 mb-1">In the bag</div>
             <div className="h-display text-white text-2xl leading-none tabular-nums">
-              {formatDKK(total)}<span className="text-fog text-xs ml-1">kr</span>
+              {landed}<span className="text-fog text-base ml-1">/ {TOOLS.length}</span>
             </div>
-            <div className="mt-1.5 text-[11px] tracking-wide">
-              <span className="text-stroxx-blue font-semibold tabular-nums">{landed}</span>
-              <span className="text-fog/70"> / {TOOLS.length} værktøjer</span>
-            </div>
+            <div className="mt-1.5 text-[11px] tracking-wide text-fog/70">tools</div>
           </div>
         </div>
       </div>

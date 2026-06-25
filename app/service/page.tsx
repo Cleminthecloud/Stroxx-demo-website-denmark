@@ -6,9 +6,9 @@ import Faq from '@/components/Faq';
 import { ArrowRight, FileText, Phone, RotateCcw, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Service og support',
+  title: 'Service and Support',
   description:
-    'Alt det praktiske samlet ét sted: STROXX 30 dages tilfredshedsgaranti, returnering, dokumenter og direkte kontakt til Carl Ras kundeservice og specialisterne.',
+    'Everything practical in one place: the STROXX 30-day satisfaction guarantee, returns, documents and direct contact with Carl Ras customer service and the specialists.',
 };
 
 /* Service & support hub: the boring-but-vital page competitors have and value
@@ -18,49 +18,49 @@ export const metadata: Metadata = {
 
 /* Handel sker altid hos Carl Ras → de juridiske dokumenter bor dér. */
 const DOCS = [
-  { label: 'Tilfredshedsgaranti, fulde vilkår (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
-  { label: 'Salgs- og leveringsbetingelser (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
-  { label: 'Persondatapolitik (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/persondatapolitik/' },
-  { label: 'Cookiepolitik (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/cookiepolitik/' },
+  { label: 'Satisfaction guarantee, full terms (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
+  { label: 'Terms of sale and delivery (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
+  { label: 'Privacy policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/persondatapolitik/' },
+  { label: 'Cookie policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/cookiepolitik/' },
 ];
 
 /* FAQ: same answers rendered as accordion AND as FAQPage JSON-LD. Plain-text
    versions feed the schema; the accordion may add links. */
 const SERVICE_FAQ = [
   {
-    q: 'Hvem kan bruge tilfredshedsgarantien?',
-    a: 'Erhvervskunder med konto hos Carl Ras. Har du ikke en konto endnu, opretter du den hos Carl Ras under "Bliv kunde", og så gælder de 30 dage også for dig.',
+    q: 'Who can use the satisfaction guarantee?',
+    a: 'Business customers with an account at Carl Ras. If you don\'t have an account yet, you set one up at Carl Ras under "Become a customer", and then the 30 days apply to you too.',
   },
   {
-    q: 'Skal varen være ubrugt, når jeg returnerer den?',
-    a: 'Nej, det er hele pointen. Garantien er til 30 dage på rigtigt arbejde, ikke fem minutter i indkørslen. Tag varen med i din Carl Ras butik sammen med faktura eller følgeseddel. Ved mængdekøb gælder garantien den først købte vare.',
+    q: 'Does the item have to be unused when I return it?',
+    a: 'No, that\'s the whole point. The guarantee is for 30 days on real work, not five minutes in the driveway. Bring the item to your Carl Ras store along with the invoice or delivery note. For bulk purchases, the guarantee applies to the first item bought.',
   },
   {
-    q: 'Hvad gør jeg, hvis varen er defekt?',
-    a: 'Fejl og mangler er ikke en garantisag men en reklamation, og den klarer Carl Ras efter deres salgs- og leveringsbetingelser. Tag varen med i butikken eller ring til kundeservice på 44 85 55 11.',
+    q: 'What do I do if the item is defective?',
+    a: 'Faults and defects are not a guarantee matter but a complaint, and Carl Ras handles that under their terms of sale and delivery. Bring the item to the store or call customer service on 44 85 55 11.',
   },
   {
-    q: 'Hvordan foregår levering og fragt?',
-    a: 'Alt køb sker hos Carl Ras, i butik eller på carl-ras.dk, og leveringsmuligheder og priser vises ved bestillingen. De fulde vilkår står i Carl Ras salgs- og leveringsbetingelser.',
+    q: 'How do delivery and shipping work?',
+    a: 'Every purchase is made at Carl Ras, in store or at carl-ras.dk, and delivery options and prices are shown at checkout. The full terms are in the Carl Ras terms of sale and delivery.',
   },
   {
-    q: 'Hvor finder jeg sikkerhedsdatablade for kemi-produkter?',
-    a: 'De er på vej til denne side. Indtil da udleverer Carl Ras kundeservice dem på 44 85 55 11 eller i din lokale butik.',
+    q: 'Where do I find safety data sheets for chemical products?',
+    a: 'They\'re on their way to this page. Until then, Carl Ras customer service provides them on 44 85 55 11 or in your local store.',
   },
 ];
 
 const RETURN_STEPS = [
   {
-    t: 'Find faktura eller følgeseddel',
-    d: 'Garantien gælder erhvervskunder med konto hos Carl Ras. Dit købsbevis er nok, varen behøver ikke fejle noget.',
+    t: 'Find your invoice or delivery note',
+    d: 'The guarantee applies to business customers with an account at Carl Ras. Your proof of purchase is enough, the item doesn\'t need to be faulty.',
   },
   {
-    t: 'Gå til din Carl Ras butik',
-    d: 'Aflever varen i en af de 26 butikker. Har du købt online, ringer du til kundeservice på 44 85 55 11 i stedet.',
+    t: 'Go to your Carl Ras store',
+    d: 'Hand the item in at one of the 26 stores. If you bought online, call customer service on 44 85 55 11 instead.',
   },
   {
-    t: 'Pengene tilbage',
-    d: 'Ingen diskussion og ingen krav om fejl. Din vurdering er nok. Ved mængdekøb gælder garantien den først købte vare.',
+    t: 'Money back',
+    d: 'No discussion and no need for faults. Your judgment is enough. For bulk purchases, the guarantee applies to the first item bought.',
   },
 ];
 
@@ -82,13 +82,13 @@ export default function ServicePage() {
         {/* hero */}
         <div className="max-w-2xl">
           <Reveal>
-            <div className="eyebrow mb-4">Service og support</div>
+            <div className="eyebrow mb-4">Service and Support</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95]">
-              Hjælpen er lige så ligetil <span className="text-stroxx-blue">som prisen.</span>
+              Help is as straightforward <span className="text-stroxx-blue">as the tools.</span>
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
-              Ingen formularer i ti trin og ingen ventemusik. Her er garantien, returneringen,
-              dokumenterne og menneskene, samlet ét sted.
+              No ten-step forms and no hold music. Here's the guarantee, the returns,
+              the documents and the people, all in one place.
             </p>
           </Reveal>
         </div>
@@ -99,15 +99,15 @@ export default function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><ShieldCheck size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">30 dages tilfredshedsgaranti</h2>
+                <h2 className="text-white font-display font-bold text-2xl">30-day satisfaction guarantee</h2>
               </div>
               <p className="text-fog leading-relaxed mb-4">
-                Prøv STROXX på rigtigt arbejde i 30 dage. Er du ikke tilfreds, får du pengene
-                tilbage. Ingen krav om fejl, din vurdering er nok. Gælder alle STROXX-produkter
-                undtagen adgangskontrol, for erhvervskunder med konto hos Carl Ras.
+                Try STROXX on real work for 30 days. If you're not happy, you get your money
+                back. No need for faults, your judgment is enough. Applies to all STROXX products
+                except access control, for business customers with an account at Carl Ras.
               </p>
               <div className="flex flex-wrap items-center gap-3 mt-6">
-                <GlassButton href="/proev-det">Sådan virker det <ArrowRight size={15} /></GlassButton>
+                <GlassButton href="/proev-det">How it works <ArrowRight size={15} /></GlassButton>
                 <GuaranteeModal />
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><RotateCcw size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">Sådan returnerer du</h2>
+                <h2 className="text-white font-display font-bold text-2xl">How to return</h2>
               </div>
               <div className="space-y-5">
                 {RETURN_STEPS.map((s, i) => (
@@ -141,7 +141,7 @@ export default function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><FileText size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">Dokumenter</h2>
+                <h2 className="text-white font-display font-bold text-2xl">Documents</h2>
               </div>
               <div className="space-y-3">
                 {DOCS.map((d) => (
@@ -152,8 +152,8 @@ export default function ServicePage() {
                   </a>
                 ))}
                 <div className="rounded-lg border border-dashed border-line px-5 py-4 text-sm text-fog">
-                  Produktkataloger og sikkerhedsdatablade for kemi kommer her, når DAM-integrationen
-                  er på plads.
+                  Product catalogues and safety data sheets for chemicals will appear here once the
+                  DAM integration is in place.
                 </div>
               </div>
             </div>
@@ -164,17 +164,17 @@ export default function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><Phone size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">Snak med et menneske</h2>
+                <h2 className="text-white font-display font-bold text-2xl">Talk to a human</h2>
               </div>
               <p className="text-fog leading-relaxed mb-5">
-                Carl Ras kundeservice sidder klar på{' '}
+                Carl Ras customer service is ready on{' '}
                 <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>{' '}
-                (man-tor 07-16, fre 07-15). Eller spring køen over og ring direkte til en specialist
-                i din nærmeste butik.
+                (Mon-Thu 07-16, Fri 07-15). Or skip the queue and call a specialist
+                directly at your nearest store.
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                <GlassButton href="/butikker?tab=specialister">Find din specialist <ArrowRight size={15} /></GlassButton>
-                <GlassButton href="/butikker" variant="ghost">Alle butikker</GlassButton>
+                <GlassButton href="/butikker?tab=specialister">Find your specialist <ArrowRight size={15} /></GlassButton>
+                <GlassButton href="/butikker" variant="ghost">All stores</GlassButton>
               </div>
             </div>
           </Reveal>
@@ -184,9 +184,9 @@ export default function ServicePage() {
         <section className="mt-24 border-t border-line pt-16">
           <div className="text-center mb-10">
             <Reveal>
-              <div className="eyebrow mb-3">Spørgsmål og svar</div>
+              <div className="eyebrow mb-3">Questions and answers</div>
               <h2 className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.96]">
-                Det praktiske, helt kort.
+                The practical stuff, in brief.
               </h2>
             </Reveal>
           </div>
@@ -195,21 +195,21 @@ export default function ServicePage() {
               items={SERVICE_FAQ.map((f) => ({
                 q: f.q,
                 a:
-                  f.q === 'Hvem kan bruge tilfredshedsgarantien?' ? (
+                  f.q === 'Who can use the satisfaction guarantee?' ? (
                     <>
-                      Erhvervskunder med konto hos Carl Ras. Har du ikke en konto endnu, opretter du den hos{' '}
+                      Business customers with an account at Carl Ras. If you don&rsquo;t have an account yet, you set one up at{' '}
                       <a href="https://www.carl-ras.dk/kundeservice/bliv-kunde/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
-                        Carl Ras under &ldquo;Bliv kunde&rdquo;
+                        Carl Ras under &ldquo;Become a customer&rdquo;
                       </a>
-                      , og så gælder de 30 dage også for dig.
+                      , and then the 30 days apply to you too.
                     </>
-                  ) : f.q === 'Hvad gør jeg, hvis varen er defekt?' ? (
+                  ) : f.q === 'What do I do if the item is defective?' ? (
                     <>
-                      Fejl og mangler er ikke en garantisag men en reklamation, og den klarer Carl Ras efter deres{' '}
+                      Faults and defects are not a guarantee matter but a complaint, and Carl Ras handles that under their{' '}
                       <a href="https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
-                        salgs- og leveringsbetingelser
+                        terms of sale and delivery
                       </a>
-                      . Tag varen med i butikken eller ring til kundeservice på <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>.
+                      . Bring the item to the store or call customer service on <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>.
                     </>
                   ) : (
                     f.a

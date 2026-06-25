@@ -6,12 +6,12 @@ import GlassButton from '@/components/GlassButton';
 const PDF = '/STROXX-tilfredshedsgaranti.pdf';
 
 const POINTS = [
-  'Er du ikke tilfreds, får du pengene tilbage.',
-  'Ingen krav om fejl. Din vurdering er nok.',
-  'Gælder alle STROXX-produkter (dog ikke adgangskontrol).',
+  'Not satisfied? You get your money back.',
+  'No need to prove a fault. Your call is enough.',
+  'Covers all STROXX products (access control excepted).',
 ];
 
-export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: { trigger?: string }) {
+export default function GuaranteeModal({ trigger = 'How the guarantee works' }: { trigger?: string }) {
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false); // drives the enter/exit transition
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -46,7 +46,7 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
 
       {open && (
         <div
-          role="dialog" aria-modal="true" aria-label="STROXX tilfredshedsgaranti"
+          role="dialog" aria-modal="true" aria-label="STROXX satisfaction guarantee"
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
         >
           {/* backdrop */}
@@ -68,19 +68,19 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
           >
             <button
               ref={closeRef}
-              onClick={close} aria-label="Luk"
+              onClick={close} aria-label="Close"
               className="absolute top-4 right-4 grid h-9 w-9 place-items-center rounded-full text-fog hover:text-white border border-white/10 hover:border-white/25 transition-colors"
             >
               <X size={17} />
             </button>
 
-            <div className="eyebrow mb-3">30 dages tilfredshedsgaranti</div>
+            <div className="eyebrow mb-3">30-day satisfaction guarantee</div>
             <h2 className="h-display text-white text-[clamp(1.6rem,4vw,2.2rem)] leading-[1.02] mb-4">
-              Tilfreds, eller pengene tilbage.
+              Full satisfaction or your money back.
             </h2>
             <p className="text-fog leading-relaxed mb-6">
-              Vi står inde for vores værktøj. Som erhvervskunde med konto kan du prøve dit
-              STROXX-produkt i <span className="text-white">30 dage</span>.
+              We stand behind our tools. As a business customer with an account, you can put your
+              STROXX product to work for <span className="text-white">30 days</span>.
             </p>
 
             <ul className="space-y-3 mb-6">
@@ -95,18 +95,18 @@ export default function GuaranteeModal({ trigger = 'Sådan virker garantien' }: 
             </ul>
 
             <p className="text-fog/80 text-sm leading-relaxed mb-1">
-              Test varen, inden du køber stort ind. Garantien gælder den først købte ved køb af
-              ens varer i mængde.
+              Test the product before you stock up. When buying identical items in bulk, the
+              guarantee applies to the first one purchased.
             </p>
             <p className="text-fog/80 text-sm leading-relaxed mb-7">
-              <span className="text-white/80">Returnering:</span> aflevér produktet hos din forhandler
-              (eller kontakt kundeservice ved online-køb) med faktura eller følgeseddel. Carl Ras
-              kundeservice: <a href="tel:+4544855511" className="text-stroxx-blue hover:text-white transition-colors">44 85 55 11</a>.
+              <span className="text-white/80">Returns:</span> hand the product back to your dealer
+              (or contact customer service for online purchases) with your invoice or delivery note.
+              Carl Ras customer service: <a href="tel:+4544855511" className="text-stroxx-blue hover:text-white transition-colors">44 85 55 11</a>.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <GlassButton href={PDF} external>
-                <FileText size={16} /> Se garantien (PDF)
+                <FileText size={16} /> See the guarantee (PDF)
               </GlassButton>
             </div>
           </div>

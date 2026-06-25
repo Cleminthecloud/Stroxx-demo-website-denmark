@@ -1,18 +1,18 @@
 import { Suspense } from 'react';
 import ProductExplorer from '@/components/ProductExplorer';
 
-// NOTE: layout.tsx has a title TEMPLATE that appends " — STROXX"; child pages
-// must NOT append it themselves or tabs read "Produkter — STROXX — STROXX".
+// NOTE: layout.tsx has a title TEMPLATE that appends " | STROXX"; child pages
+// must NOT append it themselves or tabs read "Products | STROXX | STROXX".
 export const metadata = {
-  title: 'Produkter',
+  title: 'Products',
   description:
-    'Find dit STROXX-værktøj: filtrér 358 produkter på kategori, navn eller varenummer, og spring direkte til købet hos Carl Ras. Pro-kvalitet uden mærke-tillæg.',
+    'Find your STROXX tool: filter 358 products by category, name or item number, and jump straight to the buy at Carl Ras. Pro quality without the brand markup.',
 };
 
 export default function ProdukterPage() {
   return (
     <main className="min-h-screen bg-ink">
-      <Suspense fallback={<div className="pt-40 text-center text-fog">Indlæser…</div>}>
+      <Suspense fallback={<div className="pt-40 text-center text-fog">Loading…</div>}>
         <ProductExplorer />
       </Suspense>
     </main>

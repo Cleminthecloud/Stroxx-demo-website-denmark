@@ -11,40 +11,40 @@ export default function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={brandImages.logoWhite} alt="STROXX" className="h-7 w-auto mb-7" />
             <p className="text-fog leading-relaxed">
-              <span className="text-white font-medium">STROXX fås eksklusivt hos Carl Ras i Danmark.</span> Men
-              brandet er udviklet i samarbejde med stærke partnere i Tyskland, Frankrig og Belgien og
-              forhandles også gennem kæder som{' '}
+              <span className="text-white font-medium">STROXX is available exclusively at Carl Ras in Denmark.</span> The
+              brand is developed together with strong partners in Germany, France and Belgium, and is
+              also stocked through chains like{' '}
               <a href="https://www.meesenburg.com" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Meesenburg</a>,{' '}
-              <a href="https://www.foussier.fr" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Foussier</a> og{' '}
+              <a href="https://www.foussier.fr" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Foussier</a> and{' '}
               <a href="https://lecot.be" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Lecot</a>.
             </p>
             <a href="tel:+4544855511" className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
               <Phone size={18} strokeWidth={2} /> +45 44 85 55 11
             </a>
             <div className="mt-5 text-fog text-sm leading-relaxed">
-              Mandag til Torsdag: 07:00 – 16:00<br />
-              Fredag: 07:00 – 15:00
+              Monday to Thursday: 07:00 to 16:00<br />
+              Friday: 07:00 to 15:00
             </div>
           </div>
 
           <div className="text-sm">
-            <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Sider</div>
+            <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Pages</div>
             <div className="space-y-3">
-              <Link href="/maanedens" className="block text-fog hover:text-white">Månedens værktøj</Link>
-              <Link href="/produkter" className="block text-fog hover:text-white">Produkter</Link>
-              <Link href="/fag" className="block text-fog hover:text-white">Fagområder</Link>
-              <Link href="/butikker" className="block text-fog hover:text-white">Butikker</Link>
-              <Link href="/proev-det" className="block text-fog hover:text-white">Kampagne: Prøv det</Link>
-              <Link href="/butikker?tab=specialister" className="block text-fog hover:text-white">Specialister</Link>
-              <Link href="/service" className="block text-fog hover:text-white">Service og support</Link>
+              <Link href="/maanedens" className="block text-fog hover:text-white">Tool of the Month</Link>
+              <Link href="/produkter" className="block text-fog hover:text-white">Products</Link>
+              <Link href="/fag" className="block text-fog hover:text-white">Trades</Link>
+              <Link href="/butikker" className="block text-fog hover:text-white">Stores</Link>
+              <Link href="/proev-det" className="block text-fog hover:text-white">Campaign: Try It</Link>
+              <Link href="/butikker?tab=specialister" className="block text-fog hover:text-white">Specialists</Link>
+              <Link href="/service" className="block text-fog hover:text-white">Service and Support</Link>
             </div>
           </div>
           <div className="text-sm">
-            <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Køb</div>
+            <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Buy</div>
             <div className="space-y-3">
-              <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Køb STROXX</a>
-              <Link href="/butikker" className="block text-fog hover:text-white">Find butik</Link>
-              <a href="/STROXX-tilfredshedsgaranti.pdf" target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Tilfredshedsgaranti (PDF)</a>
+              <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Buy STROXX</a>
+              <Link href="/butikker" className="block text-fog hover:text-white">Find a store</Link>
+              <a href="/STROXX-tilfredshedsgaranti.pdf" target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Satisfaction guarantee (PDF)</a>
             </div>
           </div>
         </div>
