@@ -94,7 +94,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <Eyebrow>The range</Eyebrow>
-            <ScrollText as="h2" text={'We have it. \n And we have you.'}
+            <ScrollText as="h2" text={'We got it. \n We got you.'}
               className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9]" />
           </div>
           <div className="grid gap-12 sm:grid-cols-2">
@@ -141,7 +141,7 @@ export default function Home() {
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
               {[{ v: 1400, suf: '+', l: 'product numbers' }, { v: 26, suf: '', l: 'stores in Denmark' }, { v: 227, suf: '+', l: 'stores in Europe' }].map((s, i) => (
                 <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
-                  <CountUp value={s.v} suffix={s.suf} className={`h-display text-5xl md:text-6xl block ${i === 0 ? 'text-stroxx-blue' : 'text-white'}`} />
+                  <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
                   <div className="text-fog text-sm mt-2">{s.l}</div>
                 </div>
               ))}
