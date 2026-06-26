@@ -161,7 +161,9 @@ export default function SiteOverlay() {
             }}>
               Everything you see here is placeholder content while we build the
               site and shape the brand platform. The copy and products are not
-              final, so please do not take any of it as gospel just yet.
+              final, so please do not take any of it as gospel just yet. The
+              images and product data will both get sharper once we connect the
+              DAM and PIM systems.
             </p>
 
             {/* mission-impossible self-destruct */}
