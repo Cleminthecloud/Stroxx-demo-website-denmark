@@ -65,10 +65,7 @@ export default function MaanedensPage() {
           <Reveal from="left">
             <div className="eyebrow mb-4">STROXX of the Month · {SKA.month} {SKA.year}</div>
             <h1 className="h-display text-white text-[clamp(2.6rem,6vw,5.2rem)] leading-[0.94]">
-              {hero.name.replace(' Green', '')}
-              <span className="text-stroxx-blue"> Green.</span>
-              <br />
-              <span className="text-fog">One story. Every month.</span>
+              Check out our <span className="text-stroxx-blue">product of the month.</span>
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
               Every month we pick one tool that deserves the full story.
@@ -115,7 +112,7 @@ export default function MaanedensPage() {
         <div className="relative mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-32 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <Reveal><div className="eyebrow mb-5">Application</div></Reveal>
-            <ScrollText as="h2" text={'One person. \n The whole layout.'}
+            <ScrollText as="h2" text={'One person easily \n gets the job *done.*'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4rem)] leading-[0.92] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-md"
               text="The most expensive thing on site is time. A 3D laser sets every line at once, so marking out doesn't take two people and a string." />

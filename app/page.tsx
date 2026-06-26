@@ -63,9 +63,9 @@ export default function Home() {
       <section className="relative h-[100svh] min-h-[640px]">
         <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
           <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
-            <span className="hero-line">Pro-grade tools</span>
+            <span className="hero-line">A <span className="text-stroxx-blue">great</span> headline</span>
             <br />
-            <span className="hero-line hero-line--2">without the <span className="text-stroxx-blue">brand</span> tax</span>
+            <span className="hero-line hero-line--2">will be here</span>
           </h1>
         </div>
         <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">
@@ -78,10 +78,8 @@ export default function Home() {
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
             <p className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
-              <ScrollText as="span" className="text-white" text="Just like all your pricey gear." />
-              <br />
-              <ScrollText as="span" className="text-fog" text="It just doesn't cost" />{' '}
-              <ScrollText as="span" className="text-stroxx-blue" text="anywhere near as much." />
+              <ScrollText as="span" className="text-white" text="Here we have another great headline" />{' '}
+              <ScrollText as="span" className="text-stroxx-blue" text="for the reader." />
             </p>
             <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
               text="Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about." />
@@ -89,7 +87,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Marquee text="PRO-GRADE TOOLS WITHOUT THE BRAND TAX" />
+      <Marquee text="A great headline will be here" />
 
       {/* SORTIMENT — what we have, and we have your back */}
       <section className="relative py-28 md:py-40">
@@ -121,7 +119,7 @@ export default function Home() {
           <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-end">
             <div>
               <Eyebrow>Scale</Eyebrow>
-              <ScrollText as="h2" text={'More than \n 1,400 item numbers.'}
+              <ScrollText as="h2" text={'More than \n *1,400* product numbers.'}
                 className="h-display text-white text-[clamp(2.6rem,7vw,6.5rem)] leading-[0.9]" />
             </div>
             <div className="grid gap-12 sm:grid-cols-2">
@@ -141,9 +139,9 @@ export default function Home() {
           {/* stats band — full width, vertical dividers */}
           <Reveal delay={120}>
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
-              {[{ v: 1400, suf: '+', l: 'item numbers' }, { v: 26, suf: '', l: 'stores in Denmark' }, { v: 227, suf: '+', l: 'stores in Europe' }].map((s, i) => (
+              {[{ v: 1400, suf: '+', l: 'product numbers' }, { v: 26, suf: '', l: 'stores in Denmark' }, { v: 227, suf: '+', l: 'stores in Europe' }].map((s, i) => (
                 <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
-                  <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
+                  <CountUp value={s.v} suffix={s.suf} className={`h-display text-5xl md:text-6xl block ${i === 0 ? 'text-stroxx-blue' : 'text-white'}`} />
                   <div className="text-fog text-sm mt-2">{s.l}</div>
                 </div>
               ))}
@@ -231,8 +229,8 @@ export default function Home() {
             <Reveal from="left">
               <Eyebrow>STROXX of the Month · {SKA.month} {SKA.year}</Eyebrow>
               <h2 className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
-                One story.
-                <br /><span className="text-stroxx-blue">{SKA.hero.name}.</span>
+                Check it out.
+                <br /><span className="text-stroxx-blue">Green line laser 3D</span>
               </h2>
               <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
                 Every month, one tool gets the full story: why it wins,
@@ -279,7 +277,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div className="max-w-3xl">
             <Eyebrow>The categories</Eyebrow>
-            <ScrollText as="h2" text={'Fill the bag. Category \n by category.'}
+            <ScrollText as="h2" text={"All you'll *need.* Category \n by category."}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
         </div>

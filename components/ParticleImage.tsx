@@ -11,8 +11,9 @@ import { useEffect, useRef } from 'react';
  *  the source pixel's luminance. */
 
 // Floor kept bright enough that even near-black product pixels read on the
-// dark stage (deep navy disappeared against the background).
-const BLUES = ['#155A96', '#1E6FB0', '#0082CA', '#3C92E0', '#85B7EB', '#C3DDF6'];
+// dark stage (deep navy disappeared against the background). Brightened so the
+// assembled product pops on the page instead of sitting dull.
+const BLUES = ['#2C7FC0', '#1E8FD5', '#0098E8', '#4FA8EE', '#8FC6F4', '#D2E8FC'];
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 const GRAV = 0.016;   // gentle downward pull
@@ -92,7 +93,7 @@ export default function ParticleImage({
       const bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
       const scale = Math.min((W * 0.64) / bw, (H * 0.64) / bh);
       const bcx = (minX + maxX) / 2, bcy = (minY + maxY) / 2;
-      dot = Math.max(1, scale * 0.42);
+      dot = Math.max(1, scale * 0.46);
 
       const idxs: number[] = [];
       for (let k = 0; k < total; k += stride) idxs.push(k);
@@ -122,12 +123,13 @@ export default function ParticleImage({
         ws[m] = 0.4 + Math.random() * 1.8;          // wander speed
         wp[m] = Math.random() * Math.PI * 2;
         sz[m] = 0.7 + Math.random() * 0.55;
-        const t = clamp01((L - 0.1) / 0.68);
+        // gamma lift so midtones land on brighter blues, not the dark floor
+        const t = Math.pow(clamp01((L - 0.05) / 0.7), 0.7);
         const ci = Math.min(BLUES.length - 1, Math.floor(t * BLUES.length));
         cols[m] = BLUES[ci];
         // a fraction of the brightest pixels become "light carriers": they get
         // a soft halo so the assembled product reads lit from within
-        gl[m] = ci >= 4 && Math.random() < 0.45 ? 1 : 0;
+        gl[m] = ci >= 3 && Math.random() < 0.55 ? 1 : 0;
       }
       built = true;
     };
@@ -195,8 +197,8 @@ export default function ParticleImage({
         const s = dot * sz[m];
         // gentle twinkle: each particle breathes on its own wander clock, so
         // the formed product shimmers like dust in light instead of sitting flat
-        const tw = reduce ? 1 : 0.82 + 0.18 * Math.sin(t * ws[m] * 1.9 + wp[m] * 3.1);
-        const base = (0.12 + p * 0.85) * tw;
+        const tw = reduce ? 1 : 0.88 + 0.12 * Math.sin(t * ws[m] * 1.9 + wp[m] * 3.1);
+        const base = Math.min(1, (0.16 + p * 0.95) * tw);
 
         // fast particles (scatter, cursor repulsion) leave a brief comet tail —
         // two fading ghosts along the velocity, so movement reads as motion
@@ -211,8 +213,8 @@ export default function ParticleImage({
         // halo on the light-carrier particles: one larger, faint square under
         // the core — cheap bloom that lets highlights glow on the dark stage
         if (gl[m]) {
-          ctx.globalAlpha = base * 0.16;
-          const hs = s * 3.2;
+          ctx.globalAlpha = base * 0.22;
+          const hs = s * 3.4;
           ctx.fillRect(px[m] - hs / 2, py[m] - hs / 2, hs, hs);
         }
 

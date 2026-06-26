@@ -94,7 +94,7 @@ export default function CampaignBand() {
           <div className="max-w-xl">
             <div className="eyebrow mb-5">Campaign</div>
             <h2 className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
-              Room in the budget<br className="hidden sm:block" /> for more than tools
+              Now you can afford<br className="hidden sm:block" /> more than just tools
             </h2>
             <p className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
               STROXX is exactly like your pricey tools and good gear. It just does not cost

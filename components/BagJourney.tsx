@@ -11,6 +11,10 @@ import { TOOLS, PANEL, FRONT_PANEL, BAG_BACK, BAG_AR } from '@/components/BagFil
    they land.
    ────────────────────────────────────────────────────────────────────────── */
 
+// Toggle the "In the bag · N / N tools" tally chip on the hero bag. Hidden for
+// now; flip to true to bring it back.
+const SHOW_BAG_TAG = false;
+
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeOutBack = (t: number) => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
 
@@ -210,17 +214,19 @@ export default function BagJourney() {
           style={{ left: `${PANEL.left}%`, top: `${PANEL.top}%`, width: `${PANEL.width}%`, zIndex: 40 }} />
 
         {/* tool tag — tallies the tools as they land */}
-        <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
-          <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
-            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)' }}>
-            <div className="text-[10px] uppercase tracking-[0.16em] text-fog/90 mb-1">In the bag</div>
-            <div className="h-display text-white text-2xl leading-none tabular-nums">
-              {landed}<span className="text-fog text-base ml-1">/ {TOOLS.length}</span>
+        {SHOW_BAG_TAG && (
+          <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
+            <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
+              style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)' }}>
+              <div className="text-[10px] uppercase tracking-[0.16em] text-fog/90 mb-1">In the bag</div>
+              <div className="h-display text-white text-2xl leading-none tabular-nums">
+                {landed}<span className="text-fog text-base ml-1">/ {TOOLS.length}</span>
+              </div>
+              <div className="mt-1.5 text-[11px] tracking-wide text-fog/70">tools</div>
             </div>
-            <div className="mt-1.5 text-[11px] tracking-wide text-fog/70">tools</div>
           </div>
-        </div>
+        )}
       </div>
 
       <canvas ref={dust} className="absolute inset-0 w-full h-full" />
