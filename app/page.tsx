@@ -94,7 +94,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div>
             <Eyebrow>The range</Eyebrow>
-            <ScrollText as="h2" text={'We got it. \n We got you.'}
+            <ScrollText as="h2" text={'You got what it takes, \n so do *we.*'}
               className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9]" />
           </div>
           <div className="grid gap-12 sm:grid-cols-2">
@@ -202,7 +202,7 @@ export default function Home() {
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
           <div>
             <Eyebrow>Satisfaction guarantee</Eyebrow>
-            <ScrollText as="h2" text={'100%. Or your \n money back.'}
+            <ScrollText as="h2" text={'*100%* satisfaction \n or your money back.'}
               className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
               text="We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started." />
