@@ -10,11 +10,11 @@
   <!--
     STROXX Marketo email template: MÅNEDENS STROXX (SKA nyhedsbrevet)
     Det månedlige nyhedsbrev fra STROXX kommercielle aktiveringsprogram:
-    1 hero-produkt (linker til landing page /maanedens), 5 skarpe priser
+    1 hero-produkt (linker til landing page /maanedens), 5 favoritter
     (linker direkte til webshop) og månedens nyheder.
-    Foreslået emnelinje: Én historie. Fem skarpe priser. To nyheder.
-    Preheader: Månedens STROXX: Streglaser 3D Green, plus fem priser kollegerne allerede kender.
-    Editor 2.0: mktoContainer + mktoModule. Ny måned = udskift produkter, priser og links.
+    Foreslået emnelinje: Én historie. Fem favoritter. To nyheder.
+    Preheader: Månedens STROXX: Streglaser 3D Green, plus fem favoritter kollegerne allerede kender.
+    Editor 2.0: mktoContainer + mktoModule. Ny måned = udskift produkter og links.
   -->
   <!--[if mso]>
   <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
@@ -44,7 +44,7 @@
 
   <!-- Preheader (skjult) -->
   <div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">
-    M&aring;nedens STROXX: Streglaser 3D Green, plus fem priser kollegerne allerede kender.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+    M&aring;nedens STROXX: Streglaser 3D Green, plus fem favoritter kollegerne allerede kender.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#060708;">
@@ -101,15 +101,14 @@
                   </td>
                 </tr>
 
-                <!-- MODUL: Hero pris + CTA (hero linker til landing page) -->
-                <tr class="mktoModule" id="heroCtaModule" mktoName="Hero pris og CTA">
+                <!-- MODUL: Hero CTA (hero linker til landing page) -->
+                <tr class="mktoModule" id="heroCtaModule" mktoName="Hero CTA">
                   <td style="background-color:#0B0C0E; padding:24px 32px 44px;" class="px">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td class="stack" valign="middle">
-                          <div class="mktoText" id="heroPrice" mktoName="Hero pris">
-                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:34px; font-weight:bold; letter-spacing:-1px; color:#FFFFFF;">2.498,75 <span style="font-size:14px; font-weight:normal; letter-spacing:0; color:#8A9199;">DKK / Styk</span></p>
-                            <p style="margin:6px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;">Tilsvarende A-m&aelig;rke fra <span style="text-decoration:line-through;">4.495,-</span> <span style="color:#2BA6E8; font-weight:bold;">spar 44%</span></p>
+                          <div class="mktoText" id="heroPrice" mktoName="Hero undertekst">
+                            <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; line-height:23px; color:#8A9199;">Selvnivellerende 3D-laser med tre 360-graders planer.<br>Se prisen hos Carl Ras.</p>
                           </div>
                         </td>
                         <td class="stack stack-pad" align="right" valign="middle" width="210">
@@ -135,13 +134,13 @@
                   </td>
                 </tr>
 
-                <!-- MODUL: Månedens fem (skarpe priser, direkte til webshop) -->
+                <!-- MODUL: Månedens fem (favoritter, direkte til webshop) -->
                 <tr class="mktoModule" id="winnersModule" mktoName="M&aring;nedens fem">
                   <td style="background-color:#111317; border-top:1px solid #23272E; padding:38px 32px;" class="px">
                     <div class="mktoText" id="winnersTitle" mktoName="M&aring;nedens fem titel">
                       <p style="margin:0 0 8px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:600; color:#2BA6E8;">M&aring;nedens fem</p>
-                      <h2 style="margin:0 0 6px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:22px; line-height:28px; font-weight:bold; letter-spacing:-0.5px; color:#FFFFFF;">Priser, kollegerne allerede kender</h2>
-                      <p style="margin:0 0 18px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">Fem arbejdsheste til priser, der ikke kr&aelig;ver bet&aelig;nkningstid. Direkte til webshoppen.</p>
+                      <h2 style="margin:0 0 6px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:22px; line-height:28px; font-weight:bold; letter-spacing:-0.5px; color:#FFFFFF;">V&aelig;rkt&oslash;j, kollegerne allerede kender</h2>
+                      <p style="margin:0 0 18px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#8A9199;">Fem arbejdsheste, der ikke kr&aelig;ver bet&aelig;nkningstid. Direkte til webshoppen.</p>
                     </div>
 
                     <!-- produktr&aelig;kker -->
@@ -153,7 +152,6 @@
                         <td valign="middle" style="padding:12px 12px; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="winner1" mktoName="Vinder 1">
                             <p class="row-name" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:20px; color:#FFFFFF;">Rundsavklinge &Oslash;160 Z42W Tr&aelig;</p>
-                            <p style="margin:2px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;"><span style="color:#FFFFFF; font-weight:bold;">336,25</span> DKK &middot; A-m&aelig;rke fra <span style="text-decoration:line-through;">595,-</span> <span style="color:#2BA6E8; font-weight:bold;">spar 43%</span></p>
                           </div>
                         </td>
                         <td width="78" align="right" valign="middle" style="padding:12px 0; border-bottom:1px solid #23272E;">
@@ -167,7 +165,6 @@
                         <td valign="middle" style="padding:12px 12px; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="winner2" mktoName="Vinder 2">
                             <p class="row-name" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:20px; color:#FFFFFF;">Kniv Black 25 mm med autol&aring;s</p>
-                            <p style="margin:2px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;"><span style="color:#FFFFFF; font-weight:bold;">73,75</span> DKK &middot; A-m&aelig;rke fra <span style="text-decoration:line-through;">149,-</span> <span style="color:#2BA6E8; font-weight:bold;">spar 50%</span></p>
                           </div>
                         </td>
                         <td width="78" align="right" valign="middle" style="padding:12px 0; border-bottom:1px solid #23272E;">
@@ -181,7 +178,6 @@
                         <td valign="middle" style="padding:12px 12px; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="winner3" mktoName="Vinder 3">
                             <p class="row-name" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:20px; color:#FFFFFF;">Torpedo vaterpas 250 mm</p>
-                            <p style="margin:2px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;"><span style="color:#FFFFFF; font-weight:bold;">148,75</span> DKK &middot; A-m&aelig;rke fra <span style="text-decoration:line-through;">259,-</span> <span style="color:#2BA6E8; font-weight:bold;">spar 43%</span></p>
                           </div>
                         </td>
                         <td width="78" align="right" valign="middle" style="padding:12px 0; border-bottom:1px solid #23272E;">
@@ -195,7 +191,6 @@
                         <td valign="middle" style="padding:12px 12px; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="winner4" mktoName="Vinder 4">
                             <p class="row-name" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:20px; color:#FFFFFF;">Speed vinkel 175 mm</p>
-                            <p style="margin:2px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;"><span style="color:#FFFFFF; font-weight:bold;">136,25</span> DKK &middot; A-m&aelig;rke fra <span style="text-decoration:line-through;">229,-</span> <span style="color:#2BA6E8; font-weight:bold;">spar 41%</span></p>
                           </div>
                         </td>
                         <td width="78" align="right" valign="middle" style="padding:12px 0; border-bottom:1px solid #23272E;">
@@ -209,7 +204,6 @@
                         <td valign="middle" style="padding:12px 12px; border-bottom:1px solid #23272E;">
                           <div class="mktoText" id="winner5" mktoName="Vinder 5">
                             <p class="row-name" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:20px; color:#FFFFFF;">MS Byggefuge hvid 290 ml</p>
-                            <p style="margin:2px 0 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#8A9199;"><span style="color:#FFFFFF; font-weight:bold;">75,00</span> DKK / Styk &middot; Bl&aring; pris</p>
                           </div>
                         </td>
                         <td width="78" align="right" valign="middle" style="padding:12px 0; border-bottom:1px solid #23272E;">
@@ -246,8 +240,7 @@
                                 <div class="mktoText" id="news1" mktoName="Nyhed 1">
                                   <p style="margin:0 0 3px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#2BA6E8;">STROXX</p>
                                   <p style="margin:0 0 6px; min-height:42px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:21px; color:#FFFFFF;">K&oslash;leboks m/kompressor 35 ltr</p>
-                                  <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:19px; color:#8A9199;">Kold frokost i juli, uden is.</p>
-                                  <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:19px; font-weight:bold; color:#FFFFFF;">1.873,75 <span style="font-size:11px; font-weight:normal; color:#8A9199;">DKK / Styk</span></p>
+                                  <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:19px; color:#8A9199;">Kold frokost i juli, uden is.</p>
                                   <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px;"><a href="https://stroxx-demo-website-denmark.vercel.app/produkt/koeleboks-m-kompressor-35-ltr-60w-64012039?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_maanedens" target="_blank" class="btn-full" style="display:inline-block; background-color:#14171C; border:1px solid #3A4047; border-radius:999px; padding:0 20px; line-height:42px; font-weight:bold; text-align:center; color:#FFFFFF;">Udforsk <img src="https://stroxx-demo-website-denmark.vercel.app/emails/img/arrow-right.png" width="14" height="14" alt="" style="vertical-align:-2px; margin-left:5px; border:0;"></a></p>
                                 </div>
                               </td>
@@ -271,8 +264,7 @@
                                 <div class="mktoText" id="news2" mktoName="Nyhed 2">
                                   <p style="margin:0 0 3px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#2BA6E8;">STROXX</p>
                                   <p style="margin:0 0 6px; min-height:42px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:15px; font-weight:500; line-height:21px; color:#FFFFFF;">Hue m/pandelampe</p>
-                                  <p style="margin:0 0 10px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:19px; color:#8A9199;">Lys p&aring; sagen, h&aelig;nderne fri.</p>
-                                  <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:19px; font-weight:bold; color:#FFFFFF;">86,25 <span style="font-size:11px; font-weight:normal; color:#8A9199;">DKK / Styk</span></p>
+                                  <p style="margin:0 0 12px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:19px; color:#8A9199;">Lys p&aring; sagen, h&aelig;nderne fri.</p>
                                   <p style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px;"><a href="https://stroxx-demo-website-denmark.vercel.app/produkt/hue-m-pandelampe-sort-one-size-63143492?utm_source=marketo&utm_medium=email&utm_campaign=stroxx_maanedens" target="_blank" class="btn-full" style="display:inline-block; background-color:#14171C; border:1px solid #3A4047; border-radius:999px; padding:0 20px; line-height:42px; font-weight:bold; text-align:center; color:#FFFFFF;">Udforsk <img src="https://stroxx-demo-website-denmark.vercel.app/emails/img/arrow-right.png" width="14" height="14" alt="" style="vertical-align:-2px; margin-left:5px; border:0;"></a></p>
                                 </div>
                               </td>
