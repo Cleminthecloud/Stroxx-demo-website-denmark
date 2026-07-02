@@ -19,6 +19,8 @@ const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 const GRAV = 0.016;   // gentle downward pull
 const MR = 140;       // cursor influence radius (px) — big enough to read on large screens
 const MF = 3.1;       // cursor repulsion strength
+const BLEED = 120;    // canvas overdraw beyond the host on every side, so scattered /
+                      // wandering / repelled particles never clip at an invisible edge
 
 export default function ParticleImage({
   src,
@@ -48,7 +50,8 @@ export default function ParticleImage({
     let cols: string[] = [];
 
     const size = () => {
-      W = host.clientWidth; H = host.clientHeight;
+      // canvas covers the host PLUS a bleed ring — W/H are canvas dims
+      W = host.clientWidth + BLEED * 2; H = host.clientHeight + BLEED * 2;
       cv.width = W * dpr; cv.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
@@ -91,7 +94,8 @@ export default function ParticleImage({
       const stride = total > maxParticles ? Math.ceil(total / maxParticles) : 1;
 
       const bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
-      const scale = Math.min((W * 0.64) / bw, (H * 0.64) / bh);
+      // product size tracks the HOST box, not the padded canvas
+      const scale = Math.min(((W - BLEED * 2) * 0.64) / bw, ((H - BLEED * 2) * 0.64) / bh);
       const bcx = (minX + maxX) / 2, bcy = (minY + maxY) / 2;
       dot = Math.max(1, scale * 0.46);
 
@@ -164,7 +168,7 @@ export default function ParticleImage({
 
       // cursor in canvas-local space (null when far outside the frame)
       const r = host.getBoundingClientRect();
-      let mx = cliX - r.left, my = cliY - r.top;
+      let mx = cliX - r.left + BLEED, my = cliY - r.top + BLEED;
       const hasM = !reduce && mx > -MR && mx < W + MR && my > -MR && my < H + MR;
 
       for (let m = 0; m < n; m++) {
@@ -265,7 +269,11 @@ export default function ParticleImage({
 
   return (
     <div ref={wrap} className={`relative ${className}`} aria-hidden>
-      <canvas ref={canvas} className="absolute inset-0 h-full w-full" />
+      <canvas
+        ref={canvas}
+        className="pointer-events-none absolute"
+        style={{ inset: -BLEED, width: `calc(100% + ${BLEED * 2}px)`, height: `calc(100% + ${BLEED * 2}px)` }}
+      />
     </div>
   );
 }

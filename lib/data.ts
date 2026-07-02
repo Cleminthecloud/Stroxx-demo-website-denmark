@@ -17,8 +17,20 @@ export const crImage = (id: number | string) =>
  *  cache-buster: bump it whenever the proxy's rendition logic changes so the
  *  CDN edge (s-maxage) serves fresh images instead of stale cached ones. */
 const IMG_V = '9'; // v9: no-store upstream fetches (Next data-cache hung on 18MB bodies)
+
+/** Assets whose DAM renditions are broken upstream: the transparent 50391
+ *  rendition 404s and every remaining PNG is 5-19MB — over the proxy's 3MB
+ *  guard — so /api/tool can only ever serve its BLANK fallback. These are
+ *  committed as pre-knocked-out local PNGs instead (all lasers, as of
+ *  2026-07-02). If more products go blank, check the 50391 rendition first. */
+const LOCAL_TOOL_IMG: Record<string, string> = {
+  '159146': '/Images/bag-tools/159146.png', // cross-line laser 102-187
+  '159147': '/Images/bag-tools/159147.png', // laser distance meter 102-186
+  '169234': '/Images/bag-tools/169234.png', // Line laser 3D Green (SKA hero)
+  '169241': '/Images/bag-tools/169241.png', // Line laser 3D Green Floor
+};
 export const toolTexture = (id: number | string, f?: '50383' | '50384' | '50388') =>
-  `/api/tool/${id}?v=${IMG_V}${f ? `&f=${f}` : ''}`;
+  LOCAL_TOOL_IMG[String(id)] ?? `/api/tool/${id}?v=${IMG_V}${f ? `&f=${f}` : ''}`;
 
 /** Deep-link to the Carl-Ras category listing, UTM preserved. */
 export const categoryBuyUrl = (path: string) => `${CR_BRAND}/${path}/?${UTM}`;

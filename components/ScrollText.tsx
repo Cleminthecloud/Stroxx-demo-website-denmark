@@ -42,12 +42,22 @@ export default function ScrollText({
   }, [text, start, end]);
 
   const tokens = text.split(' ');
+  let inAccent = false;
   return (
     <Tag ref={ref as any} className={className}>
       {tokens.map((t, i) => {
         if (t === '\n') return <br key={i} />;
-        const accent = t.length > 2 && t.startsWith('*') && t.endsWith('*');
-        const word = accent ? t.slice(1, -1) : t;
+        let word = t;
+        let accent = inAccent;
+        if (!inAccent && word.startsWith('*')) {
+          accent = true;
+          word = word.slice(1);
+          if (!word.endsWith('*')) inAccent = true;
+        }
+        if (word.endsWith('*')) {
+          word = word.slice(0, -1);
+          inAccent = false;
+        }
         return (
           <span key={i} data-w className={`inline-block${accent ? ' text-stroxx-blue' : ''}`}>
             {word}
