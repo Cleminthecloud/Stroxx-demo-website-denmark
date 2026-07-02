@@ -40,7 +40,7 @@ The site should feel like **one continuous surface**, not a stack of sections. M
 
 ## Trailing light — elastic
 
-Where a product/bag travels on scroll, the blue light is a **separate elastic body** that trails it. The image leads (responsive lerp ~0.17), the light springs toward it with a soft stiffness (~0.03) and low friction (damping ~0.91–0.92) plus a little gravity, so it lags, overshoots and wobbles back — reading as a light genuinely tracking the image rather than glued to it. Implemented in `ProductExperience.tsx` (pinned product) and `BagScroller.tsx` (homepage bag).
+Where a product/bag travels on scroll, the blue light is a **separate elastic body** that trails it. The image leads (responsive lerp ~0.17), the light springs toward it with a soft stiffness (~0.03) and low friction (damping ~0.91–0.92) plus a little gravity, so it lags, overshoots and wobbles back — reading as a light genuinely tracking the image rather than glued to it. Implemented in `ProductExperience.tsx` (pinned product). The homepage bag is a load-time intro (`BagJourney.tsx` + geometry from `BagFill.tsx`), not a scroll traveller.
 
 ## Buttons — the hierarchy
 
@@ -62,4 +62,4 @@ One CTA primitive (`components/GlassButton.tsx`, styled by `.glass-cta` in `glob
 
 ## Owners
 
-`components/Reveal.tsx` · `ScrollText.tsx` · `BagScroller.tsx` · `ProductExperience.tsx` · `ParticleImage.tsx` · `CursorGlow.tsx` · `GlassButton.tsx` · tokens in `app/globals.css`.
+`components/Reveal.tsx` · `ScrollText.tsx` · `BagJourney.tsx` / `BagFill.tsx` · `ProductExperience.tsx` · `ParticleImage.tsx` · `CursorGlow.tsx` · `GlassButton.tsx` · tokens in `app/globals.css`.

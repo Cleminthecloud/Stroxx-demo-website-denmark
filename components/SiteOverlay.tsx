@@ -70,6 +70,15 @@ export default function SiteOverlay() {
     setOpen(true);
   };
 
+  // Escape dismisses the notice (screenshare-friendly: tap Esc, intro plays).
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dismiss(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   return (
     <>
       <style>{`
@@ -232,6 +241,7 @@ export default function SiteOverlay() {
 
             <button
               onClick={dismiss}
+              autoFocus
               style={{
                 marginTop: 22, width: '100%', padding: '13px 18px', borderRadius: 12,
                 border: 'none', cursor: 'pointer',

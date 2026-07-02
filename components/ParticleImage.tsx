@@ -17,8 +17,8 @@ const BLUES = ['#2C7FC0', '#1E8FD5', '#0098E8', '#4FA8EE', '#8FC6F4', '#D2E8FC']
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 const GRAV = 0.016;   // gentle downward pull
-const MR = 100;       // cursor influence radius (px)
-const MF = 2.8;       // cursor repulsion strength
+const MR = 140;       // cursor influence radius (px) — big enough to read on large screens
+const MF = 3.1;       // cursor repulsion strength
 
 export default function ParticleImage({
   src,

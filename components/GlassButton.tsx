@@ -37,6 +37,21 @@ export default function GlassButton({
     const r = el.getBoundingClientRect();
     el.style.setProperty('--x', `${e.clientX - r.left}px`);
     el.style.setProperty('--y', `${e.clientY - r.top}px`);
+    // magnetic lean: the button eases a few px toward the cursor (capped) —
+    // the .25s transform transition supplies the soft pull, CSS supplies the
+    // hover lift on top via calc(). Skipped under prefers-reduced-motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cap = 3;
+    const mx = Math.max(-cap, Math.min(cap, (e.clientX - (r.left + r.width / 2)) * 0.12));
+    const my = Math.max(-cap, Math.min(cap, (e.clientY - (r.top + r.height / 2)) * 0.18));
+    el.style.setProperty('--tx', `${mx.toFixed(2)}px`);
+    el.style.setProperty('--ty', `${my.toFixed(2)}px`);
+  };
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty('--tx', '0px');
+    el.style.setProperty('--ty', '0px');
   };
   const cls = [
     'glass-cta',
@@ -48,7 +63,7 @@ export default function GlassButton({
 
   if (submit || !href) {
     return (
-      <button ref={ref as never} type="submit" onMouseMove={onMove} className={cls}>
+      <button ref={ref as never} type="submit" onMouseMove={onMove} onMouseLeave={onLeave} className={cls}>
         {inner}
       </button>
     );
@@ -56,10 +71,10 @@ export default function GlassButton({
 
   const isInternal = !external && (href.startsWith('/') || href.startsWith('#'));
   if (isInternal && !href.startsWith('#')) {
-    return <Link ref={ref as never} href={href} onMouseMove={onMove} className={cls}>{inner}</Link>;
+    return <Link ref={ref as never} href={href} onMouseMove={onMove} onMouseLeave={onLeave} className={cls}>{inner}</Link>;
   }
   return (
-    <a ref={ref as never} href={href} onMouseMove={onMove} className={cls}
+    <a ref={ref as never} href={href} onMouseMove={onMove} onMouseLeave={onLeave} className={cls}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
       {inner}
     </a>
