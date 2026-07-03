@@ -497,7 +497,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
           case 'faqSection': {
             const items = ((s.items || []) as { q?: string; a?: string }[]).map((f) => ({ q: f.q || '', a: f.a || '' }));
             return (
-              <section key={s._key} className="relative border-t border-line">
+              <section key={s._key} className="relative">
                 <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
                   <div className="text-center mb-12">
                     <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>

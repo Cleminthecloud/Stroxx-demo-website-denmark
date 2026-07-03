@@ -75,7 +75,7 @@ export function NewsletterForm({
           }}
           placeholder="your@email.dk"
           aria-label="Email address"
-          className="w-full sm:max-w-sm rounded-full border border-line bg-ink/60 px-5 py-3 text-white placeholder:text-fog/60 outline-none backdrop-blur-sm transition-colors focus:border-stroxx-blue/70"
+          className="w-full sm:max-w-sm rounded-full bg-white/[0.07] px-5 py-3 text-white placeholder:text-fog/60 outline-none backdrop-blur-sm transition-colors focus:bg-white/[0.11]"
         />
         <button
           type="submit"
@@ -97,7 +97,7 @@ export function NewsletterForm({
 /** The designed full-width signup band, rendered above the footer. */
 export function NewsletterBand({ copy }: { copy: NewsletterCopy }) {
   return (
-    <section aria-label="Newsletter" className="relative border-t border-line">
+    <section aria-label="Newsletter" className="relative">
       <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 70% at 50% 100%, rgba(0,130,202,0.13), transparent 70%)' }} />
       <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-20 md:py-24 grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
