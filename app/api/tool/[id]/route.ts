@@ -188,7 +188,7 @@ async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } 
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id.replace(/[^0-9]/g, '');
-  if (!id) return new Response(BLANK, { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
+  if (!id) return new Response(new Uint8Array(BLANK), { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
 
   const reqF = (req.nextUrl.searchParams.get('f') || '').replace(/[^0-9]/g, '');
   // transparent PNG first, then whatever was explicitly asked for, then JPG 800.
@@ -203,7 +203,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     // re-encoded to a sane 8-bit PNG even when no knockout applies.
     const processed = await processImage(r.buf);
     if (processed) {
-      return new Response(processed, { headers: { ...CORS, 'Cache-Control': CACHE_LONG, 'Content-Type': 'image/png' } });
+      return new Response(new Uint8Array(processed), { headers: { ...CORS, 'Cache-Control': CACHE_LONG, 'Content-Type': 'image/png' } });
     }
     // A heavy original we couldn't process (e.g. an 18MB 16-bit DAM export sharp
     // can't digest) must never be served raw — fall through to the next
@@ -213,9 +213,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     // path (long cache); a raw JPG fallback gets a short cache so a transient
     // upstream failure can't pin a white image at the edge for a day.
     const isPng = r.ct.includes('png');
-    return new Response(r.buf, {
+    return new Response(new Uint8Array(r.buf), {
       headers: { ...CORS, 'Cache-Control': isPng ? CACHE_LONG : CACHE_SHORT, 'Content-Type': r.ct },
     });
   }
-  return new Response(BLANK, { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
+  return new Response(new Uint8Array(BLANK), { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
 }

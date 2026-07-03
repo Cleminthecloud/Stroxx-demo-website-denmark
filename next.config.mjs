@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  // lint is a build gate: broken or sloppy code can't reach a push
-  eslint: { ignoreDuringBuilds: false },
+  // Next 16 removed lint-from-build; the gate is now `npm run check` pre-push
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.carl-ras.dk' },
