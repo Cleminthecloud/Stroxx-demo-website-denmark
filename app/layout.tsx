@@ -11,7 +11,6 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import CommandMenu from '@/components/CommandMenu';
-import SiteOverlay from '@/components/SiteOverlay';
 import ExitPreview from '@/components/ExitPreview';
 import { NewsletterBand, NewsletterPopup } from '@/components/Newsletter';
 import { SITE_URL } from '@/lib/site';
@@ -163,8 +162,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}
         <a href="#indhold" className="skip-link">Skip to content</a>
-        {/* the placeholder overlay would cover the Presentation preview iframe */}
-        {!draft && <SiteOverlay />}
         <SmoothScroll>
           <Nav links={cleanLinks(settings?.navLinks) ?? undefined} />
           <div id="indhold">{children}</div>
