@@ -10,6 +10,7 @@
     "check": "tsc --noEmit && npm run lint",
     "seed": "sanity exec scripts/seed-demo.ts --with-user-token",
     "seed:more": "sanity exec scripts/seed-home-stores.ts --with-user-token",
+    "seed:news": "sanity exec scripts/seed-news.ts --with-user-token",
     "backup": "mkdir -p backups && sanity dataset export demo backups/demo-backup.tar.gz --overwrite"
   },
   "dependencies": {

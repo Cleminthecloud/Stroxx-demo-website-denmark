@@ -139,6 +139,7 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   footerPageLinks: [
     lk('Tool of the Month', '/maanedens', 1),
     lk('Products', '/produkter', 2),
+    lk('News', '/nyheder', 8),
     lk('Trades', '/fag', 3),
     lk('Stores', '/butikker', 4),
     lk('Campaign: Try It', '/proev-det', 5),

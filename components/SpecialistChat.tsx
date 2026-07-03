@@ -20,6 +20,57 @@ const DEFAULT_CHIPS = ['How does the guarantee work?', 'Find my store', 'Got a g
 const norm = (s: string) =>
   s.toLowerCase().replace(/ø/g, 'o').replace(/å/g, 'a').replace(/æ/g, 'ae');
 
+/** Friendly labels for site paths the AI mentions, so replies show styled
+ *  clickable links instead of raw paths. Unknown paths keep their path text
+ *  but still become links. Next's Link prefetches routes as they appear, so
+ *  the recommended page is warm before the tap. */
+const PATH_LABELS: [RegExp, string][] = [
+  [/^\/produkter/, 'Products'],
+  [/^\/butikker\?tab=specialister/, 'The specialists'],
+  [/^\/butikker/, 'Store finder'],
+  [/^\/proev-det/, 'The 30-day guarantee'],
+  [/^\/maanedens/, 'Tool of the Month'],
+  [/^\/nyheder/, 'News'],
+  [/^\/service/, 'Service and support'],
+  [/^\/fag/, 'Trades'],
+];
+
+function Linkified({ text }: { text: string }) {
+  /* internal paths (/produkter, /butikker?tab=..., /produkt/slug) become
+     styled Links; bare carl-ras.dk URLs become external links */
+  const parts = text.split(/((?:https?:\/\/[^\s)]+)|(?:(?<=^|[\s(])\/[a-z0-9\-/]+(?:\?[a-z0-9=&\-]+)?))/gi);
+  return (
+    <>
+      {parts.map((p, i) => {
+        if (!p) return null;
+        if (/^https?:\/\//i.test(p)) {
+          return (
+            <a key={i} href={p} target="_blank" rel="noopener noreferrer"
+              className="text-stroxx-blue underline decoration-stroxx-blue/40 underline-offset-2 hover:decoration-stroxx-blue">
+              {p.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+            </a>
+          );
+        }
+        if (/^\/[a-z0-9\-/]/i.test(p)) {
+          const clean = p.replace(/[.,!;:]+$/, '');
+          const trail = p.slice(clean.length);
+          const label = PATH_LABELS.find(([re]) => re.test(clean))?.[1] || clean;
+          return (
+            <span key={i}>
+              <Link href={clean}
+                className="text-stroxx-blue underline decoration-stroxx-blue/40 underline-offset-2 hover:decoration-stroxx-blue">
+                {label}
+              </Link>
+              {trail}
+            </span>
+          );
+        }
+        return <span key={i}>{p}</span>;
+      })}
+    </>
+  );
+}
+
 function searchProducts(q: string) {
   const tokens = norm(q).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 &&
     !['har', 'jeg', 'med', 'til', 'den', 'det', 'der', 'hvad', 'koster', 'pris', 'find', 'skal', 'bruge', 'bruger', 'noget', 'nogle', 'god', 'godt', 'jeres', 'vores', 'eller', 'ikke', 'bedste', 'hvilken', 'hvilke', 'mest',
@@ -192,7 +243,7 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                 ? 'bg-stroxx-blue text-white rounded-br-sm'
                 : 'bg-white/[0.06] border border-white/10 text-white/90 rounded-bl-sm'
             }`}>
-              {m.text}
+              {m.from === 'bot' ? <Linkified text={m.text} /> : m.text}
               {m.products && m.products.length > 0 && (
                 <div className="mt-2.5 flex flex-col gap-2">
                   {m.products.map((p) => (
