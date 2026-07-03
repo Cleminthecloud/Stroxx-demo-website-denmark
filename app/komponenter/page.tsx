@@ -186,6 +186,20 @@ const DEMOS: Demo[] = [
     },
   },
   {
+    studioName: 'Contact form',
+    description:
+      'Name/email/message form. Submissions POST to the webhook configured in the hosting environment (FORM_WEBHOOK_URL), e.g. a Zapier/Make flow into an inbox or CRM. Until it is configured, the form points politely to the phone.',
+    section: {
+      _type: 'contactForm', _key: 'd16',
+      eyebrow: 'Component · Contact form',
+      headline: 'Talk to \n *real people.*',
+      sub: 'Project questions, bulk orders, or something the FAQ missed. Write, and a tradesperson answers.',
+      topic: 'component-demo',
+      buttonLabel: 'Send',
+      successMessage: 'Thanks, we will get back to you within one working day.',
+    },
+  },
+  {
     studioName: 'Spacer (empty breathing room)',
     description: 'Adds vertical space between sections. Three sizes. (Rendered below as the gap you are looking at.)',
     section: { _type: 'spacer', _key: 'd14', size: 'l' },

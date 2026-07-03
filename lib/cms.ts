@@ -17,6 +17,7 @@ export type NavLink = { label?: string; href?: string };
 export type SiteSettings = {
   retailerName?: string;
   retailerLogo?: unknown; // Sanity image; render via assetUrl()
+  retailerLogoHref?: string;
   supportPhone?: string;
   supportHours?: string;
   legalLine?: string;
@@ -84,6 +85,46 @@ export async function getLandingPage(slug: string): Promise<LandingDoc | null> {
       params: { slug },
     });
     return (data as LandingDoc) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/* ── News/blog ──────────────────────────────────────────────────────────── */
+
+export type PostDoc = {
+  _id?: string;
+  title?: string;
+  slug?: { current?: string };
+  publishedAt?: string;
+  heroImage?: unknown; // Sanity image (+alt field); render via assetUrl()
+  excerpt?: string;
+  body?: any[];
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: unknown;
+};
+
+/** Newest first. Empty array when the CMS is empty/unreachable: the index
+ *  renders a friendly empty state, never an error. */
+export async function getPosts(): Promise<PostDoc[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "post" && defined(slug.current)] | order(publishedAt desc)',
+    });
+    return Array.isArray(data) ? (data as PostDoc[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getPost(slug: string): Promise<PostDoc | null> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "post" && slug.current == $slug][0]',
+      params: { slug },
+    });
+    return (data as PostDoc) ?? null;
   } catch {
     return null;
   }

@@ -84,6 +84,14 @@ export const landingPage = defineType({
               type: 'image',
               options: { hotspot: true },
               description: 'Preferred. Overrides the image path below when set.',
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                  description: 'Describe the image for screen readers and image search. Leave empty for purely decorative photos.',
+                }),
+              ],
             }),
             defineField({
               name: 'image',
@@ -203,6 +211,14 @@ export const landingPage = defineType({
               type: 'image',
               options: { hotspot: true },
               description: 'Preferred. Overrides the image path below when set.',
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                  description: 'Describe the image for screen readers and image search. Leave empty for purely decorative photos.',
+                }),
+              ],
             }),
             defineField({
               name: 'image',
@@ -310,6 +326,14 @@ export const landingPage = defineType({
               type: 'image',
               options: { hotspot: true },
               description: 'Preferred. Overrides the image path below when set.',
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                  description: 'Describe the image for screen readers and image search. Leave empty for purely decorative photos.',
+                }),
+              ],
             }),
             defineField({
               name: 'image',
@@ -428,6 +452,21 @@ export const landingPage = defineType({
             }),
           ],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Newsletter · ${s.title || ''}` }) },
+        }),
+        defineArrayMember({
+          name: 'contactForm',
+          title: 'Contact form',
+          type: 'object',
+          description: 'Name/email/message form. Submissions go to the webhook the developer configures in the hosting environment (FORM_WEBHOOK_URL), e.g. a Zapier/Make flow into your inbox or CRM.',
+          fields: [
+            eyebrow,
+            headline,
+            defineField({ name: 'sub', title: 'Text', type: 'text', rows: 2 }),
+            defineField({ name: 'topic', title: 'Topic tag (internal)', type: 'string', description: 'Included in every submission so you can tell forms apart, e.g. "summer-campaign".' }),
+            defineField({ name: 'buttonLabel', title: 'Button label', type: 'string', initialValue: 'Send' }),
+            defineField({ name: 'successMessage', title: 'Success message', type: 'string', initialValue: 'Thanks, we will get back to you within one working day.' }),
+          ],
+          preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Contact form · ${s.title || ''}` }) },
         }),
         defineArrayMember({
           name: 'spacer',

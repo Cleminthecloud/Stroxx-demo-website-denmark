@@ -22,8 +22,8 @@ const norm = (s: string) =>
 
 function searchProducts(q: string) {
   const tokens = norm(q).split(/[^a-z0-9]+/).filter((t) => t.length >= 3 &&
-    !['har', 'jeg', 'med', 'til', 'den', 'det', 'der', 'hvad', 'koster', 'pris', 'find', 'skal', 'bruge', 'bruger', 'noget', 'nogle', 'god', 'godt', 'jeres', 'vores', 'eller', 'ikke',
-      'the', 'and', 'you', 'your', 'have', 'has', 'got', 'need', 'want', 'some', 'good', 'cost', 'costs', 'price', 'with', 'for', 'find'].includes(t));
+    !['har', 'jeg', 'med', 'til', 'den', 'det', 'der', 'hvad', 'koster', 'pris', 'find', 'skal', 'bruge', 'bruger', 'noget', 'nogle', 'god', 'godt', 'jeres', 'vores', 'eller', 'ikke', 'bedste', 'hvilken', 'hvilke', 'mest',
+      'the', 'and', 'you', 'your', 'have', 'has', 'got', 'need', 'want', 'some', 'good', 'cost', 'costs', 'price', 'with', 'for', 'find', 'what', 'which', 'best'].includes(t));
   if (!tokens.length) return [];
   const scored = products
     .map((p) => {
@@ -125,7 +125,16 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
     setTyping(true);
     const scripted = botReply(clean, nearest);
     const isFallback = scripted.length === 1 && !!scripted[0].text?.startsWith('I would rather not guess');
-    if (!isFallback) {
+    /* Question-shaped product queries ("hvad er den bedste laser?") deserve a
+       real answer, not just a keyword card dump: send them to the AI and
+       attach the matching product cards under its reply. Terse queries
+       ("laser", "kniv") keep the instant scripted cards. */
+    const isCards = scripted.length === 1 && !!scripted[0].products?.length;
+    const questionLike =
+      /\?/.test(clean) ||
+      /^(hvad|hvilken?|hvilke|hvordan|hvorfor|kan|what|which|how|why|can|should|does|is|are)\b/i.test(clean.trim()) ||
+      /bedste|best|anbefal|recommend/i.test(clean);
+    if (!isFallback && !(isCards && questionLike)) {
       // the scripted answers (guarantee, stores, product cards, handoff) are
       // deliberate UX; only free-form questions go to the AI below
       setTimeout(() => {
@@ -149,7 +158,7 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
         if (r.ok) {
           const j = await r.json();
           if (j?.reply) {
-            setMsgs((m) => [...m, { from: 'bot', text: j.reply }]);
+            setMsgs((m) => [...m, { from: 'bot', text: j.reply, products: isCards ? scripted[0].products : undefined }]);
             setTyping(false);
             return;
           }

@@ -35,6 +35,15 @@ export default defineConfig({
               ],
             }),
           }),
+          post: defineLocations({
+            select: { title: 'title', slug: 'slug.current' },
+            resolve: (doc) => ({
+              locations: [
+                { title: doc?.title || 'Article', href: `/nyheder/${doc?.slug || ''}` },
+                { title: 'News index', href: '/nyheder' },
+              ],
+            }),
+          }),
           monthlyLineup: defineLocations({
             select: { month: 'month' },
             resolve: (doc) => ({

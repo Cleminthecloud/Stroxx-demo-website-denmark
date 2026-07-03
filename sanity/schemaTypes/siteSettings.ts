@@ -52,6 +52,13 @@ export const siteSettings = defineType({
       group: 'contact',
     }),
     defineField({
+      name: 'retailerLogoHref',
+      title: 'Logo link',
+      type: 'string',
+      description: 'Where a click on the footer logo goes, e.g. https://www.carl-ras.dk. Empty = not clickable.',
+      group: 'contact',
+    }),
+    defineField({
       name: 'supportPhone',
       title: 'Customer service phone',
       description: 'Shown in the footer, nav, chat and guarantee modal.',

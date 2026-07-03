@@ -5,6 +5,8 @@ import { productAugment } from './productAugment';
 import { homePage } from './homePage';
 import { store } from './store';
 import { specialist, testimonial, video, legalPage } from './collections';
+import { post } from './post';
+import { redirect } from './redirect';
 
 export const schemaTypes = [
   siteSettings,
@@ -17,4 +19,6 @@ export const schemaTypes = [
   testimonial,
   video,
   legalPage,
+  post,
+  redirect,
 ];

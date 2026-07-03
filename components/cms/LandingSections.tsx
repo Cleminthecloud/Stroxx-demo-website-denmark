@@ -9,6 +9,7 @@ import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { NewsletterForm } from '@/components/Newsletter';
+import ContactForm from '@/components/ContactForm';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
 import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
@@ -20,6 +21,12 @@ import type { Video } from '@/lib/videos';
 /** Renders CMS landing-page sections with the exact art direction of the
  *  hand-built /proev-det page. Each `_type` maps to one section block; editors
  *  reorder and refill, the code owns layout, motion and brand. */
+
+/** alt text editors set on an uploaded image; empty for decorative images */
+function imgAlt(img: unknown): string {
+  const a = (img as { alt?: string } | null | undefined)?.alt;
+  return typeof a === 'string' ? a : '';
+}
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   if (!children) return null;
@@ -108,7 +115,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   />
                 ) : (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/rings.jpg'} sizes="100vw" alt="" draggable={false}
+                  <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/rings.jpg'} sizes="100vw" alt={imgAlt(s.imageUpload)} draggable={false}
                     className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '62% 35%' }} />
                 )}
                 {align === 'left' && (
@@ -164,7 +171,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   <Reveal from={imgLeft ? 'left' : 'right'} className={imgLeft ? '' : 'lg:order-2'}>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} alt="" draggable={false}
+                      <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} alt={imgAlt(s.imageUpload)} draggable={false}
                         className="absolute inset-0 h-full w-full object-cover grayscale select-none" />
                       <div className="pointer-events-none absolute inset-0" style={{
                         background: 'linear-gradient(180deg, rgba(11,12,14,0) 55%, rgba(11,12,14,0.45) 100%)' }} />
@@ -290,6 +297,27 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                         disclaimer: s.disclaimer || 'Unsubscribe anytime.',
                       }}
                     />
+                  </Reveal>
+                </div>
+              </section>
+            );
+
+          case 'contactForm':
+            return (
+              <section key={s._key} className="relative">
+                <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 grid gap-12 lg:grid-cols-2 lg:items-start">
+                  <div>
+                    <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                    <ScrollText as="h2" text={s.headline || ''}
+                      className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.95] mb-4" />
+                    {s.sub && (
+                      <Reveal delay={80}>
+                        <p className="text-fog text-lg leading-relaxed max-w-md"><Accent text={s.sub} /></p>
+                      </Reveal>
+                    )}
+                  </div>
+                  <Reveal delay={120}>
+                    <ContactForm topic={s.topic} buttonLabel={s.buttonLabel} successMessage={s.successMessage} />
                   </Reveal>
                 </div>
               </section>
@@ -429,7 +457,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
             return (
               <section key={s._key} className="relative h-[88svh] min-h-[520px] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} sizes="100vw" alt="" draggable={false}
+                <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} sizes="100vw" alt={imgAlt(s.imageUpload)} draggable={false}
                   className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '66% 40%' }} />
                 <div className="pointer-events-none absolute inset-0" style={{
                   background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.25) 60%, #0B0C0E 100%)' }} />

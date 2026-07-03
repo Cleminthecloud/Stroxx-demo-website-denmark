@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
 import { trades } from '@/lib/trades';
-import { getLandingSlugs } from '@/lib/cms';
+import { getLandingSlugs, getPosts } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/komponenter, /guide) and the
@@ -10,6 +10,7 @@ import { SITE_URL as BASE } from '@/lib/site';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const landingSlugs = await getLandingSlugs();
+  const posts = await getPosts();
   return [
     { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/produkter`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
@@ -23,6 +24,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
+    })),
+    /* news index only when articles exist; articles ride along automatically */
+    ...(posts.length ? [{ url: `${BASE}/nyheder`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.7 }] : []),
+    ...posts.map((p) => ({
+      url: `${BASE}/nyheder/${p.slug?.current}`,
+      lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
     ...['privatliv', 'cookies', 'handelsbetingelser'].map((s) => ({
       url: `${BASE}/${s}`,

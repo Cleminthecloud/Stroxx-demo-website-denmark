@@ -3,6 +3,7 @@ import { Phone } from 'lucide-react';
 import { UTM, CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
+import { stegaClean } from '@sanity/client/stega';
 
 const PAGES_FALLBACK = [
   { label: 'Tool of the Month', href: '/maanedens' },
@@ -37,6 +38,9 @@ export default async function Footer() {
      until one is uploaded, so the footer works with or without it */
   const retailerLogo = assetUrl(s?.retailerLogo, 400);
   const retailerName = s?.retailerName || 'Carl Ras';
+  /* optional click-through, e.g. https://www.carl-ras.dk (internal paths work too) */
+  const rawHref = stegaClean(s?.retailerLogoHref) || '';
+  const retailerLogoHref = /^(https:\/\/|\/)[^\s]*$/.test(rawHref) ? rawHref : null;
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
@@ -75,10 +79,17 @@ export default async function Footer() {
         </div>
 
         <div className="mt-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fog/50">
-          {retailerLogo && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img src={retailerLogo} alt={retailerName} className="h-6 w-auto opacity-80" />
-          )}
+          {retailerLogo &&
+            (retailerLogoHref ? (
+              <a href={retailerLogoHref} target="_blank" rel="noopener noreferrer"
+                className="opacity-80 hover:opacity-100 transition-opacity" aria-label={retailerName}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={retailerLogo} alt={retailerName} className="h-6 w-auto" />
+              </a>
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={retailerLogo} alt={retailerName} className="h-6 w-auto opacity-80" />
+            ))}
           <span>{legal}</span>
           <span className="flex gap-4">
             <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
