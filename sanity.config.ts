@@ -56,6 +56,28 @@ export default defineConfig({
               locations: [{ title: doc?.name || 'Store', href: '/butikker' }],
             }),
           }),
+          specialist: defineLocations({
+            select: { name: 'name' },
+            resolve: (doc) => ({
+              locations: [{ title: `${doc?.name || 'Specialist'} (homepage cards)`, href: '/#specialister' }],
+            }),
+          }),
+          testimonial: defineLocations({
+            select: {},
+            resolve: () => ({ locations: [{ title: 'Campaign: Try It (testimonials)', href: '/proev-det' }] }),
+          }),
+          video: defineLocations({
+            select: { title: 'title' },
+            resolve: (doc) => ({
+              locations: [{ title: `${doc?.title || 'Film'} (Try It, film section)`, href: '/proev-det' }],
+            }),
+          }),
+          legalPage: defineLocations({
+            select: { slug: 'slug', title: 'title' },
+            resolve: (doc) => ({
+              locations: [{ title: doc?.title || 'Legal page', href: `/${doc?.slug || ''}` }],
+            }),
+          }),
         },
       },
     }),

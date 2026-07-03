@@ -6,9 +6,8 @@ import {
   categoryBySlug,
   productBuyUrl,
   toolTexture,
-  specialistForProduct,
 } from '@/lib/data';
-import { testimonials } from '@/lib/testimonials';
+import { getSpecialists, getTestimonials, pickSpecialist } from '@/lib/cms';
 import { SITE_URL } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -41,7 +40,10 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
   const related = products
     .filter((p) => p.slug !== product.slug && p.tags.some((t) => product.tags.includes(t)))
     .slice(0, 4);
-  const spec = specialistForProduct(product);
+  const spec = pickSpecialist(await getSpecialists(), product);
+  // Real customer reviews for THIS product (from Pro Club, verified against
+  // sales data in production). Only attached when a quote names this product.
+  const revs = (await getTestimonials()).filter((t) => t.productCode === product.code);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -59,10 +61,7 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
       url: buyUrl,
       seller: { '@type': 'Organization', name: 'Carl Ras' },
     },
-    // Real customer reviews for THIS product (from Pro Club, verified against
-    // sales data in production). Only attached when a quote names this product.
     ...(() => {
-      const revs = testimonials.filter((t) => t.productCode === product.code);
       if (!revs.length) return {};
       return {
         aggregateRating: {

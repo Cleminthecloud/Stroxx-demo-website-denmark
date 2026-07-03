@@ -10,9 +10,10 @@ import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
-import { productsBySkus, LandingSection } from '@/lib/cms';
+import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
-import { testimonials } from '@/lib/testimonials';
+import type { Testimonial } from '@/lib/testimonials';
+import type { Video } from '@/lib/videos';
 
 /** Renders CMS landing-page sections with the exact art direction of the
  *  hand-built /proev-det page. Each `_type` maps to one section block; editors
@@ -45,7 +46,7 @@ export function Accent({ text }: { text?: string }) {
   );
 }
 
-export default function LandingSections({
+export default async function LandingSections({
   sections,
   buy,
   docId,
@@ -54,6 +55,8 @@ export default function LandingSections({
   buy: string;
   docId?: string;
 }) {
+  /* collections some blocks render (CMS-managed with hardcoded fallbacks) */
+  const [videosData, testimonialsData] = await Promise.all([getVideos(), getTestimonials()]);
   /* data-sanity on every section wrapper makes the WHOLE block click-to-edit
      in Presentation (headlines run through Accent/ScrollText, which split the
      invisible stega markers, so per-string overlays alone aren't enough). */
@@ -73,14 +76,14 @@ export default function LandingSections({
     <>
       {sections.map((s) => (
         <div key={s._key} data-sanity={sectionAttr(s._key)} style={{ display: 'contents' }}>
-          {renderSection(s, buy)}
+          {renderSection(s, buy, videosData, testimonialsData)}
         </div>
       ))}
     </>
   );
 }
 
-function renderSection(s: LandingSection, buy: string) {
+function renderSection(s: LandingSection, buy: string, videosData?: Video[], testimonialsData?: Testimonial[]) {
   switch (s._type) {
           case 'photoHero': {
             const height =
@@ -368,7 +371,7 @@ function renderSection(s: LandingSection, buy: string) {
                     )}
                   </div>
                   <Reveal delay={140}>
-                    <div className="max-w-5xl"><VideoProof /></div>
+                    <div className="max-w-5xl"><VideoProof videos={videosData} /></div>
                   </Reveal>
                 </div>
               </section>
@@ -383,7 +386,7 @@ function renderSection(s: LandingSection, buy: string) {
                     <ScrollText as="h2" text={s.headline || ''}
                       className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96]" />
                   </div>
-                  <Testimonials items={testimonials} />
+                  <Testimonials items={testimonialsData ?? []} />
                 </div>
               </section>
             );

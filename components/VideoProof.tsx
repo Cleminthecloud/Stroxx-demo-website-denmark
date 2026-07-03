@@ -6,20 +6,15 @@ import { Play } from 'lucide-react';
  *  autoplaying nocookie iframe) + a Se flere strip that swaps the featured
  *  video. Videos are real STROXX films from the partner chains. */
 
-interface Video { id: string; title: string; by: string }
-
-const FEATURED: Video = { id: 'egSu462a-rI', title: 'STROXX Powertools', by: 'Lecot' };
-const MORE: Video[] = [
-  { id: 'LR4bsAip9bI', title: 'Borehoved, produktvideo', by: 'Meesenburg' },
-  { id: 'q5v1MhyKHoQ', title: 'Kniv, teaser', by: 'Meesenburg' },
-  { id: 'o4AEU1-H56w', title: 'Trappestige, teaser', by: 'Meesenburg' },
-  { id: 'fuaFnPv9rIQ', title: 'Bits, teaser', by: 'Meesenburg' },
-  { id: '9nBiA4joKlc', title: 'Slukspray, teaser', by: 'Meesenburg' },
-];
+import { videos as fallbackVideos, Video } from '@/lib/videos';
 
 const thumb = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
-export default function VideoProof() {
+export default function VideoProof({ videos }: { videos?: Video[] }) {
+  // CMS film documents when present, hardcoded list otherwise
+  const list = videos && videos.length ? videos : fallbackVideos;
+  const FEATURED = list[0];
+  const MORE = list.slice(1);
   const [current, setCurrent] = useState<Video>(FEATURED);
   const [playing, setPlaying] = useState(false);
 

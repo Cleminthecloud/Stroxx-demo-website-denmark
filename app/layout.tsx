@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import CommandMenu from '@/components/CommandMenu';
 import SiteOverlay from '@/components/SiteOverlay';
+import ExitPreview from '@/components/ExitPreview';
 import { SITE_URL } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -152,6 +153,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
         <SanityLive />
         {draft && <VisualEditing />}
+        {draft && <ExitPreview />}
       </body>
     </html>
   );

@@ -10,8 +10,8 @@ import CursorGlow from '@/components/CursorGlow';
 import VideoProof from '@/components/VideoProof';
 import Faq from '@/components/Faq';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
-import { productBuyUrl, specialistForProduct, toolTexture, particleSrc, CR_BRAND, UTM } from '@/lib/data';
-import { getSka } from '@/lib/cms';
+import { productBuyUrl, toolTexture, particleSrc, CR_BRAND, UTM } from '@/lib/data';
+import { getSka, getSpecialists, getVideos, pickSpecialist } from '@/lib/cms';
 import { SITE_URL } from '@/lib/site';
 
 /* Månedens STROXX — the SKA hero landing page (docs/STROXX KOMMERCIEL MOTOR.pdf):
@@ -37,7 +37,7 @@ export default async function MaanedensPage() {
   const SKA = await getSka();
   const hero = SKA.hero;
   const buyUrl = productBuyUrl(hero.code);
-  const spec = specialistForProduct(hero);
+  const spec = pickSpecialist(await getSpecialists(), hero);
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -140,7 +140,7 @@ export default async function MaanedensPage() {
           <Reveal><div className="eyebrow mb-5">Demonstration</div></Reveal>
           <ScrollText as="h2" text="See it. Judge it yourself."
             className="h-display text-white text-[clamp(2rem,4.5vw,3.4rem)] leading-[0.95] mb-12" />
-          <VideoProof />
+          <VideoProof videos={await getVideos()} />
         </div>
       </section>
 

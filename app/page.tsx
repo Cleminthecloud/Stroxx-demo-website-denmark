@@ -18,7 +18,6 @@ import GuaranteeModal from '@/components/GuaranteeModal';
 import CampaignBand from '@/components/CampaignBand';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
-  specialists,
   featuredCategories,
   particleSrc,
   categoryBuyUrl,
@@ -27,7 +26,7 @@ import {
   UTM,
   CR_BRAND,
 } from '@/lib/data';
-import { getSka, getHomePage } from '@/lib/cms';
+import { getSka, getHomePage, getSpecialists } from '@/lib/cms';
 import { Accent } from '@/components/cms/LandingSections';
 import { createDataAttribute } from 'next-sanity';
 import { stegaClean } from '@sanity/client/stega';
@@ -59,6 +58,7 @@ function Marquee({ text }: { text: string }) {
 export default async function Home() {
   const SKA = await getSka();
   const hp = await getHomePage();
+  const specs = await getSpecialists();
   /* click-to-edit target per homepage block (Presentation tool) */
   const hAttr = (path: string) =>
     hp._id
@@ -184,7 +184,7 @@ export default async function Home() {
               background: 'radial-gradient(55% 60% at 28% 32%, rgba(0,130,202,0.16), transparent 70%), radial-gradient(50% 55% at 80% 75%, rgba(43,166,232,0.10), transparent 72%)',
             }} />
             <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
-              {specialists.slice(0, 6).map((s, i) => (
+              {specs.slice(0, 6).map((s, i) => (
                 <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
                   <div className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex flex-col h-full">
                     <div className="flex gap-1 mb-5">

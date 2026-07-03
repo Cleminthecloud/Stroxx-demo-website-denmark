@@ -69,8 +69,13 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 text-xs text-fog/50">
-          {legal}
+        <div className="mt-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fog/50">
+          <span>{legal}</span>
+          <span className="flex gap-4">
+            <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
+            <Link href="/handelsbetingelser" className="hover:text-white transition-colors">Terms</Link>
+          </span>
         </div>
       </div>
     </footer>

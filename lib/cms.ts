@@ -4,6 +4,9 @@ import { products, Product } from '@/lib/data';
 import { SKA } from '@/lib/ska';
 import { stores as fallbackStores, Store, StoreBrand, StoreRegion } from '@/lib/stores';
 import { HOME_DEFAULTS, type HomeCopy } from '@/lib/home-copy';
+import { specialists as fallbackSpecialists, Specialist } from '@/lib/data';
+import { testimonials as fallbackTestimonials, Testimonial } from '@/lib/testimonials';
+import { videos as fallbackVideos, Video } from '@/lib/videos';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -152,6 +155,117 @@ export async function getStores(): Promise<Store[]> {
     return mapped.length ? mapped : fallbackStores;
   } catch {
     return fallbackStores;
+  }
+}
+
+/* ── Specialists, testimonials, films, legal pages ──────────────────────── */
+
+export async function getSpecialists(): Promise<Specialist[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "specialist" && active != false] | order(name asc)',
+    });
+    const docs = (data ?? []) as Record<string, any>[];
+    if (!docs.length) return fallbackSpecialists;
+    const mapped = docs
+      .filter((d) => d.name)
+      .map((d): Specialist => ({
+        name: d.name,
+        role: d.role ?? '',
+        location: d.location ?? '',
+        photo: d.photoUrl ?? '',
+        quote: d.quote ?? '',
+        phone: d.phone ?? '',
+        email: d.email ?? '',
+        quoteTopic: stegaClean(d.quoteTopic) || undefined,
+      }));
+    return mapped.length ? mapped : fallbackSpecialists;
+  } catch {
+    return fallbackSpecialists;
+  }
+}
+
+/** Same relevance rule as lib/data.specialistForProduct, over any list:
+ *  prefer a quote about this product's category, else brand-generic only,
+ *  deterministic per slug. */
+export function pickSpecialist(list: Specialist[], p: Product): Specialist {
+  const hash = p.slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const onTopic = list.filter((s) => s.quoteTopic && p.tags.includes(s.quoteTopic));
+  const generic = list.filter((s) => !s.quoteTopic);
+  const pool = onTopic.length ? onTopic : generic.length ? generic : list;
+  return pool[hash % pool.length];
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "testimonial" && active != false] | order(_createdAt asc)',
+    });
+    const docs = (data ?? []) as Record<string, any>[];
+    if (!docs.length) return fallbackTestimonials;
+    const mapped = docs
+      .filter((d) => d.quote)
+      .map((d): Testimonial => ({
+        quote: d.quote,
+        name: d.name ?? '',
+        role: d.role ?? '',
+        rating: 5,
+        productCode: stegaClean(d.productCode) || undefined,
+        trades: ((d.trades ?? []) as string[]).map((t) => stegaClean(t) ?? t),
+      }));
+    return mapped.length ? mapped : fallbackTestimonials;
+  } catch {
+    return fallbackTestimonials;
+  }
+}
+
+export function testimonialsFor(list: Testimonial[], tradeSlug: string): Testimonial[] {
+  return list.filter((t) => t.trades.includes(tradeSlug));
+}
+
+export async function getVideos(): Promise<Video[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "video" && active != false] | order(featured desc, _createdAt asc)',
+    });
+    const docs = (data ?? []) as Record<string, any>[];
+    if (!docs.length) return fallbackVideos;
+    const mapped = docs
+      .filter((d) => d.youtubeId)
+      .map((d): Video => ({
+        id: stegaClean(d.youtubeId) ?? d.youtubeId,
+        title: d.title ?? '',
+        by: d.by ?? '',
+      }));
+    return mapped.length ? mapped : fallbackVideos;
+  } catch {
+    return fallbackVideos;
+  }
+}
+
+export type LegalDoc = { title?: string; body?: any };
+
+export async function getLegalPage(slug: string): Promise<LegalDoc | null> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "legalPage" && slug == $slug][0]',
+      params: { slug },
+    });
+    return (data as LegalDoc) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Landing-page slugs for the sitemap (plain client fetch, no draft context). */
+export async function getLandingSlugs(): Promise<string[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "landingPage" && defined(slug.current)].slug.current',
+    });
+    return ((data ?? []) as string[]).map((s) => stegaClean(s) ?? s).filter((s) => s && s !== 'proev-det');
+  } catch {
+    return [];
   }
 }
 

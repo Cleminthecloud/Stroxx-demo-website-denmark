@@ -11,6 +11,9 @@
 import { getCliClient } from 'sanity/cli';
 import { stores } from '../lib/stores';
 import { HOME_DEFAULTS } from '../lib/home-copy';
+import { specialists } from '../lib/data';
+import { testimonials } from '../lib/testimonials';
+import { videos } from '../lib/videos';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
@@ -49,13 +52,79 @@ const storeDocs = stores.map((s) => ({
   active: true,
 }));
 
+
+const slugify = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const specialistDocs = specialists.map((sp) => ({
+  _id: `specialist-${slugify(sp.name)}`,
+  _type: 'specialist',
+  name: sp.name,
+  role: sp.role,
+  location: sp.location,
+  photoUrl: sp.photo,
+  phone: sp.phone,
+  email: sp.email,
+  quote: sp.quote,
+  ...(sp.quoteTopic ? { quoteTopic: sp.quoteTopic } : {}),
+  consentGiven: true, // demo data was already public
+  active: true,
+}));
+
+const testimonialDocs = testimonials.map((t, i) => ({
+  _id: `testimonial-${slugify(t.name)}-${i}`,
+  _type: 'testimonial',
+  quote: t.quote,
+  name: t.name,
+  role: t.role,
+  ...(t.productCode ? { productCode: t.productCode } : {}),
+  trades: t.trades,
+  active: true,
+}));
+
+const videoDocs = videos.map((v, i) => ({
+  _id: `video-${v.id}`,
+  _type: 'video',
+  youtubeId: v.id,
+  title: v.title,
+  by: v.by,
+  featured: i === 0,
+  active: true,
+}));
+
+const legalBlock = (text: string) => [
+  {
+    _type: 'block',
+    _key: 'seed-1',
+    style: 'normal',
+    markDefs: [],
+    children: [{ _type: 'span', _key: 'seed-1a', text, marks: [] }],
+  },
+];
+const legalDocs = [
+  { slug: 'privatliv', title: 'Privacy policy' },
+  { slug: 'cookies', title: 'Cookie policy' },
+  { slug: 'handelsbetingelser', title: 'Terms of sale' },
+].map((l) => ({
+  _id: `legal-${l.slug}`,
+  _type: 'legalPage',
+  title: l.title,
+  slug: l.slug,
+  body: legalBlock(
+    'PLACEHOLDER: this text is awaiting sign-off from the legal team. Replace this paragraph with the approved policy before launch.'
+  ),
+}));
+
 async function run() {
   const tx = client.transaction();
   tx.createOrReplace(homePage as any);
   for (const d of storeDocs) tx.createOrReplace(d as any);
+  for (const d of specialistDocs) tx.createOrReplace(d as any);
+  for (const d of testimonialDocs) tx.createOrReplace(d as any);
+  for (const d of videoDocs) tx.createOrReplace(d as any);
+  for (const d of legalDocs) tx.createOrReplace(d as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console
-  console.log(`Seeded ${res.results.length} documents (homePage + ${storeDocs.length} stores)`);
+  console.log(`Seeded ${res.results.length} documents (homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);
 }
 
 run().catch((err) => {

@@ -11,7 +11,7 @@ import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
-import { testimonials } from '@/lib/testimonials';
+import { getTestimonials } from '@/lib/cms';
 import { stegaClean } from '@sanity/client/stega';
 import { getLandingPage } from '@/lib/cms';
 import LandingSections from '@/components/cms/LandingSections';
@@ -85,6 +85,7 @@ export default async function ProevDetPage() {
   /* CMS-driven when the landing page document exists (Sanity, slug
      "proev-det"); otherwise the hand-built page below renders unchanged. */
   const doc = await getLandingPage('proev-det');
+  const testimonials = await getTestimonials();
   const cms = doc?.sections?.length ? doc.sections : null;
 
   /* Structured data: FAQ + the trial steps as HowTo, so answer engines can

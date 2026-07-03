@@ -11,7 +11,7 @@ import Testimonials from '@/components/Testimonials';
 import { ArrowRight } from 'lucide-react';
 import { products, categoryBySlug } from '@/lib/data';
 import { trades, tradeBySlug } from '@/lib/trades';
-import { testimonialsForTrade } from '@/lib/testimonials';
+import { getTestimonials, testimonialsFor } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -51,7 +51,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
     .sort((a, b) => b.badges.length - a.badges.length)
     .slice(0, 8);
   const hero = heroSources(trade.slug);
-  const voices = testimonialsForTrade(trade.slug).slice(0, 3);
+  const voices = testimonialsFor(await getTestimonials(), trade.slug).slice(0, 3);
 
   const breadcrumbLd = {
     '@context': 'https://schema.org',
