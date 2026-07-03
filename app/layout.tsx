@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import ExitPreview from '@/components/ExitPreview';
 import { NewsletterBand, NewsletterPopup } from '@/components/Newsletter';
-import { SITE_URL } from '@/lib/site';
+import { SITE_URL, IS_DEMO } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   /* Site-wide SEO defaults come from Site settings in the CMS; the values
@@ -47,8 +47,15 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [og],
     },
     icons: {
+      icon: [
+        { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      ],
       apple: '/icons/apple-touch-icon.png',
     },
+    /* development mode: the vercel.app demo stays out of search engines;
+       flips off automatically when SITE_URL becomes the real domain */
+    ...(IS_DEMO ? { robots: { index: false, follow: false } } : {}),
     appleWebApp: {
       capable: true,
       title: 'STROXX',

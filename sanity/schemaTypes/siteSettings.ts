@@ -44,6 +44,14 @@ export const siteSettings = defineType({
   fields: [
     defineField({ name: 'retailerName', title: 'Retail partner', type: 'string', initialValue: 'Carl Ras', group: 'contact' }),
     defineField({
+      name: 'retailerLogo',
+      title: 'Retail partner logo',
+      description: 'Shown in the footer next to the credentials. A light/white version works best on the dark background; PNG or SVG with transparency.',
+      type: 'image',
+      options: { hotspot: true },
+      group: 'contact',
+    }),
+    defineField({
       name: 'supportPhone',
       title: 'Customer service phone',
       description: 'Shown in the footer, nav, chat and guarantee modal.',

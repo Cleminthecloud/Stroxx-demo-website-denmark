@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { UTM, CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
+import { assetUrl } from '@/sanity/lib/image';
 
 const PAGES_FALLBACK = [
   { label: 'Tool of the Month', href: '/maanedens' },
@@ -32,6 +33,10 @@ export default async function Footer() {
   const phone = s?.supportPhone || '+45 44 85 55 11';
   const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
   const legal = s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
+  /* retail partner logo from Site settings (Contact tab); nothing renders
+     until one is uploaded, so the footer works with or without it */
+  const retailerLogo = assetUrl(s?.retailerLogo, 400);
+  const retailerName = s?.retailerName || 'Carl Ras';
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
@@ -70,6 +75,10 @@ export default async function Footer() {
         </div>
 
         <div className="mt-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fog/50">
+          {retailerLogo && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={retailerLogo} alt={retailerName} className="h-6 w-auto opacity-80" />
+          )}
           <span>{legal}</span>
           <span className="flex gap-4">
             <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>

@@ -16,6 +16,7 @@ import { videos as fallbackVideos, Video } from '@/lib/videos';
 export type NavLink = { label?: string; href?: string };
 export type SiteSettings = {
   retailerName?: string;
+  retailerLogo?: unknown; // Sanity image; render via assetUrl()
   supportPhone?: string;
   supportHours?: string;
   legalLine?: string;
