@@ -46,6 +46,16 @@ export default defineConfig({
             select: {},
             resolve: () => ({ locations: [{ title: 'Footer (all pages)', href: '/' }] }),
           }),
+          homePage: defineLocations({
+            select: {},
+            resolve: () => ({ locations: [{ title: 'Homepage', href: '/' }] }),
+          }),
+          store: defineLocations({
+            select: { name: 'name' },
+            resolve: (doc) => ({
+              locations: [{ title: doc?.name || 'Store', href: '/butikker' }],
+            }),
+          }),
         },
       },
     }),

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react';
-import { stores, distanceKm, hoursLabel } from '@/lib/stores';
+import { stores as fallbackStores, distanceKm, hoursLabel, type Store } from '@/lib/stores';
 import SpecialistChat from '@/components/SpecialistChat';
 
 /** Phone-first "talk to a specialist" FAB. Pros ring, they rarely chat, and we
@@ -12,7 +12,8 @@ import SpecialistChat from '@/components/SpecialistChat';
 
 const SERVICE_TEL = '+4544855511';
 
-export default function SpecialistFab() {
+export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
+  const stores = storeData && storeData.length ? storeData : fallbackStores;
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<'home' | 'chat'>('home');
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
@@ -45,7 +46,7 @@ export default function SpecialistFab() {
       if (d < bestD) { bestD = d; best = s; }
     }
     return { store: best, km: bestD };
-  }, [pos]);
+  }, [pos, stores]);
 
   const locate = () => {
     if (!navigator.geolocation) { setDenied(true); return; }

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint --ext .ts,.tsx app components lib sanity scripts",
     "check": "tsc --noEmit && npm run lint",
-    "seed": "sanity exec scripts/seed-demo.ts --with-user-token"
+    "seed": "sanity exec scripts/seed-demo.ts --with-user-token",
+    "seed:more": "sanity exec scripts/seed-home-stores.ts --with-user-token"
   },
   "dependencies": {
     "@sanity/client": "^7.23.0",

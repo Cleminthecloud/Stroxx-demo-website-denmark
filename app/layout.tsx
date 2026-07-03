@@ -4,7 +4,7 @@ import Script from 'next/script';
 import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, getStores } from '@/lib/cms';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
@@ -100,6 +100,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
      a deploy. Strict GTM-XXXX validation so a CMS string can never inject
      arbitrary script. Production adds a CMP + Consent Mode v2 in front. */
   const settings = await getSiteSettings();
+  const storeData = await getStores();
   const rawGtm = stegaClean(settings?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
   return (
@@ -136,7 +137,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Nav />
           <div id="indhold">{children}</div>
           <Footer />
-          <SpecialistFab />
+          <SpecialistFab storeData={storeData} />
           <CommandMenu />
         </SmoothScroll>
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}

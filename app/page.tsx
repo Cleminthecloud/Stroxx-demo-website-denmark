@@ -27,7 +27,11 @@ import {
   UTM,
   CR_BRAND,
 } from '@/lib/data';
-import { getSka } from '@/lib/cms';
+import { getSka, getHomePage } from '@/lib/cms';
+import { Accent } from '@/components/cms/LandingSections';
+import { createDataAttribute } from 'next-sanity';
+import { stegaClean } from '@sanity/client/stega';
+import { projectId, dataset, studioUrl } from '@/sanity/env';
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-7">{children}</div>;
@@ -54,6 +58,12 @@ function Marquee({ text }: { text: string }) {
 
 export default async function Home() {
   const SKA = await getSka();
+  const hp = await getHomePage();
+  /* click-to-edit target per homepage block (Presentation tool) */
+  const hAttr = (path: string) =>
+    hp._id
+      ? createDataAttribute({ projectId, dataset, baseUrl: studioUrl, id: hp._id, type: 'homePage', path }).toString()
+      : undefined;
   return (
     <main className="relative overflow-x-clip">
       {/* the bag falls into the hero, dust puffs, and the tools cascade in on load */}
@@ -63,10 +73,10 @@ export default async function Home() {
           overlaps it slightly. Bag layer (z-20) paints over the headline (z-10). */}
       <section className="relative h-[100svh] min-h-[640px]">
         <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
-          <h1 className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
-            <span className="hero-line">A <span className="text-stroxx-blue">great</span> headline</span>
+          <h1 data-sanity={hAttr('heroLine1')} className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
+            <span className="hero-line"><Accent text={hp.heroLine1} /></span>
             <br />
-            <span className="hero-line hero-line--2">will be here</span>
+            <span className="hero-line hero-line--2"><Accent text={hp.heroLine2} /></span>
           </h1>
         </div>
         <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">
@@ -78,36 +88,36 @@ export default async function Home() {
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
-            <p className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
-              <ScrollText as="span" className="text-white" text="Here we have another great headline" />{' '}
-              <ScrollText as="span" className="text-stroxx-blue" text="for the reader." />
+            <p data-sanity={hAttr('claimWhite')} className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
+              <ScrollText as="span" className="text-white" text={hp.claimWhite} />{' '}
+              <ScrollText as="span" className="text-stroxx-blue" text={hp.claimBlue} />
             </p>
             <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
-              text="Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about." />
+              text={hp.claimSub} />
           </div>
         </div>
       </section>
 
-      <Marquee text="A great headline will be here" />
+      <Marquee text={stegaClean(hp.marqueeText)} />
 
       {/* SORTIMENT — what we have, and we have your back */}
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
-          <div>
+          <div data-sanity={hAttr('rangeHeadline')}>
             <Eyebrow>The range</Eyebrow>
-            <ScrollText as="h2" text={'You got what \n it takes \n ...so do *we*'}
+            <ScrollText as="h2" text={hp.rangeHeadline}
               className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9]" />
           </div>
           <div className="grid gap-12 sm:grid-cols-2">
-            <div>
-              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The selection</div>
+            <div data-sanity={hAttr('rangeCol1Text')}>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">{hp.rangeCol1Label}</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                text="Tools, equipment, accessories and consumables. From laser measures and saw blades to hand tools, socket sets and protective gear. STROXX has most of it." />
+                text={hp.rangeCol1Text} />
             </div>
-            <div>
-              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The service</div>
+            <div data-sanity={hAttr('rangeCol2Text')}>
+              <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">{hp.rangeCol2Label}</div>
               <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                text="And we have your back. So you never walk away empty-handed or with the wrong thing. It's not just the tools that are sharp." />
+                text={hp.rangeCol2Text} />
             </div>
           </div>
         </div>
@@ -118,32 +128,32 @@ export default async function Home() {
         <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 40%, rgba(0,130,202,0.07), transparent 70%)' }} />
         <div className="relative mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-end">
-            <div>
+            <div data-sanity={hAttr('scaleHeadline')}>
               <Eyebrow>Scale</Eyebrow>
-              <ScrollText as="h2" text={'More than \n *1,400* product numbers.'}
+              <ScrollText as="h2" text={hp.scaleHeadline}
                 className="h-display text-white text-[clamp(2.6rem,7vw,6.5rem)] leading-[0.9]" />
             </div>
             <div className="grid gap-12 sm:grid-cols-2">
-              <div>
-                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">Every day</div>
+              <div data-sanity={hAttr('scaleCol1Text')}>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">{hp.scaleCol1Label}</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Whether you need a Viking arm or clean hands, we've got what you're after. In the webshop at carl-ras.dk and in 26 stores across the country." />
+                  text={hp.scaleCol1Text} />
               </div>
-              <div>
-                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">The best</div>
+              <div data-sanity={hAttr('scaleCol2Text')}>
+                <div className="text-fog/75 text-xs uppercase tracking-wider mb-3">{hp.scaleCol2Label}</div>
                 <ScrollText as="p" className="text-fog text-base leading-relaxed"
-                  text="Some products are an easy call when you just don't want to overpay. Others are for those who compare specs, performance and value, and want the best." />
+                  text={hp.scaleCol2Text} />
               </div>
             </div>
           </div>
 
           {/* stats band — full width, vertical dividers */}
           <Reveal delay={120}>
-            <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
-              {[{ v: 1400, suf: '+', l: 'product numbers' }, { v: 26, suf: '', l: 'stores in Denmark' }, { v: 227, suf: '+', l: 'stores in Europe' }].map((s, i) => (
-                <div key={s.l} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
-                  <CountUp value={s.v} suffix={s.suf} className="h-display text-white text-5xl md:text-6xl block" />
-                  <div className="text-fog text-sm mt-2">{s.l}</div>
+            <div data-sanity={hAttr('stats')} className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
+              {hp.stats.map((s, i) => (
+                <div key={s.label} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
+                  <CountUp value={s.value} suffix={s.suffix} className="h-display text-white text-5xl md:text-6xl block" />
+                  <div className="text-fog text-sm mt-2">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -156,7 +166,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
           <div className="mb-16 max-w-3xl">
             <Eyebrow>The specialists</Eyebrow>
-            <ScrollText as="h2" text="Masters of the trade, majoring in STROXX"
+            <ScrollText as="h2" text={hp.specialistsHeadline}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
           <div className="relative">
@@ -201,12 +211,12 @@ export default async function Home() {
       <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
-          <div>
+          <div data-sanity={hAttr('guaranteeHeadline')}>
             <Eyebrow>Satisfaction guarantee</Eyebrow>
-            <ScrollText as="h2" text={'*100%* satisfaction \n or your money back.'}
+            <ScrollText as="h2" text={hp.guaranteeHeadline}
               className="h-display text-white text-[clamp(2rem,4.4vw,4rem)] leading-[0.95] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
-              text="We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started." />
+              text={hp.guaranteeText} />
             <GuaranteeModal />
           </div>
           <Reveal delay={120} from="far-right">
@@ -229,14 +239,12 @@ export default async function Home() {
             <CursorGlow size="42% 58%" intensity={0.14} className="-z-10" />
             <Reveal from="left">
               <Eyebrow>STROXX of the Month · {SKA.month} {SKA.year}</Eyebrow>
-              <h2 className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
-                Check it out.
-                <br /><span className="text-stroxx-blue">Green line laser 3D</span>
+              <h2 data-sanity={hAttr('monthHeadline')} className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
+                <Accent text={hp.monthHeadline} />
+                <br /><span className="text-stroxx-blue">{hp.monthBlue}</span>
               </h2>
               <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
-                Every month, one tool gets the full story: why it wins,
-                where it earns its keep, and what the trade says. The rest of
-                the month takes care of itself.
+                {hp.monthText}
               </p>
               <div className="flex flex-wrap gap-3">
                 <GlassButton href="/maanedens">The full story <ArrowRight size={16} /></GlassButton>
@@ -278,7 +286,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div className="max-w-3xl">
             <Eyebrow>The categories</Eyebrow>
-            <ScrollText as="h2" text={"All you'll *need.* Category \n by category."}
+            <ScrollText as="h2" text={hp.categoriesHeadline}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
           </div>
         </div>
@@ -316,7 +324,7 @@ export default async function Home() {
       {/* FINAL CTA */}
       <section className="relative h-[80vh] flex flex-col items-center justify-center text-center px-6">
         <ProvDet />
-        <BuyButton href={`${CR_BRAND}/?${UTM}`}>Buy STROXX at Carl Ras</BuyButton>
+        <BuyButton href={`${CR_BRAND}/?${UTM}`}>{hp.ctaLabel}</BuyButton>
       </section>
     </main>
   );

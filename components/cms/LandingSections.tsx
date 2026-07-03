@@ -23,8 +23,9 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-6">{children}</div>;
 }
 
-/** `*word*` → blue accent, newline → <br/>. Same syntax ScrollText parses. */
-function Accent({ text }: { text?: string }) {
+/** `*word*` → blue accent, newline → <br/>. Same syntax ScrollText parses.
+ *  Exported for CMS-driven copy elsewhere (homepage hero etc.). */
+export function Accent({ text }: { text?: string }) {
   if (!text) return null;
   const parts = text.split(/(\*[^*]+\*|\n)/g).filter(Boolean);
   return (

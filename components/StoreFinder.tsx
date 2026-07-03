@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import type { Map as LeafletMap, LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X, MessageCircle } from 'lucide-react';
-import { stores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores';
+import { stores as fallbackStores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores';
 
 /** Full-screen, app-like store finder: the map fills the viewport and the
  *  search/list floats over it as a dark glass panel (left card on desktop,
@@ -20,7 +20,9 @@ const norm = (s: string) =>
 
 const isLg = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
-export default function StoreFinder() {
+export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
+  // CMS store documents when present, static Webflow snapshot otherwise
+  const stores = storeData && storeData.length ? storeData : fallbackStores;
   const [tab, setTab] = useState<'butikker' | 'specialister'>('butikker');
   const [q, setQ] = useState('');
   const [region, setRegion] = useState<'Alle' | StoreRegion>('Alle');
@@ -77,7 +79,7 @@ export default function StoreFinder() {
       );
     }
     return list;
-  }, [q, region, festool, sikring, pos, searchPos]);
+  }, [q, region, festool, sikring, pos, searchPos, stores]);
 
   /* ── geocode unmatched queries via DAWA (official DK postcode API, free) ── */
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function StoreFinder() {
       }
     }, 350);
     return () => { clearTimeout(t); ctrl.abort(); };
-  }, [q]);
+  }, [q, stores]);
 
   /* ── map boot ── */
   useEffect(() => {
@@ -147,6 +149,7 @@ export default function StoreFinder() {
       map.current?.remove();
       map.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* ── markers follow filter + selection ── */
