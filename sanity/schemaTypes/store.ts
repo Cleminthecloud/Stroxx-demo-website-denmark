@@ -32,7 +32,14 @@ export const store = defineType({
     defineField({ name: 'managerName', title: 'Manager name', type: 'string' }),
     defineField({ name: 'managerEmail', title: 'Manager email', type: 'string' }),
     defineField({ name: 'managerPhone', title: 'Manager direct phone', type: 'string' }),
-    defineField({ name: 'managerPhoto', title: 'Manager photo URL', type: 'url' }),
+    defineField({
+      name: 'managerPhotoUpload',
+      title: 'Manager photo (upload or pick from media library)',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Preferred. Overrides the URL below when set.',
+    }),
+    defineField({ name: 'managerPhoto', title: 'Manager photo URL (fallback)', type: 'url' }),
     defineField({
       name: 'managerConsent',
       title: 'Manager consent given (photo + direct phone on the web)',

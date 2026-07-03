@@ -12,6 +12,7 @@ import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
 import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
+import { assetUrl } from '@/sanity/lib/image';
 import type { Testimonial } from '@/lib/testimonials';
 import type { Video } from '@/lib/videos';
 
@@ -97,7 +98,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                 {s.videoUrl ? (
                   <video
                     src={s.videoUrl}
-                    poster={s.image || undefined}
+                    poster={assetUrl(s.imageUpload) || s.image || undefined}
                     autoPlay
                     muted
                     loop
@@ -106,7 +107,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   />
                 ) : (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={s.image || '/Images/campaign/rings.jpg'} sizes="100vw" alt="" draggable={false}
+                  <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/rings.jpg'} sizes="100vw" alt="" draggable={false}
                     className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '62% 35%' }} />
                 )}
                 {align === 'left' && (
@@ -158,7 +159,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   <Reveal from={imgLeft ? 'left' : 'right'} className={imgLeft ? '' : 'lg:order-2'}>
                     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={s.image || '/Images/campaign/tea.jpg'} alt="" draggable={false}
+                      <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} alt="" draggable={false}
                         className="absolute inset-0 h-full w-full object-cover grayscale select-none" />
                       <div className="pointer-events-none absolute inset-0" style={{
                         background: 'linear-gradient(180deg, rgba(11,12,14,0) 55%, rgba(11,12,14,0.45) 100%)' }} />
@@ -395,7 +396,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
             return (
               <section key={s._key} className="relative h-[88svh] min-h-[520px] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.image || '/Images/campaign/tea.jpg'} sizes="100vw" alt="" draggable={false}
+                <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} sizes="100vw" alt="" draggable={false}
                   className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '66% 40%' }} />
                 <div className="pointer-events-none absolute inset-0" style={{
                   background: 'linear-gradient(180deg, #0B0C0E 0%, rgba(11,12,14,0) 22%, rgba(11,12,14,0.25) 60%, #0B0C0E 100%)' }} />

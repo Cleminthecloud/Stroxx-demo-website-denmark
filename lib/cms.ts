@@ -1,4 +1,5 @@
 import { stegaClean } from '@sanity/client/stega';
+import { assetUrl } from '@/sanity/lib/image';
 import { sanityFetch } from '@/sanity/lib/live';
 import { products, Product } from '@/lib/data';
 import { SKA } from '@/lib/ska';
@@ -141,7 +142,7 @@ export async function getStores(): Promise<Store[]> {
             name: d.managerName ?? '',
             email: d.managerEmail ?? '',
             phone: d.managerPhone ?? '',
-            photo: d.managerPhoto ?? '',
+            photo: assetUrl(d.managerPhotoUpload, 300) ?? d.managerPhoto ?? '',
           },
           monThu: [Number(d.openMonThu ?? 7), Number(d.closeMonThu ?? 16)],
           fri: [Number(d.openFri ?? 7), Number(d.closeFri ?? 15)],
@@ -173,7 +174,7 @@ export async function getSpecialists(): Promise<Specialist[]> {
         name: d.name,
         role: d.role ?? '',
         location: d.location ?? '',
-        photo: d.photoUrl ?? '',
+        photo: assetUrl(d.photoUpload, 400) ?? d.photoUrl ?? '',
         quote: d.quote ?? '',
         phone: d.phone ?? '',
         email: d.email ?? '',

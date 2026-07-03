@@ -60,10 +60,17 @@ export const landingPage = defineType({
             defineField({ name: 'ctaLabel', title: 'Primary button label', type: 'string' }),
             defineField({ name: 'secondaryLabel', title: 'Secondary link label', type: 'string' }),
             defineField({
+              name: 'imageUpload',
+              title: 'Image (upload or pick from media library)',
+              type: 'image',
+              options: { hotspot: true },
+              description: 'Preferred. Overrides the image path below when set.',
+            }),
+            defineField({
               name: 'image',
-              title: 'Background image path',
+              title: 'Background image path (fallback)',
               type: 'string',
-              description: 'Path under /public, e.g. /Images/campaign/rings.jpg. Ignored when a video is set.',
+              description: 'Path under /public, e.g. /Images/campaign/rings.jpg. Used when no image is uploaded. Ignored when a video is set.',
               initialValue: '/Images/campaign/rings.jpg',
             }),
             defineField({
@@ -172,10 +179,17 @@ export const landingPage = defineType({
               description: 'Internal path (/produkter) or full URL. Defaults to the Carl Ras shop.',
             }),
             defineField({
+              name: 'imageUpload',
+              title: 'Image (upload or pick from media library)',
+              type: 'image',
+              options: { hotspot: true },
+              description: 'Preferred. Overrides the image path below when set.',
+            }),
+            defineField({
               name: 'image',
-              title: 'Image path',
+              title: 'Image path (fallback)',
               type: 'string',
-              description: 'Path under /public, e.g. /Images/campaign/tea.jpg',
+              description: 'Path under /public, used when no image is uploaded.',
             }),
             defineField({
               name: 'imageSide',
@@ -272,8 +286,15 @@ export const landingPage = defineType({
             headline,
             defineField({ name: 'sub', title: 'Caption', type: 'text', rows: 3 }),
             defineField({
+              name: 'imageUpload',
+              title: 'Image (upload or pick from media library)',
+              type: 'image',
+              options: { hotspot: true },
+              description: 'Preferred. Overrides the image path below when set.',
+            }),
+            defineField({
               name: 'image',
-              title: 'Image path',
+              title: 'Image path (fallback)',
               type: 'string',
               initialValue: '/Images/campaign/tea.jpg',
             }),
