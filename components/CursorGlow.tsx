@@ -49,12 +49,20 @@ export default function CursorGlow({
       window.removeEventListener('pointermove', onMove);
     };
   }, []);
+  // The layer bleeds past its parent AND fades itself out toward its own
+  // edges (feathered mask) — otherwise the radial glow gets guillotined on a
+  // hard rectangle edge whenever the cursor nears the section boundary.
+  const feather =
+    'radial-gradient(110% 110% at 50% 50%, black 52%, transparent 96%)';
   return (
     <div
       ref={ref}
-      className={`absolute inset-0 pointer-events-none ${className}`}
+      className={`absolute pointer-events-none ${className}`}
       style={{
+        inset: '-14%',
         background: `radial-gradient(${size} at var(--gx,66%) var(--gy,46%), rgba(0,130,202,${intensity}), transparent 70%)`,
+        maskImage: feather,
+        WebkitMaskImage: feather,
       }}
     />
   );
