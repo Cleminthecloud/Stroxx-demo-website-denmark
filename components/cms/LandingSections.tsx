@@ -137,10 +137,14 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     </p>
                     <div className={`flex flex-wrap items-center gap-3 ${btnJustify}`}>
                       {s.ctaLabel && (
-                        <GlassButton href={buy} external>{s.ctaLabel} <ArrowRight size={16} /></GlassButton>
+                        <GlassButton href={s.ctaHref || buy} external={/^https?:/i.test(s.ctaHref || buy)}>
+                          {s.ctaLabel} <ArrowRight size={16} />
+                        </GlassButton>
                       )}
                       {s.secondaryLabel && (
-                        <a href="#section-1" className="link-arrow text-sm">{s.secondaryLabel} <ArrowDown size={15} /></a>
+                        <a href={s.secondaryHref || '#section-1'} className="link-arrow text-sm">
+                          {s.secondaryLabel} <ArrowDown size={15} />
+                        </a>
                       )}
                     </div>
                   </div>
@@ -443,8 +447,16 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   <Reveal delay={200}>
                     <div className="text-center">
                       <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-                        {s.ctaLabel && <GlassButton href={buy} external>{s.ctaLabel} <ArrowRight size={16} /></GlassButton>}
-                        {s.secondaryLabel && <GlassButton href="/butikker" variant="ghost">{s.secondaryLabel}</GlassButton>}
+                        {s.ctaLabel && (
+                          <GlassButton href={s.ctaHref || buy} external={/^https?:/i.test(s.ctaHref || buy)}>
+                            {s.ctaLabel} <ArrowRight size={16} />
+                          </GlassButton>
+                        )}
+                        {s.secondaryLabel && (
+                          <GlassButton href={s.secondaryHref || '/butikker'} external={/^https?:/i.test(s.secondaryHref || '')} variant="ghost">
+                            {s.secondaryLabel}
+                          </GlassButton>
+                        )}
                       </div>
                       <GuaranteeModal />
                     </div>

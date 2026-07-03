@@ -14,6 +14,7 @@ import { HOME_DEFAULTS } from '../lib/home-copy';
 import { specialists } from '../lib/data';
 import { testimonials } from '../lib/testimonials';
 import { videos } from '../lib/videos';
+import { LLMS_FALLBACK } from '../lib/llms-fallback';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
@@ -114,8 +115,60 @@ const legalDocs = [
   ),
 }));
 
+
+/* Site settings: populate every field with the value the site actually uses,
+   so editors see reality instead of empty fields. Existing non-empty values
+   are kept (merge happens in run()). */
+const lk = (label: string, href: string, i: number) => ({ _type: 'navLink', _key: `seed-${i}`, label, href });
+const SETTINGS_DEFAULTS: Record<string, unknown> = {
+  _id: 'siteSettings',
+  _type: 'siteSettings',
+  retailerName: 'Carl Ras',
+  supportPhone: '+45 44 85 55 11',
+  supportHours: 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00',
+  legalLine: '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14',
+  navLinks: [
+    lk('Tool of the Month', '/maanedens', 1),
+    lk('Products', '/produkter', 2),
+    lk('Stores', '/butikker', 3),
+    lk('Specialists', '/butikker?tab=specialister', 4),
+    lk('Trades', '/fag', 5),
+    lk('Try It', '/proev-det', 6),
+    lk('Service and Support', '/service', 7),
+  ],
+  footerPageLinks: [
+    lk('Tool of the Month', '/maanedens', 1),
+    lk('Products', '/produkter', 2),
+    lk('Trades', '/fag', 3),
+    lk('Stores', '/butikker', 4),
+    lk('Campaign: Try It', '/proev-det', 5),
+    lk('Specialists', '/butikker?tab=specialister', 6),
+    lk('Service and Support', '/service', 7),
+  ],
+  footerBuyLinks: [
+    lk('Buy STROXX', 'https://www.carl-ras.dk/maerker/stroxx/?utm_source=cr-byg&utm_medium=brandsite_link&utm_campaign=stroxx', 1),
+    lk('Find a store', '/butikker', 2),
+    lk('Satisfaction guarantee (PDF)', '/STROXX-tilfredshedsgaranti.pdf', 3),
+  ],
+  seoTitle: 'STROXX | Premium tools, beastly low prices',
+  seoDescription:
+    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.',
+  ogImage: '/brand/og.jpg',
+  llmsTxt: LLMS_FALLBACK,
+  chatEnabled: true,
+  aiChatEnabled: false,
+};
+
 async function run() {
+  // settings: defaults fill only the gaps, existing editor values win
+  const existing = (await client.getDocument('siteSettings').catch(() => null)) as Record<string, unknown> | null;
+  const settingsDoc: Record<string, unknown> = { ...SETTINGS_DEFAULTS };
+  for (const [k, v] of Object.entries(existing ?? {})) {
+    const empty = v === undefined || v === null || v === '' || (Array.isArray(v) && v.length === 0);
+    if (!empty) settingsDoc[k] = v;
+  }
   const tx = client.transaction();
+  tx.createOrReplace(settingsDoc as any);
   tx.createOrReplace(homePage as any);
   for (const d of storeDocs) tx.createOrReplace(d as any);
   for (const d of specialistDocs) tx.createOrReplace(d as any);
@@ -124,7 +177,7 @@ async function run() {
   for (const d of legalDocs) tx.createOrReplace(d as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console
-  console.log(`Seeded ${res.results.length} documents (homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);
+  console.log(`Seeded ${res.results.length} documents (siteSettings, homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);
 }
 
 run().catch((err) => {
