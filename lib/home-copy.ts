@@ -4,7 +4,7 @@
 
 export type HomeStat = { value: number; suffix: string; label: string };
 export type HomeCopy = {
-  heroLine1: string; heroLine2: string;
+  heroHeadline: string;
   claimWhite: string; claimBlue: string; claimSub: string;
   marqueeText: string;
   rangeHeadline: string; rangeCol1Label: string; rangeCol1Text: string; rangeCol2Label: string; rangeCol2Text: string;
@@ -20,8 +20,7 @@ export type HomeCopy = {
 
 /** Any field left empty in the Studio renders this. */
 export const HOME_DEFAULTS: HomeCopy = {
-  heroLine1: 'A *great* headline',
-  heroLine2: 'will be here',
+  heroHeadline: 'A *great* headline\nwill be here',
   claimWhite: 'Here we have another great headline',
   claimBlue: 'for the reader.',
   claimSub:

@@ -73,10 +73,15 @@ export default async function Home() {
           overlaps it slightly. Bag layer (z-20) paints over the headline (z-10). */}
       <section className="relative h-[100svh] min-h-[640px]">
         <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-5 pt-[14vh] md:pt-[13vh]">
-          <h1 data-sanity={hAttr('heroLine1')} className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
-            <span className="hero-line"><Accent text={hp.heroLine1} /></span>
-            <br />
-            <span className="hero-line hero-line--2"><Accent text={hp.heroLine2} /></span>
+          <h1 data-sanity={hAttr('heroHeadline')} className="h-display text-white text-[clamp(3rem,13vw,13rem)] leading-[0.86] text-center">
+            {stegaClean(hp.heroHeadline)
+              .split('\n')
+              .filter((l) => l.trim())
+              .map((line, i) => (
+                <span key={i} className={i === 0 ? 'hero-line' : 'hero-line hero-line--2 block'}>
+                  <Accent text={line} />
+                </span>
+              ))}
           </h1>
         </div>
         <div className="absolute inset-x-0 bottom-8 z-30 hidden lg:flex justify-center">

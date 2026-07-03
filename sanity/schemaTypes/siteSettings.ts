@@ -29,6 +29,20 @@ export const siteSettings = defineType({
       validation: (r) =>
         r.custom((v) => (!v || /^GTM-[A-Z0-9]+$/i.test(v) ? true : 'Must look like GTM-XXXXXXX')),
     }),
+    defineField({
+      name: 'pimFeedUrl',
+      title: 'PIM: product feed URL',
+      description:
+        'Base URL of the product API this market reads from (Carl Ras product API for DK). URL only; API keys and secrets NEVER go in the CMS, they live in the hosting environment.',
+      type: 'url',
+    }),
+    defineField({
+      name: 'damBaseUrl',
+      title: 'DAM: image base URL',
+      description:
+        'Base URL of the image bank (Digizuite for DK). Used by the image pipeline once the DAM integration is live. URL only, no credentials.',
+      type: 'url',
+    }),
   ],
   preview: { prepare: () => ({ title: 'Site settings' }) },
 });

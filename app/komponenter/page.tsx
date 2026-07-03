@@ -1,0 +1,210 @@
+import type { Metadata } from 'next';
+import LandingSections from '@/components/cms/LandingSections';
+import { LandingSection } from '@/lib/cms';
+import { CR_BRAND, UTM } from '@/lib/data';
+
+export const metadata: Metadata = {
+  title: 'Component library',
+  robots: { index: false, follow: false },
+};
+
+/** Internal reference page: every landing-page block rendered live with its
+ *  Studio name and a short description. Editors browse this to learn what
+ *  each block looks like before adding it. Not linked in navigation. */
+
+type Demo = { studioName: string; description: string; section: LandingSection };
+
+const DEMOS: Demo[] = [
+  {
+    studioName: 'Hero: full-screen photo or video',
+    description:
+      'Full-bleed opener. Photo or looping video background, text position left/center/right, three heights. This sample: photo, left, tall.',
+    section: {
+      _type: 'photoHero', _key: 'd1', height: 'tall', align: 'left',
+      eyebrow: 'Component · Hero',
+      headline: 'A hero headline\nwith a *blue* word.',
+      sub: 'A short subline that sets up the page. One or two sentences at most.',
+      ctaLabel: 'Primary button', secondaryLabel: 'Secondary link',
+      image: '/Images/campaign/rings.jpg',
+    },
+  },
+  {
+    studioName: 'Big statement (huge headline + paragraphs)',
+    description:
+      'The signature typographic section. Headline animates in on scroll; the last paragraph renders white for emphasis. Alignment left or right.',
+    section: {
+      _type: 'statement', _key: 'd2', align: 'left',
+      eyebrow: 'Component · Big statement',
+      headline: 'A very big statement \n lands *here.*',
+      paragraphs: [
+        'A supporting paragraph in the muted grey. Use it to carry the argument forward in two or three sentences.',
+        'The final paragraph renders in white, so end on the line you want remembered.',
+      ],
+    },
+  },
+  {
+    studioName: 'Headline + animated number stats',
+    description: 'Two columns: headline and paragraphs left, counting-up numbers right.',
+    section: {
+      _type: 'reframe', _key: 'd3',
+      eyebrow: 'Component · Stats',
+      headline: 'Numbers that \n *count up.*',
+      paragraphs: ['A short paragraph next to the stats. The numbers animate when they scroll into view.'],
+      stats: [
+        { _type: 'stat', _key: 'a', value: 4, suffix: '', label: 'countries behind it' },
+        { _type: 'stat', _key: 'b', value: 227, suffix: '+', label: 'stores in Europe' },
+        { _type: 'stat', _key: 'c', value: 1400, suffix: '+', label: 'item numbers' },
+      ],
+    },
+  },
+  {
+    studioName: 'Image + text, side by side',
+    description: 'Classic 50/50 split with an optional button. Image side is switchable.',
+    section: {
+      _type: 'splitMedia', _key: 'd4', imageSide: 'right',
+      eyebrow: 'Component · Split',
+      headline: 'Image one side, \n *story* the other.',
+      body: 'Two to four sentences of supporting copy. Good for telling one focused story with a strong visual.',
+      ctaLabel: 'Optional button', image: '/Images/campaign/tea.jpg',
+    },
+  },
+  {
+    studioName: 'Feature cards (3-up glass grid)',
+    description: 'Frosted-glass cards for USPs, benefits or service promises. Up to six cards.',
+    section: {
+      _type: 'featureGrid', _key: 'd5',
+      eyebrow: 'Component · Features',
+      headline: 'Three reasons, \n three *cards.*',
+      items: [
+        { title: 'First benefit', body: 'One or two sentences on why this matters to the customer.' },
+        { title: 'Second benefit', body: 'Keep the card texts about the same length so the row sits evenly.' },
+        { title: 'Third benefit', body: 'End with the strongest one. People remember the last card.' },
+      ],
+    },
+  },
+  {
+    studioName: 'Product cards (by SKU)',
+    description: 'Live product cards from Carl Ras item numbers. Unknown SKUs are skipped silently.',
+    section: {
+      _type: 'productProof', _key: 'd6',
+      eyebrow: 'Component · Products',
+      headline: 'Real products, \n by *item number.*',
+      sub: 'These four cards are fetched live from the product data.',
+      skus: ['34011573', '34009021', '35011812', '35011846'],
+    },
+  },
+  {
+    studioName: 'Video gallery (partner films)',
+    description: 'The partner film section in a lightweight player.',
+    section: {
+      _type: 'videoProof', _key: 'd7',
+      eyebrow: 'Component · Video',
+      headline: 'Films go \n *here.*',
+      sub: 'The videos come from the partner YouTube channels.',
+    },
+  },
+  {
+    studioName: 'Pull quote (one big citation)',
+    description: 'One large quote with attribution. Use when a single line carries more weight than a grid of testimonials.',
+    section: {
+      _type: 'quote', _key: 'd8',
+      text: 'One strong sentence from a real customer beats three paragraphs of marketing.',
+      attribution: 'Firstname Lastname', role: 'Carpenter, Copenhagen',
+    },
+  },
+  {
+    studioName: 'Testimonials (customer quotes grid)',
+    description: 'The curated testimonial cards from the testimonial collection.',
+    section: {
+      _type: 'testimonialProof', _key: 'd9',
+      eyebrow: 'Component · Testimonials',
+      headline: 'What the *trade* \n says.',
+    },
+  },
+  {
+    studioName: 'Photo break (full-width image + caption)',
+    description: 'A cinematic breather between heavy sections. Full-width photo, short caption bottom-left.',
+    section: {
+      _type: 'photoBreak', _key: 'd10',
+      eyebrow: 'Component · Photo break',
+      headline: 'A moment of *calm.*',
+      sub: 'One caption line. Let the photo do the talking.',
+      image: '/Images/campaign/tea.jpg',
+    },
+  },
+  {
+    studioName: 'Call-to-action banner (blue glow + buttons)',
+    description: 'Centered conversion moment with primary and secondary buttons. Links default to the Carl Ras shop and the store finder.',
+    section: {
+      _type: 'ctaBanner', _key: 'd11',
+      eyebrow: 'Component · CTA',
+      headline: 'Ready to *try* it?',
+      sub: 'One line that removes the last doubt.',
+      primaryLabel: 'Buy at Carl Ras', secondaryLabel: 'Find your store',
+    },
+  },
+  {
+    studioName: 'Guarantee + numbered steps',
+    description: 'The risk-reversal section: promise, numbered step cards, buttons and the guarantee modal.',
+    section: {
+      _type: 'guaranteeAsk', _key: 'd12',
+      eyebrow: 'Component · Guarantee',
+      headline: '*100%* happy. Or \n your money back.',
+      sub: 'The step cards number themselves.',
+      steps: [
+        { title: 'Step one', body: 'Short and concrete. What does the customer do first?' },
+        { title: 'Step two', body: 'Keep each step to one action.' },
+        { title: 'Step three', body: 'End with the payoff.' },
+      ],
+      ctaLabel: 'Buy at Carl Ras', secondaryLabel: 'Find your store',
+    },
+  },
+  {
+    studioName: 'FAQ accordion',
+    description: 'Questions and answers. Also feeds Google and AI answer engines via structured data.',
+    section: {
+      _type: 'faqSection', _key: 'd13',
+      eyebrow: 'Component · FAQ',
+      headline: 'Answers, \n *up front.*',
+      items: [
+        { q: 'How does a FAQ item look?', a: 'Like this. Question in the bar, answer folds out.' },
+        { q: 'How many should a page have?', a: 'Four to six. Answer the real objections, skip the filler.' },
+      ],
+    },
+  },
+  {
+    studioName: 'Spacer (empty breathing room)',
+    description: 'Adds vertical space between sections. Three sizes. (Rendered below as the gap you are looking at.)',
+    section: { _type: 'spacer', _key: 'd14', size: 'l' },
+  },
+];
+
+export default function ComponentLibraryPage() {
+  const buy = `${CR_BRAND}/?${UTM}`;
+  return (
+    <main className="bg-ink">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-10">
+        <div className="eyebrow mb-6">Internal · Component library</div>
+        <h1 className="h-display text-white text-[clamp(2.4rem,6vw,5rem)] leading-[0.92] mb-6">
+          Every building block, <span className="text-stroxx-blue">live.</span>
+        </h1>
+        <p className="text-fog text-lg max-w-2xl">
+          These are the blocks landing pages are built from, rendered with sample content. The name above
+          each block is exactly what it's called in the Studio's "Add item" menu. This page is internal
+          and hidden from search engines.
+        </p>
+      </div>
+      {DEMOS.map((d) => (
+        <div key={d.section._key}>
+          <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-16 pb-2">
+            <div className="border-t border-line pt-6 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+              <div className="text-white font-medium">{d.studioName}</div>
+              <div className="text-fog text-sm max-w-2xl">{d.description}</div>
+            </div>
+          </div>
+          <LandingSections sections={[d.section]} buy={buy} />
+        </div>
+      ))}
+    </main>
+  );
+}

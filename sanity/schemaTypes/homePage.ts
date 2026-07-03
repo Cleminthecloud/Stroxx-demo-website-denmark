@@ -19,8 +19,12 @@ export const homePage = defineType({
     { name: 'month', title: 'Month + categories + CTA' },
   ],
   fields: [
-    defineField({ ...t('heroLine1', 'Hero line 1'), group: 'hero' }),
-    defineField({ ...t('heroLine2', 'Hero line 2'), group: 'hero' }),
+    defineField({
+      ...t('heroHeadline', 'Hero headline', 3),
+      description:
+        'The giant front-page headline. Press Enter where the line should break; each line animates in separately. Wrap a word in *asterisks* for the blue accent.',
+      group: 'hero',
+    }),
     defineField({ ...t('claimWhite', 'Claim (white part)'), group: 'hero' }),
     defineField({ ...t('claimBlue', 'Claim (blue part)'), group: 'hero' }),
     defineField({ ...t('claimSub', 'Claim subtext', 4), group: 'hero' }),
