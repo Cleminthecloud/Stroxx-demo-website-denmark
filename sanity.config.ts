@@ -3,8 +3,10 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
+import { BookIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
 import { projectId, dataset } from './sanity/env';
+import GuideTool from './sanity/GuideTool';
 
 /** Embedded Studio config, served at /studio (app/studio/[[...tool]]).
  *  Presentation = the visual editing workspace: the live site in an iframe,
@@ -84,4 +86,6 @@ export default defineConfig({
     structureTool({ title: 'Content' }),
   ],
   schema: { types: schemaTypes },
+  /* the editor guide as its own Studio tab, always the deployed version */
+  tools: (prev) => [...prev, { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool }],
 });
