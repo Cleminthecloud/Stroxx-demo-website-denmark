@@ -29,6 +29,9 @@ export type SiteSettings = {
   footerBuyLinks?: NavLink[];
   pimFeedUrl?: string;
   damBaseUrl?: string;
+  cookiebotId?: string;
+  chatEnabled?: boolean;
+  aiChatEnabled?: boolean;
 };
 
 /** CMS link lists → clean {label, href}[] or null when unset/empty. */
@@ -105,6 +108,7 @@ export async function getHomePage(): Promise<HomeCopy> {
         merged[key] = v;
       }
     }
+    merged.campaignImages = Array.isArray(d.campaignImages) ? d.campaignImages : [];
     return merged as HomeCopy;
   } catch {
     return HOME_DEFAULTS;

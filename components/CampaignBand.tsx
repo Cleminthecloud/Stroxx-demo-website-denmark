@@ -15,7 +15,11 @@ const SLIDES = [
 ];
 const DWELL = 3400; // ms per slide
 
-export default function CampaignBand() {
+export default function CampaignBand({ images }: { images?: string[] }) {
+  // CMS uploads when present, the built-in campaign shots otherwise
+  const slides = images && images.length
+    ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
+    : SLIDES;
   const [i, setI] = useState(0);
   const [reduce, setReduce] = useState(false);
   const paused = useRef(false);
@@ -25,10 +29,10 @@ export default function CampaignBand() {
     setReduce(m.matches);
     if (m.matches) return;
     const id = setInterval(() => {
-      if (!paused.current) setI((p) => (p + 1) % SLIDES.length);
+      if (!paused.current) setI((p) => (p + 1) % slides.length);
     }, DWELL);
     return () => clearInterval(id);
-  }, []);
+  }, [slides.length]);
 
   return (
     <section
@@ -43,7 +47,7 @@ export default function CampaignBand() {
           scrim); desktop: the photos' real 16:9 ratio so the full frame shows */}
       <div className="relative w-full h-[92svh] lg:h-auto lg:aspect-[16/9] lg:min-h-[72vh] lg:max-h-[112vh]">
         {/* image series */}
-        {SLIDES.map((s, idx) => {
+        {slides.map((s, idx) => {
           const active = idx === i;
           return (
             // eslint-disable-next-line @next/next/no-img-element

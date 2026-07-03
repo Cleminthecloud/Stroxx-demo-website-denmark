@@ -5,24 +5,24 @@
 export type HomeStat = { value: number; suffix: string; label: string };
 export type HomeCopy = {
   heroHeadline: string;
-  claimWhite: string; claimBlue: string; claimSub: string;
+  claim: string; claimSub: string;
   marqueeText: string;
   rangeHeadline: string; rangeCol1Label: string; rangeCol1Text: string; rangeCol2Label: string; rangeCol2Text: string;
   scaleHeadline: string; scaleCol1Label: string; scaleCol1Text: string; scaleCol2Label: string; scaleCol2Text: string;
   stats: HomeStat[];
   specialistsHeadline: string;
   guaranteeHeadline: string; guaranteeText: string;
-  monthHeadline: string; monthBlue: string; monthText: string;
+  monthHeadline: string; monthText: string;
   categoriesHeadline: string;
   ctaLabel: string;
+  campaignImages?: unknown[];
   _id?: string;
 };
 
 /** Any field left empty in the Studio renders this. */
 export const HOME_DEFAULTS: HomeCopy = {
   heroHeadline: 'A *great* headline\nwill be here',
-  claimWhite: 'Here we have another great headline',
-  claimBlue: 'for the reader.',
+  claim: 'Here we have another great headline *for the reader.*',
   claimSub:
     "Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about.",
   marqueeText: 'A great headline will be here',
@@ -49,8 +49,7 @@ export const HOME_DEFAULTS: HomeCopy = {
   guaranteeHeadline: '*100%* satisfaction \n or your money back.',
   guaranteeText:
     "We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started.",
-  monthHeadline: 'Check it out.',
-  monthBlue: 'Green line laser 3D',
+  monthHeadline: 'Check it out.\n*Green line laser 3D*',
   monthText:
     'Every month, one tool gets the full story: why it wins, where it earns its keep, and what the trade says. The rest of the month takes care of itself.',
   categoriesHeadline: "All you'll *need.* Category \n by category.",

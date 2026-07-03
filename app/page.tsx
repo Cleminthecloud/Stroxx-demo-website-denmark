@@ -31,6 +31,7 @@ import { Accent } from '@/components/cms/LandingSections';
 import { createDataAttribute } from 'next-sanity';
 import { stegaClean } from '@sanity/client/stega';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
+import { assetUrl } from '@/sanity/lib/image';
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-7">{children}</div>;
@@ -93,9 +94,8 @@ export default async function Home() {
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
-            <p data-sanity={hAttr('claimWhite')} className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
-              <ScrollText as="span" className="text-white" text={hp.claimWhite} />{' '}
-              <ScrollText as="span" className="text-stroxx-blue" text={hp.claimBlue} />
+            <p data-sanity={hAttr('claim')} className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
+              <ScrollText as="span" className="text-white" text={hp.claim} />
             </p>
             <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
               text={hp.claimSub} />
@@ -236,7 +236,7 @@ export default async function Home() {
       </section>
 
       {/* CAMPAIGN — print campaign as a cinematic image series */}
-      <CampaignBand />
+      <CampaignBand images={(hp.campaignImages ?? []).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[]} />
 
       {/* MÅNEDENS STROXX — the SKA engine: one hero story + the month's five
           DB2-winners, same lineup as nyhedsbrev/SoMe/kampagner/salg. The hero
@@ -249,7 +249,6 @@ export default async function Home() {
               <Eyebrow>STROXX of the Month · {SKA.month} {SKA.year}</Eyebrow>
               <h2 data-sanity={hAttr('monthHeadline')} className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
                 <Accent text={hp.monthHeadline} />
-                <br /><span className="text-stroxx-blue">{hp.monthBlue}</span>
               </h2>
               <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
                 {hp.monthText}

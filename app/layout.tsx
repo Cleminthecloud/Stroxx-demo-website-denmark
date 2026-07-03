@@ -113,9 +113,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const storeData = await getStores();
   const rawGtm = stegaClean(settings?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
+  /* Cookiebot CMP from CMS: consent banner + auto-blocking of tracking until
+     consent (Consent Mode v2). Strict UUID validation, same reasoning as GTM. */
+  const rawCb = stegaClean(settings?.cookiebotId) || '';
+  const cookiebotId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawCb) ? rawCb : null;
   return (
     <html lang="en">
       <body>
+        {cookiebotId && (
+          <Script
+            id="Cookiebot"
+            src="https://consent.cookiebot.com/uc.js"
+            data-cbid={cookiebotId}
+            data-blockingmode="auto"
+            strategy="beforeInteractive"
+          />
+        )}
         {gtmId && (
           <>
             <Script
@@ -147,7 +160,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Nav links={cleanLinks(settings?.navLinks) ?? undefined} />
           <div id="indhold">{children}</div>
           <Footer />
-          <SpecialistFab storeData={storeData} />
+          {/* editors can hide the chat entirely: Site settings → Integrations */}
+          {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} />}
           <CommandMenu />
         </SmoothScroll>
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}

@@ -119,13 +119,47 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
   const send = (text: string) => {
     const clean = text.trim();
     if (!clean || typing) return;
+    const history = [...msgs, { from: 'user' as const, text: clean }];
     setMsgs((m) => [...m, { from: 'user', text: clean }]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
-      setMsgs((m) => [...m, ...botReply(clean, nearest)]);
+    const scripted = botReply(clean, nearest);
+    const isFallback = scripted.length === 1 && !!scripted[0].text?.startsWith('I would rather not guess');
+    if (!isFallback) {
+      // the scripted answers (guarantee, stores, product cards, handoff) are
+      // deliberate UX; only free-form questions go to the AI below
+      setTimeout(() => {
+        setMsgs((m) => [...m, ...scripted]);
+        setTyping(false);
+      }, 700 + Math.random() * 500);
+      return;
+    }
+    (async () => {
+      try {
+        const payload = history
+          .filter((m) => m.text)
+          .slice(-8)
+          .map((m) => ({ role: m.from === 'user' ? 'user' : 'assistant', content: m.text }));
+        const r = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: payload }),
+          signal: AbortSignal.timeout(22000),
+        });
+        if (r.ok) {
+          const j = await r.json();
+          if (j?.reply) {
+            setMsgs((m) => [...m, { from: 'bot', text: j.reply }]);
+            setTyping(false);
+            return;
+          }
+        }
+      } catch {
+        /* AI off or unreachable → scripted fallback below */
+      }
+      setMsgs((m) => [...m, ...scripted]);
       setTyping(false);
-    }, 700 + Math.random() * 500);
+    })();
   };
 
   // human handoff brief, built from what the user actually wrote
