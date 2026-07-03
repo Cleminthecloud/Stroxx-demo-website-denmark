@@ -100,6 +100,7 @@ export type PostDoc = {
   heroImage?: unknown; // Sanity image (+alt field); render via assetUrl()
   excerpt?: string;
   body?: any[];
+  relatedSkus?: string[];
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: unknown;

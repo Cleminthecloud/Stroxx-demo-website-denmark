@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { PortableText } from 'next-sanity';
-import { getPost } from '@/lib/cms';
+import { getPost, getPosts, productsBySkus } from '@/lib/cms';
+import ProductCard from '@/components/ProductCard';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
 import { SITE_URL } from '@/lib/site';
@@ -55,6 +56,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const slug = (await params).slug;
   const doc = await getPost(slug);
   if (!doc) notFound();
+  /* related content under the article: products the editor tagged by SKU,
+     and the three most recent other articles */
+  const relatedProducts = productsBySkus(doc.relatedSkus);
+  const readNext = (await getPosts()).filter((p) => stegaClean(p.slug?.current) !== slug).slice(0, 3);
   const hero = assetUrl(doc.heroImage, 2200);
   const heroAlt = stegaClean((doc.heroImage as { alt?: string } | null)?.alt) || '';
   const date = fmtDate(doc.publishedAt);
@@ -90,6 +95,45 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         ) : null}
         <ShareRow url={`${SITE_URL}/nyheder/${slug}`} />
       </article>
+
+      {/* products mentioned in the article (editor-tagged SKUs) */}
+      {relatedProducts.length > 0 && (
+        <section className="mx-auto max-w-[1600px] px-6 md:px-10 pb-8">
+          <div className="eyebrow mb-8">Tools mentioned</div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {relatedProducts.slice(0, 4).map((p) => (
+              <ProductCard key={p.code} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* keep them reading */}
+      {readNext.length > 0 && (
+        <section className="mx-auto max-w-[1600px] px-6 md:px-10 pt-10 pb-28">
+          <div className="eyebrow mb-8">Read next</div>
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {readNext.map((p) => {
+              const s = stegaClean(p.slug?.current) || '';
+              const img = assetUrl(p.heroImage, 900);
+              return (
+                <Link key={p._id || s} href={`/nyheder/${s}`} className="group block">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-white/[0.04] mb-4">
+                    {img && (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={img} alt="" loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                    )}
+                  </div>
+                  <h2 className="text-white text-lg font-medium leading-snug group-hover:text-stroxx-blue transition-colors">
+                    {p.title}
+                  </h2>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

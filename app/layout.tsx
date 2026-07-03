@@ -7,6 +7,7 @@ import { SanityLive } from '@/sanity/lib/live';
 import { getSiteSettings, getStores, cleanLinks } from '@/lib/cms';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
+import Analytics from '@/components/Analytics';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
@@ -176,6 +177,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* editors can hide the chat entirely: Site settings → Integrations */}
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} />}
         </SmoothScroll>
+        {/* first-party anonymous stats (no cookies): feeds the Studio Dashboard */}
+        <Analytics />
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
         <SanityLive />
         {draft && <VisualEditing />}

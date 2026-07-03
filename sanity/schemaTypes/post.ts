@@ -62,6 +62,13 @@ export const post = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'relatedSkus',
+      title: 'Related products (SKUs)',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+      description: 'Item numbers of products mentioned in the article; they show as cards under it ("Tools mentioned"). Unknown SKUs are skipped silently.',
+    }),
     defineField({ name: 'seoTitle', title: 'SEO title', type: 'string' }),
     defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3 }),
     defineField({
