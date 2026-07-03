@@ -3,6 +3,7 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { products, Product } from '@/lib/data';
 import { SKA } from '@/lib/ska';
 import { stores as fallbackStores, Store, StoreBrand, StoreRegion } from '@/lib/stores';
+import { HOME_DEFAULTS, type HomeCopy } from '@/lib/home-copy';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -60,61 +61,7 @@ export function productsBySkus(skus: (string | undefined)[] | undefined): Produc
 
 /* ── Homepage copy ──────────────────────────────────────────────────────── */
 
-export type HomeStat = { value: number; suffix: string; label: string };
-export type HomeCopy = {
-  heroLine1: string; heroLine2: string;
-  claimWhite: string; claimBlue: string; claimSub: string;
-  marqueeText: string;
-  rangeHeadline: string; rangeCol1Label: string; rangeCol1Text: string; rangeCol2Label: string; rangeCol2Text: string;
-  scaleHeadline: string; scaleCol1Label: string; scaleCol1Text: string; scaleCol2Label: string; scaleCol2Text: string;
-  stats: HomeStat[];
-  specialistsHeadline: string;
-  guaranteeHeadline: string; guaranteeText: string;
-  monthHeadline: string; monthBlue: string; monthText: string;
-  categoriesHeadline: string;
-  ctaLabel: string;
-  _id?: string;
-};
-
-/** The exact pre-CMS copy: any field left empty in the Studio renders this. */
-export const HOME_DEFAULTS: HomeCopy = {
-  heroLine1: 'A *great* headline',
-  heroLine2: 'will be here',
-  claimWhite: 'Here we have another great headline',
-  claimBlue: 'for the reader.',
-  claimSub:
-    "Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about.",
-  marqueeText: 'A great headline will be here',
-  rangeHeadline: 'You got what \n it takes \n ...so do *we*',
-  rangeCol1Label: 'The selection',
-  rangeCol1Text:
-    'Tools, equipment, accessories and consumables. From laser measures and saw blades to hand tools, socket sets and protective gear. STROXX has most of it.',
-  rangeCol2Label: 'The service',
-  rangeCol2Text:
-    "And we have your back. So you never walk away empty-handed or with the wrong thing. It's not just the tools that are sharp.",
-  scaleHeadline: 'More than \n *1,400* product numbers.',
-  scaleCol1Label: 'Every day',
-  scaleCol1Text:
-    "Whether you need a Viking arm or clean hands, we've got what you're after. In the webshop at carl-ras.dk and in 26 stores across the country.",
-  scaleCol2Label: 'The best',
-  scaleCol2Text:
-    "Some products are an easy call when you just don't want to overpay. Others are for those who compare specs, performance and value, and want the best.",
-  stats: [
-    { value: 1400, suffix: '+', label: 'product numbers' },
-    { value: 26, suffix: '', label: 'stores in Denmark' },
-    { value: 227, suffix: '+', label: 'stores in Europe' },
-  ],
-  specialistsHeadline: 'Masters of the trade, majoring in STROXX',
-  guaranteeHeadline: '*100%* satisfaction \n or your money back.',
-  guaranteeText:
-    "We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started.",
-  monthHeadline: 'Check it out.',
-  monthBlue: 'Green line laser 3D',
-  monthText:
-    'Every month, one tool gets the full story: why it wins, where it earns its keep, and what the trade says. The rest of the month takes care of itself.',
-  categoriesHeadline: "All you'll *need.* Category \n by category.",
-  ctaLabel: 'Buy STROXX at Carl Ras',
-};
+export type { HomeCopy, HomeStat } from '@/lib/home-copy';
 
 export async function getHomePage(): Promise<HomeCopy> {
   try {

@@ -10,7 +10,7 @@
  */
 import { getCliClient } from 'sanity/cli';
 import { stores } from '../lib/stores';
-import { HOME_DEFAULTS } from '../lib/cms';
+import { HOME_DEFAULTS } from '../lib/home-copy';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
