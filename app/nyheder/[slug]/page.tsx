@@ -7,6 +7,7 @@ import { getPost } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
 import { SITE_URL } from '@/lib/site';
+import ShareRow from '@/components/ShareRow';
 
 /** One news article. Portable text body with inline images (alt + caption),
  *  Article JSON-LD for search engines, share image cascade:
@@ -87,6 +88,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <PortableText value={doc.body} components={components} />
           </div>
         ) : null}
+        <ShareRow url={`${SITE_URL}/nyheder/${slug}`} />
       </article>
     </main>
   );
