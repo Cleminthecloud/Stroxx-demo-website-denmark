@@ -12,6 +12,7 @@ export type SiteSettings = {
   supportPhone?: string;
   supportHours?: string;
   legalLine?: string;
+  gtmId?: string;
 };
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -27,7 +28,9 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 
 export type LandingSection = { _type: string; _key: string } & Record<string, any>;
 export type LandingDoc = {
+  _id?: string;
   title?: string;
+  slug?: { current?: string };
   seoTitle?: string;
   seoDescription?: string;
   sections?: LandingSection[];

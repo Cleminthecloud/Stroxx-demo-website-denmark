@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { draftMode } from 'next/headers';
+import Script from 'next/script';
+import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
+import { getSiteSettings } from '@/lib/cms';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
@@ -93,9 +96,36 @@ const siteLd = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const draft = (await draftMode()).isEnabled;
+  /* GTM container from CMS siteSettings: tags/pixels/analytics change without
+     a deploy. Strict GTM-XXXX validation so a CMS string can never inject
+     arbitrary script. Production adds a CMP + Consent Mode v2 in front. */
+  const settings = await getSiteSettings();
+  const rawGtm = stegaClean(settings?.gtmId) || '';
+  const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
   return (
     <html lang="en">
       <body>
+        {gtmId && (
+          <>
+            <Script
+              id="gtm"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`,
+              }}
+            />
+            <noscript>
+              {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                height="0"
+                width="0"
+                style={{ display: 'none', visibility: 'hidden' }}
+                title="gtm"
+              />
+            </noscript>
+          </>
+        )}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}

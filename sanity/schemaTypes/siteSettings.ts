@@ -21,6 +21,14 @@ export const siteSettings = defineType({
       description: 'Legal entity line for the footer, e.g. company name + CVR.',
       type: 'string',
     }),
+    defineField({
+      name: 'gtmId',
+      title: 'Google Tag Manager container ID',
+      description: 'Format GTM-XXXXXXX. Loads GTM on every page; leave empty to disable. Manage tags, pixels and analytics inside GTM, no deploy needed.',
+      type: 'string',
+      validation: (r) =>
+        r.custom((v) => (!v || /^GTM-[A-Z0-9]+$/i.test(v) ? true : 'Must look like GTM-XXXXXXX')),
+    }),
   ],
   preview: { prepare: () => ({ title: 'Site settings' }) },
 });

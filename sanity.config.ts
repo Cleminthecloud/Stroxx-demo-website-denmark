@@ -24,7 +24,13 @@ export default defineConfig({
           landingPage: defineLocations({
             select: { title: 'title', slug: 'slug.current' },
             resolve: (doc) => ({
-              locations: [{ title: doc?.title || 'Landing page', href: `/${doc?.slug || ''}` }],
+              locations: [
+                {
+                  title: doc?.title || 'Landing page',
+                  // proev-det keeps its historic route; new pages live under /kampagne/
+                  href: doc?.slug === 'proev-det' ? '/proev-det' : `/kampagne/${doc?.slug || ''}`,
+                },
+              ],
             }),
           }),
           monthlyLineup: defineLocations({

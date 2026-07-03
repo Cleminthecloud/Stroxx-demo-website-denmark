@@ -9,7 +9,9 @@ import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
+import { createDataAttribute } from 'next-sanity';
 import { productsBySkus, LandingSection } from '@/lib/cms';
+import { projectId, dataset, studioUrl } from '@/sanity/env';
 import { testimonials } from '@/lib/testimonials';
 
 /** Renders CMS landing-page sections with the exact art direction of the
@@ -42,11 +44,43 @@ function Accent({ text }: { text?: string }) {
   );
 }
 
-export default function LandingSections({ sections, buy }: { sections: LandingSection[]; buy: string }) {
+export default function LandingSections({
+  sections,
+  buy,
+  docId,
+}: {
+  sections: LandingSection[];
+  buy: string;
+  docId?: string;
+}) {
+  /* data-sanity on every section wrapper makes the WHOLE block click-to-edit
+     in Presentation (headlines run through Accent/ScrollText, which split the
+     invisible stega markers, so per-string overlays alone aren't enough). */
+  const sectionAttr = (key: string) =>
+    docId
+      ? createDataAttribute({
+          projectId,
+          dataset,
+          baseUrl: studioUrl,
+          id: docId,
+          type: 'landingPage',
+          path: `sections[_key=="${key}"]`,
+        }).toString()
+      : undefined;
+
   return (
     <>
-      {sections.map((s) => {
-        switch (s._type) {
+      {sections.map((s) => (
+        <div key={s._key} data-sanity={sectionAttr(s._key)} style={{ display: 'contents' }}>
+          {renderSection(s, buy)}
+        </div>
+      ))}
+    </>
+  );
+}
+
+function renderSection(s: LandingSection, buy: string) {
+  switch (s._type) {
           case 'photoHero':
             return (
               <section key={s._key} className="relative h-[100svh] min-h-[560px] overflow-hidden">
@@ -289,8 +323,5 @@ export default function LandingSections({ sections, buy }: { sections: LandingSe
 
           default:
             return null;
-        }
-      })}
-    </>
-  );
+  }
 }

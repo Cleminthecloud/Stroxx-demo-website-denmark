@@ -127,7 +127,7 @@ export default async function ProevDetPage() {
       <main className="bg-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
-        <LandingSections sections={cms} buy={buy} />
+        <LandingSections sections={cms} buy={buy} docId={doc?._id} />
       </main>
     );
   }
