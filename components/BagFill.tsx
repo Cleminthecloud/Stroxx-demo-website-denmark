@@ -58,6 +58,15 @@ export default function BagFill() {
   const wrap = useRef<HTMLDivElement>(null);
   const toolRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [landed, setLanded] = useState(0);
+  // Safari (iOS and macOS) rasterises large drop-shadow layers as opaque
+  // white when they exceed GPU memory; skip the filter there.
+  const [noShadow, setNoShadow] = useState(false);
+
+  useEffect(() => {
+    if (/safari/i.test(navigator.userAgent) && !/chrome|chromium|crios|edg|android/i.test(navigator.userAgent)) {
+      setNoShadow(true);
+    }
+  }, []);
 
   useEffect(() => {
     let raf = 0;
@@ -114,7 +123,7 @@ export default function BagFill() {
           {/* 1 — bag back */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={BAG_BACK} alt="" className="absolute inset-0 h-full w-full object-contain select-none"
-            style={{ filter: 'drop-shadow(0 30px 40px rgba(0,0,0,0.55))' }} />
+            style={noShadow ? undefined : { filter: 'drop-shadow(0 30px 40px rgba(0,0,0,0.55))' }} />
 
           {/* 2 — tools */}
           {TOOLS.map((t, i) => (

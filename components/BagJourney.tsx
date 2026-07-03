@@ -38,9 +38,12 @@ export default function BagJourney() {
     // Whether to skip the fall-in/puff. Computed at start() time, since the
     // intro can be deferred until the placeholder overlay is dismissed.
     let skipEntrance = false;
-    // iOS Safari rasterises large blur/drop-shadow layers as opaque white when
-    // they exceed GPU memory, so phones get NO css filter (pool div = shadow).
+    // Safari (iOS AND macOS) rasterises large blur/drop-shadow layers as opaque
+    // white when they exceed GPU memory, so phones get NO css filter (pool div
+    // = shadow) and Safari on any size skips the bag filter too.
     const noFilter = window.matchMedia('(max-width: 1023px)').matches;
+    const isSafari =
+      /safari/i.test(navigator.userAgent) && !/chrome|chromium|crios|edg|android/i.test(navigator.userAgent);
     // Fixed hero pose. y nudges the bag down so the headline reads above it.
     const POSE_Y = noFilter ? 18 : 16; // vh below centre
     let t0 = 0; // set when the intro actually starts
@@ -93,7 +96,7 @@ export default function BagJourney() {
       if (group.current) {
         group.current.style.transform = `${jolt}translate(-50%,-50%) translate(0vw, ${(POSE_Y + entY).toFixed(2)}vh) scale(${BAG_S})`;
       }
-      if (bag.current && !noFilter) {
+      if (bag.current && !noFilter && !isSafari) {
         const off = 16 + lift * 30, bl = 34 + lift * 40;
         const a1 = (0.5 - lift * 0.16).toFixed(2);
         bag.current.style.filter =
