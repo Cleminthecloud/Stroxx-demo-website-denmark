@@ -32,6 +32,18 @@ export type SiteSettings = {
   cookiebotId?: string;
   chatEnabled?: boolean;
   aiChatEnabled?: boolean;
+  newsletterEnabled?: boolean;
+  newsletterProvider?: string;
+  newsletterListId?: string;
+  newsletterHeadline?: string;
+  newsletterText?: string;
+  newsletterButtonLabel?: string;
+  newsletterDisclaimer?: string;
+  newsletterBandEnabled?: boolean;
+  newsletterPopupEnabled?: boolean;
+  newsletterPopupDelay?: number;
+  newsletterPopupScroll?: number;
+  newsletterPopupFrequencyDays?: number;
 };
 
 /** CMS link lists → clean {label, href}[] or null when unset/empty. */

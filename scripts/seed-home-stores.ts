@@ -157,6 +157,17 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   llmsTxt: LLMS_FALLBACK,
   chatEnabled: true,
   aiChatEnabled: false,
+  newsletterEnabled: false,
+  newsletterProvider: 'mailchimp',
+  newsletterHeadline: 'Sharp offers, no spam.',
+  newsletterText: 'The monthly lineup and the sharpest prices, straight to your inbox.',
+  newsletterButtonLabel: 'Sign up',
+  newsletterDisclaimer: 'Unsubscribe anytime. We only write when it is worth your time.',
+  newsletterBandEnabled: true,
+  newsletterPopupEnabled: false,
+  newsletterPopupDelay: 8,
+  newsletterPopupScroll: 50,
+  newsletterPopupFrequencyDays: 14,
 };
 
 async function run() {

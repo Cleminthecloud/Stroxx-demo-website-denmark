@@ -13,6 +13,7 @@ import SpecialistFab from '@/components/SpecialistFab';
 import CommandMenu from '@/components/CommandMenu';
 import SiteOverlay from '@/components/SiteOverlay';
 import ExitPreview from '@/components/ExitPreview';
+import { NewsletterBand, NewsletterPopup } from '@/components/Newsletter';
 import { SITE_URL } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -117,6 +118,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
      consent (Consent Mode v2). Strict UUID validation, same reasoning as GTM. */
   const rawCb = stegaClean(settings?.cookiebotId) || '';
   const cookiebotId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawCb) ? rawCb : null;
+  /* newsletter: band above the footer + optional rules-driven popup */
+  const nlOn = settings?.newsletterEnabled === true;
+  const nlCopy = {
+    headline: settings?.newsletterHeadline || 'Sharp offers, no spam.',
+    text: settings?.newsletterText || 'The monthly lineup and the sharpest prices, straight to your inbox.',
+    buttonLabel: settings?.newsletterButtonLabel || 'Sign up',
+    disclaimer: settings?.newsletterDisclaimer || 'Unsubscribe anytime. We only write when it is worth your time.',
+  };
   return (
     <html lang="en">
       <body>
@@ -159,6 +168,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SmoothScroll>
           <Nav links={cleanLinks(settings?.navLinks) ?? undefined} />
           <div id="indhold">{children}</div>
+          {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} />}
           <Footer />
           {/* editors can hide the chat entirely: Site settings → Integrations */}
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} />}
@@ -168,6 +178,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SanityLive />
         {draft && <VisualEditing />}
         {draft && <ExitPreview />}
+        {nlOn && settings?.newsletterPopupEnabled === true && (
+          <NewsletterPopup
+            copy={nlCopy}
+            delaySeconds={settings?.newsletterPopupDelay ?? 8}
+            scrollPercent={settings?.newsletterPopupScroll ?? 50}
+            frequencyDays={settings?.newsletterPopupFrequencyDays ?? 14}
+          />
+        )}
       </body>
     </html>
   );

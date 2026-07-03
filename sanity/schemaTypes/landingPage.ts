@@ -404,6 +404,25 @@ export const landingPage = defineType({
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `FAQ · ${s.title || ''}` }) },
         }),
         defineArrayMember({
+          name: 'newsletter',
+          title: 'Newsletter signup',
+          type: 'object',
+          description: 'Email signup form. Sends to the email platform chosen in Site settings → Newsletter (which must be configured and enabled).',
+          fields: [
+            eyebrow,
+            headline,
+            defineField({ name: 'sub', title: 'Text', type: 'text', rows: 2 }),
+            defineField({ name: 'buttonLabel', title: 'Button label', type: 'string', initialValue: 'Sign up' }),
+            defineField({
+              name: 'disclaimer',
+              title: 'Consent line under the form',
+              type: 'string',
+              initialValue: 'Unsubscribe anytime. We only write when it is worth your time.',
+            }),
+          ],
+          preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Newsletter · ${s.title || ''}` }) },
+        }),
+        defineArrayMember({
           name: 'spacer',
           title: 'Spacer (empty breathing room)',
           type: 'object',

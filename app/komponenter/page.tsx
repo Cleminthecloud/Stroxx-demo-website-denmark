@@ -173,6 +173,19 @@ const DEMOS: Demo[] = [
     },
   },
   {
+    studioName: 'Newsletter signup',
+    description:
+      'Email signup form sending to the market’s email platform (chosen in Site settings → Newsletter). Also available site-wide as the band above the footer and an optional popup.',
+    section: {
+      _type: 'newsletter', _key: 'd15',
+      eyebrow: 'Component · Newsletter',
+      headline: 'Sharp offers, \n no *spam.*',
+      sub: 'The monthly lineup and the sharpest prices, straight to your inbox.',
+      buttonLabel: 'Sign up',
+      disclaimer: 'Unsubscribe anytime. We only write when it is worth your time.',
+    },
+  },
+  {
     studioName: 'Spacer (empty breathing room)',
     description: 'Adds vertical space between sections. Three sizes. (Rendered below as the gap you are looking at.)',
     section: { _type: 'spacer', _key: 'd14', size: 'l' },

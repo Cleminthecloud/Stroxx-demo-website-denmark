@@ -8,6 +8,7 @@ import VideoProof from '@/components/VideoProof';
 import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
+import { NewsletterForm } from '@/components/Newsletter';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
 import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
@@ -265,6 +266,34 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
               </section>
             );
           }
+
+          case 'newsletter':
+            return (
+              <section key={s._key} className="relative">
+                <div className="absolute inset-0" style={{ background: 'radial-gradient(50% 60% at 50% 50%, rgba(0,130,202,0.10), transparent 70%)' }} />
+                <div className="relative mx-auto max-w-2xl px-6 md:px-10 py-24 md:py-32 text-center">
+                  <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                  <ScrollText as="h2" text={s.headline || ''}
+                    className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.95] mb-4" />
+                  {s.sub && (
+                    <Reveal delay={80}>
+                      <p className="text-fog text-lg leading-relaxed mb-8">{s.sub}</p>
+                    </Reveal>
+                  )}
+                  <Reveal delay={140}>
+                    <NewsletterForm
+                      center
+                      copy={{
+                        headline: s.headline || '',
+                        text: s.sub || '',
+                        buttonLabel: s.buttonLabel || 'Sign up',
+                        disclaimer: s.disclaimer || 'Unsubscribe anytime.',
+                      }}
+                    />
+                  </Reveal>
+                </div>
+              </section>
+            );
 
           case 'spacer':
             return <div key={s._key} aria-hidden className={s.size === 's' ? 'h-12 md:h-16' : s.size === 'l' ? 'h-32 md:h-48' : 'h-20 md:h-28'} />;
