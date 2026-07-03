@@ -94,7 +94,7 @@ export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
               </button>
               <div className="min-w-0">
                 <div className="text-white text-sm font-medium leading-tight">STROXX assistant</div>
-                <div className="text-[10px] text-fog uppercase tracking-wider">AI · demo</div>
+                <div className="text-[10px] text-fog uppercase tracking-wider">AI assistant</div>
               </div>
             </div>
             <SpecialistChat nearest={nearest} />
@@ -111,7 +111,7 @@ export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
         <button onClick={() => setView('chat')}
           className="glass-cta glass-cta--sm w-full justify-center text-white mb-3">
           <MessageCircle size={13} /> Start chat
-          <span className="text-[9px] uppercase tracking-wider rounded-full border border-white/25 px-1.5 py-0.5 ml-1 text-white/80">AI · demo</span>
+          <span className="text-[9px] uppercase tracking-wider rounded-full border border-white/25 px-1.5 py-0.5 ml-1 text-white/80">AI</span>
         </button>
 
         {nearest ? (
