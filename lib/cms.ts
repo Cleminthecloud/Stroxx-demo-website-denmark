@@ -73,6 +73,7 @@ export type LandingDoc = {
   slug?: { current?: string };
   seoTitle?: string;
   seoDescription?: string;
+  ogImage?: unknown; // Sanity image; render via assetUrl()
   sections?: LandingSection[];
 };
 

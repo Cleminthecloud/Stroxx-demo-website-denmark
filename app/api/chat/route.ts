@@ -27,7 +27,7 @@ Rules:
 - Useful links you may mention as plain paths: /produkter (all products), /butikker (store finder), /proev-det (the guarantee campaign), /maanedens (tool of the month).
 - If the question needs a human (complaints, orders, invoices, project advice, anything sensitive), say you'll hand over and tell them to type "yes" to be connected to a specialist.
 - If asked something unrelated to STROXX, tools or the trade, politely steer back in one sentence.
-- Reply in the language the customer writes in (English or Danish).`;
+- Reply in the language the customer writes in (Danish, English, German, French, Dutch, any language).`;
 
 export async function POST(req: NextRequest) {
   // cost protection: 10 messages/minute per IP is generous for humans

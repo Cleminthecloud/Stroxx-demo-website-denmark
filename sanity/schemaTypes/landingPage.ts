@@ -44,6 +44,13 @@ export const landingPage = defineType({
     defineField({ name: 'seoTitle', title: 'SEO title', type: 'string' }),
     defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3 }),
     defineField({
+      name: 'ogImage',
+      title: 'Share image (social)',
+      description: 'Shown when this page is shared on LinkedIn/Facebook etc. 1200x630 works best. Empty = the site-wide share image from Site settings.',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'sections',
       title: 'Sections',
       type: 'array',

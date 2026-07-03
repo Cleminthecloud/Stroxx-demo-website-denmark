@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { stegaClean } from '@sanity/client/stega';
+import { assetUrl } from '@/sanity/lib/image';
 import { getLandingPage } from '@/lib/cms';
 import LandingSections from '@/components/cms/LandingSections';
 import { CR_BRAND, UTM } from '@/lib/data';
@@ -14,10 +15,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const path = (await params).slug.join('/');
   const doc = await getLandingPage(path);
   if (!doc) return { title: 'STROXX' };
+  const og = assetUrl(doc.ogImage, 1200);
   return {
     title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
     description: stegaClean(doc.seoDescription) || undefined,
     alternates: { canonical: `/kampagne/${path}` },
+    /* per-page share image; empty = site-wide default from layout metadata */
+    ...(og ? { openGraph: { images: [{ url: og, width: 1200, height: 630 }] } } : {}),
   };
 }
 
