@@ -4,8 +4,8 @@ import { trades } from '@/lib/trades';
 import { getLandingSlugs } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
-/** Public pages only: hidden internals (/plan, /email-skabeloner,
- *  /komponenter) and the /kategori redirects are deliberately left out.
+/** Public pages only: hidden internals (/komponenter, /guide) and the
+ *  /kategori redirects are deliberately left out.
  *  CMS landing pages are included automatically. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();

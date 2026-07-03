@@ -10,7 +10,6 @@ import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
-import CommandMenu from '@/components/CommandMenu';
 import ExitPreview from '@/components/ExitPreview';
 import { NewsletterBand, NewsletterPopup } from '@/components/Newsletter';
 import { SITE_URL } from '@/lib/site';
@@ -169,7 +168,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Footer />
           {/* editors can hide the chat entirely: Site settings → Integrations */}
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} />}
-          <CommandMenu />
         </SmoothScroll>
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
         <SanityLive />
