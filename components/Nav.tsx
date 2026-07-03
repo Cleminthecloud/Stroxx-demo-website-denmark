@@ -16,7 +16,7 @@ const LINKS = [
   { href: '/service', label: 'Service and Support' },
 ];
 
-export default function Nav() {
+export default function Nav({ links = LINKS }: { links?: { href: string; label: string }[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -65,7 +65,7 @@ export default function Nav() {
       >
         <div className="flex h-full flex-col px-6 pt-28 pb-10 overflow-y-auto">
           <nav className="flex flex-col gap-1" aria-label="Mobile menu">
-            {LINKS.map((l, i) => (
+            {links.map((l, i) => (
               <Link
                 key={l.label}
                 href={l.href}
@@ -89,7 +89,7 @@ export default function Nav() {
             style={{
               opacity: open ? 1 : 0,
               transform: open ? 'none' : 'translateY(16px)',
-              transition: `opacity .55s cubic-bezier(.16,1,.3,1) ${90 + LINKS.length * 50}ms, transform .55s cubic-bezier(.16,1,.3,1) ${90 + LINKS.length * 50}ms`,
+              transition: `opacity .55s cubic-bezier(.16,1,.3,1) ${90 + links.length * 50}ms, transform .55s cubic-bezier(.16,1,.3,1) ${90 + links.length * 50}ms`,
             }}
           >
             <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
@@ -122,10 +122,12 @@ export default function Nav() {
             />
           </Link>
           <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">
-            <Link href="/maanedens" className="hidden lg:inline hover:text-white transition-colors">Tool of the Month</Link>
-            <Link href="/produkter" className="hidden sm:inline hover:text-white transition-colors">Products</Link>
-            <Link href="/butikker" className="hidden sm:inline hover:text-white transition-colors">Stores</Link>
-            <Link href="/butikker?tab=specialister" className="hidden md:inline hover:text-white transition-colors">Specialists</Link>
+            {links.slice(0, 4).map((l, i) => (
+              <Link key={l.href} href={l.href}
+                className={`${['hidden lg:inline', 'hidden sm:inline', 'hidden sm:inline', 'hidden md:inline'][i]} hover:text-white transition-colors`}>
+                {l.label}
+              </Link>
+            ))}
             {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
                 utilities in the cascade, so `hidden` directly on it loses */}
             <span className="hidden sm:inline-flex">

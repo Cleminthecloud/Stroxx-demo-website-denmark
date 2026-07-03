@@ -4,7 +4,7 @@ import Script from 'next/script';
 import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
-import { getSiteSettings, getStores } from '@/lib/cms';
+import { getSiteSettings, getStores, cleanLinks } from '@/lib/cms';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
@@ -14,39 +14,48 @@ import CommandMenu from '@/components/CommandMenu';
 import SiteOverlay from '@/components/SiteOverlay';
 import { SITE_URL } from '@/lib/site';
 
-export const metadata: Metadata = {
-  // Demo domain; swap lib/site.ts when the production domain lands. Makes all
-  // OG/twitter image and canonical URLs absolute.
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: 'STROXX | Premium tools, beastly low prices',
-    template: '%s | STROXX',
-  },
-  description:
-    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.',
-  openGraph: {
-    title: 'STROXX | Premium tools, beastly low prices',
-    description: 'Great tools at refreshingly low prices. Only at Carl Ras.',
-    type: 'website',
-    siteName: 'STROXX',
-    locale: 'en',
-    images: [{ url: '/brand/og.jpg', width: 1200, height: 630, alt: 'STROXX tools' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'STROXX | Premium tools, beastly low prices',
-    description: 'Great tools at refreshingly low prices. Only at Carl Ras.',
-    images: ['/brand/og.jpg'],
-  },
-  icons: {
-    apple: '/icons/apple-touch-icon.png',
-  },
-  appleWebApp: {
-    capable: true,
-    title: 'STROXX',
-    statusBarStyle: 'black-translucent',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  /* Site-wide SEO defaults come from Site settings in the CMS; the values
+     below are the fallbacks when a field is empty. */
+  const s = await getSiteSettings();
+  const title = stegaClean(s?.seoTitle) || 'STROXX | Premium tools, beastly low prices';
+  const description =
+    stegaClean(s?.seoDescription) ||
+    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.';
+  const og = stegaClean(s?.ogImage) || '/brand/og.jpg';
+  return {
+    // Demo domain; swap lib/site.ts when the production domain lands. Makes all
+    // OG/twitter image and canonical URLs absolute.
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: '%s | STROXX',
+    },
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      siteName: 'STROXX',
+      locale: 'en',
+      images: [{ url: og, width: 1200, height: 630, alt: 'STROXX tools' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [og],
+    },
+    icons: {
+      apple: '/icons/apple-touch-icon.png',
+    },
+    appleWebApp: {
+      capable: true,
+      title: 'STROXX',
+      statusBarStyle: 'black-translucent',
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: '#0B0C0E',
@@ -134,7 +143,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* the placeholder overlay would cover the Presentation preview iframe */}
         {!draft && <SiteOverlay />}
         <SmoothScroll>
-          <Nav />
+          <Nav links={cleanLinks(settings?.navLinks) ?? undefined} />
           <div id="indhold">{children}</div>
           <Footer />
           <SpecialistFab storeData={storeData} />

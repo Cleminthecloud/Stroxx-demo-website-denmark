@@ -26,10 +26,20 @@ export const landingPage = defineType({
     defineField({
       name: 'slug',
       title: 'URL slug',
-      description: 'Becomes the address: slug "sommer" publishes at /kampagne/sommer.',
+      description:
+        'Becomes the address: slug "sommer" publishes at /kampagne/sommer. Use / to nest: "sommer/tilbud" publishes at /kampagne/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
       type: 'slug',
-      options: { source: 'title' },
-      validation: (r) => r.required(),
+      options: {
+        source: 'title',
+        slugify: (input: string) =>
+          input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9/-]/g, '').replace(/-+/g, '-').slice(0, 96),
+      },
+      validation: (r) =>
+        r.required().custom((s: { current?: string } | undefined) =>
+          !s?.current || /^[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(s.current)
+            ? true
+            : 'Lowercase letters, numbers and dashes; use / to nest under a parent'
+        ),
     }),
     defineField({ name: 'seoTitle', title: 'SEO title', type: 'string' }),
     defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3 }),

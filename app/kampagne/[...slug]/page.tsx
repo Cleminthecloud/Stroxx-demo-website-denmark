@@ -6,25 +6,26 @@ import LandingSections from '@/components/cms/LandingSections';
 import { CR_BRAND, UTM } from '@/lib/data';
 
 /** Every landingPage document an editor creates in the Studio gets a URL here
- *  automatically: slug "sommer-kampagne" → /kampagne/sommer-kampagne.
- *  (/proev-det keeps its own route since it predates the CMS and is linked
- *  everywhere; its doc simply carries that slug.) */
+ *  automatically: slug "sommer" → /kampagne/sommer, and slugs may nest with
+ *  slashes: "sommer/tilbud" → /kampagne/sommer/tilbud. Moving a page is
+ *  editing its slug. (/proev-det keeps its own historic route.) */
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const doc = await getLandingPage((await params).slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }): Promise<Metadata> {
+  const path = (await params).slug.join('/');
+  const doc = await getLandingPage(path);
   if (!doc) return { title: 'STROXX' };
   return {
     title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
     description: stegaClean(doc.seoDescription) || undefined,
-    alternates: { canonical: `/kampagne/${(await params).slug}` },
+    alternates: { canonical: `/kampagne/${path}` },
   };
 }
 
-export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function CampaignPage({ params }: { params: Promise<{ slug: string[] }> }) {
+  const path = (await params).slug.join('/');
   // /proev-det owns its own route; don't render it twice
-  if (slug === 'proev-det') notFound();
-  const doc = await getLandingPage(slug);
+  if (path === 'proev-det') notFound();
+  const doc = await getLandingPage(path);
   if (!doc?.sections?.length) notFound();
   const buy = `${CR_BRAND}/?${UTM}`;
 

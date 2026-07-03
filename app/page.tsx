@@ -103,7 +103,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <Marquee text={stegaClean(hp.marqueeText)} />
+      {/* editable in Studio: Homepage → Marquee text; click the band to open it */}
+      <div data-sanity={hAttr('marqueeText')}>
+        <Marquee text={stegaClean(hp.marqueeText)} />
+      </div>
 
       {/* SORTIMENT — what we have, and we have your back */}
       <section className="relative py-28 md:py-40">

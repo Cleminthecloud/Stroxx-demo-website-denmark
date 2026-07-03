@@ -1,10 +1,34 @@
 import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { UTM, CR_BRAND, brandImages } from '@/lib/data';
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, cleanLinks } from '@/lib/cms';
+
+const PAGES_FALLBACK = [
+  { label: 'Tool of the Month', href: '/maanedens' },
+  { label: 'Products', href: '/produkter' },
+  { label: 'Trades', href: '/fag' },
+  { label: 'Stores', href: '/butikker' },
+  { label: 'Campaign: Try It', href: '/proev-det' },
+  { label: 'Specialists', href: '/butikker?tab=specialister' },
+  { label: 'Service and Support', href: '/service' },
+];
+
+function FooterLink({ label, href }: { label: string; href: string }) {
+  return /^https?:/i.test(href) ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">{label}</a>
+  ) : (
+    <Link href={href} className="block text-fog hover:text-white">{label}</Link>
+  );
+}
 
 export default async function Footer() {
   const s = await getSiteSettings();
+  const pageLinks = cleanLinks(s?.footerPageLinks) ?? PAGES_FALLBACK;
+  const buyLinks = cleanLinks(s?.footerBuyLinks) ?? [
+    { label: 'Buy STROXX', href: `${CR_BRAND}/?${UTM}` },
+    { label: 'Find a store', href: '/butikker' },
+    { label: 'Satisfaction guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
+  ];
   const phone = s?.supportPhone || '+45 44 85 55 11';
   const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
   const legal = s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
@@ -34,21 +58,13 @@ export default async function Footer() {
           <div className="text-sm">
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Pages</div>
             <div className="space-y-3">
-              <Link href="/maanedens" className="block text-fog hover:text-white">Tool of the Month</Link>
-              <Link href="/produkter" className="block text-fog hover:text-white">Products</Link>
-              <Link href="/fag" className="block text-fog hover:text-white">Trades</Link>
-              <Link href="/butikker" className="block text-fog hover:text-white">Stores</Link>
-              <Link href="/proev-det" className="block text-fog hover:text-white">Campaign: Try It</Link>
-              <Link href="/butikker?tab=specialister" className="block text-fog hover:text-white">Specialists</Link>
-              <Link href="/service" className="block text-fog hover:text-white">Service and Support</Link>
+              {pageLinks.map((l) => <FooterLink key={l.href} {...l} />)}
             </div>
           </div>
           <div className="text-sm">
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Buy</div>
             <div className="space-y-3">
-              <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Buy STROXX</a>
-              <Link href="/butikker" className="block text-fog hover:text-white">Find a store</Link>
-              <a href="/STROXX-tilfredshedsgaranti.pdf" target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">Satisfaction guarantee (PDF)</a>
+              {buyLinks.map((l) => <FooterLink key={l.href} {...l} />)}
             </div>
           </div>
         </div>

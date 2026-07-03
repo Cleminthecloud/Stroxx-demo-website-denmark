@@ -9,13 +9,31 @@ import { HOME_DEFAULTS, type HomeCopy } from '@/lib/home-copy';
  *  unreachable, every consumer renders exactly what it rendered before the
  *  CMS existed. Same seam philosophy as lib/data.ts. */
 
+export type NavLink = { label?: string; href?: string };
 export type SiteSettings = {
   retailerName?: string;
   supportPhone?: string;
   supportHours?: string;
   legalLine?: string;
   gtmId?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: string;
+  llmsTxt?: string;
+  navLinks?: NavLink[];
+  footerPageLinks?: NavLink[];
+  footerBuyLinks?: NavLink[];
+  pimFeedUrl?: string;
+  damBaseUrl?: string;
 };
+
+/** CMS link lists → clean {label, href}[] or null when unset/empty. */
+export function cleanLinks(links: NavLink[] | undefined): { label: string; href: string }[] | null {
+  const out = (links ?? [])
+    .map((l) => ({ label: l.label ?? '', href: stegaClean(l.href) ?? '' }))
+    .filter((l) => l.label && l.href);
+  return out.length ? out : null;
+}
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {

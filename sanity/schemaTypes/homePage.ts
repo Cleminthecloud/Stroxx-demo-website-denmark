@@ -25,8 +25,8 @@ export const homePage = defineType({
         'The giant front-page headline. Press Enter where the line should break; each line animates in separately. Wrap a word in *asterisks* for the blue accent.',
       group: 'hero',
     }),
-    defineField({ ...t('claimWhite', 'Claim (white part)'), group: 'hero' }),
-    defineField({ ...t('claimBlue', 'Claim (blue part)'), group: 'hero' }),
+    defineField({ ...s('claimWhite', 'Claim (white part)'), description: accentNote, group: 'hero' }),
+    defineField({ ...s('claimBlue', 'Claim (blue part)'), group: 'hero' }),
     defineField({ ...t('claimSub', 'Claim subtext', 4), group: 'hero' }),
     defineField({ ...s('marqueeText', 'Marquee text'), group: 'hero' }),
 
@@ -60,11 +60,11 @@ export const homePage = defineType({
       ],
     }),
 
-    defineField({ ...t('specialistsHeadline', 'Specialists headline'), group: 'proof' }),
+    defineField({ ...s('specialistsHeadline', 'Specialists headline'), description: accentNote, group: 'proof' }),
     defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof' }),
     defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof' }),
 
-    defineField({ ...t('monthHeadline', 'Month section headline'), group: 'month' }),
+    defineField({ ...s('monthHeadline', 'Month section headline'), description: accentNote, group: 'month' }),
     defineField({ ...s('monthBlue', 'Month section blue line'), group: 'month' }),
     defineField({ ...t('monthText', 'Month section text', 4), group: 'month' }),
     defineField({ ...t('categoriesHeadline', 'Categories headline'), group: 'month' }),
