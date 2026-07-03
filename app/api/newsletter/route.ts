@@ -1,5 +1,6 @@
 import { createHash } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
 
@@ -17,6 +18,9 @@ export const maxDuration = 30;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`nl:${clientIp(req.headers)}`, 5, 60000)) {
+    return NextResponse.json({ ok: false, error: 'rate-limited' }, { status: 429 });
+  }
   let email = '';
   let honeypot = '';
   try {

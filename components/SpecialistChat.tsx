@@ -106,7 +106,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
 
 export default function SpecialistChat({ nearest }: { nearest: { store: Store; km: number } | null }) {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: 'bot', text: 'Hi! I am the STROXX assistant. Ask me about products, the guarantee or the stores, or ask for a human any time.' },
+    { from: 'bot', text: 'Hi! I am the STROXX AI assistant. Ask me about products, the guarantee or the stores, or ask for a human any time.' },
   ]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
 import { LLMS_FALLBACK } from '@/lib/llms-fallback';
@@ -29,6 +30,10 @@ Rules:
 - Reply in the language the customer writes in (English or Danish).`;
 
 export async function POST(req: NextRequest) {
+  // cost protection: 10 messages/minute per IP is generous for humans
+  if (!rateLimit(`chat:${clientIp(req.headers)}`, 10, 60000)) {
+    return NextResponse.json({ fallback: true }, { status: 429 });
+  }
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) return NextResponse.json({ fallback: true }, { status: 503 });
 
