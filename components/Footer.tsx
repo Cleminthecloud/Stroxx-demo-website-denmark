@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { UTM, CR_BRAND, brandImages } from '@/lib/data';
+import { getSiteSettings } from '@/lib/cms';
 
-export default function Footer() {
+export default async function Footer() {
+  const s = await getSiteSettings();
+  const phone = s?.supportPhone || '+45 44 85 55 11';
+  const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
+  const legal = s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
@@ -18,12 +23,11 @@ export default function Footer() {
               <a href="https://www.foussier.fr" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Foussier</a> and{' '}
               <a href="https://lecot.be" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Lecot</a>.
             </p>
-            <a href="tel:+4544855511" className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
-              <Phone size={18} strokeWidth={2} /> +45 44 85 55 11
+            <a href={`tel:${phone.replace(/\s+/g, '')}`} className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
+              <Phone size={18} strokeWidth={2} /> {phone}
             </a>
-            <div className="mt-5 text-fog text-sm leading-relaxed">
-              Monday to Thursday: 07:00 to 16:00<br />
-              Friday: 07:00 to 15:00
+            <div className="mt-5 text-fog text-sm leading-relaxed whitespace-pre-line">
+              {hours}
             </div>
           </div>
 
@@ -50,7 +54,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-20 text-xs text-fog/50">
-          © Carl Ras A/S &nbsp;|&nbsp; Mileparken 31 &nbsp;|&nbsp; 2730 Herlev &nbsp;|&nbsp; CVR: DK 70 58 71 14
+          {legal}
         </div>
       </div>
     </footer>

@@ -186,8 +186,8 @@ async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } 
   return null;
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const id = params.id.replace(/[^0-9]/g, '');
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id.replace(/[^0-9]/g, '');
   if (!id) return new Response(BLANK, { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
 
   const reqF = (req.nextUrl.searchParams.get('f') || '').replace(/[^0-9]/g, '');

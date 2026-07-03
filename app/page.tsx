@@ -27,7 +27,7 @@ import {
   UTM,
   CR_BRAND,
 } from '@/lib/data';
-import { SKA } from '@/lib/ska';
+import { getSka } from '@/lib/cms';
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-7">{children}</div>;
@@ -52,7 +52,8 @@ function Marquee({ text }: { text: string }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const SKA = await getSka();
   return (
     <main className="relative overflow-x-clip">
       {/* the bag falls into the hero, dust puffs, and the tools cascade in on load */}

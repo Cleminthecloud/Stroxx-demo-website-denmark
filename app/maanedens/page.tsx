@@ -11,7 +11,7 @@ import VideoProof from '@/components/VideoProof';
 import Faq from '@/components/Faq';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import { productBuyUrl, specialistForProduct, toolTexture, particleSrc, CR_BRAND, UTM } from '@/lib/data';
-import { SKA } from '@/lib/ska';
+import { getSka } from '@/lib/cms';
 import { SITE_URL } from '@/lib/site';
 
 /* Månedens STROXX — the SKA hero landing page (docs/STROXX KOMMERCIEL MOTOR.pdf):
@@ -19,18 +19,22 @@ import { SITE_URL } from '@/lib/site';
    video, comparison, FAQ, specialist — while the 5 DB2-winners and nyheder
    link straight to the webshop. Newsletter, SoMe and sales all point here. */
 
-export const metadata: Metadata = {
-  title: `Tool of the Month: ${SKA.hero.name}`,
-  description: `${SKA.month}'s STROXX: the ${SKA.hero.name}, plus the month's five DB2 winners and new arrivals. Quality and value, not just price. 30-day satisfaction guarantee at Carl Ras.`,
-  alternates: { canonical: '/maanedens' },
-  openGraph: {
-    title: `STROXX of the Month · ${SKA.month}: ${SKA.hero.name}`,
-    description: 'One headline story every month. Quality and value, documented.',
-    images: [`${SITE_URL}${toolTexture(SKA.hero.imgId, '50383')}`],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const SKA = await getSka();
+  return {
+    title: `Tool of the Month: ${SKA.hero.name}`,
+    description: `${SKA.month}'s STROXX: the ${SKA.hero.name}, plus the month's five DB2 winners and new arrivals. Quality and value, not just price. 30-day satisfaction guarantee at Carl Ras.`,
+    alternates: { canonical: '/maanedens' },
+    openGraph: {
+      title: `STROXX of the Month · ${SKA.month}: ${SKA.hero.name}`,
+      description: 'One headline story every month. Quality and value, documented.',
+      images: [`${SITE_URL}${toolTexture(SKA.hero.imgId, '50383')}`],
+    },
+  };
+}
 
-export default function MaanedensPage() {
+export default async function MaanedensPage() {
+  const SKA = await getSka();
   const hero = SKA.hero;
   const buyUrl = productBuyUrl(hero.code);
   const spec = specialistForProduct(hero);

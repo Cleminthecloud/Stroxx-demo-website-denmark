@@ -392,3 +392,12 @@ body:has(main.fullscreen-map) footer { display: none; }
   transition: top 0.15s ease;
 }
 .skip-link:focus { top: 16px; outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ── Embedded Sanity Studio (/studio) ──────────────────────────────────────
+   The Studio page is a fixed full-viewport shell; hide every piece of site
+   chrome around it (same body:has trick as the fullscreen map). The FAB's
+   root is .no-print, scoped here to the fab wrapper via :has on body. */
+body:has(main.studio-shell) header,
+body:has(main.studio-shell) footer,
+body:has(main.studio-shell) .skip-link,
+body:has(main.studio-shell) .no-print { display: none; }

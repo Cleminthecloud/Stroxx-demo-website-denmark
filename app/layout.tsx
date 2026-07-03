@@ -1,4 +1,7 @@
 import type { Metadata, Viewport } from 'next';
+import { draftMode } from 'next/headers';
+import { VisualEditing } from 'next-sanity/visual-editing';
+import { SanityLive } from '@/sanity/lib/live';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Nav from '@/components/Nav';
@@ -88,7 +91,8 @@ const siteLd = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const draft = (await draftMode()).isEnabled;
   return (
     <html lang="en">
       <body>
@@ -96,7 +100,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}
         <a href="#indhold" className="skip-link">Skip to content</a>
-        <SiteOverlay />
+        {/* the placeholder overlay would cover the Presentation preview iframe */}
+        {!draft && <SiteOverlay />}
         <SmoothScroll>
           <Nav />
           <div id="indhold">{children}</div>
@@ -104,6 +109,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SpecialistFab />
           <CommandMenu />
         </SmoothScroll>
+        {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
+        <SanityLive />
+        {draft && <VisualEditing />}
       </body>
     </html>
   );

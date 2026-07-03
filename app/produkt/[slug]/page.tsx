@@ -15,8 +15,8 @@ export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const p = productBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const p = productBySlug((await params).slug);
   if (!p) return { title: 'STROXX' };
   const cat = categoryBySlug(p.category);
   const desc = `${p.name} from STROXX${cat ? ` · ${cat.name}` : ''}. Pro quality, only at Carl Ras. 100% satisfaction guarantee.`;
@@ -32,8 +32,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function FocusProduct({ params }: { params: { slug: string } }) {
-  const product = productBySlug(params.slug);
+export default async function FocusProduct({ params }: { params: Promise<{ slug: string }> }) {
+  const product = productBySlug((await params).slug);
   if (!product) notFound();
 
   const cat = categoryBySlug(product.category);

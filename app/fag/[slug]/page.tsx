@@ -18,8 +18,8 @@ export function generateStaticParams() {
   return trades.map((t) => ({ slug: t.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const t = tradeBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const t = tradeBySlug((await params).slug);
   if (!t) return { title: 'STROXX' };
   const title = `Tools for ${t.name.toLowerCase()} without the brand markup`;
   const description = `${t.blurb} 30-day satisfaction guarantee, only at Carl Ras in Denmark.`;
@@ -41,8 +41,8 @@ function heroSources(slug: string) {
   return { main, sm };
 }
 
-export default function TradePage({ params }: { params: { slug: string } }) {
-  const trade = tradeBySlug(params.slug);
+export default async function TradePage({ params }: { params: Promise<{ slug: string }> }) {
+  const trade = tradeBySlug((await params).slug);
   if (!trade) notFound();
 
   const cats = trade.categories.map((c) => categoryBySlug(c)).filter(Boolean);

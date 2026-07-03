@@ -12,6 +12,9 @@ import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
 import { testimonials } from '@/lib/testimonials';
+import { stegaClean } from '@sanity/client/stega';
+import { getLandingPage } from '@/lib/cms';
+import LandingSections from '@/components/cms/LandingSections';
 
 /* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
    Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
@@ -75,16 +78,31 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-6">{children}</div>;
 }
 
-export default function ProevDetPage() {
+export default async function ProevDetPage() {
   const proof = PROOF_CODES.map((c) => products.find((p) => p.code === c)).filter(Boolean);
   const buy = `${CR_BRAND}/?${UTM}`;
 
-  /* Structured data: FAQ + the 3 trial steps as HowTo, so answer engines can
-     quote the guarantee mechanics directly. */
+  /* CMS-driven when the landing page document exists (Sanity, slug
+     "proev-det"); otherwise the hand-built page below renders unchanged. */
+  const doc = await getLandingPage('proev-det');
+  const cms = doc?.sections?.length ? doc.sections : null;
+
+  /* Structured data: FAQ + the trial steps as HowTo, so answer engines can
+     quote the guarantee mechanics directly. Sourced from the CMS when active;
+     stegaClean strips draft-mode edit-tracking characters from LD strings. */
+  const faqSrc = cms
+    ? (((cms.find((x) => x._type === 'faqSection')?.items ?? []) as { q?: string; a?: string }[])
+        .map((f) => ({ q: stegaClean(f.q) || '', a: stegaClean(f.a) || '' })))
+    : FAQ_ITEMS;
+  const stepsSrc = cms
+    ? (((cms.find((x) => x._type === 'guaranteeAsk')?.steps ?? []) as { title?: string; body?: string }[])
+        .map((st, i) => ({ n: String(i + 1).padStart(2, '0'), t: stegaClean(st.title) || '', d: stegaClean(st.body) || '' })))
+    : STEPS;
+
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: FAQ_ITEMS.map((f) => ({
+    mainEntity: faqSrc.map((f) => ({
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -96,13 +114,23 @@ export default function ProevDetPage() {
     name: 'How to try STROXX for 30 days with the satisfaction guarantee',
     description:
       'STROXX gives you a 30-day satisfaction guarantee: try the tool on real work, and get your money back if you\'re not happy.',
-    step: STEPS.map((s, i) => ({
+    step: stepsSrc.map((s, i) => ({
       '@type': 'HowToStep',
       position: i + 1,
       name: s.t,
       text: s.d,
     })),
   };
+
+  if (cms) {
+    return (
+      <main className="bg-ink">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
+        <LandingSections sections={cms} buy={buy} />
+      </main>
+    );
+  }
 
   return (
     <main className="bg-ink">
