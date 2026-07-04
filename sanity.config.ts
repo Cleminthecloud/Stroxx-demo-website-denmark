@@ -3,10 +3,11 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
-import { BookIcon, BulbOutlineIcon, ShareIcon, BarChartIcon } from '@sanity/icons';
+import { BookIcon, BulbOutlineIcon, ShareIcon, BarChartIcon, SparklesIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
+import WelcomeTool from './sanity/WelcomeTool';
 import ArticleAgentTool from './sanity/ArticleAgentTool';
 import SharePreviewTool from './sanity/SharePreviewTool';
 import DashboardTool from './sanity/DashboardTool';
@@ -99,7 +100,8 @@ export default defineConfig({
   ],
   schema: { types: schemaTypes },
   /* the editor guide as its own Studio tab, always the deployed version */
-  tools: (prev) => [...prev, { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
+  tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },
+    { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
     { name: 'article-ai', title: 'Article AI', icon: BulbOutlineIcon, component: ArticleAgentTool },
     { name: 'dashboard', title: 'Dashboard', icon: BarChartIcon, component: DashboardTool },
     { name: 'share-preview', title: 'Share preview', icon: ShareIcon, component: SharePreviewTool }],
