@@ -1,0 +1,45 @@
+# Weekly Sanity content backup.
+# Exports each dataset as a .tar.gz and stores it as a GitHub artifact for 90 days.
+# Requires one repository secret: SANITY_AUTH_TOKEN (a READ-ONLY token created at
+# sanity.io/manage -> project STROXX -> API -> Tokens -> "Viewer").
+#
+# At launch: add "production" to the DATASETS list below.
+
+name: Sanity weekly backup
+
+on:
+  schedule:
+    - cron: '0 4 * * 1' # every Monday 04:00 UTC
+  workflow_dispatch: {} # allows manual runs from the Actions tab
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+      DATASETS: 'demo' # space-separated; add "production" at launch
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export datasets
+        run: |
+          mkdir -p backups
+          for ds in $DATASETS; do
+            npx sanity dataset export "$ds" "backups/stroxx-$ds-$(date +%F).tar.gz"
+          done
+
+      - name: Store backup (90 days)
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-backup-${{ github.run_number }}
+          path: backups/*.tar.gz
+          retention-days: 90
+          if-no-files-found: error
