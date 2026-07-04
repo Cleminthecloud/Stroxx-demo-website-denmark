@@ -41,8 +41,8 @@ export const landingPage = defineType({
             : 'Lowercase letters, numbers and dashes; use / to nest under a parent'
         ),
     }),
-    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string' }),
-    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3 }),
+    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string', description: 'The title Google and share cards show. Under 60 characters. Empty = the page title.' }),
+    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3, description: 'The snippet under the title in Google. Under 155 characters.' }),
     defineField({
       name: 'ogImage',
       title: 'Share image (social)',

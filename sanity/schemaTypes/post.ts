@@ -64,12 +64,12 @@ export const post = defineType({
           type: 'object',
           name: 'productSlider',
           title: 'Product slider',
-          description: 'A horizontal row of product cards inside the article. Type item numbers; name, photo and buy link come from the product feed automatically.',
+          description: 'A horizontal row of product cards inside the article. Type item numbers; name, photo and buy link come from the product feed automatically. All of them show: the row scrolls and gets arrows, 3-8 products read best.',
           fields: [
             defineField({ name: 'title', title: 'Small heading above (optional)', type: 'string' }),
             defineField({
               name: 'skus',
-              title: 'Product SKUs (3 or more work best)',
+              title: 'Product SKUs (3-8 work best)',
               type: 'array',
               of: [defineArrayMember({ type: 'string' })],
               options: { layout: 'tags' },
@@ -97,10 +97,10 @@ export const post = defineType({
       title: 'Related products (SKUs)',
       type: 'array',
       of: [defineArrayMember({ type: 'string' })],
-      description: 'Item numbers of products mentioned in the article; they show as cards under it ("Tools mentioned"). Unknown SKUs are skipped silently.',
+      description: 'Item numbers of products mentioned in the article. THE RULE: the first 4 show as a card row under the article ("Tools mentioned"), so put the most relevant first. Unknown SKUs are skipped silently.',
     }),
-    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string' }),
-    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3 }),
+    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string', description: 'The title Google and share cards show. Under 60 characters. Empty = the headline.' }),
+    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3, description: 'The snippet under the title in Google. Under 155 characters. Empty = the excerpt.' }),
     defineField({
       name: 'ogImage',
       title: 'Share image (social)',

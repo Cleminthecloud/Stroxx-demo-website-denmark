@@ -49,8 +49,9 @@ type Block = { _type?: string; style?: string; children?: { text?: string }[] };
 const blockText = (b: Block) => (b.children ?? []).map((c) => c.text ?? '').join('');
 
 /* the reading column is 42rem; these classes push media WIDER than the text,
-   the long-form breathing room every good editorial layout uses */
-const BREAKOUT = 'md:w-[calc(100%+10rem)] md:-ml-20 lg:w-[calc(100%+16rem)] lg:-ml-32';
+   the long-form breathing room every good editorial layout uses. Breakout
+   starts at lg: at md (768px) the column+20rem would overflow the viewport. */
+const BREAKOUT = 'lg:w-[calc(100%+10rem)] lg:-ml-20 xl:w-[calc(100%+16rem)] xl:-ml-32';
 
 const components = {
   types: {
