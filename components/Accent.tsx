@@ -1,9 +1,12 @@
+import { stegaClean } from '@sanity/client/stega';
+
 /** `*word*` → blue accent, newline → <br/>. The site's signature text code,
- *  same syntax ScrollText parses. Pure and dependency-free so BOTH server
- *  and client components can render CMS copy with accents. */
+ *  same syntax ScrollText parses. Pure (no client hooks) so BOTH server
+ *  and client components can render CMS copy with accents. stegaClean strips
+ *  the invisible Presentation-mode marker chars that break asterisk parsing. */
 export default function Accent({ text }: { text?: string }) {
   if (!text) return null;
-  const parts = text.split(/(\*[^*]+\*|\n)/g).filter(Boolean);
+  const parts = stegaClean(text).split(/(\*[^*]+\*|\n)/g).filter(Boolean);
   return (
     <>
       {parts.map((p, i) =>

@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import { stegaClean } from '@sanity/client/stega';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -41,7 +42,13 @@ export default function ScrollText({
     return () => ctx.revert();
   }, [text, start, end]);
 
-  const tokens = text.split(' ');
+  // stegaClean: in Presentation draft mode CMS strings carry invisible stega
+  // marker chars; they break startsWith/endsWith('*') and the '\n' token check
+  // (symptom: literal asterisk rendered, accent never closes). Overlays come
+  // from data-sanity attributes, so cleaning here is safe.
+  // Newlines are normalised into standalone ' \n ' tokens so real line breaks
+  // typed in the CMS work the same as the documented '\n' syntax.
+  const tokens = stegaClean(text).replace(/\n/g, ' \n ').split(' ').filter(Boolean);
   let inAccent = false;
   return (
     <Tag ref={ref as any} className={className}>
