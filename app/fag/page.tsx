@@ -1,10 +1,9 @@
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, getTrades } from '@/lib/cms';
 import Accent from '@/components/Accent';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { ArrowRight, Hammer, Zap, Wrench, PaintRoller, HardHat, type LucideIcon } from 'lucide-react';
-import { trades } from '@/lib/trades';
 import { products, toolTexture, type Product } from '@/lib/data';
 import { SITE_URL as BASE } from '@/lib/site';
 
@@ -56,7 +55,7 @@ function MiniProduct({ p }: { p: Product }) {
 }
 
 export default async function TradesIndexPage() {
-  const cms = await getSiteSettings();
+  const [cms, trades] = await Promise.all([getSiteSettings(), getTrades()]);
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',

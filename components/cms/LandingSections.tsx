@@ -14,6 +14,7 @@ import ContactForm from '@/components/ContactForm';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
 import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
+import { cardCols, productCols, colsPlain } from '@/lib/grid';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
 import { assetUrl } from '@/sanity/lib/image';
 import type { Testimonial } from '@/lib/testimonials';
@@ -185,7 +186,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                       )}
                     </div>
                   )}
-                  <div className="grid gap-5 md:grid-cols-3">
+                  <div className={`grid gap-5 ${cardCols((s.items || []).length)}`}>
                     {((s.items || []) as { title?: string; body?: string }[]).map((f, i) => (
                       <Reveal key={i} delay={(i % 3) * 90}>
                         <div className="glass glass-card glass-panel rounded-xl p-7 h-full">
@@ -351,7 +352,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   </div>
                   {!!s.stats?.length && (
                     <Reveal delay={140} from="right">
-                      <div className="grid grid-cols-3 gap-6 lg:gap-8">
+                      <div className={`grid ${colsPlain(s.stats.length)} gap-6 lg:gap-8`}>
                         {s.stats.map((st: { value?: number; suffix?: string; label?: string }, i: number) => (
                           <div key={i} className="text-center lg:text-left">
                             <CountUp value={st.value ?? 0} suffix={st.suffix || ''}
@@ -381,7 +382,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                       </Reveal>
                     )}
                   </div>
-                  <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
+                  <div className={`grid gap-5 grid-cols-2 ${productCols(proof.length)}`}>
                     {proof.map((p, i) => (
                       <Reveal key={p.slug} delay={(i % 4) * 80}><ProductCard product={p} /></Reveal>
                     ))}
@@ -470,7 +471,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     )}
                   </div>
                   {!!s.steps?.length && (
-                    <div className="grid gap-5 md:grid-cols-3 max-w-5xl mx-auto mb-14 md:mb-16">
+                    <div className={`grid gap-5 ${cardCols(s.steps.length)} max-w-5xl mx-auto mb-14 md:mb-16`}>
                       {s.steps.map((st: { title?: string; body?: string }, i: number) => (
                         <Reveal key={i} delay={i * 90}>
                           <div className="glass glass-card rounded-xl p-7 h-full">

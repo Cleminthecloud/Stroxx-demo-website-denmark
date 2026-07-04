@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
-import { trades } from '@/lib/trades';
-import { getLandingSlugs, getPosts, getSupportPages } from '@/lib/cms';
+import { getLandingSlugs, getPosts, getSupportPages, getTrades } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/komponenter, /guide) and the
@@ -12,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const landingSlugs = await getLandingSlugs();
   const posts = await getPosts();
   const supportPages = await getSupportPages();
+  const trades = await getTrades();
   return [
     { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/produkter`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },

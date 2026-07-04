@@ -4,6 +4,7 @@ import { monthlyLineup } from './monthlyLineup';
 import { productAugment } from './productAugment';
 import { homePage } from './homePage';
 import { store } from './store';
+import { trade } from './trade';
 import { specialist, testimonial, video, legalPage } from './collections';
 import { post } from './post';
 import { redirect } from './redirect';
@@ -17,6 +18,7 @@ export const schemaTypes = [
   productAugment,
   homePage,
   store,
+  trade,
   specialist,
   testimonial,
   video,

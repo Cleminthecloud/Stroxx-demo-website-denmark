@@ -8,6 +8,7 @@ import { HOME_DEFAULTS, type HomeCopy } from '@/lib/home-copy';
 import { specialists as fallbackSpecialists, Specialist } from '@/lib/data';
 import { testimonials as fallbackTestimonials, Testimonial } from '@/lib/testimonials';
 import { videos as fallbackVideos, Video } from '@/lib/videos';
+import { trades as fallbackTrades, Trade } from '@/lib/trades';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -285,6 +286,42 @@ export async function getStores(): Promise<Store[]> {
     return mapped.length ? mapped : fallbackStores;
   } catch {
     return fallbackStores;
+  }
+}
+
+/* ── Trades (fag pages) ─────────────────────────────────────────────────── */
+
+/** CMS trades with fallback to the hardcoded lib/trades list. title and
+ *  accent are stegaCleaned because the page renders the blue part via
+ *  title.split(accent), which invisible draft-mode chars would break;
+ *  slug and categories are cleaned for matching. */
+export async function getTrades(): Promise<Trade[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: '*[_type == "trade" && active != false] | order(order asc, name asc)',
+    });
+    const docs = (data ?? []) as Record<string, any>[];
+    if (!docs.length) return fallbackTrades;
+    const mapped = docs
+      .map((d): Trade | null => {
+        const slug = stegaClean(d.slug?.current) || '';
+        if (!slug || !d.name) return null;
+        return {
+          slug,
+          name: d.name,
+          title: stegaClean(d.title) || '',
+          accent: stegaClean(d.accent) || '',
+          blurb: d.blurb ?? '',
+          categories: ((d.categories ?? []) as string[]).map((c) => stegaClean(c) ?? c),
+          faq: ((d.faq ?? []) as Record<string, any>[])
+            .filter((f) => f.q && f.a)
+            .map((f) => ({ q: f.q, a: f.a })),
+        };
+      })
+      .filter(Boolean) as Trade[];
+    return mapped.length ? mapped : fallbackTrades;
+  } catch {
+    return fallbackTrades;
   }
 }
 

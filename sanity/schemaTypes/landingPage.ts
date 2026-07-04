@@ -173,6 +173,8 @@ export const landingPage = defineType({
               name: 'stats',
               title: 'Stats',
               type: 'array',
+              description: '1, 2 or 3 numbers; the row adapts.',
+              validation: (r) => r.max(3),
               of: [
                 defineArrayMember({
                   type: 'object',
@@ -248,6 +250,7 @@ export const landingPage = defineType({
               name: 'items',
               title: 'Cards',
               type: 'array',
+              description: 'The row balances itself at any count; 2, 3, 4 or 6 cards look best.',
               validation: (r) => r.max(6),
               of: [
                 defineArrayMember({
@@ -378,6 +381,8 @@ export const landingPage = defineType({
               name: 'steps',
               title: 'Steps',
               type: 'array',
+              description: 'The row balances itself at any count; 3 steps is the classic.',
+              validation: (r) => r.max(6),
               of: [
                 defineArrayMember({
                   type: 'object',

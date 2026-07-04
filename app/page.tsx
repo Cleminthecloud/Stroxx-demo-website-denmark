@@ -27,6 +27,7 @@ import {
   CR_BRAND,
 } from '@/lib/data';
 import { getSka, getHomePage, getSpecialists } from '@/lib/cms';
+import { cardCols, statColsSm } from '@/lib/grid';
 import { Accent } from '@/components/cms/LandingSections';
 import { createDataAttribute } from 'next-sanity';
 import { stegaClean } from '@sanity/client/stega';
@@ -157,7 +158,7 @@ export default async function Home() {
 
           {/* stats band — full width, vertical dividers */}
           <Reveal delay={120}>
-            <div data-sanity={hAttr('stats')} className="mt-20 grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-line overflow-hidden">
+            <div data-sanity={hAttr('stats')} className={`mt-20 grid grid-cols-1 ${statColsSm(hp.stats.length)} rounded-2xl border border-line overflow-hidden`}>
               {hp.stats.map((s, i) => (
                 <div key={s.label} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
                   <CountUp value={s.value} suffix={s.suffix} className="h-display text-white text-5xl md:text-6xl block" />
@@ -183,7 +184,7 @@ export default async function Home() {
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{
               background: 'radial-gradient(55% 60% at 28% 32%, rgba(0,136,194,0.16), transparent 70%), radial-gradient(50% 55% at 80% 75%, rgba(43,166,232,0.10), transparent 72%)',
             }} />
-            <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
+            <div className={`grid gap-6 lg:gap-8 ${cardCols(Math.min(specs.length, 6))}`}>
               {specs.slice(0, 6).map((s, i) => (
                 <Reveal key={s.name} delay={(i % 3) * 80} className="h-full">
                   <div className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex flex-col h-full">

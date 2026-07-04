@@ -22,6 +22,8 @@ export const monthlyLineup = defineType({
       name: 'heroClaims',
       title: 'Hero claims',
       type: 'array',
+      description: 'The row balances itself at any count; 3 claims is the classic.',
+      validation: (r) => r.max(6),
       of: [
         defineArrayMember({
           type: 'object',

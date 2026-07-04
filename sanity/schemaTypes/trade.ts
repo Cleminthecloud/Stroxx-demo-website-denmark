@@ -1,0 +1,115 @@
+import { defineArrayMember, defineField, defineType } from 'sanity';
+
+/** Trade ("fag") landing pages: /fag lists them as cards, /fag/<slug> is the
+ *  full page. Hardcoded fallbacks live in lib/trades.ts, so an empty
+ *  collection never blanks the pages. Products are pulled automatically from
+ *  the chosen categories (PIM does the rest); testimonials tagged with the
+ *  trade slug appear on the page by themselves. */
+
+/** Keep in sync with the category slugs in lib/data.ts. */
+const CATEGORY_OPTIONS = [
+  { title: 'Access control', value: 'adgangskontrol' },
+  { title: 'Workwear', value: 'arbejdstoej' },
+  { title: 'Batteries', value: 'batterier' },
+  { title: 'Lighting and accessories', value: 'belysning' },
+  { title: 'Bits and screwdrivers', value: 'bits-skruetraekkere' },
+  { title: 'Drills and drill sets', value: 'bor-borsaet' },
+  { title: 'Sealant and accessories', value: 'fugemasse' },
+  { title: 'Hole saws and accessories', value: 'hulsave' },
+  { title: 'Cable reels', value: 'kabeltromler' },
+  { title: 'Chemicals and paint tools', value: 'kemi' },
+  { title: 'Knives and blades', value: 'knive' },
+  { title: 'Lasers and accessories', value: 'lasere' },
+  { title: 'Painting gear and accessories', value: 'malergrej' },
+  { title: 'Multi-cutter blades', value: 'multicutterklinger' },
+  { title: 'Measuring tools', value: 'maalevaerktoej' },
+  { title: 'Circular saw blades', value: 'rundsavklinger' },
+  { title: 'Safety', value: 'sikkerhed' },
+  { title: 'Site hut supplies', value: 'skurvognsartikler' },
+  { title: 'Tape', value: 'tape' },
+  { title: 'Socket sets, sockets and accessories', value: 'topnoegler' },
+];
+
+export const trade = defineType({
+  name: 'trade',
+  title: 'Trade (fag page)',
+  type: 'document',
+  description: 'A trade area: card on /fag plus its own page at /fag/<slug>.',
+  fields: [
+    defineField({
+      name: 'name',
+      title: 'Trade name',
+      type: 'string',
+      description: 'Shown on the card and in menus, e.g. Electrician.',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug (the address: /fag/<slug>)',
+      type: 'slug',
+      options: { source: 'name' },
+      description:
+        'Lowercase, no spaces. Testimonials tagged with this slug appear on the page. Changing it changes the address.',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'title',
+      title: 'Page headline',
+      type: 'string',
+      description: 'The big h1 on the trade page, e.g. "Power on the job. Not on the price."',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'accent',
+      title: 'Blue part of the headline',
+      type: 'string',
+      description:
+        'The exact ending of the headline rendered in STROXX blue. Must match the headline text exactly, e.g. "Not on the price."',
+    }),
+    defineField({
+      name: 'blurb',
+      title: 'Blurb',
+      type: 'text',
+      rows: 3,
+      description: 'One or two sentences under the headline and on the /fag card. Name the job, sell the outcome, no hype.',
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Product categories',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+      options: { list: CATEGORY_OPTIONS },
+      description:
+        'The categories this trade buys from. The card shows the top 3 products, the page shows the top 8, picked automatically.',
+      validation: (r) => r.min(1),
+    }),
+    defineField({
+      name: 'faq',
+      title: 'Trade FAQ',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'q', title: 'Question', type: 'string', validation: (r) => r.required() }),
+            defineField({ name: 'a', title: 'Answer', type: 'text', rows: 3, validation: (r) => r.required() }),
+          ],
+          preview: { select: { title: 'q' } },
+        }),
+      ],
+      description: 'Shown as an accordion and sent to Google as FAQ data. 2-4 questions is the sweet spot.',
+    }),
+    defineField({
+      name: 'order',
+      title: 'Sort order',
+      type: 'number',
+      description: 'Lower numbers first on /fag. 10, 20, 30... leaves room to squeeze one in later.',
+      initialValue: 50,
+    }),
+    defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
+  ],
+  orderings: [
+    { title: 'Sort order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+  ],
+  preview: { select: { title: 'name', subtitle: 'title' } },
+});

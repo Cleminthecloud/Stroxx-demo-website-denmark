@@ -14,6 +14,7 @@ import { HOME_DEFAULTS } from '../lib/home-copy';
 import { specialists } from '../lib/data';
 import { testimonials } from '../lib/testimonials';
 import { videos } from '../lib/videos';
+import { trades } from '../lib/trades';
 import { LLMS_FALLBACK } from '../lib/llms-fallback';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
@@ -79,6 +80,20 @@ const testimonialDocs = testimonials.map((t, i) => ({
   role: t.role,
   ...(t.productCode ? { productCode: t.productCode } : {}),
   trades: t.trades,
+  active: true,
+}));
+
+const tradeDocs = trades.map((t, i) => ({
+  _id: `trade-${t.slug}`,
+  _type: 'trade',
+  name: t.name,
+  slug: { _type: 'slug', current: t.slug },
+  title: t.title,
+  accent: t.accent,
+  blurb: t.blurb,
+  categories: t.categories,
+  faq: t.faq.map((f, j) => ({ _type: 'object', _key: `seed-${j}`, q: f.q, a: f.a })),
+  order: (i + 1) * 10,
   active: true,
 }));
 
@@ -211,11 +226,12 @@ async function run() {
   for (const d of storeDocs) tx.createOrReplace(d as any);
   for (const d of specialistDocs) tx.createOrReplace(d as any);
   for (const d of testimonialDocs) tx.createOrReplace(d as any);
+  for (const d of tradeDocs) tx.createOrReplace(d as any);
   for (const d of videoDocs) tx.createOrReplace(d as any);
   for (const d of legalDocs) tx.createOrReplace(d as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console
-  console.log(`Seeded ${res.results.length} documents (siteSettings, homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);
+  console.log(`Seeded ${res.results.length} documents (siteSettings, homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${tradeDocs.length} trades, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);
 }
 
 run().catch((err) => {

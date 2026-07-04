@@ -10,16 +10,16 @@ import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight } from 'lucide-react';
 import { products, categoryBySlug } from '@/lib/data';
-import { trades, tradeBySlug } from '@/lib/trades';
-import { getTestimonials, testimonialsFor } from '@/lib/cms';
+import { getTestimonials, testimonialsFor, getTrades } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
-export function generateStaticParams() {
-  return trades.map((t) => ({ slug: t.slug }));
+export async function generateStaticParams() {
+  return (await getTrades()).map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const t = tradeBySlug((await params).slug);
+  const { slug } = await params;
+  const t = (await getTrades()).find((x) => x.slug === slug);
   if (!t) return { title: 'STROXX' };
   const title = `Tools for ${t.name.toLowerCase()} without the brand markup`;
   const description = `${t.blurb} 30-day satisfaction guarantee, only at Carl Ras in Denmark.`;
@@ -42,7 +42,8 @@ function heroSources(slug: string) {
 }
 
 export default async function TradePage({ params }: { params: Promise<{ slug: string }> }) {
-  const trade = tradeBySlug((await params).slug);
+  const { slug } = await params;
+  const trade = (await getTrades()).find((x) => x.slug === slug);
   if (!trade) notFound();
 
   const cats = trade.categories.map((c) => categoryBySlug(c)).filter(Boolean);
@@ -116,8 +117,16 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
           <Reveal>
             <div className="eyebrow mb-4">Trade · {trade.name}</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-              {trade.title.split(trade.accent)[0]}
-              <span className="text-stroxx-blue">{trade.accent}</span>
+              {/* accent must be a real substring of the title, else render plain
+                  (an editor's empty/mistyped accent must never shred the h1) */}
+              {trade.accent && trade.title.includes(trade.accent) ? (
+                <>
+                  {trade.title.split(trade.accent)[0]}
+                  <span className="text-stroxx-blue">{trade.accent}</span>
+                </>
+              ) : (
+                trade.title
+              )}
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">{trade.blurb}</p>
           </Reveal>
@@ -166,16 +175,19 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
           </div>
         </Reveal>
 
-        {/* peer proof */}
-        <section className="mt-24">
-          <Reveal>
-            <div className="eyebrow mb-3">From the trade</div>
-            <h2 className="h-display text-white text-[clamp(1.6rem,3.5vw,2.6rem)] leading-[0.96] mb-10">
-              The crew has put it to work.
-            </h2>
-          </Reveal>
-          <Testimonials items={voices} />
-        </section>
+        {/* peer proof — hidden entirely when no testimonial is tagged with
+            this trade, so a new trade never shows a heading over nothing */}
+        {voices.length > 0 && (
+          <section className="mt-24">
+            <Reveal>
+              <div className="eyebrow mb-3">From the trade</div>
+              <h2 className="h-display text-white text-[clamp(1.6rem,3.5vw,2.6rem)] leading-[0.96] mb-10">
+                The crew has put it to work.
+              </h2>
+            </Reveal>
+            <Testimonials items={voices} />
+          </section>
+        )}
 
         {/* trade FAQ */}
         <section className="mt-24 border-t border-line pt-14">

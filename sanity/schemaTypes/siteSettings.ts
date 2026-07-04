@@ -7,6 +7,7 @@ const linkArray = (name: string, title: string, description: string, group: stri
     description,
     group,
     type: 'array',
+    validation: (r) => r.max(8),
     of: [
       defineArrayMember({
         type: 'object',

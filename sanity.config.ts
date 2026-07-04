@@ -77,6 +77,15 @@ export default defineConfig({
               locations: [{ title: `${doc?.name || 'Specialist'} (homepage cards)`, href: '/#specialister' }],
             }),
           }),
+          trade: defineLocations({
+            select: { name: 'name', slug: 'slug.current' },
+            resolve: (doc) => ({
+              locations: [
+                { title: `${doc?.name || 'Trade'} (trade page)`, href: `/fag/${doc?.slug || ''}` },
+                { title: 'Trades index', href: '/fag' },
+              ],
+            }),
+          }),
           testimonial: defineLocations({
             select: {},
             resolve: () => ({ locations: [{ title: 'Campaign: Try It (testimonials)', href: '/proev-det' }] }),

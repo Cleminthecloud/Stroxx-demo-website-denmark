@@ -12,6 +12,7 @@ import Faq from '@/components/Faq';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import { productBuyUrl, toolTexture, particleSrc, CR_BRAND, UTM } from '@/lib/data';
 import { getSka, getSpecialists, getVideos, pickSpecialist } from '@/lib/cms';
+import { cardCols, productColsWide } from '@/lib/grid';
 import { SITE_URL } from '@/lib/site';
 
 /* Månedens STROXX — the SKA hero landing page (docs/STROXX KOMMERCIEL MOTOR.pdf):
@@ -96,7 +97,7 @@ export default async function MaanedensPage() {
           <Reveal><div className="eyebrow mb-5">The story</div></Reveal>
           <ScrollText as="h2" text={'Quality and value. \n Not just price.'}
             className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.92] mb-14" />
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className={`grid gap-5 ${cardCols(SKA.heroClaims.length)}`}>
             {SKA.heroClaims.map((c, i) => (
               <Reveal key={c.title} delay={i * 90} from="left">
                 <div className="glass-card glass-panel glass-panel--frost rounded-2xl p-7 h-full">
@@ -195,7 +196,7 @@ export default async function MaanedensPage() {
             </Link>
           </Reveal>
 
-          <div className="grid gap-4 grid-cols-2 lg:grid-cols-5 mb-14">
+          <div className={`grid gap-4 grid-cols-2 ${productColsWide(SKA.cashCows.length)} mb-14`}>
             {SKA.cashCows.map((p, i) => (
               <Reveal key={p.slug} delay={(i % 5) * 60}><ProductCard product={p} /></Reveal>
             ))}

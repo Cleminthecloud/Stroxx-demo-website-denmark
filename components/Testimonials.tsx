@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import type { Testimonial } from '@/lib/testimonials';
+import { testimonialCols } from '@/lib/grid';
 
 function Stars({ n }: { n: number }) {
   return (
@@ -16,8 +17,9 @@ function Stars({ n }: { n: number }) {
  *  Review/AggregateRating JSON-LD is emitted server-side by the page that uses
  *  this (keep the two in sync). */
 export default function Testimonials({ items }: { items: Testimonial[] }) {
+  if (!items.length) return null;
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className={`grid gap-4 ${testimonialCols(items.length)}`}>
       {items.map((t, i) => (
         <Reveal key={t.name + t.quote.slice(0, 12)} delay={(i % 3) * 80}>
           <figure className="glass glass-card flex h-full flex-col rounded-xl p-6">
