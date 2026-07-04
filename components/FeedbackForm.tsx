@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowRight, ImagePlus, X } from 'lucide-react';
 
 /** The /test page's report form. Posts to /api/feedback, which files the
  *  report as a `feedback` document for triage in the Studio. Device/browser
@@ -16,13 +16,41 @@ const KINDS: { v: Kind; label: string }[] = [
   { v: 'other', label: 'Other' },
 ];
 
+const IMG_MAX = 3 * 1024 * 1024; // keep in sync with /api/feedback
+
 export default function FeedbackForm() {
   const [state, setState] = useState<State>('idle');
   const [kind, setKind] = useState<Kind>('bug');
   const [form, setForm] = useState({ message: '', page: '', name: '', email: '' });
+  const [image, setImage] = useState(''); // data URL, '' = none
+  const [imgError, setImgError] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  function pickImage(e: React.ChangeEvent<HTMLInputElement>) {
+    setImgError('');
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+      setImgError('PNG, JPG or WebP only.');
+      return;
+    }
+    if (file.size > IMG_MAX) {
+      setImgError('Keep the screenshot under 3 MB (a phone screenshot is fine).');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setImage(String(reader.result || ''));
+    reader.readAsDataURL(file);
+  }
+
+  function clearImage() {
+    setImage('');
+    setImgError('');
+    if (fileRef.current) fileRef.current.value = '';
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,6 +63,7 @@ export default function FeedbackForm() {
         body: JSON.stringify({
           ...form,
           kind,
+          image,
           device: typeof navigator !== 'undefined' ? navigator.userAgent : '',
           company: '', // honeypot
         }),
@@ -106,6 +135,29 @@ export default function FeedbackForm() {
           aria-label="Email"
           className={field}
         />
+      </div>
+
+      {/* optional screenshot */}
+      <div className="flex flex-wrap items-center gap-3">
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={pickImage} className="hidden" id="fb-shot" />
+        {!image ? (
+          <label
+            htmlFor="fb-shot"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-ink/50 px-4 py-2 text-sm text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white"
+          >
+            <ImagePlus size={15} /> Attach a screenshot (optional)
+          </label>
+        ) : (
+          <span className="inline-flex items-center gap-3 rounded-2xl border border-line bg-ink/50 p-2 pr-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={image} alt="Screenshot to attach" className="h-12 w-12 rounded-lg object-cover" />
+            <span className="text-sm text-fog">Screenshot attached</span>
+            <button type="button" onClick={clearImage} aria-label="Remove screenshot" className="text-fog transition-colors hover:text-white">
+              <X size={15} />
+            </button>
+          </span>
+        )}
+        {imgError && <span className="text-sm text-fog">{imgError}</span>}
       </div>
       <div className="flex flex-wrap items-center gap-4 pt-1">
         <button

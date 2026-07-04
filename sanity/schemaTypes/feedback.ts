@@ -60,6 +60,12 @@ export const feedback = defineType({
       readOnly: true,
     }),
     defineField({
+      name: 'screenshot',
+      title: 'Screenshot (attached by the tester)',
+      type: 'image',
+      readOnly: true,
+    }),
+    defineField({
       name: 'note',
       title: 'Internal note',
       type: 'text',
@@ -72,12 +78,13 @@ export const feedback = defineType({
     { title: 'By status', name: 'status', by: [{ field: 'status', direction: 'asc' }, { field: '_createdAt', direction: 'desc' }] },
   ],
   preview: {
-    select: { title: 'message', status: 'status', kind: 'kind', reporter: 'reporter' },
-    prepare({ title, status, kind, reporter }) {
+    select: { title: 'message', status: 'status', kind: 'kind', reporter: 'reporter', media: 'screenshot' },
+    prepare({ title, status, kind, reporter, media }) {
       const flag = status === 'new' ? '● ' : status === 'fixed' ? '✓ ' : '';
       return {
         title: `${flag}${(title || 'Empty report').slice(0, 80)}`,
         subtitle: [kind, status, reporter].filter(Boolean).join(' · '),
+        media,
       };
     },
   },

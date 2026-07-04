@@ -245,7 +245,7 @@ Today the packaging design and the PDFs are produced externally (Kreativ Zone / 
 
 ## 10f. The test page and feedback (finding bugs together)
 
-The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
+The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. Testers can attach a screenshot (PNG/JPG/WebP, up to 3 MB) and paste links straight into the text. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
 
 **Where the reports go.** Every submission lands in Content → **Feedback (test reports)**, newest first, with the tester's device and browser attached automatically (so "it looked odd on my phone" arrives with the phone included). Reviewing is a two-minute routine:
 
