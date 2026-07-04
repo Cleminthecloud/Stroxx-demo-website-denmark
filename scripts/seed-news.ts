@@ -39,6 +39,12 @@ const POSTS = [
       block('Short answer: class 2 is the safe default on a construction site, and it is what most line and rotation lasers for the trades are. Class 3R exists and is legal to use, but it comes with extra duties, so most crews never need it.', 'b1'),
       block('What the classes mean', 'b2', 'h2'),
       block('Laser classes describe how much power the beam carries and what it can do to an unprotected eye. Class 2 is limited enough that your blink reflex protects you. Class 3R is stronger, which buys you visibility in bright conditions but requires you to control who is in the beam path. For everyday interior work, level, alignment, tiling, class 2 does the job without paperwork.', 'b3'),
+      {
+        _type: 'productSlider',
+        _key: 'ps1',
+        title: 'The lasers in question',
+        skus: ['35011932', '35011938', '35011908', '35011418'],
+      },
       block('Green or red?', 'b4', 'h2'),
       block('Green light sits where the eye is most sensitive, so a green class 2 laser looks brighter than a red one at the same power. That is why green has taken over on site: better visibility without moving up a class. The trade-off is battery life, green draws more power.', 'b5'),
       block('This is placeholder content for the demo. Swap it for the market’s real article before launch, and check national rules with the local safety authority.', 'b6'),

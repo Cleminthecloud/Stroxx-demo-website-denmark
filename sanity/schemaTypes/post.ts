@@ -60,6 +60,28 @@ export const post = defineType({
             defineField({ name: 'caption', title: 'Caption', type: 'string' }),
           ],
         }),
+        defineArrayMember({
+          type: 'object',
+          name: 'productSlider',
+          title: 'Product slider',
+          description: 'A horizontal row of product cards inside the article. Type item numbers; name, photo and buy link come from the product feed automatically.',
+          fields: [
+            defineField({ name: 'title', title: 'Small heading above (optional)', type: 'string' }),
+            defineField({
+              name: 'skus',
+              title: 'Product SKUs (3 or more work best)',
+              type: 'array',
+              of: [defineArrayMember({ type: 'string' })],
+              options: { layout: 'tags' },
+            }),
+          ],
+          preview: {
+            select: { title: 'title', skus: 'skus' },
+            prepare: (v: { title?: string; skus?: string[] }) => ({
+              title: `Product slider · ${v.title || (v.skus || []).length + ' products'}`,
+            }),
+          },
+        }),
       ],
     }),
     defineField({
