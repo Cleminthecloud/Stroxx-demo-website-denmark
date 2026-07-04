@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
 import { trades } from '@/lib/trades';
-import { getLandingSlugs, getPosts } from '@/lib/cms';
+import { getLandingSlugs, getPosts, getSupportPages } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/komponenter, /guide) and the
@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const landingSlugs = await getLandingSlugs();
   const posts = await getPosts();
+  const supportPages = await getSupportPages();
   return [
     { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE}/produkter`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
@@ -32,6 +33,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    })),
+    /* support & downloads: the packaging QR targets, they rank on Google */
+    ...(supportPages.length
+      ? [{ url: `${BASE}/support`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 }]
+      : []),
+    ...supportPages.map((p) => ({
+      url: `${BASE}/support/${p.slug?.current}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
     ...['privatliv', 'cookies', 'handelsbetingelser'].map((s) => ({
       url: `${BASE}/${s}`,

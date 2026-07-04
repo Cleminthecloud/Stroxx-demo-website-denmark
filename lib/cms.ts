@@ -155,6 +155,51 @@ export async function getPost(slug: string): Promise<PostDoc | null> {
   }
 }
 
+/* ── Support & downloads pages ──────────────────────────────────────────── */
+
+export type SupportDownload = { label?: string; note?: string; url?: string; ext?: string; size?: number };
+export type SupportGroup = { heading?: string; items?: SupportDownload[] };
+export type SupportPageDoc = {
+  _id?: string;
+  title?: string;
+  slug?: { current?: string };
+  intro?: string;
+  groups?: SupportGroup[];
+  seoTitle?: string;
+  seoDescription?: string;
+};
+
+const SUPPORT_PROJECTION = `{
+  _id, title, slug, intro, seoTitle, seoDescription,
+  groups[]{ heading, items[]{ label, note,
+    "url": file.asset->url, "ext": file.asset->extension, "size": file.asset->size } }
+}`;
+
+/** All support pages (for the /support index and the sitemap). Empty array
+ *  when the CMS is empty/unreachable, same contract as getPosts. */
+export async function getSupportPages(): Promise<SupportPageDoc[]> {
+  try {
+    const { data } = await sanityFetch({
+      query: `*[_type == "supportPage" && defined(slug.current)] | order(title asc) ${SUPPORT_PROJECTION}`,
+    });
+    return Array.isArray(data) ? (data as SupportPageDoc[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getSupportPage(slug: string): Promise<SupportPageDoc | null> {
+  try {
+    const { data } = await sanityFetch({
+      query: `*[_type == "supportPage" && slug.current == $slug][0] ${SUPPORT_PROJECTION}`,
+      params: { slug },
+    });
+    return (data as SupportPageDoc) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Join SKUs from the CMS against the product feed. Unknown codes are dropped
  *  silently (an editor typo must never crash a page). stegaClean strips the
  *  invisible edit-tracking characters draft mode adds to strings. */

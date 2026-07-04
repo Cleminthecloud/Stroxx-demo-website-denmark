@@ -7,6 +7,8 @@ import { store } from './store';
 import { specialist, testimonial, video, legalPage } from './collections';
 import { post } from './post';
 import { redirect } from './redirect';
+import { supportPage } from './supportPage';
+import { qrCode } from './qrCode';
 
 export const schemaTypes = [
   siteSettings,
@@ -21,4 +23,6 @@ export const schemaTypes = [
   legalPage,
   post,
   redirect,
+  supportPage,
+  qrCode,
 ];

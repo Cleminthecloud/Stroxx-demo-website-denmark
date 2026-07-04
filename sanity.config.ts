@@ -93,6 +93,15 @@ export default defineConfig({
               locations: [{ title: doc?.title || 'Legal page', href: `/${doc?.slug || ''}` }],
             }),
           }),
+          supportPage: defineLocations({
+            select: { title: 'title', slug: 'slug.current' },
+            resolve: (doc) => ({
+              locations: [
+                { title: doc?.title || 'Support page', href: `/support/${doc?.slug || ''}` },
+                { title: 'Support index', href: '/support' },
+              ],
+            }),
+          }),
         },
       },
     }),

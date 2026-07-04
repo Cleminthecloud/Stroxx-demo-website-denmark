@@ -11,6 +11,31 @@ import { NextRequest, NextResponse } from 'next/server';
 
 type Rule = { to: string; permanent: boolean };
 
+/** Legacy stroxx.eu Shopify-store URLs (pre-takeover). The packaging QR
+ *  codes in circulation point at /pages/... on the old store; after the
+ *  domain cutover those requests hit THIS app, so the map below keeps every
+ *  printed code and seven years of links alive. CMS redirects (below) are
+ *  checked first so editors can override any single path without a deploy. */
+const LEGACY_EXACT = new Map<string, string>([
+  ['/pages/about', '/'],
+  ['/pages/contact', '/'],
+  ['/pages/categories', '/produkter'],
+  ['/collections/all', '/produkter'],
+  ['/cart', '/produkter'],
+  ['/account/login', '/'],
+]);
+
+function legacyTarget(path: string): string | null {
+  const exact = LEGACY_EXACT.get(path);
+  if (exact) return exact;
+  // support pages keep their exact old slugs: /pages/smart-locks-st2 → /support/smart-locks-st2
+  const page = path.match(/^\/pages\/([a-z0-9-]+)$/);
+  if (page) return `/support/${page[1]}`;
+  if (/^\/(products|collections)(\/|$)/.test(path)) return '/produkter';
+  if (/^\/(account|customer_authentication|challenge)(\/|$)/.test(path)) return '/';
+  return null;
+}
+
 const TTL_MS = 60_000;
 let cache: { at: number; map: Map<string, Rule> } | null = null;
 
@@ -40,13 +65,16 @@ async function getRules(): Promise<Map<string, Rule>> {
 
 export async function middleware(req: NextRequest) {
   try {
-    const rules = await getRules();
-    if (rules.size === 0) return NextResponse.next();
     const path = req.nextUrl.pathname.replace(/\/+$/, '') || '/';
+    const rules = await getRules();
     const hit = rules.get(path);
-    if (!hit) return NextResponse.next();
-    const dest = hit.to.startsWith('/') ? new URL(hit.to + req.nextUrl.search, req.url) : new URL(hit.to);
-    return NextResponse.redirect(dest, hit.permanent ? 308 : 307);
+    if (hit) {
+      const dest = hit.to.startsWith('/') ? new URL(hit.to + req.nextUrl.search, req.url) : new URL(hit.to);
+      return NextResponse.redirect(dest, hit.permanent ? 308 : 307);
+    }
+    const legacy = legacyTarget(path);
+    if (legacy) return NextResponse.redirect(new URL(legacy, req.url), 308);
+    return NextResponse.next();
   } catch {
     return NextResponse.next();
   }

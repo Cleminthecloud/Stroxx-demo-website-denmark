@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import SharePreviewField from '../SharePreviewField';
 
 /** News/blog articles at /nyheder. Formatted text with images; the index
  *  and article pages are code-owned, editors own the words. */
@@ -107,6 +108,14 @@ export const post = defineType({
       type: 'image',
       options: { hotspot: true },
       description: 'For LinkedIn/Facebook shares, 1200x630. Empty = the hero image, then the site-wide one.',
+    }),
+    defineField({
+      name: 'sharePreview',
+      title: 'Share preview (live)',
+      type: 'string',
+      readOnly: true,
+      components: { input: SharePreviewField },
+      description: 'How this article looks when the link is shared, built from the fields above as you type. Nothing to fill in here.',
     }),
   ],
   orderings: [
