@@ -44,7 +44,8 @@ function Marquee({ text }: { text: string }) {
     <div className="marquee__track">
       {items.map((_, i) => (
         <span key={i} className="font-display text-3xl md:text-6xl text-white/85 tracking-tightest flex items-center gap-10" style={{ fontWeight: 500 }}>
-          {text}<span className="text-stroxx-blue text-2xl">●</span>
+          {/* Accent: the site-wide *word* = blue syntax works here too */}
+          <span><Accent text={text} /></span><span className="text-stroxx-blue text-2xl">●</span>
         </span>
       ))}
     </div>

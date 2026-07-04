@@ -3,8 +3,11 @@ const nextConfig = {
   /* iCloud (the repo lives in ~/Documents) syncs .next and corrupts it with
      " 2" duplicate dirs mid-build. Folders named *.nosync are excluded from
      iCloud sync entirely, which makes local builds deterministic again.
-     Vercel is unaffected (no iCloud) and respects distDir. */
-  distDir: '.next.nosync',
+     ON VERCEL the dist dir MUST stay the default ".next": the deploy step
+     hardcodes ".next/routes-manifest.json" and a custom distDir fails the
+     deployment AFTER a green build (proven Jul 4: six straight Error deploys).
+     Hence: .nosync locally, .next in CI/Vercel. */
+  distDir: process.env.VERCEL ? '.next' : '.next.nosync',
   reactStrictMode: false,
   // /guide reads the editor-guide markdown at runtime; make sure Vercel ships it
   outputFileTracingIncludes: { '/guide': ['./docs/STROXX-editor-guide.md'] },

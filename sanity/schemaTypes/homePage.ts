@@ -27,7 +27,11 @@ export const homePage = defineType({
     }),
     defineField({ ...t('claim', 'Claim headline'), description: accentNote + ' The accented part renders blue.', group: 'hero' }),
     defineField({ ...t('claimSub', 'Claim subtext', 4), group: 'hero' }),
-    defineField({ ...s('marqueeText', 'Marquee text'), group: 'hero' }),
+    defineField({
+      ...s('marqueeText', 'Marquee text'),
+      description: 'The scrolling band. Wrap a word in *asterisks* for the blue accent.',
+      group: 'hero',
+    }),
 
     defineField({ ...t('rangeHeadline', 'Range headline', 3), group: 'range' }),
     defineField({ ...s('rangeCol1Label', 'Range column 1 label'), group: 'range' }),
