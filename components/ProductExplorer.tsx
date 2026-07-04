@@ -3,6 +3,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import Reveal from '@/components/Reveal';
+import Accent from '@/components/Accent';
 import ParticleImage from '@/components/ParticleImage';
 import CursorGlow from '@/components/CursorGlow';
 import GlassButton from '@/components/GlassButton';
@@ -11,7 +12,7 @@ import { products, categories, categoryBySlug, categoryBuyUrl, particleSrc } fro
 
 type Sort = 'pop' | 'new';
 
-export default function ProductExplorer() {
+export default function ProductExplorer({ headline, intro }: { headline?: string; intro?: string } = {}) {
   const params = useSearchParams();
   const [active, setActive] = useState<string | null>(null);
   const [q, setQ] = useState('');
@@ -81,11 +82,10 @@ export default function ProductExplorer() {
           <Reveal from="left">
             <div className="eyebrow mb-4">Products</div>
             <h1 className="h-display text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95] text-white">
-              Find your STROXX tool
+              <Accent text={headline || 'Find your STROXX tool'} />
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">
-              Filter the range and jump straight to the buy at Carl Ras. A selection
-              of the 1,400+ item numbers. The purchase always happens on the partner platform.
+              {intro || 'Filter the range and jump straight to the buy at Carl Ras. A selection of the 1,400+ item numbers. The purchase always happens on the partner platform.'}
             </p>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">

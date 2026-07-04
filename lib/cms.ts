@@ -59,6 +59,14 @@ export type SiteSettings = {
   newsIntro?: string;
   newsEmpty?: string;
   newsletterSuccess?: string;
+  produkterHeadline?: string;
+  produkterIntro?: string;
+  butikkerHeadlineStores?: string;
+  butikkerHeadlineSpecialists?: string;
+  serviceHeadline?: string;
+  serviceIntro?: string;
+  fagHeadline?: string;
+  fagIntro?: string;
   notFoundHeadline?: string;
   notFoundText?: string;
 };

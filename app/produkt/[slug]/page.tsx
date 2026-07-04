@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import ProductExperience from '@/components/ProductExperience';
+import CompareSpecs from '@/components/CompareSpecs';
 import {
   products,
   productBySlug,
@@ -105,6 +106,7 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
         categoryName={cat?.name ?? 'STROXX'}
         categorySlug={cat?.slug ?? ''}
       />
+      <CompareSpecs product={product} others={related} />
     </>
   );
 }

@@ -164,6 +164,17 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   newsIntro: 'Tips, specialist know-how and news from the trades. Filter by what you work with.',
   newsEmpty: 'Nothing published yet. The first stories are on their way.',
   newsletterSuccess: 'Check your inbox to confirm. Welcome aboard.',
+  produkterHeadline: 'Find your STROXX tool',
+  produkterIntro:
+    'Filter the range and jump straight to the buy at Carl Ras. A selection of the 1,400+ item numbers. The purchase always happens on the partner platform.',
+  butikkerHeadlineStores: 'Get the tool in your hand before you buy it.',
+  butikkerHeadlineSpecialists: 'Talk to people who use the tools themselves.',
+  serviceHeadline: 'Help is as straightforward *as the tools.*',
+  serviceIntro:
+    "No ten-step forms and no hold music. Here's the guarantee, the returns, the documents and the people, all in one place.",
+  fagHeadline: 'Your trade. *Your tools.*',
+  fagIntro:
+    "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee.",
   notFoundHeadline: 'This page took\nthe *day off.*',
   notFoundText: "The address doesn't exist (anymore). The tools do, though, and they're this way.",
   seoTitle: 'STROXX | Premium tools, beastly low prices',

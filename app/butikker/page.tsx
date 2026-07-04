@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import StoreFinder from '@/components/StoreFinder';
+import { getSiteSettings } from '@/lib/cms';
 import { getStores } from '@/lib/cms';
 
 export const metadata: Metadata = {
@@ -13,11 +14,12 @@ export const metadata: Metadata = {
  *  hidden on this route via body:has(main.fullscreen-map) in globals.css. */
 export default async function ButikkerPage() {
   const storeData = await getStores();
+  const s = await getSiteSettings();
   return (
     <main className="fullscreen-map bg-ink">
       {/* StoreFinder reads useSearchParams (tab/q deep links) → needs Suspense */}
       <Suspense fallback={<div className="pt-40 text-center text-fog">Loading...</div>}>
-        <StoreFinder storeData={storeData} />
+        <StoreFinder storeData={storeData}  headlineStores={s?.butikkerHeadlineStores} headlineSpecialists={s?.butikkerHeadlineSpecialists} />
       </Suspense>
     </main>
   );

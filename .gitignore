@@ -1,5 +1,6 @@
 /node_modules
 /.next
+/.next.nosync
 /out
 .DS_Store
 *.tsbuildinfo

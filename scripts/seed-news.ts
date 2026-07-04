@@ -139,6 +139,53 @@ async function run() {
     console.log('seeded', p._id);
   }
 
+  /* the manifesto page: the Brand Plan's words as a CMS landing page at
+     /kampagne/manifesto — the About page every big tool brand has, fully
+     editable like any other landing page */
+  await client.createOrReplace({
+    _id: 'landing-manifesto',
+    _type: 'landingPage',
+    title: 'The STROXX manifesto',
+    slug: { _type: 'slug', current: 'manifesto' },
+    seoTitle: 'The STROXX manifesto',
+    seoDescription: 'Made to perform. Not to shine. What STROXX believes about craftsmanship, quality and honest value for money.',
+    sections: [
+      {
+        _type: 'statement', _key: 'm1',
+        eyebrow: 'The STROXX manifesto',
+        headline: 'Made to perform.\n*Not to shine.*',
+        paragraphs: [
+          'Great craftsmanship has never been about noise. It is about precision. Consistency. Pride in the details. The right cut. The right fit. The right finish.',
+          'Professionals know the feeling when everything aligns. When the tool in your hand responds exactly the way it should. Solid. Balanced. Reliable. Because it is made to perform. Not to shine.',
+        ],
+      },
+      {
+        _type: 'pullQuote', _key: 'm2',
+        text: 'Professional quality should not be defined by how expensive it is, but by how well it works.',
+      },
+      {
+        _type: 'statement', _key: 'm3',
+        eyebrow: 'How we build',
+        headline: 'Our own specifications.\n*Our own rules.*',
+        paragraphs: [
+          'STROXX is developed in close collaboration between partners in Denmark, Germany, France and Belgium. Together we define our own specifications, select our own materials, disrupt conventional thinking, and refine every detail with a clear focus on function, form, reliability and efficiency.',
+          'The standards are high. The tolerances are tight. Durability is non-negotiable. STROXX is available in more than 227 stores across Europe.',
+        ],
+      },
+      {
+        _type: 'ctaBanner', _key: 'm4',
+        eyebrow: 'Tough stuff and real value',
+        headline: 'Made for professionals who care about *the results.*',
+        sub: 'Nothing else. That is STROXX.',
+        primaryLabel: 'See the tools',
+        primaryHref: '/produkter',
+        secondaryLabel: 'The 30-day guarantee',
+        secondaryHref: '/proev-det',
+      },
+    ],
+  });
+  console.log('seeded landing-manifesto (/kampagne/manifesto)');
+
   /* add News to the footer links in Site settings, once */
   const settings = await client.getDocument('siteSettings');
   const links = (settings?.footerPageLinks ?? []) as { href?: string }[];

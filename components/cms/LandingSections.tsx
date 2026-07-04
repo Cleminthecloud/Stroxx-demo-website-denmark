@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import Accent from '@/components/Accent';
 import ScrollText from '@/components/ScrollText';
 import GlassButton from '@/components/GlassButton';
 import ProductCard from '@/components/ProductCard';
@@ -33,27 +34,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   return <div className="eyebrow mb-6">{children}</div>;
 }
 
-/** `*word*` → blue accent, newline → <br/>. Same syntax ScrollText parses.
- *  Exported for CMS-driven copy elsewhere (homepage hero etc.). */
-export function Accent({ text }: { text?: string }) {
-  if (!text) return null;
-  const parts = text.split(/(\*[^*]+\*|\n)/g).filter(Boolean);
-  return (
-    <>
-      {parts.map((p, i) =>
-        p === '\n' ? (
-          <br key={i} />
-        ) : p.length > 2 && p.startsWith('*') && p.endsWith('*') ? (
-          <span key={i} className="text-stroxx-blue">
-            {p.slice(1, -1)}
-          </span>
-        ) : (
-          <span key={i}>{p}</span>
-        )
-      )}
-    </>
-  );
-}
+export { default as Accent } from '@/components/Accent';
 
 export default async function LandingSections({
   sections,

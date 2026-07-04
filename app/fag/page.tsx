@@ -1,3 +1,5 @@
+import { getSiteSettings } from '@/lib/cms';
+import Accent from '@/components/Accent';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
@@ -53,7 +55,8 @@ function MiniProduct({ p }: { p: Product }) {
   );
 }
 
-export default function TradesIndexPage() {
+export default async function TradesIndexPage() {
+  const cms = await getSiteSettings();
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -82,12 +85,10 @@ export default function TradesIndexPage() {
         <Reveal>
           <div className="eyebrow mb-4">Trades</div>
           <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-            Your trade. <span className="text-stroxx-blue">Your tools.</span>
+            <Accent text={cms?.fagHeadline || 'Your trade. *Your tools.*'} />
           </h1>
           <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
-            Skip the catalog and start with what you do. We've pulled together the
-            workhorses for every trade, without the brand markup and backed by a
-            30-day satisfaction guarantee.
+            {cms?.fagIntro || "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee."}
           </p>
         </Reveal>
 

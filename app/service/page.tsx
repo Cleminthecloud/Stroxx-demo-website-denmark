@@ -1,3 +1,5 @@
+import { getSiteSettings } from '@/lib/cms';
+import Accent from '@/components/Accent';
 import type { Metadata } from 'next';
 import Reveal from '@/components/Reveal';
 import GlassButton from '@/components/GlassButton';
@@ -64,7 +66,7 @@ const RETURN_STEPS = [
   },
 ];
 
-export default function ServicePage() {
+export default async function ServicePage() {
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -75,6 +77,7 @@ export default function ServicePage() {
     })),
   };
 
+  const cms = await getSiteSettings();
   return (
     <main className="bg-ink min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -84,11 +87,10 @@ export default function ServicePage() {
           <Reveal>
             <div className="eyebrow mb-4">Service and Support</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95]">
-              Help is as straightforward <span className="text-stroxx-blue">as the tools.</span>
+              <Accent text={cms?.serviceHeadline || 'Help is as straightforward *as the tools.*'} />
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
-              No ten-step forms and no hold music. Here's the guarantee, the returns,
-              the documents and the people, all in one place.
+              {cms?.serviceIntro || "No ten-step forms and no hold music. Here's the guarantee, the returns, the documents and the people, all in one place."}
             </p>
           </Reveal>
         </div>

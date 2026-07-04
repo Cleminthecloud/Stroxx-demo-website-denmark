@@ -20,7 +20,7 @@ const norm = (s: string) =>
 
 const isLg = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
-export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
+export default function StoreFinder({ storeData, headlineStores, headlineSpecialists,}: { storeData?: Store[]; headlineStores?: string; headlineSpecialists?: string;}) {
   // CMS store documents when present, static Webflow snapshot otherwise
   const stores = storeData && storeData.length ? storeData : fallbackStores;
   const [tab, setTab] = useState<'butikker' | 'specialister'>('butikker');
@@ -276,8 +276,8 @@ export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
           <div className="hidden lg:block eyebrow mb-2">Stores · Denmark</div>
           <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
             {tab === 'specialister'
-              ? 'Talk to people who use the tools themselves.'
-              : 'Get the tool in your hand before you buy it.'}
+              ? headlineSpecialists || 'Talk to people who use the tools themselves.'
+              : headlineStores || 'Get the tool in your hand before you buy it.'}
           </h1>
 
           {/* tabs */}

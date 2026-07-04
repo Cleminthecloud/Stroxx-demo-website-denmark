@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  /* iCloud (the repo lives in ~/Documents) syncs .next and corrupts it with
+     " 2" duplicate dirs mid-build. Folders named *.nosync are excluded from
+     iCloud sync entirely, which makes local builds deterministic again.
+     Vercel is unaffected (no iCloud) and respects distDir. */
+  distDir: '.next.nosync',
   reactStrictMode: false,
   // /guide reads the editor-guide markdown at runtime; make sure Vercel ships it
   outputFileTracingIncludes: { '/guide': ['./docs/STROXX-editor-guide.md'] },
