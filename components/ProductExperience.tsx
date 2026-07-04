@@ -228,7 +228,7 @@ export default function ProductExperience({
       {/* long gradient lead-in so the travelling product + its glow dissolve
           into ink instead of being hard-cut by the solid section bg */}
       <div className="pointer-events-none absolute inset-x-0 top-0 -translate-y-full h-[55vh] bg-gradient-to-b from-transparent to-ink" />
-      <div className="mx-auto max-w-[1400px] px-5 md:px-10 py-24">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
         <Reveal className="mb-10 flex items-end justify-between gap-6">
           <h2 className="h-display text-white text-[clamp(1.6rem,3vw,2.4rem)]">Related STROXX tools</h2>
           <Link href={`/produkter?cat=${categorySlug}`} className="link-arrow hidden sm:inline-flex shrink-0">See the whole category <ArrowRight size={15} /></Link>
@@ -279,10 +279,10 @@ export default function ProductExperience({
           empty area the product travels through, never the content (e.g. the
           Pro Club box). */}
       <div className="relative z-40">
-        <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
-        <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
-        <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>
-        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifications</div></Reveal><ScrollText as="h2" text="The numbers behind the tool." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup headline={proClubHeadline} text={proClubText} /></div></div></div></section>
+        <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
+        <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
+        <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>
+        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifications</div></Reveal><ScrollText as="h2" text="The numbers behind the tool." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup headline={proClubHeadline} text={proClubText} /></div></div></div></section>
       </div>
 
       {Related}

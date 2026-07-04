@@ -65,7 +65,7 @@ export default async function MaanedensPage() {
       {/* ── HERO — månedens hovedhistorie ─────────────────────────────── */}
       <section className="relative">
         <CursorGlow size="44% 60%" intensity={0.15} className="-z-0" />
-        <div className="relative mx-auto max-w-[1500px] px-5 md:px-10 pt-32 md:pt-40 pb-10 grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 pt-32 md:pt-40 pb-10 grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
           <Reveal from="left">
             <div className="eyebrow mb-4">STROXX of the Month · {SKA.month} {SKA.year}</div>
             <h1 className="h-display text-white text-[clamp(2.6rem,6vw,5.2rem)] leading-[0.94]">
@@ -92,7 +92,7 @@ export default async function MaanedensPage() {
 
       {/* ── CLAIMS — kvalitet og værdi, ikke pris ─────────────────────── */}
       <section id="historien" className="relative scroll-mt-24">
-        <div className="mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-32">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
           <Reveal><div className="eyebrow mb-5">The story</div></Reveal>
           <ScrollText as="h2" text={'Quality and value. \n Not just price.'}
             className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.92] mb-14" />
@@ -113,7 +113,7 @@ export default async function MaanedensPage() {
       {/* ── CASES — hvor den tjener sig hjem ──────────────────────────── */}
       <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 50% at 50% 45%, rgba(0,130,202,0.08), transparent 70%)' }} />
-        <div className="relative mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-32 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <Reveal><div className="eyebrow mb-5">Application</div></Reveal>
             <ScrollText as="h2" text={'One person easily \n gets the job *done.*'}
@@ -136,7 +136,7 @@ export default async function MaanedensPage() {
 
       {/* ── VIDEO — se det i aktion ───────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-28">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-28">
           <Reveal><div className="eyebrow mb-5">Demonstration</div></Reveal>
           <ScrollText as="h2" text="See it. Judge it yourself."
             className="h-display text-white text-[clamp(2rem,4.5vw,3.4rem)] leading-[0.95] mb-12" />
@@ -146,7 +146,7 @@ export default async function MaanedensPage() {
 
       {/* ── SPECIALIST — troværdighed med direkte nummer ──────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-32 text-center">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 text-center">
           <Reveal><div className="eyebrow mb-8">Recommended by the specialists</div></Reveal>
           <Reveal delay={80}>
             <blockquote className="h-display text-white text-[clamp(1.7rem,3.6vw,2.8rem)] leading-[1.1] mb-10 max-w-3xl mx-auto">
@@ -172,7 +172,7 @@ export default async function MaanedensPage() {
 
       {/* ── FAQ ───────────────────────────────────────────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-[900px] px-5 md:px-10 py-20 md:py-24">
+        <div className="mx-auto max-w-[900px] px-6 md:px-10 py-20 md:py-24">
           <Reveal><div className="eyebrow mb-5">Questions</div></Reveal>
           <ScrollText as="h2" text="What the trade asks about."
             className="h-display text-white text-[clamp(1.8rem,4vw,2.8rem)] leading-[0.95] mb-8" />
@@ -182,7 +182,7 @@ export default async function MaanedensPage() {
 
       {/* ── MÅNEDENS LINEUP — DB2-vindere + nyheder ───────────────────── */}
       <section className="relative">
-        <div className="mx-auto max-w-[1500px] px-5 md:px-10 py-24 md:py-32">
+        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
           <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="eyebrow mb-5">The rest of the month</div>

@@ -55,7 +55,7 @@ export default function ProductExplorer() {
   }, [active]);
 
   return (
-    <div className="mx-auto max-w-[1400px] px-5 md:px-8 pb-24">
+    <div className="mx-auto max-w-[1600px] px-6 md:px-10 pb-24">
       {/* header — generic finder intro, or a particle hero for the active category */}
       {activeCat && catHero ? (
         <div className="relative pt-28 md:pt-36 pb-8 grid gap-8 lg:grid-cols-[1fr_0.92fr] lg:items-center">
@@ -98,9 +98,9 @@ export default function ProductExplorer() {
       {/* controls — below lg the 21 chips collapse to ONE horizontally
           scrollable row (13 wrapped rows of sticky chips ate the whole phone
           viewport); lg+ keeps the wrapped layout */}
-      <div className="sticky top-14 z-30 -mx-5 md:-mx-8 px-5 md:px-8 pt-4 lg:pt-5 pb-3 lg:pb-4 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
+      <div className="sticky top-14 z-30 -mx-6 md:-mx-10 px-6 md:px-10 pt-4 lg:pt-5 pb-3 lg:pb-4 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
         <div className="flex flex-col gap-3 lg:gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-5 px-5 md:-mx-8 md:px-8 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-6 px-6 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <button
               onClick={() => setActive(null)}
               className={`shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
@@ -121,7 +121,7 @@ export default function ProductExplorer() {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-3 justify-between overflow-x-auto no-scrollbar -mx-5 px-5 md:-mx-8 md:px-8 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
+          <div className="flex items-center gap-3 justify-between overflow-x-auto no-scrollbar -mx-6 px-6 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}

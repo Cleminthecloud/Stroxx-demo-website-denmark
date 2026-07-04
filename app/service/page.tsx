@@ -78,7 +78,7 @@ export default function ServicePage() {
   return (
     <main className="bg-ink min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <div className="mx-auto max-w-[1400px] px-5 md:px-8 pb-28 pt-32 md:pt-40">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-10 pb-28 pt-32 md:pt-40">
         {/* hero */}
         <div className="max-w-2xl">
           <Reveal>

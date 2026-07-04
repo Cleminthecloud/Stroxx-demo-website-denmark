@@ -35,6 +35,7 @@ function bucket(src: string): string {
 const safeKey = (p: string) => (p.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'home').slice(0, 80);
 
 const PARTNERS = ['carl-ras', 'meesenburg', 'foussier', 'lecot'] as const;
+const SHARE_CHANNELS = ['native', 'linkedin', 'facebook', 'x', 'whatsapp', 'email', 'copy'] as const;
 
 /* only real routes get counted: bounds the per-day document size no matter
    what a flooder posts (everything else lands in the 'other' bucket) */
@@ -47,13 +48,14 @@ export async function POST(req: NextRequest) {
   const token = process.env.SANITY_API_WRITE_TOKEN;
   if (!token) return new NextResponse(null, { status: 204 });
 
-  let t = '', path = '', src = '', to = '';
+  let t = '', path = '', src = '', to = '', channel = '';
   try {
     const b = await req.json();
     t = String(b?.t ?? '');
     path = String(b?.path ?? '').slice(0, 200);
     src = String(b?.src ?? '').slice(0, 300);
     to = String(b?.to ?? '').slice(0, 40);
+    channel = String(b?.channel ?? '').slice(0, 20);
   } catch {
     return new NextResponse(null, { status: 204 });
   }
@@ -64,7 +66,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const inc: Record<string, number> = {};
-    const setIfMissing: Record<string, unknown> = { total: 0, paths: {}, sources: {}, outbound: {}, pathNames: {} };
+    const setIfMissing: Record<string, unknown> = { total: 0, paths: {}, sources: {}, outbound: {}, shares: {}, pathNames: {} };
     const set: Record<string, string> = {};
 
     if (t === 'pv' && path.startsWith('/')) {
@@ -76,6 +78,8 @@ export async function POST(req: NextRequest) {
       if (known) set[`pathNames.${k}`] = path.split('?')[0];
     } else if (t === 'out' && (PARTNERS as readonly string[]).includes(to)) {
       inc[`outbound.${to.replace('-', '_')}`] = 1;
+    } else if (t === 'share' && (SHARE_CHANNELS as readonly string[]).includes(channel)) {
+      inc[`shares.${channel}`] = 1;
     } else {
       return new NextResponse(null, { status: 204 });
     }

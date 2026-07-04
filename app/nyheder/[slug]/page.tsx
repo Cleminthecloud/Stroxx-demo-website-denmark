@@ -116,7 +116,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       {/* ── editorial header: wide stage, huge headline, lede, meta ── */}
       <header className="mx-auto max-w-[1200px] px-6 md:px-10 pt-36">
-        <Link href="/nyheder" className="inline-flex items-center gap-2 text-fog text-sm hover:text-white transition-colors mb-10">
+        <Link href="/nyheder" className="link-arrow mb-10">
           <ArrowLeft size={14} /> All news
         </Link>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
@@ -162,7 +162,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <PortableText value={doc.body} components={components} />
           </div>
         ) : null}
-        <ShareRow url={`${SITE_URL}/nyheder/${slug}`} />
+        <ShareRow url={`${SITE_URL}/nyheder/${slug}`} title={stegaClean(doc.title) || undefined} />
       </article>
 
       {/* products mentioned in the article (editor-tagged SKUs) */}

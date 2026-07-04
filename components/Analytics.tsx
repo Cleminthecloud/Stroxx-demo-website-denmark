@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { sendTrack as send } from '@/lib/track-client';
 
 /** First-party stats beacon. Sends anonymous counters to /api/track:
  *  a pageview per route change (with the referrer/utm source) and outbound
@@ -21,16 +22,7 @@ function partnerOf(href: string): string | null {
   return null;
 }
 
-function send(payload: Record<string, string>) {
-  try {
-    const body = JSON.stringify(payload);
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }));
-    } else {
-      fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true });
-    }
-  } catch {}
-}
+
 
 export default function Analytics() {
   const pathname = usePathname();

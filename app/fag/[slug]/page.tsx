@@ -112,7 +112,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
           <div className="pointer-events-none absolute inset-0" style={{
             background: 'radial-gradient(60% 50% at 30% 40%, rgba(0,130,202,0.10), transparent 70%)' }} />
         )}
-        <div className={`relative mx-auto w-full max-w-[1400px] px-5 md:px-8 ${hero.main ? 'pb-16 pt-40' : 'pt-32 md:pt-40'}`}>
+        <div className={`relative mx-auto w-full max-w-[1600px] px-6 md:px-10 ${hero.main ? 'pb-16 pt-40' : 'pt-32 md:pt-40'}`}>
           <Reveal>
             <div className="eyebrow mb-4">Trade · {trade.name}</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
@@ -137,7 +137,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <div className="mx-auto max-w-[1400px] px-5 md:px-8 pb-28">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-10 pb-28">
         {/* the workhorses */}
         <div className="mt-20">
           <Reveal>

@@ -18,6 +18,7 @@ type Day = {
   pathNames?: Record<string, string>;
   sources?: Record<string, number>;
   outbound?: Record<string, number>;
+  shares?: Record<string, number>;
 };
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -40,9 +41,19 @@ const PARTNER_LABELS: Record<string, string> = {
   lecot: 'Lecot (BE)',
 };
 
+const SHARE_LABELS: Record<string, string> = {
+  native: 'Native share sheet',
+  linkedin: 'LinkedIn',
+  facebook: 'Facebook',
+  x: 'X (Twitter)',
+  whatsapp: 'WhatsApp',
+  email: 'Email',
+  copy: 'Copied link',
+};
+
 const PERIODS = [7, 30, 90] as const;
 
-function mergeCounts(days: Day[], field: 'paths' | 'sources' | 'outbound'): [string, number][] {
+function mergeCounts(days: Day[], field: 'paths' | 'sources' | 'outbound' | 'shares'): [string, number][] {
   const acc: Record<string, number> = {};
   for (const d of days)
     for (const [k, v] of Object.entries(d[field] ?? {})) acc[k] = (acc[k] ?? 0) + (typeof v === 'number' ? v : 0);
@@ -81,6 +92,7 @@ export default function DashboardTool() {
   const paths = useMemo(() => mergeCounts(days, 'paths'), [days]);
   const sources = useMemo(() => mergeCounts(days, 'sources'), [days]);
   const outbound = useMemo(() => mergeCounts(days, 'outbound'), [days]);
+  const shares = useMemo(() => mergeCounts(days, 'shares'), [days]);
   const articles = useMemo(() => paths.filter(([k]) => k.startsWith('nyheder')), [paths]);
   const social = sources.filter(([k]) => ['linkedin', 'meta', 'x', 'whatsapp'].includes(k)).reduce((a, [, v]) => a + v, 0);
 
@@ -113,6 +125,10 @@ export default function DashboardTool() {
       L.push('## Articles');
       for (const [k, v] of articles) L.push(`- ${pathName(days, k)}: ${v}`);
     }
+    L.push('');
+    L.push('## Shares from the article pages (by channel)');
+    if (shares.length === 0) L.push('- none in this period');
+    for (const [k, v] of shares) L.push(`- ${SHARE_LABELS[k] ?? k}: ${v}`);
     L.push('');
     L.push('## Clicks out to partner webshops');
     if (outbound.length === 0) L.push('- none in this period');
@@ -232,6 +248,10 @@ export default function DashboardTool() {
             <div style={S.card}>
               <div style={S.h}>Articles</div>
               <List rows={articles} empty="No article reads yet. Publish and share one." />
+            </div>
+            <div style={S.card}>
+              <div style={S.h}>Shares by channel</div>
+              <List rows={shares} labels={SHARE_LABELS} empty="No shares from the article pages yet. This shows which channels the audience itself shares on." />
             </div>
           </div>
 

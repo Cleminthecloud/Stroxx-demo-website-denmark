@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
+import CarouselRow from '@/components/CarouselRow';
 import { productsBySkus } from '@/lib/cms';
 import { toolTexture, productBuyUrl } from '@/lib/data';
 
@@ -16,8 +17,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
   if (!items.length) return null;
   return (
     <div className="my-12">
-      {title && <div className="eyebrow mb-5">{title}</div>}
-      <div data-lenis-prevent className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2 -mx-1 px-1">
+      <CarouselRow title={title}>
         {items.map((p) => (
           <div key={p.code} className="snap-start shrink-0 w-[240px] sm:w-[260px] group">
             <div className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden">
@@ -46,7 +46,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
             </div>
           </div>
         ))}
-      </div>
+      </CarouselRow>
     </div>
   );
 }
