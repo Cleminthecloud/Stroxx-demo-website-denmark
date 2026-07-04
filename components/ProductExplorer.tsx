@@ -26,7 +26,7 @@ export default function ProductExplorer() {
     setQ(params.get('q') ?? '');
   }, [params]);
 
-  // categories that actually have products in this demo dataset
+  // categories that actually have products in the current product snapshot
   const populated = useMemo(() => {
     const set = new Set<string>();
     products.forEach((p) => p.tags.forEach((t) => set.add(t)));

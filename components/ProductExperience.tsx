@@ -43,11 +43,9 @@ function sample(p: number): Omit<Stop, 'p'> {
 }
 
 export default function ProductExperience({
-  product, related, spec, buyUrl, categoryName, categorySlug,
-}: {
+  product, related, spec, buyUrl, categoryName, categorySlug, proClubHeadline, proClubText,}: {
   product: Product; related: Product[]; spec: Specialist;
-  buyUrl: string; categoryName: string; categorySlug: string;
-}) {
+  buyUrl: string; categoryName: string; categorySlug: string; proClubHeadline?: string; proClubText?: string;}) {
   const prodRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const tagRef = useRef<HTMLAnchorElement>(null);
@@ -284,7 +282,7 @@ export default function ProductExperience({
         <section className="lg:min-h-[92vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><Reveal from="right" className="lg:w-[46%] pt-10 lg:pt-0">{Details}</Reveal></div></section>
         <section className="lg:min-h-[88vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]">{SellingPoints}</div></div></section>
         <section className="lg:min-h-[80vh] flex items-center"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-end"><div className="lg:w-[52%]">{Review}</div></div></section>
-        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifications</div></Reveal><ScrollText as="h2" text="The numbers behind the tool." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup /></div></div></div></section>
+        <section id="specifikationer" className="lg:min-h-[88vh] flex items-center scroll-mt-24"><div className="mx-auto w-full max-w-[1500px] px-5 md:px-10 lg:flex lg:justify-start"><div className="lg:w-[46%]"><Reveal><div className="eyebrow mb-5">Specifications</div></Reveal><ScrollText as="h2" text="The numbers behind the tool." className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] mb-8" />{Specs}<div className="mt-10"><ProClubSignup headline={proClubHeadline} text={proClubText} /></div></div></div></section>
       </div>
 
       {Related}

@@ -46,6 +46,20 @@ export type SiteSettings = {
   newsletterPopupDelay?: number;
   newsletterPopupScroll?: number;
   newsletterPopupFrequencyDays?: number;
+  /* microcopy */
+  footerAbout?: string;
+  chatFabLabel?: string;
+  chatPanelHeadline?: string;
+  chatPanelText?: string;
+  chatGreeting?: string;
+  chatFallback?: string;
+  proClubHeadline?: string;
+  proClubText?: string;
+  newsHeadline?: string;
+  newsEmpty?: string;
+  newsletterSuccess?: string;
+  notFoundHeadline?: string;
+  notFoundText?: string;
 };
 
 /** CMS link lists → clean {label, href}[] or null when unset/empty. */

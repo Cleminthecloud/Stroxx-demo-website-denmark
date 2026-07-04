@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
 import { LLMS_FALLBACK } from '@/lib/llms-fallback';
@@ -30,6 +31,7 @@ Rules:
 - Reply in the language the customer writes in (Danish, English, German, French, Dutch, any language).`;
 
 export async function POST(req: NextRequest) {
+  if (!sameOrigin(req)) return NextResponse.json({ fallback: true }, { status: 403 });
   // cost protection: 10 messages/minute per IP is generous for humans
   if (!rateLimit(`chat:${clientIp(req.headers)}`, 10, 60000)) {
     return NextResponse.json({ fallback: true }, { status: 429 });

@@ -13,6 +13,7 @@ export type NewsletterCopy = {
   text: string;
   buttonLabel: string;
   disclaimer: string;
+  success?: string;
 };
 
 const DONE_KEY = 'sx-nl-done';
@@ -57,7 +58,7 @@ export function NewsletterForm({
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-stroxx-blue/20 border border-stroxx-blue/50">
           <Check size={15} className="text-stroxx-blue" />
         </span>
-        Check your inbox to confirm. Welcome aboard.
+        {copy.success || 'Check your inbox to confirm. Welcome aboard.'}
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
 import { categories } from '@/lib/data';
@@ -106,7 +107,8 @@ One line: the share image and OG title decide how the link looks on LinkedIn; ch
 }
 
 export async function POST(req: NextRequest) {
-  /* costs real money: tighter limit than the chat */
+  /* costs real money: same-origin only + tighter limit than the chat */
+  if (!sameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   if (!rateLimit(`agent:${clientIp(req.headers)}`, 6, 60000)) {
     return NextResponse.json({ error: 'rate-limited' }, { status: 429 });
   }

@@ -16,6 +16,36 @@ const PAGES_FALLBACK = [
   { label: 'Service and Support', href: '/service' },
 ];
 
+/* the about paragraph is CMS text; partner names become links automatically
+   so editors keep plain text and the links never break */
+const PARTNER_URLS: Record<string, string> = {
+  Meesenburg: 'https://www.meesenburg.com',
+  Foussier: 'https://www.foussier.fr',
+  Lecot: 'https://lecot.be',
+};
+
+function linkify(text: string, keyBase: string) {
+  return text.split(/(Meesenburg|Foussier|Lecot)/g).map((p, i) =>
+    PARTNER_URLS[p] ? (
+      <a key={`${keyBase}-${i}`} href={PARTNER_URLS[p]} target="_blank" rel="noopener noreferrer"
+        className="underline decoration-fog/40 underline-offset-2 hover:text-white">{p}</a>
+    ) : (
+      <span key={`${keyBase}-${i}`}>{p}</span>
+    )
+  );
+}
+
+function AboutText({ text }: { text: string }) {
+  /* first sentence carries the design's white emphasis, the rest stays fog */
+  const m = text.match(/^(.*?[.!?])\s+([\s\S]*)$/);
+  if (!m) return <>{linkify(text, 'a')}</>;
+  return (
+    <>
+      <span className="text-white font-medium">{linkify(m[1], 'w')}</span> {linkify(m[2], 'r')}
+    </>
+  );
+}
+
 function FooterLink({ label, href }: { label: string; href: string }) {
   return /^https?:/i.test(href) ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">{label}</a>
@@ -50,12 +80,12 @@ export default async function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={brandImages.logoWhite} alt="STROXX" className="h-7 w-auto mb-7" />
             <p className="text-fog leading-relaxed">
-              <span className="text-white font-medium">STROXX is available exclusively at Carl Ras in Denmark.</span> The
-              brand is developed together with strong partners in Germany, France and Belgium, and is
-              also stocked through chains like{' '}
-              <a href="https://www.meesenburg.com" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Meesenburg</a>,{' '}
-              <a href="https://www.foussier.fr" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Foussier</a> and{' '}
-              <a href="https://lecot.be" target="_blank" rel="noopener noreferrer" className="underline decoration-fog/40 underline-offset-2 hover:text-white">Lecot</a>.
+              <AboutText
+                text={
+                  s?.footerAbout ||
+                  'STROXX is available exclusively at Carl Ras in Denmark. The brand is developed together with strong partners in Germany, France and Belgium, and is also stocked through chains like Meesenburg, Foussier and Lecot.'
+                }
+              />
             </p>
             <a href={`tel:${phone.replace(/\s+/g, '')}`} className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
               <Phone size={18} strokeWidth={2} /> {phone}

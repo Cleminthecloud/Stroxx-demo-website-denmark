@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Reveal from '@/components/Reveal';
-import { getPosts } from '@/lib/cms';
+import { getPosts, getSiteSettings } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
 
@@ -27,17 +27,18 @@ function fmtDate(iso?: string) {
 
 export default async function NewsIndex() {
   const posts = await getPosts();
+  const settings = await getSiteSettings();
   return (
     <main className="bg-ink min-h-screen">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-28">
         <div className="eyebrow mb-6">News</div>
         <h1 className="h-display text-white text-[clamp(2.6rem,6vw,5rem)] leading-[0.92] mb-16">
-          What&apos;s happening.
+          {settings?.newsHeadline || "What's happening."}
         </h1>
 
         {posts.length === 0 ? (
           <p className="text-fog text-lg max-w-md leading-relaxed">
-            Nothing published yet. The first stories are on their way.
+            {settings?.newsEmpty || 'Nothing published yet. The first stories are on their way.'}
           </p>
         ) : (
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">

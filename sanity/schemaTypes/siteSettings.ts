@@ -40,6 +40,7 @@ export const siteSettings = defineType({
     { name: 'tracking', title: 'Tracking + consent' },
     { name: 'newsletter', title: 'Newsletter' },
     { name: 'integrations', title: 'Integrations (PIM/DAM/AI)' },
+    { name: 'copy', title: 'Microcopy' },
   ],
   fields: [
     defineField({ name: 'retailerName', title: 'Retail partner', type: 'string', initialValue: 'Carl Ras', group: 'contact' }),
@@ -280,6 +281,24 @@ export const siteSettings = defineType({
       type: 'url',
       group: 'integrations',
     }),
+
+    /* ── Microcopy: every small user-facing text on the site ── */
+    defineField({ name: 'footerAbout', title: 'Footer: about paragraph', type: 'text', rows: 3, group: 'copy',
+      description: 'The paragraph under the logo in the footer. Partner names (Meesenburg, Foussier, Lecot) become links automatically.' }),
+    defineField({ name: 'chatFabLabel', title: 'Chat: floating button label', type: 'string', group: 'copy' }),
+    defineField({ name: 'chatPanelHeadline', title: 'Chat: panel headline', type: 'string', group: 'copy' }),
+    defineField({ name: 'chatPanelText', title: 'Chat: panel text', type: 'text', rows: 2, group: 'copy' }),
+    defineField({ name: 'chatGreeting', title: 'Chat: greeting message', type: 'text', rows: 2, group: 'copy' }),
+    defineField({ name: 'chatFallback', title: 'Chat: fallback answer', type: 'text', rows: 2, group: 'copy',
+      description: 'Shown when neither the built-in answers nor the AI can help. Should offer the human handoff ("type yes").' }),
+    defineField({ name: 'proClubHeadline', title: 'Pro Club: headline', type: 'string', group: 'copy' }),
+    defineField({ name: 'proClubText', title: 'Pro Club: text', type: 'text', rows: 2, group: 'copy',
+      description: 'The signup box on product pages. Submissions go to the Newsletter platform.' }),
+    defineField({ name: 'newsHeadline', title: 'News: index headline', type: 'string', group: 'copy' }),
+    defineField({ name: 'newsEmpty', title: 'News: empty-state text', type: 'string', group: 'copy' }),
+    defineField({ name: 'newsletterSuccess', title: 'Newsletter: success message', type: 'string', group: 'copy' }),
+    defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy' }),
+    defineField({ name: 'notFoundText', title: '404 page: text', type: 'string', group: 'copy' }),
   ],
   preview: { prepare: () => ({ title: 'Site settings' }) },
 });

@@ -12,7 +12,15 @@ import SpecialistChat from '@/components/SpecialistChat';
 
 const SERVICE_TEL = '+4544855511';
 
-export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
+export type FabCopy = {
+  fabLabel?: string;
+  panelHeadline?: string;
+  panelText?: string;
+  greeting?: string;
+  fallback?: string;
+};
+
+export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]; copy?: FabCopy }) {
   const stores = storeData && storeData.length ? storeData : fallbackStores;
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<'home' | 'chat'>('home');
@@ -97,15 +105,14 @@ export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
                 <div className="text-[10px] text-fog uppercase tracking-wider">AI assistant</div>
               </div>
             </div>
-            <SpecialistChat nearest={nearest} />
+            <SpecialistChat nearest={nearest} greeting={copy?.greeting} fallbackText={copy?.fallback} />
           </>
         ) : (
         <>
         <div className="eyebrow mb-3">The specialists</div>
-        <h3 className="h-display text-white text-2xl leading-tight mb-2">Talk to a specialist.</h3>
+        <h3 className="h-display text-white text-2xl leading-tight mb-2">{copy?.panelHeadline || 'Talk to a specialist.'}</h3>
         <p className="text-fog text-[13px] leading-relaxed mb-5">
-          Our store managers are tradespeople themselves. Call direct, no phone
-          queue, no switchboard.
+          {copy?.panelText || 'Our store managers are tradespeople themselves. Call direct, no phone queue, no switchboard.'}
         </p>
 
         <button onClick={() => setView('chat')}
@@ -179,7 +186,7 @@ export default function SpecialistFab({ storeData }: { storeData?: Store[] }) {
         }}
       >
         <MessageCircle size={19} />
-        <span className="hidden md:inline text-sm font-medium tracking-wide">Talk to a specialist</span>
+        <span className="hidden md:inline text-sm font-medium tracking-wide">{copy?.fabLabel || 'Talk to a specialist'}</span>
       </button>
     </div>
   );

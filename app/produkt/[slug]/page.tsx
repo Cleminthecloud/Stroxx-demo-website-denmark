@@ -7,7 +7,7 @@ import {
   productBuyUrl,
   toolTexture,
 } from '@/lib/data';
-import { getSpecialists, getTestimonials, pickSpecialist } from '@/lib/cms';
+import { getSpecialists, getTestimonials, pickSpecialist, getSiteSettings } from '@/lib/cms';
 import { SITE_URL } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -90,12 +90,15 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
     ],
   };
 
+  const settings = await getSiteSettings();
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ProductExperience
         product={product}
+        proClubHeadline={settings?.proClubHeadline}
+        proClubText={settings?.proClubText}
         related={related}
         spec={spec}
         buyUrl={buyUrl}

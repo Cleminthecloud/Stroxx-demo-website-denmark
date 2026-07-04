@@ -131,6 +131,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     text: settings?.newsletterText || 'The monthly lineup and the sharpest prices, straight to your inbox.',
     buttonLabel: settings?.newsletterButtonLabel || 'Sign up',
     disclaimer: settings?.newsletterDisclaimer || 'Unsubscribe anytime. We only write when it is worth your time.',
+    success: settings?.newsletterSuccess || '',
+  };
+  /* chat microcopy from Site settings → Microcopy */
+  const fabCopy = {
+    fabLabel: settings?.chatFabLabel || '',
+    panelHeadline: settings?.chatPanelHeadline || '',
+    panelText: settings?.chatPanelText || '',
+    greeting: settings?.chatGreeting || '',
+    fallback: settings?.chatFallback || '',
   };
   return (
     <html lang="en">
@@ -175,7 +184,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} />}
           <Footer />
           {/* editors can hide the chat entirely: Site settings → Integrations */}
-          {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} />}
+          {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} copy={fabCopy} />}
         </SmoothScroll>
         {/* first-party anonymous stats (no cookies): feeds the Studio Dashboard */}
         <Analytics />

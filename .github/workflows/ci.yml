@@ -1,0 +1,29 @@
+# CI gate: typecheck + lint + production build on every push and PR.
+# A broken branch can never merge quietly again.
+#
+# Secrets used (Settings → Secrets and variables → Actions):
+#   SANITY_API_READ_TOKEN  optional; the build falls back to hardcoded content
+#                          without it, so CI passes either way.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: cr7dktly
+      NEXT_PUBLIC_SANITY_DATASET: demo
+      SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build

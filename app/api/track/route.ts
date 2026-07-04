@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { sameOrigin } from '@/lib/same-origin';
 import { projectId, dataset } from '@/sanity/env';
 
 /** First-party, privacy-clean analytics collector. No cookies, no user IDs,
@@ -35,7 +36,13 @@ const safeKey = (p: string) => (p.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+
 
 const PARTNERS = ['carl-ras', 'meesenburg', 'foussier', 'lecot'] as const;
 
+/* only real routes get counted: bounds the per-day document size no matter
+   what a flooder posts (everything else lands in the 'other' bucket) */
+const KNOWN_PATH =
+  /^\/($|produkter|produkt\/[a-z0-9-]+|butikker|maanedens|proev-det|service|fag(\/[a-z0-9-]+)?|nyheder(\/[a-z0-9-]+)?|kampagne\/[a-z0-9\/-]+|privatliv|cookies|handelsbetingelser)$/;
+
 export async function POST(req: NextRequest) {
+  if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });
   if (!rateLimit(`trk:${clientIp(req.headers)}`, 60, 60000)) return new NextResponse(null, { status: 204 });
   const token = process.env.SANITY_API_WRITE_TOKEN;
   if (!token) return new NextResponse(null, { status: 204 });
@@ -61,11 +68,12 @@ export async function POST(req: NextRequest) {
     const set: Record<string, string> = {};
 
     if (t === 'pv' && path.startsWith('/')) {
-      const k = safeKey(path);
+      const known = KNOWN_PATH.test(path.split('?')[0]);
+      const k = known ? safeKey(path.split('?')[0]) : 'other';
       inc['total'] = 1;
       inc[`paths.${k}`] = 1;
       inc[`sources.${bucket(src)}`] = 1;
-      set[`pathNames.${k}`] = path;
+      if (known) set[`pathNames.${k}`] = path.split('?')[0];
     } else if (t === 'out' && (PARTNERS as readonly string[]).includes(to)) {
       inc[`outbound.${to.replace('-', '_')}`] = 1;
     } else {

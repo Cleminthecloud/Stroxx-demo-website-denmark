@@ -1,0 +1,37 @@
+# Weekly content backup: exports the whole Sanity dataset (documents + media)
+# and stores it as a workflow artifact for 90 days. Also runnable on demand
+# from the Actions tab (workflow_dispatch).
+#
+# Required secret (Settings → Secrets and variables → Actions):
+#   SANITY_AUTH_TOKEN  a Sanity token with read access (the Viewer token works)
+#
+# At launch cutover: change DATASET below to `production`.
+name: Content backup
+
+on:
+  schedule:
+    - cron: '0 5 * * 1' # Mondays 05:00 UTC
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    env:
+      DATASET: demo
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+      NEXT_PUBLIC_SANITY_PROJECT_ID: cr7dktly
+      NEXT_PUBLIC_SANITY_DATASET: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Export dataset
+        run: npx sanity dataset export "$DATASET" "backup-$DATASET-$(date +%F).tar.gz" --overwrite
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sanity-backup-${{ github.run_id }}
+          path: backup-*.tar.gz
+          retention-days: 90

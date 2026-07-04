@@ -6,14 +6,14 @@ import { products, toolTexture, Product } from '@/lib/data';
 import KnockoutImage from '@/components/KnockoutImage';
 import { Store } from '@/lib/stores';
 
-/** Demo AI chat: a scripted assistant that answers from the site's real data
- *  (guarantee terms, store list, live product catalogue) and can hand off to a
- *  human. The handoff composes a brief from the conversation and passes it to
- *  the nearest butikschef via call or prefilled WhatsApp, the same flow a
- *  production LLM + WhatsApp Business / Messenger integration would use. */
+/** The specialist chat: scripted answers from the site's real data (guarantee
+ *  terms, store list, live product catalogue) with free-form questions handled
+ *  by the AI (/api/chat) when enabled. The human handoff composes a brief from
+ *  the conversation and passes it to the nearest store manager via call or
+ *  prefilled WhatsApp. */
 
 interface BtnLink { label: string; href: string; external?: boolean }
-interface Msg { from: 'bot' | 'user'; text: string; links?: BtnLink[]; products?: Product[]; handoff?: boolean }
+interface Msg { from: 'bot' | 'user'; text: string; links?: BtnLink[]; products?: Product[]; handoff?: boolean; kind?: 'fallback' }
 
 const DEFAULT_CHIPS = ['How does the guarantee work?', 'Find my store', 'Got a good knife?', 'Talk to a human'];
 
@@ -87,7 +87,7 @@ function searchProducts(q: string) {
   return scored.slice(0, 3).map((x) => x.p);
 }
 
-function botReply(raw: string, nearest: { store: Store; km: number } | null): Msg[] {
+function botReply(raw: string, nearest: { store: Store; km: number } | null, fallbackText: string): Msg[] {
   const t = norm(raw);
 
   // "ja"/"ja tak"/"gerne" accepts the bot's own handoff offer — without this
@@ -149,16 +149,28 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null): Ms
   }
   return [{
     from: 'bot',
-    text: 'I would rather not guess on that, it deserves a real answer. Want me to put you through to a specialist? Type "yes" and I will sort it.',
+    text: fallbackText,
     links: [],
     handoff: false,
+    kind: 'fallback',
   }];
 }
 
-export default function SpecialistChat({ nearest }: { nearest: { store: Store; km: number } | null }) {
-  const [msgs, setMsgs] = useState<Msg[]>([
-    { from: 'bot', text: 'Hi! I am the STROXX AI assistant. Ask me about products, the guarantee or the stores, or ask for a human any time.' },
-  ]);
+const GREETING_DEFAULT =
+  'Hi! I am the STROXX AI assistant. Ask me about products, the guarantee or the stores, or ask for a human any time.';
+const FALLBACK_DEFAULT =
+  'I would rather not guess on that, it deserves a real answer. Want me to put you through to a specialist? Type "yes" and I will sort it.';
+
+export default function SpecialistChat({
+  nearest,
+  greeting,
+  fallbackText,
+}: {
+  nearest: { store: Store; km: number } | null;
+  greeting?: string;
+  fallbackText?: string;
+}) {
+  const [msgs, setMsgs] = useState<Msg[]>([{ from: 'bot', text: greeting || GREETING_DEFAULT }]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
@@ -174,8 +186,8 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
     setMsgs((m) => [...m, { from: 'user', text: clean }]);
     setInput('');
     setTyping(true);
-    const scripted = botReply(clean, nearest);
-    const isFallback = scripted.length === 1 && !!scripted[0].text?.startsWith('I would rather not guess');
+    const scripted = botReply(clean, nearest, fallbackText || FALLBACK_DEFAULT);
+    const isFallback = scripted.length === 1 && scripted[0].kind === 'fallback';
     /* Question-shaped product queries ("hvad er den bedste laser?") deserve a
        real answer, not just a keyword card dump: send them to the AI and
        attach the matching product cards under its reply. Terse queries
@@ -303,7 +315,7 @@ export default function SpecialistChat({ nearest }: { nearest: { store: Store; k
                     </div>
                   )}
                   <div className="mt-2 text-[10px] text-fog leading-snug">
-                    Demo: in production the conversation is handed over automatically, and the specialist sees the summary before the chat continues.
+                    The message includes a short summary of this chat, so you will not have to start over.
                   </div>
                 </div>
               )}
