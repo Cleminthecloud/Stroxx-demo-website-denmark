@@ -355,7 +355,7 @@ export default function SpecialistChat({
           onChange={(e) => setInput(e.target.value)}
           placeholder="Write your question"
           aria-label="Write to the assistant"
-          className="flex-1 rounded-full bg-white/[0.05] border border-white/10 px-4 py-2.5 text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 transition-colors"
+          className="flex-1 rounded-full bg-white/[0.05] border border-white/10 px-4 py-2.5 text-base sm:text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 transition-colors"
         />
         <button type="submit" aria-label="Send"
           className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stroxx-blue text-white border border-white/20 hover:scale-105 transition-transform cursor-pointer disabled:opacity-50"

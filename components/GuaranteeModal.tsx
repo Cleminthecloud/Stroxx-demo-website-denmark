@@ -47,7 +47,7 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
       {open && (
         <div
           role="dialog" aria-modal="true" aria-label="STROXX satisfaction guarantee"
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-6"
         >
           {/* backdrop */}
           <div
@@ -58,7 +58,7 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
 
           {/* panel — near-opaque so the page never bleeds through the text */}
           <div
-            className="relative w-full max-w-lg rounded-2xl border border-white/10 p-7 sm:p-9 transition-all duration-300 will-change-transform"
+            className="relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 p-7 pb-[calc(1.75rem+env(safe-area-inset-bottom))] sm:p-9 transition-all duration-300 will-change-transform"
             style={{
               opacity: show ? 1 : 0,
               transform: show ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.97)',
@@ -66,6 +66,7 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
             }}
           >
+            <div aria-hidden className="sheet-handle" />
             <button
               ref={closeRef}
               onClick={close} aria-label="Close"

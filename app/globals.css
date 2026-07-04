@@ -401,3 +401,23 @@ body:has(main.studio-shell) header,
 body:has(main.studio-shell) footer,
 body:has(main.studio-shell) .skip-link,
 body:has(main.studio-shell) .no-print { display: none; }
+
+/* ── mobile foundations ─────────────────────────────────────────────────
+   touch-action kills the double-tap zoom delay on interactive elements;
+   .sheet-in is the bottom-sheet entrance used by modals on phones;
+   .sheet-handle is the grab bar that signals "this is a sheet". */
+a, button, [role='button'], input, select, textarea, label { touch-action: manipulation; }
+
+@keyframes sheet-up {
+  from { transform: translateY(28px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.sheet-in { animation: sheet-up 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (prefers-reduced-motion: reduce) { .sheet-in { animation: none; } }
+
+.sheet-handle {
+  width: 2.5rem; height: 4px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  margin: 0 auto 1rem;
+}
+@media (min-width: 640px) { .sheet-handle { display: none; } }

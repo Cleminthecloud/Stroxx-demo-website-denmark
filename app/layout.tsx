@@ -67,6 +67,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: '#0B0C0E',
+  /* lets the dark canvas run under the iPhone notch/home bar while
+     env(safe-area-inset-*) keeps fixed UI out of the gesture zones */
+  viewportFit: 'cover',
 };
 
 const BASE = SITE_URL;

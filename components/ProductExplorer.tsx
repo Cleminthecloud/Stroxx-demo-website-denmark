@@ -126,7 +126,7 @@ export default function ProductExplorer() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by name or item number…"
-              className="flex-1 min-w-[160px] bg-carbon border border-line rounded-full px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
+              className="flex-1 min-w-[160px] bg-carbon border border-line rounded-full px-4 py-2.5 text-base sm:text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
             />
             <div className="flex items-center gap-2 text-sm shrink-0">
               <span className="text-fog hidden sm:inline">Sort:</span>

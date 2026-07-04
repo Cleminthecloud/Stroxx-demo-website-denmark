@@ -71,23 +71,24 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
     <div className="no-print">
       {/* backdrop closes the panel on outside tap */}
       {open && (
-        <div className="fixed inset-0 z-[88] bg-ink/40 lg:bg-transparent" onClick={() => setOpen(false)} />
+        <div className="fixed inset-0 z-[88] bg-ink/60 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none" onClick={() => setOpen(false)} />
       )}
 
       {/* panel */}
       <div
         ref={panelRef}
         role="dialog" aria-label="Talk to a specialist" aria-hidden={!open}
-        className={`fixed z-[89] right-5 w-[calc(100vw-2.5rem)] max-w-sm rounded-2xl border border-white/10 p-6 transition-all duration-300 ${
-          onProduct ? 'bottom-[10.5rem]' : 'bottom-[5.5rem]'
-        } lg:bottom-24 ${view === 'chat' ? 'flex flex-col h-[min(72svh,580px)]' : ''} ${
-          open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'
+        className={`fixed z-[89] left-0 right-0 bottom-0 w-full rounded-t-2xl border border-white/10 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] transition-all duration-300 sm:left-auto sm:right-5 sm:w-[calc(100vw-2.5rem)] sm:max-w-sm sm:rounded-2xl sm:pb-6 ${
+          onProduct ? 'sm:bottom-[10.5rem]' : 'sm:bottom-[5.5rem]'
+        } lg:bottom-24 ${view === 'chat' ? 'flex flex-col h-[min(78svh,580px)] sm:h-[min(72svh,580px)]' : ''} ${
+          open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-6 sm:translate-y-3 pointer-events-none'
         }`}
         style={{
           background: 'rgba(13,15,19,0.97)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
         }}
       >
+        <div aria-hidden className="sheet-handle shrink-0" />
         <button onClick={() => setOpen(false)} aria-label="Close"
           className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white transition-colors">
           <X size={14} />
@@ -178,7 +179,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
         onClick={() => setOpen((o) => !o)}
         aria-label="Talk to a specialist"
         aria-expanded={open}
-        className={`fixed z-[89] right-5 ${onProduct ? 'bottom-24' : 'bottom-5'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] cursor-pointer`}
+        className={`fixed z-[89] right-5 ${onProduct ? 'bottom-[calc(6rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] cursor-pointer`}
         style={{
           background: 'linear-gradient(180deg, rgba(0,130,202,0.92), rgba(0,98,154,0.92))',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 14px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,130,202,0.35)',

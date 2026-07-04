@@ -176,10 +176,11 @@ export function NewsletterPopup({
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[115] flex items-center justify-center p-5" role="dialog" aria-modal="true" aria-label="Newsletter signup">
+    <div className="fixed inset-0 z-[115] flex items-end justify-center p-0 sm:items-center sm:p-5" role="dialog" aria-modal="true" aria-label="Newsletter signup">
       <button aria-label="Close" className="absolute inset-0 bg-ink/70 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#0E1013] p-8 md:p-10 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
-        <div className="pointer-events-none absolute inset-0 rounded-2xl" style={{ background: 'radial-gradient(80% 60% at 50% 0%, rgba(0,130,202,0.14), transparent 70%)' }} />
+      <div className="sheet-in relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 bg-[#0E1013] p-8 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:p-8 md:p-10 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+        <div className="pointer-events-none absolute inset-0 rounded-[inherit]" style={{ background: 'radial-gradient(80% 60% at 50% 0%, rgba(0,130,202,0.14), transparent 70%)' }} />
+        <div aria-hidden className="sheet-handle" />
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"

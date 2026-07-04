@@ -290,7 +290,7 @@ export default function ProductExperience({
       {/* mobile sticky buy-bar — the product is inline (doesn't travel) on mobile,
           so the riding tag becomes a slim pinned bar that slides up after the hero */}
       <div
-        className={`lg:hidden fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 pt-2 transition-transform duration-300 ease-out ${pastHero ? 'translate-y-0' : 'translate-y-[140%]'}`}
+        className={`lg:hidden fixed inset-x-0 bottom-0 z-[60] px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2 transition-transform duration-300 ease-out ${pastHero ? 'translate-y-0' : 'translate-y-[140%]'}`}
         style={{ pointerEvents: pastHero ? 'auto' : 'none' }}
       >
         <div className="glass-panel rounded-2xl flex items-center gap-3 px-4 py-3">

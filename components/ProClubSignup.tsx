@@ -54,7 +54,7 @@ export default function ProClubSignup({ headline, text }: { headline?: string; t
               if (state === 'error') setState('idle');
             }}
             placeholder="you@email.com"
-            className="flex-1 bg-ink border border-line rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
+            className="flex-1 bg-ink border border-line rounded-sm px-4 py-2.5 text-base sm:text-sm text-white placeholder:text-fog/60 focus:border-fog outline-none"
           />
           <GlassButton submit>{state === 'busy' ? 'Sending…' : 'Sign up'}</GlassButton>
         </form>
