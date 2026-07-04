@@ -60,7 +60,7 @@ export default function CursorGlow({
       className={`absolute pointer-events-none ${className}`}
       style={{
         inset: '-14%',
-        background: `radial-gradient(${size} at var(--gx,66%) var(--gy,46%), rgba(0,130,202,${intensity}), transparent 70%)`,
+        background: `radial-gradient(${size} at var(--gx,66%) var(--gy,46%), rgba(0,136,194,${intensity}), transparent 70%)`,
         maskImage: feather,
         WebkitMaskImage: feather,
       }}

@@ -110,7 +110,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
         )}
         {!hero.main && (
           <div className="pointer-events-none absolute inset-0" style={{
-            background: 'radial-gradient(60% 50% at 30% 40%, rgba(0,130,202,0.10), transparent 70%)' }} />
+            background: 'radial-gradient(60% 50% at 30% 40%, rgba(0,136,194,0.10), transparent 70%)' }} />
         )}
         <div className={`relative mx-auto w-full max-w-[1600px] px-6 md:px-10 ${hero.main ? 'pb-16 pt-40' : 'pt-32 md:pt-40'}`}>
           <Reveal>

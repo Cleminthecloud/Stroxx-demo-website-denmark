@@ -10,7 +10,7 @@ const config: Config = {
         paper: '#F6F5F3',
         fog: '#8A9199',
         line: '#23272E',
-        stroxx: { red: '#EB0029', blue: '#0082CA', blueGlow: '#2BA6E8' }
+        stroxx: { red: '#EB0029', blue: '#0088C2', blueGlow: '#2FACE8' }
       },
       fontFamily: {
         display: ['var(--font-display)', 'Helvetica Neue', 'Arial', 'sans-serif'],

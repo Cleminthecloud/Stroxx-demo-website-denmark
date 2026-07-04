@@ -133,7 +133,7 @@ export default async function Home() {
 
       {/* SKALA — headline + the scale, capped by a bold stats band */}
       <section className="relative py-28 md:py-36">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 40%, rgba(0,130,202,0.07), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 40%, rgba(0,136,194,0.07), transparent 70%)' }} />
         <div className="relative mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-end">
             <div data-sanity={hAttr('scaleHeadline')}>
@@ -181,7 +181,7 @@ export default async function Home() {
             {/* blue light pooling behind the cards — pure gradients, NO css
                 filter: blur() on a big layer is the iOS white-box pattern */}
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{
-              background: 'radial-gradient(55% 60% at 28% 32%, rgba(0,130,202,0.16), transparent 70%), radial-gradient(50% 55% at 80% 75%, rgba(43,166,232,0.10), transparent 72%)',
+              background: 'radial-gradient(55% 60% at 28% 32%, rgba(0,136,194,0.16), transparent 70%), radial-gradient(50% 55% at 80% 75%, rgba(43,166,232,0.10), transparent 72%)',
             }} />
             <div className="grid gap-6 lg:gap-8 md:grid-cols-3">
               {specs.slice(0, 6).map((s, i) => (
@@ -217,7 +217,7 @@ export default async function Home() {
 
       {/* GUARANTEE */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,130,202,0.12), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,136,194,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
           <div data-sanity={hAttr('guaranteeHeadline')}>
             <Eyebrow>Satisfaction guarantee</Eyebrow>
@@ -260,7 +260,7 @@ export default async function Home() {
             </Reveal>
             <Reveal delay={120} from="far-right">
               <Link href="/maanedens" className="group relative block aspect-[5/4]">
-                <div className="pointer-events-none absolute inset-[8%]" style={{ background: 'radial-gradient(45% 42% at 50% 52%, rgba(0,130,202,0.26), transparent 70%)' }} />
+                <div className="pointer-events-none absolute inset-[8%]" style={{ background: 'radial-gradient(45% 42% at 50% 52%, rgba(0,136,194,0.26), transparent 70%)' }} />
                 <KnockoutImage
                   src={toolTexture(SKA.hero.imgId, '50383')}
                   alt={SKA.hero.name}

@@ -112,7 +112,7 @@ export default async function MaanedensPage() {
 
       {/* ── CASES — hvor den tjener sig hjem ──────────────────────────── */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 50% at 50% 45%, rgba(0,130,202,0.08), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 50% at 50% 45%, rgba(0,136,194,0.08), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <Reveal><div className="eyebrow mb-5">Application</div></Reveal>

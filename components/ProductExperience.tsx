@@ -132,7 +132,7 @@ export default function ProductExperience({
       {/* blue light pool — kept inline for the static (mobile/wide) layouts;
           on desktop the pinned product hands this to a trailing physics layer */}
       {withGlow && (
-        <div className="pointer-events-none absolute -z-10" style={{ inset: '-40%', background: 'radial-gradient(40% 38% at 50% 48%, rgba(0,130,202,0.32), transparent 68%)' }} />
+        <div className="pointer-events-none absolute -z-10" style={{ inset: '-40%', background: 'radial-gradient(40% 38% at 50% 48%, rgba(0,136,194,0.32), transparent 68%)' }} />
       )}
       <div className="pointer-events-none absolute left-1/2 bottom-[4%] h-10 w-3/5 -translate-x-1/2 rounded-[50%] bg-black/55 blur-2xl" />
       <KnockoutImage src={toolTexture(product.imgId, '50383')} alt={product.name} maxSize={1100} className={`relative w-full ${size}`} />
@@ -247,7 +247,7 @@ export default function ProductExperience({
       {/* fixed traveling product (desktop) — the light trails the product */}
       <div className="fixed inset-0 z-[20] overflow-hidden pointer-events-none hidden lg:block" aria-hidden>
         <div ref={glowRef} className="absolute left-1/2 top-1/2 w-[60vw] h-[64vh] will-change-transform"
-          style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)', background: 'radial-gradient(38% 38% at 50% 48%, rgba(0,130,202,0.34), transparent 66%)' }} />
+          style={{ transform: 'translate(-50%,-50%) translate(-24vw,0)', background: 'radial-gradient(38% 38% at 50% 48%, rgba(0,136,194,0.34), transparent 66%)' }} />
         <div ref={prodRef} className="absolute left-1/2 top-1/2 w-[42vw] max-w-[680px] will-change-transform" style={{ transform: 'translate(-50%,-50%) translate(-27vw,0)' }}>
           {Figure('h-[66vh] min-h-[400px]', false)}
         </div>
@@ -261,7 +261,7 @@ export default function ProductExperience({
           className="group absolute left-1/2 top-1/2 flex items-center gap-3.5 rounded-2xl pl-4 pr-2.5 py-2.5 backdrop-blur-xl border border-white/[0.12]"
           style={{ opacity: 0, transform: 'translate(-50%,-50%)', willChange: 'transform, opacity',
             background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 14px 34px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.16)' }}>
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 14px 34px rgba(0,0,0,0.5), 0 0 28px rgba(0,136,194,0.16)' }}>
           <span className="text-left leading-tight">
             <span className="block text-white text-[13px] font-medium truncate max-w-[190px]">{product.name}</span>
           </span>

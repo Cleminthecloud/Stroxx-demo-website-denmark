@@ -32,7 +32,7 @@ export default function NewsCard({ post }: { post: NewsCardData }) {
             <img src={post.img} alt={post.alt || ''} loading="lazy" decoding="async"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
           ) : (
-            <div className="h-full w-full" style={{ background: 'radial-gradient(80% 80% at 50% 30%, rgba(0,130,202,0.22), rgba(11,12,14,1) 75%)' }} />
+            <div className="h-full w-full" style={{ background: 'radial-gradient(80% 80% at 50% 30%, rgba(0,136,194,0.22), rgba(11,12,14,1) 75%)' }} />
           )}
           {post.tags && post.tags.length > 0 && (
             <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-1.5">

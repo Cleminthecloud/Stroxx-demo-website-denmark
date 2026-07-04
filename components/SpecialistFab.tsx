@@ -85,7 +85,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
         }`}
         style={{
           background: 'rgba(13,15,19,0.97)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,136,194,0.18)',
         }}
       >
         <div aria-hidden className="sheet-handle shrink-0" />
@@ -181,8 +181,8 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
         aria-expanded={open}
         className={`fixed z-[89] right-5 ${onProduct ? 'bottom-[calc(6rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] cursor-pointer`}
         style={{
-          background: 'linear-gradient(180deg, rgba(0,130,202,0.92), rgba(0,98,154,0.92))',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 14px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,130,202,0.35)',
+          background: 'linear-gradient(180deg, rgba(0,136,194,0.92), rgba(0,98,154,0.92))',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 14px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,136,194,0.35)',
           backdropFilter: 'blur(10px)',
         }}
       >

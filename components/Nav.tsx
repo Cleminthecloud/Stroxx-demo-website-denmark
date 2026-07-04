@@ -60,7 +60,7 @@ export default function Nav({ links = LINKS }: { links?: { href: string; label: 
         }`}
         style={{
           background:
-            'radial-gradient(120% 50% at 50% -10%, rgba(0,130,202,0.16), transparent 60%), #0A0B0D',
+            'radial-gradient(120% 50% at 50% -10%, rgba(0,136,194,0.16), transparent 60%), #0A0B0D',
         }}
       >
         <div className="flex h-full flex-col px-6 pt-28 pb-10 overflow-y-auto">

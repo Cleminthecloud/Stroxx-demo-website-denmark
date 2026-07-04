@@ -8,7 +8,7 @@ import GlassButton from '@/components/GlassButton';
  *  it completes the picture. */
 
 const COLORS = [
-  { name: 'STROXX blue', varName: 'stroxx-blue', hex: '#0082CA', note: 'The ONLY accent. Links, accents, active states, glows. Blue = interactive or emphasized.' },
+  { name: 'STROXX blue', varName: 'stroxx-blue', hex: '#0088C2', note: 'The ONLY accent. Links, accents, active states, glows. Blue = interactive or emphasized.' },
   { name: 'Ink', varName: 'ink', hex: '#0B0C0E', note: 'The page background. Everything lives on dark.' },
   { name: 'Carbon', varName: 'carbon', hex: '#111317', note: 'Raised surfaces, input fields.' },
   { name: 'Steel', varName: 'steel', hex: '#171B21', note: 'Higher surfaces, confirmations.' },
@@ -45,7 +45,7 @@ export default function BrandGuide() {
           </div>
         ))}
         <div className="glass-panel rounded-xl overflow-hidden">
-          <div className="h-16" style={{ background: 'radial-gradient(80% 120% at 50% 100%, rgba(0,130,202,0.5), rgba(11,12,14,1) 80%)' }} />
+          <div className="h-16" style={{ background: 'radial-gradient(80% 120% at 50% 100%, rgba(0,136,194,0.5), rgba(11,12,14,1) 80%)' }} />
           <div className="p-4">
             <div className="text-white text-sm font-medium">The blue glow</div>
             <p className="text-fog text-xs leading-relaxed mt-1.5">

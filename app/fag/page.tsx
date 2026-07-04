@@ -31,7 +31,7 @@ function MiniProduct({ p }: { p: Product }) {
   return (
     <Link
       href={`/produkt/${p.slug}`}
-      className="group/p block rounded-lg border border-line bg-ink/60 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-stroxx-blue/50 hover:shadow-[0_0_22px_rgba(0,130,202,0.18)]"
+      className="group/p block rounded-lg border border-line bg-ink/60 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-stroxx-blue/50 hover:shadow-[0_0_22px_rgba(0,136,194,0.18)]"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -103,7 +103,7 @@ export default function TradesIndexPage() {
                 <div className="glass glass-card group flex h-full flex-col rounded-xl p-7 transition-transform duration-500 hover:-translate-y-1">
                   {/* trade header to the fag page */}
                   <Link href={`/fag/${t.slug}`} className="block">
-                    <span className="mb-4 grid h-12 w-12 place-items-center rounded-full border border-stroxx-blue/40 text-stroxx-blue transition-all duration-300 group-hover:border-stroxx-blue/70 group-hover:shadow-[0_0_22px_rgba(0,130,202,0.3)]">
+                    <span className="mb-4 grid h-12 w-12 place-items-center rounded-full border border-stroxx-blue/40 text-stroxx-blue transition-all duration-300 group-hover:border-stroxx-blue/70 group-hover:shadow-[0_0_22px_rgba(0,136,194,0.3)]">
                       <Icon size={21} strokeWidth={1.8} />
                     </span>
                     <span className="mb-2 block font-display text-2xl font-bold text-white transition-colors group-hover:text-stroxx-blue">

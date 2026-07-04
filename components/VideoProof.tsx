@@ -51,8 +51,8 @@ export default function VideoProof({ videos }: { videos?: Video[] }) {
               <span className="absolute inset-0 grid place-items-center">
                 <span className="grid h-20 w-20 place-items-center rounded-full border border-white/25 text-white transition-all duration-300 group-hover:scale-110"
                   style={{
-                    background: 'rgba(0,130,202,0.85)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px rgba(0,0,0,0.5), 0 0 40px rgba(0,130,202,0.45)',
+                    background: 'rgba(0,136,194,0.85)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3), 0 14px 40px rgba(0,0,0,0.5), 0 0 40px rgba(0,136,194,0.45)',
                     backdropFilter: 'blur(8px)',
                   }}>
                   <Play size={28} className="ml-1" fill="currentColor" />
@@ -79,7 +79,7 @@ export default function VideoProof({ videos }: { videos?: Video[] }) {
               aria-label={`Afspil: ${v.title}`}
               className={`group relative shrink-0 w-[58vw] sm:w-64 lg:w-auto rounded-xl overflow-hidden border text-left transition-all duration-300 cursor-pointer ${
                 active
-                  ? 'border-stroxx-blue/70 shadow-[0_0_26px_rgba(0,130,202,0.3)]'
+                  ? 'border-stroxx-blue/70 shadow-[0_0_26px_rgba(0,136,194,0.3)]'
                   : 'border-white/10 hover:border-white/30'
               }`}
             >

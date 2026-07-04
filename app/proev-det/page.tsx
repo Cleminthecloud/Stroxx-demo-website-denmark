@@ -190,7 +190,7 @@ export default async function ProevDetPage() {
 
       {/* ── 3 · THE HABIT — why the brain picks the expensive brand ───── */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 30% 50%, rgba(0,130,202,0.07), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 30% 50%, rgba(0,136,194,0.07), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-4xl lg:ml-auto lg:text-right">
             <Reveal><Eyebrow>The habit</Eyebrow></Reveal>
@@ -216,7 +216,7 @@ export default async function ProevDetPage() {
 
       {/* ── 4 · THE REFRAME — how it's possible ────────────────────────── */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 50%, rgba(0,130,202,0.10), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 50%, rgba(0,136,194,0.10), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
           <div>
             <Reveal><Eyebrow>How it's possible</Eyebrow></Reveal>
@@ -285,7 +285,7 @@ export default async function ProevDetPage() {
 
       {/* ── 5b · SEE IT IN ACTION — video proof ────────────────────────── */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,130,202,0.08), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,136,194,0.08), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36">
           <div className="max-w-3xl mb-12">
             <Reveal><Eyebrow>See it in action</Eyebrow></Reveal>
@@ -342,7 +342,7 @@ export default async function ProevDetPage() {
 
       {/* ── 7 · RISK REVERSAL + THE ASK ────────────────────────────────── */}
       <section className="relative">
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,130,202,0.13), transparent 70%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,136,194,0.13), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-44">
           <div className="text-center mb-14 md:mb-20">
             <Reveal><Eyebrow>And if we're wrong?</Eyebrow></Reveal>

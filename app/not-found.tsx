@@ -13,7 +13,7 @@ export default async function NotFound() {
   return (
     <main className="bg-ink min-h-[100svh] flex items-center relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0" style={{
-        background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,130,202,0.12), transparent 70%)' }} />
+        background: 'radial-gradient(55% 55% at 50% 45%, rgba(0,136,194,0.12), transparent 70%)' }} />
       <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 w-full">
         <div className="eyebrow mb-6">404</div>
         <h1 className="h-display text-white text-[clamp(2.6rem,8vw,7rem)] leading-[0.9] mb-6">

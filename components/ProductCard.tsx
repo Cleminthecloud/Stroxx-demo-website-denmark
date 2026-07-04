@@ -31,7 +31,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* lit, floating product cut-out — white background knocked out */}
         <Link href={`/produkt/${product.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
-          <div className="absolute inset-6 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,130,202,0.16), rgba(0,130,202,0) 70%)' }} />
+          <div className="absolute inset-6 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.16), rgba(0,136,194,0) 70%)' }} />
           {/* the /api/tool proxy knocks the white studio bg out SERVER-SIDE
               (sharp), so a plain lazy <img> is enough here — no client canvas
               work for 358 cards. KnockoutImage stays for the PDP hero only. */}

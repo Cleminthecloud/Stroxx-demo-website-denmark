@@ -29,8 +29,8 @@ export default function ReadingProgress() {
         className="h-full origin-left"
         style={{
           transform: `scaleX(${p})`,
-          background: 'linear-gradient(90deg, #0082CA, #35b6ff)',
-          boxShadow: '0 0 12px rgba(0,130,202,0.55)',
+          background: 'linear-gradient(90deg, #0088C2, #38BAFF)',
+          boxShadow: '0 0 12px rgba(0,136,194,0.55)',
         }}
       />
     </div>

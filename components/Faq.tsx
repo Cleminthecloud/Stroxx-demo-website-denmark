@@ -27,8 +27,8 @@ export default function Faq({ items }: { items: FaqItem[] }) {
               <span
                 className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 ${
                   isOpen
-                    ? 'rotate-45 border-stroxx-blue/60 text-stroxx-blue shadow-[0_0_18px_rgba(0,130,202,0.35)]'
-                    : 'border-line text-fog group-hover:border-stroxx-blue/60 group-hover:text-stroxx-blueGlow group-hover:shadow-[0_0_18px_rgba(0,130,202,0.3)]'
+                    ? 'rotate-45 border-stroxx-blue/60 text-stroxx-blue shadow-[0_0_18px_rgba(0,136,194,0.35)]'
+                    : 'border-line text-fog group-hover:border-stroxx-blue/60 group-hover:text-stroxx-blueGlow group-hover:shadow-[0_0_18px_rgba(0,136,194,0.3)]'
                 }`}
               >
                 <Plus size={15} />

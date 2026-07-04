@@ -187,7 +187,7 @@ export default function BagJourney() {
       {/* blue light glow under/behind the bag */}
       <div ref={spill} className="absolute left-1/2 top-1/2 will-change-transform" style={{
         width: 'min(90vw, 1300px)', height: 'min(82vh, 1020px)',
-        background: 'radial-gradient(42% 42% at 50% 50%, rgba(0,130,202,0.28), transparent 70%)', transform: 'translate(-50%,-50%)' }} />
+        background: 'radial-gradient(42% 42% at 50% 50%, rgba(0,136,194,0.28), transparent 70%)', transform: 'translate(-50%,-50%)' }} />
       {/* soft shadow pool under the bag */}
       <div ref={pool} className="absolute left-1/2 top-1/2 lg:blur-[20px]" style={{
         width: 'min(46vh, 680px)', height: 'min(46vh, 680px)',
@@ -221,7 +221,7 @@ export default function BagJourney() {
           <div className="absolute right-[4%] lg:-right-[6%] scale-90 lg:scale-100 origin-bottom-right" style={{ bottom: '20%', zIndex: 50 }}>
             <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
               style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)' }}>
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,136,194,0.14)' }}>
               <div className="text-[10px] uppercase tracking-[0.16em] text-fog/90 mb-1">In the bag</div>
               <div className="h-display text-white text-2xl leading-none tabular-nums">
                 {landed}<span className="text-fog text-base ml-1">/ {TOOLS.length}</span>

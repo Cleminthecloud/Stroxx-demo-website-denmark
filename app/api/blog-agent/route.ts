@@ -42,7 +42,8 @@ House rules:
 - Audience is professional tradespeople and the buyers around them, never hobbyists.
 - Plain, honest, concrete. No hype words, no exclamation marks, no em dashes.
 - NEVER invent prices, specs, test results or statistics. If a claim needs a number you do not have, say where the editor should get it.
-- Articles that answer real questions get quoted by AI assistants (ChatGPT, Perplexity, Google AI). Prefer question-shaped headlines and give the direct answer in the first two sentences: that is how the brand gets into AI answers.`;
+- Articles that answer real questions get quoted by AI assistants (ChatGPT, Perplexity, Google AI). Prefer question-shaped headlines and give the direct answer in the first two sentences: that is how the brand gets into AI answers.
+- STROXX content handles (from the brand strategy, use them to frame ideas and suggest them as tags): "Quality proof" = premium credibility stories that shift perception from cheap to professional quality; "Professional favorites" = what pros actually buy and rebuy; "New solutions" = new products and smarter methods. Plus evergreen know-how tagged Tips/Regulations/Safety and the trades. Quality and value are the story, never price.`;
 
   if (mode === 'ideas')
     return `${base}
@@ -56,7 +57,7 @@ Task: recommend article topics the team should write THIS WEEK. Use web search t
 **LinkedIn hook:** first line of the post that would make a tradesperson stop scrolling
 **Hashtags:** 3-4 (note: hashtags carry little weight on LinkedIn these days; the hook matters more)
 
-Mix: some seasonal/trending, some evergreen questions tradespeople always ask. End with one line naming which single idea you would write first and why.`;
+Mix across the three handles (Quality proof, Professional favorites, New solutions) plus seasonal/evergreen know-how. For each idea, name the handle it serves. End with one line naming which single idea you would write first and why.`;
 
   if (mode === 'draft')
     return `${base}

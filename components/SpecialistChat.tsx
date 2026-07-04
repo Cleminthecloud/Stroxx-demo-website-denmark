@@ -262,7 +262,7 @@ export default function SpecialistChat({
                     <Link key={p.slug} href={`/produkt/${p.slug}`}
                       className="group flex items-center gap-3 rounded-xl bg-ink/60 border border-white/10 p-2.5 hover:border-stroxx-blue/50 hover:bg-ink/80 transition-colors">
                       <span className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-white/[0.04] border border-white/[0.06] overflow-hidden">
-                        <span className="absolute inset-1 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,130,202,0.18), rgba(0,130,202,0) 70%)' }} />
+                        <span className="absolute inset-1 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.18), rgba(0,136,194,0) 70%)' }} />
                         <KnockoutImage src={toolTexture(p.imgId)} alt={p.name} className="relative z-10 h-11 w-11" />
                       </span>
                       <span className="min-w-0 flex-1">

@@ -75,7 +75,7 @@ const components = {
   block: {
     h2: (({ children, value }: { children?: React.ReactNode; value?: Block }) => (
       <h2 id={anchorId(blockText(value ?? {}))} className="scroll-mt-28 !mt-16 mb-1">
-        <span aria-hidden className="block h-[3px] w-10 rounded-full mb-5" style={{ background: 'linear-gradient(90deg, #0082CA, rgba(0,130,202,0))' }} />
+        <span aria-hidden className="block h-[3px] w-10 rounded-full mb-5" style={{ background: 'linear-gradient(90deg, #0088C2, rgba(0,136,194,0))' }} />
         {children}
       </h2>
       /* the library's block-component type is stricter than what it calls with */

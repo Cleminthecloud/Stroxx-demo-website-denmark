@@ -22,7 +22,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
           <div key={p.code} className="snap-start shrink-0 w-[240px] sm:w-[260px] group">
             <div className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden">
               <Link href={`/produkt/${p.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
-                <div className="absolute inset-5 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,130,202,0.16), rgba(0,130,202,0) 70%)' }} />
+                <div className="absolute inset-5 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.16), rgba(0,136,194,0) 70%)' }} />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={toolTexture(p.imgId)}

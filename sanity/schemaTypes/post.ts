@@ -90,7 +90,7 @@ export const post = defineType({
       type: 'array',
       of: [defineArrayMember({ type: 'string' })],
       options: { layout: 'tags' },
-      description: 'Type a tag and press Enter. These become the filter chips on /nyheder. Suggested set: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
+      description: 'Type a tag and press Enter. These become the filter chips on /nyheder. Use the brand handles where they fit: Quality proof (premium credibility stories), Professional favorites (what pros actually rebuy), New solutions (new products and methods), plus trades and topics: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
     }),
     defineField({
       name: 'relatedSkus',

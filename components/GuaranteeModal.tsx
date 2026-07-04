@@ -63,7 +63,7 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
               opacity: show ? 1 : 0,
               transform: show ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.97)',
               background: 'rgba(13,15,19,0.97)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,130,202,0.18)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,136,194,0.18)',
             }}
           >
             <div aria-hidden className="sheet-handle" />

@@ -22,7 +22,7 @@ body {
   overflow-x: clip;
 }
 
-::selection { background: #0082CA; color: #fff; }
+::selection { background: #0088C2; color: #fff; }
 
 /* Lenis */
 html.lenis, html.lenis body { height: auto; }
@@ -82,23 +82,23 @@ html.lenis, html.lenis body { height: auto; }
 }
 .glass-btn:hover {
   transform: translateY(-2px);
-  border-color: rgba(0,130,202,0.55);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -10px 22px rgba(0,0,0,0.22), 0 16px 38px rgba(0,130,202,0.32);
+  border-color: rgba(0,136,194,0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -10px 22px rgba(0,0,0,0.22), 0 16px 38px rgba(0,136,194,0.32);
 }
 .glass-btn__glow {
   position: absolute; inset: -1px; z-index: -1; border-radius: inherit; pointer-events: none;
   opacity: 0; transition: opacity .35s ease;
-  background: radial-gradient(150px circle at var(--x, 50%) var(--y, 50%), rgba(0,130,202,0.6), rgba(0,130,202,0.0) 60%);
+  background: radial-gradient(150px circle at var(--x, 50%) var(--y, 50%), rgba(0,136,194,0.6), rgba(0,136,194,0.0) 60%);
 }
 .glass-btn:hover .glass-btn__glow { opacity: 1; }
 
 /* Tertiary CTA — STROXX-blue text link with a sliding arrow (no box) */
 .link-arrow {
   display: inline-flex; align-items: center; gap: 0.45rem;
-  color: #0082CA; font-size: 0.875rem; letter-spacing: -0.01em;
+  color: #0088C2; font-size: 0.875rem; letter-spacing: -0.01em;
   transition: color .25s ease;
 }
-.link-arrow:hover { color: #2BA6E8; }
+.link-arrow:hover { color: #2FACE8; }
 .link-arrow svg { transition: transform .25s cubic-bezier(.16,1,.3,1); }
 .link-arrow:hover svg { transform: translateX(3px); }
 
@@ -137,8 +137,8 @@ html.lenis, html.lenis body { height: auto; }
 /* Blue light on hover — STROXX blue rim + outer glow + slight lift. */
 .glass-panel--glow { transition: box-shadow .35s ease, border-color .35s ease, transform .35s ease; }
 .glass-panel--glow:hover {
-  border-color: rgba(0, 130, 202, 0.45);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(0, 0, 0, 0.42), 0 0 48px rgba(0, 130, 202, 0.30);
+  border-color: rgba(0, 136, 194, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(0, 0, 0, 0.42), 0 0 48px rgba(0, 136, 194, 0.30);
   transform: translateY(-4px);
 }
 @media (prefers-reduced-motion: reduce) { .glass-panel--glow:hover { transform: none; } }
@@ -161,7 +161,7 @@ html.lenis, html.lenis body { height: auto; }
 /* mouse-follow spotlight (drives --mx/--my in px) */
 .spotlight::before {
   content: ''; position: absolute; inset: -340px; pointer-events: none; z-index: 0;
-  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(0,130,202,0.18), transparent 60%);
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(0,136,194,0.18), transparent 60%);
   opacity: 0; transition: opacity .4s ease;
 }
 .spotlight:hover::before { opacity: 1; }
@@ -174,13 +174,13 @@ html.lenis, html.lenis body { height: auto; }
 .glass-card::after {
   content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; z-index: 30;
   background: conic-gradient(from var(--a),
-    rgba(0,130,202,0) 0deg,
-    rgba(0,130,202,0) 55deg,
+    rgba(0,136,194,0) 0deg,
+    rgba(0,136,194,0) 55deg,
     rgba(43,166,232,0.95) 95deg,
     rgba(198,221,246,1) 115deg,
     rgba(43,166,232,0.95) 135deg,
-    rgba(0,130,202,0) 180deg,
-    rgba(0,130,202,0) 360deg);
+    rgba(0,136,194,0) 180deg,
+    rgba(0,136,194,0) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
@@ -190,13 +190,13 @@ html.lenis, html.lenis body { height: auto; }
 .glass-card::before {
   content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px; pointer-events: none; z-index: 29;
   background: conic-gradient(from var(--a),
-    rgba(0,130,202,0) 0deg,
-    rgba(0,130,202,0) 55deg,
+    rgba(0,136,194,0) 0deg,
+    rgba(0,136,194,0) 55deg,
     rgba(43,166,232,0.9) 95deg,
     rgba(198,221,246,1) 115deg,
     rgba(43,166,232,0.9) 135deg,
-    rgba(0,130,202,0) 180deg,
-    rgba(0,130,202,0) 360deg);
+    rgba(0,136,194,0) 180deg,
+    rgba(0,136,194,0) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
@@ -205,8 +205,8 @@ html.lenis, html.lenis body { height: auto; }
 .glass-card:hover::after  { opacity: 1; }
 .glass-card:hover::before { opacity: 0.85; }
 .glass-card:hover {
-  border-color: rgba(0,130,202,0.45);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.42), 0 0 50px rgba(0,130,202,0.28);
+  border-color: rgba(0,136,194,0.45);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.42), 0 0 50px rgba(0,136,194,0.28);
 }
 @media (prefers-reduced-motion: reduce) {
   .glass-card::after, .glass-card::before { animation: none; }
@@ -215,7 +215,7 @@ html.lenis, html.lenis body { height: auto; }
    behind the cut-out product so it glows around it */
 .glass-glow__light {
   position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
-  background: radial-gradient(42% 42% at var(--gx, 50%) var(--gy, 50%), rgba(0,130,202,0.42), rgba(0,130,202,0) 70%);
+  background: radial-gradient(42% 42% at var(--gx, 50%) var(--gy, 50%), rgba(0,136,194,0.42), rgba(0,136,194,0) 70%);
   filter: blur(16px); opacity: 0; transition: opacity .4s ease;
 }
 .glass-card:hover .glass-glow__light { opacity: 1; }
@@ -237,23 +237,23 @@ html.lenis, html.lenis body { height: auto; }
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   border-radius: 9999px; padding: 0.8rem 1.55rem;
   font-weight: 600; font-size: 0.9rem; letter-spacing: -0.01em; color: #fff;
-  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02)), rgba(0,130,202,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02)), rgba(0,136,194,0.18);
   -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.24),
     inset 0 -1px 0 rgba(0,0,0,0.22),
     0 10px 26px rgba(0,0,0,0.38),
-    0 6px 20px rgba(0,130,202,0.28);
+    0 6px 20px rgba(0,136,194,0.28);
   /* --tx/--ty = magnetic lean set by GlassButton (0 when idle / reduced motion) */
   transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0);
   transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;
 }
 .glass-cta:hover { transform: translate3d(var(--tx, 0px), calc(var(--ty, 0px) - 1.5px), 0);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.22), 0 14px 34px rgba(0,0,0,0.44), 0 9px 28px rgba(0,130,202,0.42); }
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.22), 0 14px 34px rgba(0,0,0,0.44), 0 9px 28px rgba(0,136,194,0.42); }
 .glass-cta:active { transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(.985); }
 .glass-cta::before {
   content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
-  background: conic-gradient(from var(--a), rgba(43,166,232,0), rgba(43,166,232,0.85), rgba(150,210,255,0.28), rgba(0,130,202,0.9), rgba(43,166,232,0));
+  background: conic-gradient(from var(--a), rgba(43,166,232,0), rgba(43,166,232,0.85), rgba(150,210,255,0.28), rgba(0,136,194,0.9), rgba(43,166,232,0));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
@@ -295,18 +295,18 @@ html.lenis, html.lenis body { height: auto; }
 }
 .sf-pin span {
   width: 12px; height: 12px; border-radius: 9999px;
-  background: #0082CA;
-  box-shadow: 0 0 0 3px rgba(0,130,202,0.25), 0 0 14px rgba(0,130,202,0.65);
+  background: #0088C2;
+  box-shadow: 0 0 0 3px rgba(0,136,194,0.25), 0 0 14px rgba(0,136,194,0.65);
   transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
 }
 .sf-pin:hover span { transform: scale(1.25); }
 .sf-pin--active span {
   background: #fff; transform: scale(1.3);
-  box-shadow: 0 0 0 4px rgba(0,130,202,0.85), 0 0 26px rgba(0,130,202,0.9);
+  box-shadow: 0 0 0 4px rgba(0,136,194,0.85), 0 0 26px rgba(0,136,194,0.9);
 }
 .sf-pin--active::after {
   content: ''; position: absolute; inset: -6px; border-radius: 9999px;
-  border: 1px solid rgba(0,130,202,0.5);
+  border: 1px solid rgba(0,136,194,0.5);
   animation: sf-ping 1.6s ease-out infinite;
 }
 @keyframes sf-ping {
@@ -315,8 +315,8 @@ html.lenis, html.lenis body { height: auto; }
 }
 .sf-me {
   width: 18px; height: 18px; border-radius: 9999px;
-  background: #fff; border: 3px solid #0082CA;
-  box-shadow: 0 0 16px rgba(0,130,202,0.8);
+  background: #fff; border: 3px solid #0088C2;
+  box-shadow: 0 0 16px rgba(0,136,194,0.8);
 }
 /* dark-theme the Leaflet chrome. !important: leaflet.css is imported
    DYNAMICALLY (after globals) and its #ddd background otherwise wins — the
@@ -348,8 +348,8 @@ body:has(main.fullscreen-map) footer { display: none; }
 /* specialist face pins on the map */
 .sf-face {
   width: 40px; height: 40px; border-radius: 9999px; overflow: hidden;
-  border: 2px solid rgba(0,130,202,0.85); background: #101216;
-  box-shadow: 0 0 0 3px rgba(0,130,202,0.22), 0 6px 18px rgba(0,0,0,0.55), 0 0 16px rgba(0,130,202,0.5);
+  border: 2px solid rgba(0,136,194,0.85); background: #101216;
+  box-shadow: 0 0 0 3px rgba(0,136,194,0.22), 0 6px 18px rgba(0,0,0,0.55), 0 0 16px rgba(0,136,194,0.5);
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   cursor: pointer;
 }
@@ -357,7 +357,7 @@ body:has(main.fullscreen-map) footer { display: none; }
 .sf-face:hover { transform: scale(1.12); }
 .sf-face--active {
   border-color: #fff; transform: scale(1.18);
-  box-shadow: 0 0 0 4px rgba(0,130,202,0.85), 0 8px 22px rgba(0,0,0,0.6), 0 0 28px rgba(0,130,202,0.9);
+  box-shadow: 0 0 0 4px rgba(0,136,194,0.85), 0 8px 22px rgba(0,0,0,0.6), 0 0 28px rgba(0,136,194,0.9);
 }
 
 /* hero load intro — the headline lines rise while the bag falls in, so the
@@ -388,7 +388,7 @@ body:has(main.fullscreen-map) footer { display: none; }
 .skip-link {
   position: fixed; top: -100px; left: 16px; z-index: 200;
   padding: 10px 18px; border-radius: 9999px;
-  background: #0082CA; color: #fff; font-size: 14px; font-weight: 600;
+  background: #0088C2; color: #fff; font-size: 14px; font-weight: 600;
   transition: top 0.15s ease;
 }
 .skip-link:focus { top: 16px; outline: 2px solid #fff; outline-offset: 2px; }

@@ -243,7 +243,7 @@ export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
   const chip = (on: boolean) =>
     `shrink-0 px-3.5 py-1.5 rounded-full text-[12px] tracking-wide transition-all cursor-pointer border ${
       on
-        ? 'bg-stroxx-blue text-white border-stroxx-blue shadow-[0_0_18px_rgba(0,130,202,0.35)]'
+        ? 'bg-stroxx-blue text-white border-stroxx-blue shadow-[0_0_18px_rgba(0,136,194,0.35)]'
         : 'bg-white/[0.04] text-fog border-white/10 hover:text-white hover:border-white/25'
     }`;
 
@@ -288,7 +288,7 @@ export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
                 onClick={() => setTab(t)}
                 className={`flex-1 px-4 py-2 rounded-full text-[12px] tracking-wide transition-all cursor-pointer ${
                   tab === t
-                    ? 'bg-stroxx-blue text-white shadow-[0_0_18px_rgba(0,130,202,0.35)]'
+                    ? 'bg-stroxx-blue text-white shadow-[0_0_18px_rgba(0,136,194,0.35)]'
                     : 'text-fog hover:text-white'
                 }`}
               >
@@ -367,7 +367,7 @@ export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
                   onClick={() => focusStore(s)}
                   className={`rounded-xl p-4 lg:p-5 cursor-pointer transition-all duration-300 border bg-white/[0.03] ${
                     active
-                      ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,130,202,0.22)] bg-white/[0.06]'
+                      ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,136,194,0.22)] bg-white/[0.06]'
                       : 'border-white/[0.06] hover:border-white/20 hover:bg-white/[0.05]'
                   }`}
                 >
@@ -412,7 +412,7 @@ export default function StoreFinder({ storeData }: { storeData?: Store[] }) {
                 onClick={() => focusStore(s)}
                 className={`rounded-xl p-4 lg:p-5 cursor-pointer transition-all duration-300 border bg-white/[0.03] ${
                   active
-                    ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,130,202,0.22)] bg-white/[0.06]'
+                    ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,136,194,0.22)] bg-white/[0.06]'
                     : 'border-white/[0.06] hover:border-white/20 hover:bg-white/[0.05]'
                 }`}
               >

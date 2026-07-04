@@ -111,7 +111,7 @@ export default function BagFill() {
         {/* soft blue light pool behind the bag */}
         <div className="pointer-events-none absolute" style={{
           width: '70vw', height: '70vh',
-          background: 'radial-gradient(42% 42% at 50% 52%, rgba(0,130,202,0.22), transparent 70%)',
+          background: 'radial-gradient(42% 42% at 50% 52%, rgba(0,136,194,0.22), transparent 70%)',
         }} />
 
         {/* the bag stage */}
@@ -159,7 +159,7 @@ export default function BagFill() {
             <div className="rounded-2xl px-4 py-2.5 backdrop-blur-xl border border-white/[0.12] text-right"
               style={{
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,130,202,0.14)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.20), 0 12px 30px rgba(0,0,0,0.5), 0 0 28px rgba(0,136,194,0.14)',
               }}>
               <div className="text-[9px] uppercase tracking-[0.18em] text-fog mb-1">In the bag</div>
               <div className="h-display text-white text-xl leading-none tabular-nums">

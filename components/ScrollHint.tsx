@@ -11,7 +11,7 @@ export default function ScrollHint() {
         </circle>
       </svg>
       <svg width="16" height="9" viewBox="0 0 16 9" fill="none" aria-hidden>
-        <path d="M1 1l7 6 7-6" stroke="#0082CA" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 1l7 6 7-6" stroke="#0088C2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite" />
         </path>
       </svg>
