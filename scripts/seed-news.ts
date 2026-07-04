@@ -31,6 +31,7 @@ const POSTS = [
     publishedAt: '2026-07-01T07:00:00Z',
     image: 'public/Images/campaign/rings.jpg',
     alt: 'Line laser projecting green rings in a dark workshop',
+    tags: ['Lasers', 'Regulations', 'Tips'],
     excerpt: 'Class 2 or class 3R, green or red: what the rules actually say, and what it means for the laser you bring to work.',
     seoTitle: 'Which laser class is allowed on site?',
     seoDescription: 'Class 2 is the safe default on construction sites. What the classes mean, when green beats red, and what to check before you buy.',
@@ -50,6 +51,7 @@ const POSTS = [
     publishedAt: '2026-06-24T07:00:00Z',
     image: 'public/Images/campaign/tea.jpg',
     alt: 'Tradesperson taking a break with tools on the workbench',
+    tags: ['Guarantee', 'Specialist advice'],
     excerpt: 'No fault needed, your own judgment is enough. What the guarantee covers, how returns actually happen, and why we can afford to offer it.',
     seoTitle: 'How the 30-day satisfaction guarantee works',
     seoDescription: 'Use the tool on real work for 30 days. Not convinced? Money back, no defect required. Here is exactly how the process works.',
@@ -69,6 +71,7 @@ const POSTS = [
     publishedAt: '2026-06-15T07:00:00Z',
     image: 'public/Images/campaign/glasses.jpg',
     alt: 'Safety glasses on a site table in cold morning light',
+    tags: ['Sealants', 'Painting', 'Tips'],
     excerpt: 'Some cure, some just pretend to. What happens to common sealant chemistries below 5 degrees, and how to keep joints honest in winter.',
     seoTitle: 'Sealant in freezing weather: what actually cures',
     seoDescription: 'Below 5 degrees most sealants slow down or stop curing. Which chemistries handle the cold, and the winter habits that save call-backs.',
@@ -98,6 +101,7 @@ async function run() {
       excerpt: p.excerpt,
       seoTitle: p.seoTitle,
       seoDescription: p.seoDescription,
+      tags: (p as { tags?: string[] }).tags ?? [],
       body: p.body,
     });
     console.log('seeded', p._id);

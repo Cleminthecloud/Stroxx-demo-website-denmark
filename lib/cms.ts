@@ -56,6 +56,7 @@ export type SiteSettings = {
   proClubHeadline?: string;
   proClubText?: string;
   newsHeadline?: string;
+  newsIntro?: string;
   newsEmpty?: string;
   newsletterSuccess?: string;
   notFoundHeadline?: string;
@@ -114,6 +115,7 @@ export type PostDoc = {
   heroImage?: unknown; // Sanity image (+alt field); render via assetUrl()
   excerpt?: string;
   body?: any[];
+  tags?: string[];
   relatedSkus?: string[];
   seoTitle?: string;
   seoDescription?: string;

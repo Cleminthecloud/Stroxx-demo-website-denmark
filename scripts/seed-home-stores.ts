@@ -161,6 +161,7 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   proClubHeadline: 'Know it before everyone else',
   proClubText: 'Early access and specialist tips, straight to your inbox. A couple of emails a month, tops. No spam.',
   newsHeadline: "What's happening.",
+  newsIntro: 'Tips, specialist know-how and news from the trades. Filter by what you work with.',
   newsEmpty: 'Nothing published yet. The first stories are on their way.',
   newsletterSuccess: 'Check your inbox to confirm. Welcome aboard.',
   notFoundHeadline: 'This page took\nthe *day off.*',

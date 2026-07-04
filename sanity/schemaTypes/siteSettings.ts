@@ -295,6 +295,7 @@ export const siteSettings = defineType({
     defineField({ name: 'proClubText', title: 'Pro Club: text', type: 'text', rows: 2, group: 'copy',
       description: 'The signup box on product pages. Submissions go to the Newsletter platform.' }),
     defineField({ name: 'newsHeadline', title: 'News: index headline', type: 'string', group: 'copy' }),
+    defineField({ name: 'newsIntro', title: 'News: intro line', type: 'text', rows: 2, group: 'copy' }),
     defineField({ name: 'newsEmpty', title: 'News: empty-state text', type: 'string', group: 'copy' }),
     defineField({ name: 'newsletterSuccess', title: 'Newsletter: success message', type: 'string', group: 'copy' }),
     defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy' }),

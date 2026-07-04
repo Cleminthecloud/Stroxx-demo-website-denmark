@@ -63,6 +63,14 @@ export const post = defineType({
       ],
     }),
     defineField({
+      name: 'tags',
+      title: 'Tags (filters on the news page)',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+      options: { layout: 'tags' },
+      description: 'Type a tag and press Enter. These become the filter chips on /nyheder. Suggested set: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
+    }),
+    defineField({
       name: 'relatedSkus',
       title: 'Related products (SKUs)',
       type: 'array',
