@@ -10,6 +10,7 @@ import { post } from './post';
 import { redirect } from './redirect';
 import { supportPage } from './supportPage';
 import { qrCode } from './qrCode';
+import { feedback } from './feedback';
 
 export const schemaTypes = [
   siteSettings,
@@ -27,4 +28,5 @@ export const schemaTypes = [
   redirect,
   supportPage,
   qrCode,
+  feedback,
 ];

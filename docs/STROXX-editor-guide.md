@@ -1,7 +1,7 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.8 · July 2026
+Version 1.9 · July 2026
 
 ---
 
@@ -242,6 +242,18 @@ Today the packaging design and the PDFs are produced externally (Kreativ Zone / 
 1. **The one-time rescue import.** The nine manuals and software guides that exist today (ST-2 Smart Lock in five languages, XLOCK software incl. Spanish) live on the old stroxx.eu webshop's file storage, which disappears when that shop is closed. The developer runs a one-time import that downloads them and creates the two support pages with the files attached; from that moment the CMS is the only home the files need. If /support says "Nothing published yet", this import simply has not been run yet.
 2. **Product suppliers, via Carl Ras.** Going forward, manuals, declarations and software guides for a product come from whoever sources that product (purchasing/product management at Carl Ras, or the supplier directly). Whoever receives a new or updated PDF sends it to an editor, and the editor uploads it to the product's support page, two minutes, no developer. Which department officially owns "manuals source of truth" is one of the open questions Carl Ras IT is asked in the technical hand-over document; until it is answered, the working rule is: the person who receives the file uploads it (or mails it to whoever has Studio access).
 3. **The packaging designer**, for anything created as part of new packaging or campaigns, per the workflow above.
+
+## 10f. The test page and feedback (finding bugs together)
+
+The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
+
+**Where the reports go.** Every submission lands in Content → **Feedback (test reports)**, newest first, with the tester's device and browser attached automatically (so "it looked odd on my phone" arrives with the phone included). Reviewing is a two-minute routine:
+
+1. Open Content → Feedback. New reports are marked with a dot.
+2. Read the report, look at the page it mentions on the device type it mentions.
+3. Set the status: **Reviewed** (seen, on the list), **Fixed** (done), or **Won't fix** (a choice, not a bug). Add an internal note if the reasoning is worth keeping, the tester never sees it.
+
+Reports are read-only by design (the record of what testers actually said stays intact); only status and the internal note are yours to edit. Rule of thumb for inviting: send /test to colleagues, friendly customers and the client team, and ask for bluntness. One report per finding beats one long email.
 
 ## 11. Products, prices and images (PIM and DAM)
 
