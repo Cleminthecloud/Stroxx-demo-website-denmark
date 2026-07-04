@@ -9,8 +9,12 @@ next-env.d.ts
 .vercel
 
 # internal-only material — do NOT commit
+# (/docs/* + negation instead of /docs: git cannot re-include a file inside an
+#  excluded DIRECTORY, only inside an excluded glob. The editor guide must ship:
+#  the /guide route and the Studio's Guide tab read it at runtime on Vercel.)
 /INFO
-/docs
+/docs/*
+!/docs/STROXX-editor-guide.md
 /lib/_products.txt
 
 # scratch
