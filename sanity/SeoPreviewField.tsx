@@ -1,0 +1,69 @@
+'use client';
+
+import { useFormValue } from 'sanity';
+import { SITE_URL } from '../lib/site';
+import { assetUrl } from './lib/image';
+import { ShareCard, DOMAIN } from './ShareCard';
+
+/** Live SEO preview rendered UNDER the SEO fields (Site settings and landing
+ *  pages): a Google-style result snippet plus a LinkedIn-style link card,
+ *  rebuilt from the form values as you type, with character budgets. The
+ *  field stores nothing. ogImage may be a string path (Site settings) or an
+ *  uploaded image (landing pages); both render. */
+
+const LIGHT = {
+  card: { background: '#fff', borderRadius: 10, padding: '14px 16px', maxWidth: 600 },
+  url: { color: '#202124', fontSize: 12.5, lineHeight: 1.3 },
+  title: { color: '#1a0dab', fontSize: 18, lineHeight: 1.3, margin: '2px 0 3px', fontWeight: 400 },
+  desc: { color: '#4d5156', fontSize: 13.5, lineHeight: 1.5 },
+} as const;
+
+function budget(n: number, max: number) {
+  const over = n > max;
+  return (
+    <span style={{ color: over ? '#e8590c' : 'inherit', opacity: over ? 1 : 0.65 }}>
+      {n}/{max}
+      {over ? ' · will be cut off' : ''}
+    </span>
+  );
+}
+
+export default function SeoPreviewField() {
+  const seoTitle = useFormValue(['seoTitle']) as string | undefined;
+  const seoDescription = useFormValue(['seoDescription']) as string | undefined;
+  const ogImage = useFormValue(['ogImage']);
+  const docTitle = useFormValue(['title']) as string | undefined; // landing pages
+  const slug = (useFormValue(['slug']) as { current?: string } | undefined)?.current;
+
+  const title = seoTitle || docTitle || 'The SEO title goes here';
+  const desc = seoDescription || 'The description Google shows under the title. Fill the field above and watch it land here.';
+  const img =
+    typeof ogImage === 'string'
+      ? (ogImage ? (ogImage.startsWith('/') ? `${SITE_URL}${ogImage}` : ogImage) : undefined)
+      : assetUrl(ogImage, 1200) || undefined;
+  const path = slug ? (slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug}`) : '/';
+  const url = `${SITE_URL}${path}`;
+
+  return (
+    <div style={{ display: 'grid', gap: 14, fontFamily: 'inherit' }}>
+      <div style={{ fontSize: 12.5, opacity: 0.8 }}>
+        Google result · title {budget(title.length, 60)} · description {budget(desc.length, 160)}
+      </div>
+      <div style={LIGHT.card}>
+        <div style={LIGHT.url}>
+          {DOMAIN}
+          {path !== '/' ? ` › ${path.split('/').filter(Boolean).join(' › ')}` : ''}
+        </div>
+        <div style={{ ...LIGHT.title, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</div>
+        <div style={LIGHT.desc}>{desc.slice(0, 300)}</div>
+      </div>
+      <div style={{ fontSize: 12.5, opacity: 0.8 }}>Shared link (LinkedIn-style card)</div>
+      <ShareCard platform="LinkedIn" title={title} desc={desc} img={img ?? null} url={url} />
+      {!img && (
+        <div style={{ fontSize: 12.5, opacity: 0.8 }}>
+          No share image set, platforms will show a bare text card. 1200x630 works best.
+        </div>
+      )}
+    </div>
+  );
+}

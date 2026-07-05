@@ -3,13 +3,12 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
-import { BookIcon, BulbOutlineIcon, ShareIcon, BarChartIcon, SparklesIcon } from '@sanity/icons';
+import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
 import WelcomeTool from './sanity/WelcomeTool';
 import ArticleAgentTool from './sanity/ArticleAgentTool';
-import SharePreviewTool from './sanity/SharePreviewTool';
 import DashboardTool from './sanity/DashboardTool';
 
 /** Embedded Studio config, served at /studio (app/studio/[[...tool]]).
@@ -121,6 +120,8 @@ export default defineConfig({
   tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },
     { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
     { name: 'article-ai', title: 'Article AI', icon: BulbOutlineIcon, component: ArticleAgentTool },
-    { name: 'dashboard', title: 'Dashboard', icon: BarChartIcon, component: DashboardTool },
-    { name: 'share-preview', title: 'Share preview', icon: ShareIcon, component: SharePreviewTool }],
+    /* the old "Share preview" tab was retired Jul 5 2026: the same live card
+       sits at the bottom of every article, and SEO previews live under the
+       SEO fields on Site settings + landing pages (SeoPreviewField) */
+    { name: 'dashboard', title: 'Dashboard', icon: BarChartIcon, component: DashboardTool }],
 });

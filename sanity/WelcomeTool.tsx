@@ -118,9 +118,9 @@ The Guide tab answers almost everything. Questions? Just reply to this message.`
 
       <p style={{ ...S.sub, marginBottom: 44 }}>
         When you are comfortable: <a href={`${studioUrl}/dashboard`} style={{ color: BLUE }}>Dashboard</a> shows
-        what readers do on the site, <a href={`${studioUrl}/article-ai`} style={{ color: BLUE }}>Article AI</a> helps
-        you write news, and <a href={`${studioUrl}/share-preview`} style={{ color: BLUE }}>Share preview</a> shows
-        how articles look on LinkedIn before you post.
+        what readers do on the site, and <a href={`${studioUrl}/article-ai`} style={{ color: BLUE }}>Article AI</a> helps
+        you write news. Every article shows a live preview of its LinkedIn card at the bottom of its own
+        editing form, right where you set the share image.
       </p>
 
       {/* ── admin: invite a colleague ── */}

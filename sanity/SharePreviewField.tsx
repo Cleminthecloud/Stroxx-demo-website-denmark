@@ -55,7 +55,7 @@ export default function SharePreviewField() {
       </div>
       <p style={{ fontSize: 11.5, opacity: 0.6, lineHeight: 1.5, marginTop: 10 }}>
         Built live from this article&#39;s SEO title and share image (own share image first, then the
-        hero). Thin card? Fix those fields above. The Share preview tab has the share buttons.
+        hero). Thin card? Fix those fields above. Share buttons live on the article page itself.
       </p>
     </div>
   );

@@ -194,7 +194,7 @@ The **Article AI** tab in the Studio's top bar is your writing partner for the n
 
 The LinkedIn workflow that drives traffic: publish the article → open it on the site → use the Share row at the bottom (LinkedIn button or Copy link) → paste the post from the Article AI. The link preview card on LinkedIn is built from the article's SEO title and share image, so fill both in before sharing; a good share image does half the work.
 
-**See the card before you post:** the **Share preview** tab (next to Article AI) shows how any published article's link card looks on LinkedIn, Facebook, X or WhatsApp, with a share button and copy-link that match the platform you picked. If the preview looks thin, fix the SEO title or share image on the article and publish again. Instagram gets its own advice there (no link cards in the feed: use the share image as the post and put the link in a Story sticker or the bio).
+**See the card before you post:** every article shows a live preview of its link card at the bottom of its own editing form, built from the SEO title and share image as you type. If the card looks thin, fix those fields right above it and publish. The same kind of live preview (Google result + shared-link card) sits under the SEO fields on Site settings and on every landing page. Instagram note: no link cards in the feed, so use the share image as the post and put the link in a Story sticker or the bio.
 
 It follows the same rules as the chat: grounded in your llms.txt brand facts, and it never invents prices, specs or statistics.
 

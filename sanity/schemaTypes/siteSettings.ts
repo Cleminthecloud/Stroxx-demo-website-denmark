@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import SeoPreviewField from '../SeoPreviewField';
 
 const linkArray = (name: string, title: string, description: string, group: string) =>
   defineField({
@@ -109,6 +110,15 @@ export const siteSettings = defineType({
       description: 'Image shown when links are shared (Open Graph). Path under /public, ideally 1200x630, e.g. /brand/og.jpg.',
       type: 'string',
       group: 'seo',
+    }),
+    defineField({
+      name: 'seoPreview',
+      title: 'Preview (live)',
+      description: 'How the site-wide defaults look in a Google result and a shared link. Built from the fields above as you type; nothing to fill in here.',
+      type: 'string',
+      readOnly: true,
+      group: 'seo',
+      components: { input: SeoPreviewField },
     }),
     defineField({
       name: 'llmsTxt',

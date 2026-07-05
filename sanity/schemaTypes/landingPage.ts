@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import SeoPreviewField from '../SeoPreviewField';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
@@ -49,6 +50,14 @@ export const landingPage = defineType({
       description: 'Shown when this page is shared on LinkedIn/Facebook etc. 1200x630 works best. Empty = the site-wide share image from Site settings.',
       type: 'image',
       options: { hotspot: true },
+    }),
+    defineField({
+      name: 'seoPreview',
+      title: 'SEO preview (live)',
+      description: 'How this page looks in a Google result and a shared link, built from the fields above as you type. Nothing to fill in here.',
+      type: 'string',
+      readOnly: true,
+      components: { input: SeoPreviewField },
     }),
     defineField({
       name: 'sections',
