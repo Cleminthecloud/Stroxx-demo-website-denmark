@@ -60,6 +60,12 @@ export const landingPage = defineType({
           title: 'Hero: full-screen photo or video',
           type: 'object',
           description: 'Full-bleed opener with a photo or looping video behind the headline. Choose text position and height.',
+          initialValue: {
+            eyebrow: 'New here',
+            headline: 'A headline that *earns its keep.*',
+            sub: 'One or two lines that tell the visitor exactly what this page gives them.',
+            ctaLabel: 'See the tools',
+          },
           fields: [
             eyebrow,
             headline,
@@ -136,6 +142,14 @@ export const landingPage = defineType({
           title: 'Big statement (huge headline + paragraphs)',
           type: 'object',
           description: 'The signature typographic section: giant scroll-animated headline with supporting paragraphs. The last paragraph renders white for emphasis.',
+          initialValue: {
+            eyebrow: 'The point',
+            headline: 'Say the one thing *that matters.*',
+            paragraphs: [
+              'Back the headline with a short paragraph that explains the claim in plain language.',
+              'End on the strongest line. This last paragraph renders white for emphasis.',
+            ],
+          },
           fields: [
             eyebrow,
             headline,
@@ -160,6 +174,16 @@ export const landingPage = defineType({
           title: 'Headline + animated number stats',
           type: 'object',
           description: 'Two columns: headline and paragraphs on the left, big counting-up numbers on the right.',
+          initialValue: {
+            eyebrow: 'The numbers',
+            headline: 'Claims are cheap. *Numbers stick.*',
+            paragraphs: ['Replace or keep these real STROXX numbers; invented stats erode trust faster than no stats.'],
+            stats: [
+              { _type: 'stat', value: 1400, suffix: '+', label: 'Item numbers' },
+              { _type: 'stat', value: 227, suffix: '+', label: 'Stores in Europe' },
+              { _type: 'stat', value: 30, suffix: ' days', label: 'Satisfaction guarantee' },
+            ],
+          },
           fields: [
             eyebrow,
             headline,
@@ -179,6 +203,7 @@ export const landingPage = defineType({
                 defineArrayMember({
                   type: 'object',
                   name: 'stat',
+                  initialValue: { value: 100, suffix: '+', label: 'Replace this label' },
                   fields: [
                     defineField({ name: 'value', title: 'Number', type: 'number' }),
                     defineField({ name: 'suffix', title: 'Suffix', type: 'string', description: 'E.g. + or %.' }),
@@ -196,6 +221,13 @@ export const landingPage = defineType({
           title: 'Image + text, side by side',
           type: 'object',
           description: 'Classic 50/50 split: an image on one side, headline + text + optional button on the other. Choose which side the image sits on.',
+          initialValue: {
+            eyebrow: 'Up close',
+            headline: 'Show it *in real hands.*',
+            body: 'Two or three sentences about the image beside this text. Swap the photo, keep it honest.',
+            ctaLabel: 'See the products',
+            image: '/Images/campaign/rings.jpg',
+          },
           fields: [
             eyebrow,
             headline,
@@ -243,6 +275,15 @@ export const landingPage = defineType({
           title: 'Feature cards (3-up glass grid)',
           type: 'object',
           description: 'A row of frosted-glass cards, each with a title and short text. Good for USPs, benefits, service promises.',
+          initialValue: {
+            eyebrow: 'Why it works',
+            headline: 'Three reasons *pros switch.*',
+            items: [
+              { _type: 'feature', title: 'Pro quality', body: 'The same feel and finish as the big brands. The badge premium is the only thing missing.' },
+              { _type: 'feature', title: 'A fair price', body: 'Specifications set by tradespeople, no logo tax, no middlemen.' },
+              { _type: 'feature', title: '30-day guarantee', body: 'Work it hard for a month. Not convinced? Money back at Carl Ras.' },
+            ],
+          },
           fields: [
             eyebrow,
             headline,
@@ -256,6 +297,7 @@ export const landingPage = defineType({
                 defineArrayMember({
                   type: 'object',
                   name: 'feature',
+                  initialValue: { title: 'New card', body: 'One or two sentences that earn this card its place.' },
                   fields: [
                     defineField({ name: 'title', title: 'Card title', type: 'string' }),
                     defineField({ name: 'body', title: 'Card text', type: 'text', rows: 3 }),
@@ -272,6 +314,12 @@ export const landingPage = defineType({
           title: 'Product cards (by SKU)',
           type: 'object',
           description: 'A grid of live product cards. Enter Carl Ras item numbers; name, photo and price data come from the product feed.',
+          initialValue: {
+            eyebrow: 'The proof',
+            headline: 'The tools *do the talking.*',
+            sub: 'Swap these item numbers for the products this page is about.',
+            skus: ['34011573', '34009021', '35011812', '35011846'],
+          },
           fields: [
             eyebrow,
             headline,
@@ -291,6 +339,11 @@ export const landingPage = defineType({
           title: 'Video gallery (partner films)',
           type: 'object',
           description: 'The film section: partner YouTube videos in a lightweight player.',
+          initialValue: {
+            eyebrow: 'On the job',
+            headline: 'See it *at work.*',
+            sub: 'The films come from the Film collection; this block just gives them a home on this page.',
+          },
           fields: [eyebrow, headline, defineField({ name: 'sub', title: 'Subline', type: 'text', rows: 3 })],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Video · ${s.title || ''}` }) },
         }),
@@ -299,6 +352,11 @@ export const landingPage = defineType({
           title: 'Pull quote (one big citation)',
           type: 'object',
           description: 'One large quote with attribution. Stronger than a testimonial grid when you have a single killer line.',
+          initialValue: {
+            text: 'One line from a real customer that says more than a page of marketing ever could.',
+            attribution: 'Name Surname',
+            role: 'Carpenter, Aarhus',
+          },
           fields: [
             defineField({ name: 'text', title: 'Quote', type: 'text', rows: 3 }),
             defineField({ name: 'attribution', title: 'Name', type: 'string' }),
@@ -311,6 +369,7 @@ export const landingPage = defineType({
           title: 'Testimonials (customer quotes grid)',
           type: 'object',
           description: 'The curated customer testimonial cards. Content comes from the testimonial collection.',
+          initialValue: { eyebrow: 'From the trade', headline: 'The crew *has spoken.*' },
           fields: [eyebrow, headline],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Testimonials · ${s.title || ''}` }) },
         }),
@@ -319,6 +378,11 @@ export const landingPage = defineType({
           title: 'Photo break (full-width image + caption)',
           type: 'object',
           description: 'A cinematic full-width photo moment with a short caption. Use as a breather between heavy sections.',
+          initialValue: {
+            eyebrow: 'Out there',
+            headline: 'Let one photo *breathe.*',
+            sub: 'A short caption is enough. Swap the photo for one from the campaign.',
+          },
           fields: [
             eyebrow,
             headline,
@@ -352,6 +416,13 @@ export const landingPage = defineType({
           title: 'Call-to-action banner (blue glow + buttons)',
           type: 'object',
           description: 'Centered conversion moment: headline, one line of text, primary + secondary button on the blue glow.',
+          initialValue: {
+            eyebrow: 'Ready?',
+            headline: 'Try it. *Risk free.*',
+            sub: 'The 30-day satisfaction guarantee carries the decision.',
+            primaryLabel: 'Buy STROXX',
+            secondaryLabel: 'Find a store',
+          },
           fields: [
             eyebrow,
             headline,
@@ -373,6 +444,18 @@ export const landingPage = defineType({
           title: 'Guarantee + numbered steps',
           type: 'object',
           description: 'The risk-reversal section: big promise, numbered step cards, buy buttons and the guarantee modal.',
+          initialValue: {
+            eyebrow: 'The guarantee',
+            headline: 'Try it for 30 days. *Then decide.*',
+            sub: 'Money back if it does not deliver. Your own judgement is enough.',
+            steps: [
+              { _type: 'step', title: 'Buy it', body: 'Pick it up at Carl Ras or order online.' },
+              { _type: 'step', title: 'Work it hard', body: 'Use it on real jobs for a month.' },
+              { _type: 'step', title: 'Decide', body: 'Not convinced? Money back, no defect required.' },
+            ],
+            ctaLabel: 'Buy STROXX',
+            secondaryLabel: 'Find a store',
+          },
           fields: [
             eyebrow,
             headline,
@@ -387,6 +470,7 @@ export const landingPage = defineType({
                 defineArrayMember({
                   type: 'object',
                   name: 'step',
+                  initialValue: { title: 'New step', body: 'What the customer does at this step, one sentence.' },
                   fields: [
                     defineField({ name: 'title', title: 'Title', type: 'string' }),
                     defineField({ name: 'body', title: 'Body', type: 'text', rows: 3 }),
@@ -417,6 +501,22 @@ export const landingPage = defineType({
           title: 'FAQ accordion',
           type: 'object',
           description: 'Questions and answers in an accordion. Also feeds Google/AI answer engines via structured data.',
+          initialValue: {
+            eyebrow: 'Questions',
+            headline: 'Asked *and answered.*',
+            items: [
+              {
+                _type: 'faqItem',
+                q: 'How does the 30-day satisfaction guarantee work?',
+                a: 'Use the tool on real jobs for 30 days. Not satisfied? Money back at Carl Ras, your own judgement is enough.',
+              },
+              {
+                _type: 'faqItem',
+                q: 'Replace this with a question customers actually ask?',
+                a: 'Answer in plain language, two or three sentences. Google and AI assistants read these answers too.',
+              },
+            ],
+          },
           fields: [
             eyebrow,
             headline,
@@ -428,6 +528,7 @@ export const landingPage = defineType({
                 defineArrayMember({
                   type: 'object',
                   name: 'faqItem',
+                  initialValue: { q: 'A question customers actually ask?', a: 'The answer in plain language, two or three sentences.' },
                   fields: [
                     defineField({ name: 'q', title: 'Question', type: 'string' }),
                     defineField({ name: 'a', title: 'Answer', type: 'text', rows: 4 }),
@@ -444,6 +545,11 @@ export const landingPage = defineType({
           title: 'Newsletter signup',
           type: 'object',
           description: 'Email signup form. Sends to the email platform chosen in Site settings → Newsletter (which must be configured and enabled).',
+          initialValue: {
+            eyebrow: 'Know-how',
+            headline: 'Professional know-how. *No spam.*',
+            sub: 'A couple of mails a month with tips, specialist advice and new tools.',
+          },
           fields: [
             eyebrow,
             headline,
@@ -463,6 +569,11 @@ export const landingPage = defineType({
           title: 'Contact form',
           type: 'object',
           description: 'Name/email/message form. Submissions go to the webhook the developer configures in the hosting environment (FORM_WEBHOOK_URL), e.g. a Zapier/Make flow into your inbox or CRM.',
+          initialValue: {
+            eyebrow: 'Contact',
+            headline: 'Talk to *a human.*',
+            sub: 'We answer within one working day.',
+          },
           fields: [
             eyebrow,
             headline,
