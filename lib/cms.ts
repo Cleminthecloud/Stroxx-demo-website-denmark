@@ -232,6 +232,9 @@ export async function getHomePage(): Promise<HomeCopy> {
         }
       } else if (typeof v === 'string' && v.trim()) {
         merged[key] = v;
+      } else if (typeof v === 'boolean') {
+        /* section switches: explicit editor choice wins, absent keeps the default (on) */
+        merged[key] = v;
       }
     }
     merged.campaignImages = Array.isArray(d.campaignImages) ? d.campaignImages : [];

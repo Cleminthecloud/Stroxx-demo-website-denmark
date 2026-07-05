@@ -5,6 +5,30 @@ const t = (name: string, title: string, rows = 2) =>
   defineField({ name, title, type: 'text', rows, description: rows <= 2 ? accentNote : undefined });
 const s = (name: string, title: string) => defineField({ name, title, type: 'string' });
 
+/** One collapsible, titled box per homepage section, numbered in the order
+ *  the page scrolls, so the edit panel mirrors the page. Collapsed by default:
+ *  opening the document shows the clean 10-section overview; clicking text on
+ *  the page still jumps straight into (and expands) the right box. */
+const fs = (name: string, title: string) => ({
+  name,
+  title,
+  options: { collapsible: true, collapsed: true },
+});
+
+/** Per-market section switch: every section except the hero can be hidden.
+ *  Defaults to on; the fallback layer treats "never touched" as on too. */
+const show = (name: string, fieldset: string, group: string) =>
+  defineField({
+    name,
+    title: 'Shown on the site',
+    type: 'boolean',
+    initialValue: true,
+    description:
+      'Toggle off to hide this whole section (markets differ). If a menu link points here, remove it too (Site settings → menus).',
+    fieldset,
+    group,
+  });
+
 /** Homepage copy (singleton). Layout, bag animation, particles, specialists
  *  and category data stay in code; this document owns the words. Every field
  *  left empty falls back to the built-in copy. */
@@ -18,37 +42,57 @@ export const homePage = defineType({
     { name: 'proof', title: 'Specialists + guarantee' },
     { name: 'month', title: 'Month + categories + CTA' },
   ],
+  fieldsets: [
+    fs('fsHero', '1 · Hero (the giant headline)'),
+    fs('fsClaim', '2 · Claim'),
+    fs('fsMarquee', '3 · Marquee band'),
+    fs('fsRange', '4 · The range (two columns)'),
+    fs('fsScale', '5 · The scale + stats band'),
+    fs('fsSpecialists', '6 · Specialists'),
+    fs('fsGuarantee', '7 · Guarantee'),
+    fs('fsCampaign', '8 · Campaign photo band'),
+    fs('fsMonth', '9 · Tool of the month'),
+    fs('fsCategories', '10 · Categories + final CTA'),
+  ],
   fields: [
     defineField({
       ...t('heroHeadline', 'Hero headline', 3),
       description:
         'The giant front-page headline. Press Enter where the line should break; each line animates in separately. Wrap a word in *asterisks* for the blue accent.',
       group: 'hero',
+      fieldset: 'fsHero',
     }),
-    defineField({ ...t('claim', 'Claim headline'), description: accentNote + ' The accented part renders blue.', group: 'hero' }),
-    defineField({ ...t('claimSub', 'Claim subtext', 4), group: 'hero' }),
+    show('showClaim', 'fsClaim', 'hero'),
+    defineField({ ...t('claim', 'Claim headline'), description: accentNote + ' The accented part renders blue.', group: 'hero', fieldset: 'fsClaim' }),
+    defineField({ ...t('claimSub', 'Claim subtext', 4), group: 'hero', fieldset: 'fsClaim' }),
+    show('showMarquee', 'fsMarquee', 'hero'),
     defineField({
       ...s('marqueeText', 'Marquee text'),
       description: 'The scrolling band. Wrap a word in *asterisks* for the blue accent.',
       group: 'hero',
+      fieldset: 'fsMarquee',
     }),
 
-    defineField({ ...t('rangeHeadline', 'Range headline', 3), group: 'range' }),
-    defineField({ ...s('rangeCol1Label', 'Range column 1 label'), group: 'range' }),
-    defineField({ ...t('rangeCol1Text', 'Range column 1 text', 4), group: 'range' }),
-    defineField({ ...s('rangeCol2Label', 'Range column 2 label'), group: 'range' }),
-    defineField({ ...t('rangeCol2Text', 'Range column 2 text', 4), group: 'range' }),
-    defineField({ ...t('scaleHeadline', 'Scale headline', 3), group: 'range' }),
-    defineField({ ...s('scaleCol1Label', 'Scale column 1 label'), group: 'range' }),
-    defineField({ ...t('scaleCol1Text', 'Scale column 1 text', 4), group: 'range' }),
-    defineField({ ...s('scaleCol2Label', 'Scale column 2 label'), group: 'range' }),
-    defineField({ ...t('scaleCol2Text', 'Scale column 2 text', 4), group: 'range' }),
+    show('showRange', 'fsRange', 'range'),
+    defineField({ ...t('rangeHeadline', 'Range headline', 3), group: 'range', fieldset: 'fsRange' }),
+    defineField({ ...s('rangeCol1Label', 'Range column 1 label'), group: 'range', fieldset: 'fsRange' }),
+    defineField({ ...t('rangeCol1Text', 'Range column 1 text', 4), group: 'range', fieldset: 'fsRange' }),
+    defineField({ ...s('rangeCol2Label', 'Range column 2 label'), group: 'range', fieldset: 'fsRange' }),
+    defineField({ ...t('rangeCol2Text', 'Range column 2 text', 4), group: 'range', fieldset: 'fsRange' }),
+    show('showScale', 'fsScale', 'range'),
+    defineField({ ...t('scaleHeadline', 'Scale headline', 3), group: 'range', fieldset: 'fsScale' }),
+    defineField({ ...s('scaleCol1Label', 'Scale column 1 label'), group: 'range', fieldset: 'fsScale' }),
+    defineField({ ...t('scaleCol1Text', 'Scale column 1 text', 4), group: 'range', fieldset: 'fsScale' }),
+    defineField({ ...s('scaleCol2Label', 'Scale column 2 label'), group: 'range', fieldset: 'fsScale' }),
+    defineField({ ...t('scaleCol2Text', 'Scale column 2 text', 4), group: 'range', fieldset: 'fsScale' }),
     defineField({
       name: 'stats',
-      title: 'Stats band',
+      title: 'Stats cards',
+      description: 'One glass card per number. Add, remove and drag to reorder; the row adapts to 1-4 cards.',
       group: 'range',
+      fieldset: 'fsScale',
       type: 'array',
-      validation: (r) => r.max(3),
+      validation: (r) => r.max(4),
       of: [
         defineArrayMember({
           type: 'object',
@@ -63,23 +107,34 @@ export const homePage = defineType({
       ],
     }),
 
-    defineField({ ...s('specialistsHeadline', 'Specialists headline'), description: accentNote, group: 'proof' }),
-    defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof' }),
-    defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof' }),
+    show('showSpecialists', 'fsSpecialists', 'proof'),
+    defineField({ ...s('specialistsHeadline', 'Specialists headline'), description: accentNote, group: 'proof', fieldset: 'fsSpecialists' }),
+    show('showGuarantee', 'fsGuarantee', 'proof'),
+    defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof', fieldset: 'fsGuarantee' }),
+    defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof', fieldset: 'fsGuarantee' }),
 
-    defineField({ ...t('monthHeadline', 'Month section headline'), description: accentNote + ' The accented part renders blue.', group: 'month' }),
-    defineField({ ...t('monthText', 'Month section text', 4), group: 'month' }),
-    defineField({ ...t('categoriesHeadline', 'Categories headline'), group: 'month' }),
-    defineField({ ...s('ctaLabel', 'Final CTA button label'), group: 'month' }),
+    show('showCampaign', 'fsCampaign', 'month'),
     defineField({
       name: 'campaignImages',
       title: 'Campaign band photos (3 recommended)',
       description: 'The cinematic cross-fading photo series on the homepage. Leave empty for the built-in campaign shots.',
       type: 'array',
       group: 'month',
+      fieldset: 'fsCampaign',
       validation: (r) => r.max(4),
       of: [{ type: 'image', options: { hotspot: true } }],
     }),
+    show('showMonth', 'fsMonth', 'month'),
+    defineField({ ...t('monthHeadline', 'Month section headline'), description: accentNote + ' The accented part renders blue.', group: 'month', fieldset: 'fsMonth' }),
+    defineField({ ...t('monthText', 'Month section text', 4), group: 'month', fieldset: 'fsMonth' }),
+    show('showCategories', 'fsCategories', 'month'),
+    defineField({ ...t('categoriesHeadline', 'Categories headline'), group: 'month', fieldset: 'fsCategories' }),
+    defineField({
+      ...show('showFinalCta', 'fsCategories', 'month'),
+      title: 'Final CTA shown',
+      description: 'The closing full-screen call to action. Toggle off to hide it (markets differ).',
+    }),
+    defineField({ ...s('ctaLabel', 'Final CTA button label'), group: 'month', fieldset: 'fsCategories' }),
   ],
   preview: { prepare: () => ({ title: 'Homepage' }) },
 });

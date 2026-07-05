@@ -16,6 +16,17 @@ export type HomeCopy = {
   categoriesHeadline: string;
   ctaLabel: string;
   campaignImages?: unknown[];
+  /* per-market section switches; the hero has no switch on purpose */
+  showClaim: boolean;
+  showMarquee: boolean;
+  showRange: boolean;
+  showScale: boolean;
+  showSpecialists: boolean;
+  showGuarantee: boolean;
+  showCampaign: boolean;
+  showMonth: boolean;
+  showCategories: boolean;
+  showFinalCta: boolean;
   _id?: string;
 };
 
@@ -54,4 +65,14 @@ export const HOME_DEFAULTS: HomeCopy = {
     'Every month, one tool gets the full story: why it wins, where it earns its keep, and what the trade says. The rest of the month takes care of itself.',
   categoriesHeadline: "All you'll *need.* Category \n by category.",
   ctaLabel: 'Buy STROXX at Carl Ras',
+  showClaim: true,
+  showMarquee: true,
+  showRange: true,
+  showScale: true,
+  showSpecialists: true,
+  showGuarantee: true,
+  showCampaign: true,
+  showMonth: true,
+  showCategories: true,
+  showFinalCta: true,
 };

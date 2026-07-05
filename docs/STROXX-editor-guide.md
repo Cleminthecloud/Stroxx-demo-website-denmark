@@ -50,7 +50,11 @@ The homepage is one document ("Homepage" under Content, or click any headline on
 
 Headlines that mix white and blue (the claim, the Tool of the Month headline) are one field: the part you wrap in *asterisks* renders blue, and Enter breaks the line. The **campaign band photos** (the cinematic cross-fading series) are uploadable too, three photos recommended.
 
-Not editable by design: the bag animation and all motion, the category data and product cards (they come from the product feed). Any field left empty simply shows the original copy, so you can never blank the front page.
+The panel is organised as **ten numbered, collapsible boxes in the order the page scrolls** (1 · Hero down to 10 · Categories + final CTA), so what you see in the panel mirrors what you see on the page. They start collapsed for the overview; clicking text on the page opens the right one automatically.
+
+**Showing and hiding sections (per market).** Every section except the hero has a "Shown on the site" switch at the top of its box. Markets differ, so a market that has no specialists yet, or no campaign photos, simply switches those sections off; nothing else moves. Two rules: if a menu link points at a hidden section (e.g. Tool of the Month), remove that link too under Site settings → menus, and remember the switch hides the section for everyone visiting that market's site, it is not a draft.
+
+Not editable by design: the bag animation and all motion, the category data and product cards (they come from the product feed), and the order of the homepage sections (the flagship's composition is locked; landing pages are where you reorder freely). Any field left empty simply shows the original copy, so you can never blank the front page.
 
 ## 5. Moving, adding and removing blocks (landing pages)
 

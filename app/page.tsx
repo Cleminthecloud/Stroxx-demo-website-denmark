@@ -93,6 +93,7 @@ export default async function Home() {
       </section>
 
       {/* CLAIM — the promise, front and centre */}
+      {hp.showClaim && (
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
           <div className="max-w-3xl">
@@ -104,13 +105,17 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* editable in Studio: Homepage → Marquee text; click the band to open it */}
+      {hp.showMarquee && (
       <div data-sanity={hAttr('marqueeText')}>
         <Marquee text={stegaClean(hp.marqueeText)} />
       </div>
+      )}
 
       {/* SORTIMENT — what we have, and we have your back */}
+      {hp.showRange && (
       <section className="relative py-28 md:py-40">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 grid gap-16 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <div data-sanity={hAttr('rangeHeadline')}>
@@ -132,8 +137,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* SKALA — headline + the scale, capped by a bold stats band */}
+      {hp.showScale && (
       <section className="relative py-28 md:py-36">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 40%, rgba(0,136,194,0.07), transparent 70%)' }} />
         <div className="relative mx-auto w-full max-w-[1600px] px-6 md:px-10">
@@ -157,11 +164,12 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* stats band — full width, vertical dividers */}
+          {/* stats — one glass card per number; editors add/remove/reorder in
+              Homepage → 5 · The scale + stats band (the row adapts to 1-4) */}
           <Reveal delay={120}>
-            <div data-sanity={hAttr('stats')} className={`mt-20 grid grid-cols-1 ${statColsSm(hp.stats.length)} rounded-2xl border border-line overflow-hidden`}>
-              {hp.stats.map((s, i) => (
-                <div key={s.label} className={`px-8 py-10 ${i > 0 ? 'border-t sm:border-t-0 sm:border-l border-line' : ''}`}>
+            <div data-sanity={hAttr('stats')} className={`mt-20 grid gap-5 grid-cols-1 ${statColsSm(hp.stats.length)}`}>
+              {hp.stats.map((s) => (
+                <div key={s.label} className="glass glass-card glass-panel rounded-xl px-8 py-10">
                   <CountUp value={s.value} suffix={s.suffix} className="h-display text-white text-5xl md:text-6xl block" />
                   <div className="text-fog text-sm mt-2">{s.label}</div>
                 </div>
@@ -170,8 +178,10 @@ export default async function Home() {
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* SPECIALISTS */}
+      {hp.showSpecialists && (
       <section id="specialister" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
           <div className="mb-16 max-w-3xl">
@@ -216,8 +226,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* GUARANTEE */}
+      {hp.showGuarantee && (
       <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,136,194,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -236,13 +248,17 @@ export default async function Home() {
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* CAMPAIGN — print campaign as a cinematic image series */}
+      {hp.showCampaign && (
       <CampaignBand images={(hp.campaignImages ?? []).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[]} />
+      )}
 
       {/* MÅNEDENS STROXX — the SKA engine: one hero story + the month's five
           DB2-winners, same lineup as nyhedsbrev/SoMe/kampagner/salg. The hero
           links to its dedicated landing page; everything else buys directly. */}
+      {hp.showMonth && (
       <section id="maanedens" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-36">
           <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center mb-20">
@@ -289,8 +305,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* CATEGORIES */}
+      {hp.showCategories && (
       <section id="kategorier" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div className="max-w-3xl">
@@ -329,12 +347,15 @@ export default async function Home() {
           <CategoryList />
         </div>
       </section>
+      )}
 
       {/* FINAL CTA */}
+      {hp.showFinalCta && (
       <section className="relative h-[80vh] flex flex-col items-center justify-center text-center px-6">
         <ProvDet />
         <BuyButton href={`${CR_BRAND}/?${UTM}`}>{hp.ctaLabel}</BuyButton>
       </section>
+      )}
     </main>
   );
 }

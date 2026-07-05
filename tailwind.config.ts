@@ -1,6 +1,9 @@
 import type { Config } from 'tailwindcss';
 const config: Config = {
-  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+  /* lib/ MUST be scanned: lib/grid.ts holds the count-aware column classes
+     as literal strings; without it they get purged and grids collapse to
+     one column (the Jul 5 stats-band bug) */
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {

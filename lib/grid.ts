@@ -23,9 +23,9 @@ export const productCols = (n: number): string =>
 export const productColsWide = (n: number): string =>
   n <= 2 ? 'lg:grid-cols-2' : n === 3 ? 'lg:grid-cols-3' : n === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-5';
 
-/** Stat bands with sm breakpoint (homepage stats). */
+/** Stat cards with sm breakpoint (homepage stats band, up to 4). */
 export const statColsSm = (n: number): string =>
-  n === 1 ? 'sm:grid-cols-1' : n === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3';
+  n === 1 ? 'sm:grid-cols-1' : n === 2 ? 'sm:grid-cols-2' : n === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3';
 
 /** Unprefixed 3-col grids (landing reframe stats). */
 export const colsPlain = (n: number): string =>
