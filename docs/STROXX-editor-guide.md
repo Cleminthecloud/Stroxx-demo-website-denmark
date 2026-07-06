@@ -73,7 +73,13 @@ Landing pages are built from **sections** (blocks). The full menu:
 - **Call-to-action banner**, headline + buttons on the blue glow
 - **Guarantee + numbered steps**
 - **FAQ accordion**
+- **Before / after slider**, two photos with a draggable divider, let people see the difference
+- **Story cards**, a 3-5 chapter narrative that stacks as the reader scrolls (the job, the tool, the result)
+- **Logo band**, a slow scrolling strip of partner names or logos
+- **Embed**, a form, map or video from another service (see the embed rules below)
 - **Spacer**, empty breathing room in three sizes
+
+**Embed rules.** The Embed block accepts pages from **approved providers only** (Typeform, Microsoft and Google forms, Google Maps, YouTube, Vimeo, and Carl Ras/STROXX pages). Paste the provider's https share/embed address and set a height. Visitors see a "Load content" card first and nothing is fetched, and no cookies are set, until they click, which keeps embeds GDPR-clean. Need another provider? Ask the developer to approve it (one line of code, deliberately). Anything that wants a `<script>` tag never goes in the CMS; those widgets are installed via Google Tag Manager.
 
 **See them all live**: open **/komponenter** on the site. Every block is rendered there with sample content, its exact Studio name and a short description. Browse it before building a page.
 

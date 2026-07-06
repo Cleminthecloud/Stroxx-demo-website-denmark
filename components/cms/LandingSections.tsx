@@ -11,8 +11,12 @@ import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { NewsletterForm } from '@/components/Newsletter';
 import ContactForm from '@/components/ContactForm';
+import BeforeAfter from '@/components/BeforeAfter';
+import LogoMarquee from '@/components/LogoMarquee';
+import EmbedFrame from '@/components/EmbedFrame';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
+import { stegaClean } from '@sanity/client/stega';
 import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
 import { cardCols, productCols, colsPlain } from '@/lib/grid';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
@@ -300,6 +304,120 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   </div>
                   <Reveal delay={120}>
                     <ContactForm topic={s.topic} buttonLabel={s.buttonLabel} successMessage={s.successMessage} />
+                  </Reveal>
+                </div>
+              </section>
+            );
+
+          case 'beforeAfter':
+            return (
+              <section key={s._key} className="relative">
+                <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
+                  <div className="mb-10 max-w-3xl">
+                    <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                    <ScrollText as="h2" text={s.headline || ''}
+                      className="h-display text-white text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] mb-4" />
+                    {s.sub && <Reveal delay={80}><p className="text-fog text-lg leading-relaxed max-w-xl">{s.sub}</p></Reveal>}
+                  </div>
+                  <Reveal delay={120}>
+                    <div className="mx-auto max-w-5xl">
+                      <BeforeAfter
+                        before={assetUrl(s.beforeUpload, 1600) || s.beforeImage || '/Images/campaign/rings.jpg'}
+                        after={assetUrl(s.afterUpload, 1600) || s.afterImage || '/Images/campaign/tea.jpg'}
+                        beforeAlt={imgAlt(s.beforeUpload)}
+                        afterAlt={imgAlt(s.afterUpload)}
+                        beforeLabel={s.beforeLabel || 'Before'}
+                        afterLabel={s.afterLabel || 'After'}
+                      />
+                    </div>
+                  </Reveal>
+                </div>
+              </section>
+            );
+
+          case 'storyCards': {
+            const cards = (s.cards || []) as { title?: string; body?: string; imageUpload?: unknown; image?: string }[];
+            return (
+              <section key={s._key} className="relative">
+                <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
+                  <div className="mb-14 max-w-3xl">
+                    <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                    <ScrollText as="h2" text={s.headline || ''}
+                      className="h-display text-white text-[clamp(2.2rem,5.5vw,4.6rem)] leading-[0.95]" />
+                  </div>
+                  <div className="mx-auto max-w-4xl">
+                    {cards.map((c, i) => {
+                      const img = assetUrl(c.imageUpload, 1200) || c.image;
+                      return (
+                        /* solid card background on purpose: the stack covers
+                           earlier cards, and backdrop blur on big sticky
+                           layers is the iOS white-box pattern */
+                        <div
+                          key={i}
+                          className="sticky mb-8 overflow-hidden rounded-2xl border border-line bg-carbon"
+                          style={{ top: 96 + i * 18 }}
+                        >
+                          <div className={`grid ${img ? 'md:grid-cols-2' : ''}`}>
+                            <div className="p-8 md:p-12">
+                              <div className="text-stroxx-blue text-xs uppercase tracking-wider mb-4">
+                                {String(i + 1).padStart(2, '0')} / {String(cards.length).padStart(2, '0')}
+                              </div>
+                              <div className="h-display text-white text-2xl md:text-4xl mb-4">{c.title}</div>
+                              <p className="text-fog text-base md:text-lg leading-relaxed max-w-md">{c.body}</p>
+                            </div>
+                            {img && (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img src={img} alt={imgAlt(c.imageUpload)} loading="lazy"
+                                className="h-56 w-full object-cover grayscale md:h-full" />
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
+            );
+          }
+
+          case 'logoMarquee': {
+            const logos = ((s.logos || []) as { name?: string; logoUpload?: unknown; image?: string; href?: string }[])
+              .filter((l) => l.name)
+              .map((l) => ({ name: l.name as string, img: assetUrl(l.logoUpload, 300) || l.image || undefined, href: l.href }));
+            return (
+              <section key={s._key} className="relative py-16 md:py-24">
+                {s.eyebrow && (
+                  <div className="mx-auto max-w-[1600px] px-6 md:px-10 mb-8 text-center">
+                    <Reveal><div className="eyebrow !mb-0 inline-block">{s.eyebrow}</div></Reveal>
+                  </div>
+                )}
+                <LogoMarquee logos={logos} />
+              </section>
+            );
+          }
+
+          case 'embed':
+            return (
+              <section key={s._key} className="relative">
+                <div className="mx-auto max-w-3xl px-6 md:px-10 py-24 md:py-32">
+                  <div className="mb-10">
+                    <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                    {s.headline && (
+                      <ScrollText as="h2" text={s.headline}
+                        className="h-display text-white text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.95] mb-4" />
+                    )}
+                    {s.sub && <Reveal delay={80}><p className="text-fog text-lg leading-relaxed">{s.sub}</p></Reveal>}
+                  </div>
+                  <Reveal delay={120}>
+                    {s.url ? (
+                      /* stegaClean: draft-mode marker chars inside the URL
+                         would fail new URL() and the allowlist check */
+                      <EmbedFrame url={stegaClean(s.url) || s.url} height={s.height} title={stegaClean(s.headline) || undefined} />
+                    ) : (
+                      <div className="rounded-xl border border-line bg-ink/50 p-8 text-center">
+                        <p className="text-fog text-sm">Paste the provider&apos;s https:// address in the block to load the embed.</p>
+                      </div>
+                    )}
                   </Reveal>
                 </div>
               </section>

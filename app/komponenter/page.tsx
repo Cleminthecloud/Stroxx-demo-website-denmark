@@ -205,6 +205,57 @@ const DEMOS: Demo[] = [
     description: 'Adds vertical space between sections. Three sizes. (Rendered below as the gap you are looking at.)',
     section: { _type: 'spacer', _key: 'd14', size: 'l' },
   },
+  {
+    studioName: 'Before / after slider (drag to compare)',
+    description:
+      'Two photos, a draggable divider. Proof beats claims: the reader sees the difference with their own hands. Works with mouse, touch and keyboard.',
+    section: {
+      _type: 'beforeAfter', _key: 'd17',
+      eyebrow: 'Component · Before/after',
+      headline: 'Drag. *See it yourself.*',
+      sub: 'Swap these photos for a real before/after from a job.',
+      beforeImage: '/Images/campaign/rings.jpg', afterImage: '/Images/campaign/tea.jpg',
+      beforeLabel: 'Before', afterLabel: 'After',
+    },
+  },
+  {
+    studioName: 'Story cards (stack as you scroll)',
+    description:
+      'A 3-5 chapter narrative where each card stacks on the previous while scrolling. Built for job stories: the job, the tool, the result.',
+    section: {
+      _type: 'storyCards', _key: 'd18',
+      eyebrow: 'Component · Story cards',
+      headline: 'One job. *Three chapters.*',
+      cards: [
+        { title: 'The job', body: 'Set the scene in two sentences: the site, the deadline, the problem that needed solving.' },
+        { title: 'The tool', body: 'Which STROXX tool went to work, and what it had to prove.', image: '/Images/campaign/rings.jpg' },
+        { title: 'The result', body: 'What the customer got, in their own words if you have them. End on the outcome, not the product.' },
+      ],
+    },
+  },
+  {
+    studioName: 'Logo band (partners, scrolling)',
+    description:
+      'Slow scrolling band of partner names or logos for instant credibility. Names render as wordmarks until logo files are uploaded.',
+    section: {
+      _type: 'logoMarquee', _key: 'd19',
+      eyebrow: 'Component · Logo band',
+      logos: [{ name: 'Carl Ras' }, { name: 'Meesenburg' }, { name: 'Foussier' }, { name: 'Lecot' }],
+    },
+  },
+  {
+    studioName: 'Embed (form, map or video from another service)',
+    description:
+      'Sandboxed iframe from an approved provider with click-to-load (GDPR-clean: nothing loads before the visitor chooses). Script widgets go via GTM instead.',
+    section: {
+      _type: 'embed', _key: 'd20',
+      eyebrow: 'Component · Embed',
+      headline: 'A form, map or film *right here.*',
+      sub: 'This sample embeds a YouTube player; forms and maps work the same way.',
+      url: 'https://www.youtube-nocookie.com/embed/egSu462a-rI',
+      height: 480,
+    },
+  },
 ];
 
 export default function ComponentLibraryPage() {
