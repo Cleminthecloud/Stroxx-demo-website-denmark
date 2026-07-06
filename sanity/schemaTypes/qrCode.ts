@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import QrImageField from '../QrImageField';
 
 /** Managed QR short links. Every FUTURE print run points its QR code at
  *  stroxx.eu/qr/<code>; each scan is counted (Dashboard tab) and forwarded
@@ -51,6 +52,14 @@ export const qrCode = defineType({
       type: 'boolean',
       initialValue: true,
       description: 'Off = scans land on the homepage instead of the target (use for retired campaigns).',
+    }),
+    defineField({
+      name: 'qrPreview',
+      title: 'Printable QR code',
+      type: 'string',
+      readOnly: true,
+      description: 'Download the SVG (best for print) or PNG and place it on the packaging artwork.',
+      components: { input: QrImageField },
     }),
   ],
   preview: {
