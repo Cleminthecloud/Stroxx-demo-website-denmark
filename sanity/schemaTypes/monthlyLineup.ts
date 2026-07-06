@@ -15,7 +15,7 @@ export const monthlyLineup = defineType({
       name: 'heroSku',
       title: 'Hero product SKU',
       type: 'string',
-      description: 'The month’s main story. Carl Ras item number.',
+      description: 'The month’s main story. Item number (SKU) from the product range.',
       validation: (r) => r.required(),
     }),
     defineField({

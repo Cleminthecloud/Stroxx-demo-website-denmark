@@ -84,7 +84,7 @@ export const landingPage = defineType({
               name: 'ctaHref',
               title: 'Primary button link',
               type: 'string',
-              description: 'Internal path (/produkter) or full URL. Empty = the Carl Ras shop.',
+              description: 'Internal path (/produkter) or full URL. Empty = the retailer’s webshop.',
             }),
             defineField({ name: 'secondaryLabel', title: 'Secondary link label', type: 'string' }),
             defineField({
@@ -246,7 +246,7 @@ export const landingPage = defineType({
               name: 'ctaHref',
               title: 'Button link',
               type: 'string',
-              description: 'Internal path (/produkter) or full URL. Defaults to the Carl Ras shop.',
+              description: 'Internal path (/produkter) or full URL. Defaults to the retailer’s webshop.',
             }),
             defineField({
               name: 'imageUpload',
@@ -290,7 +290,7 @@ export const landingPage = defineType({
             items: [
               { _type: 'feature', title: 'Pro quality', body: 'The same feel and finish as the big brands. The badge premium is the only thing missing.' },
               { _type: 'feature', title: 'A fair price', body: 'Specifications set by tradespeople, no logo tax, no middlemen.' },
-              { _type: 'feature', title: '30-day guarantee', body: 'Work it hard for a month. Not convinced? Money back at Carl Ras.' },
+              { _type: 'feature', title: '30-day guarantee', body: 'Work it hard for a month. Not convinced? Money back at the dealer.' },
             ],
           },
           fields: [
@@ -322,7 +322,7 @@ export const landingPage = defineType({
           name: 'productProof',
           title: 'Product cards (by SKU)',
           type: 'object',
-          description: 'A grid of live product cards. Enter Carl Ras item numbers; name, photo and price data come from the product feed.',
+          description: 'A grid of live product cards. Enter item numbers (SKU); name, photo and price data come from the product feed.',
           initialValue: {
             eyebrow: 'The proof',
             headline: 'The tools *do the talking.*',
@@ -336,7 +336,7 @@ export const landingPage = defineType({
             defineField({
               name: 'skus',
               title: 'Product SKUs',
-              description: 'Carl Ras item numbers, e.g. 34011573. Unknown numbers are skipped.',
+              description: 'Item numbers (SKU) from the product range, e.g. 34011573. Unknown numbers are skipped.',
               type: 'array',
               of: [defineArrayMember({ type: 'string' })],
             }),
@@ -441,7 +441,7 @@ export const landingPage = defineType({
               name: 'primaryHref',
               title: 'Primary button link',
               type: 'string',
-              description: 'Internal path or full URL. Empty = the Carl Ras shop.',
+              description: 'Internal path or full URL. Empty = the retailer’s webshop.',
             }),
             defineField({ name: 'secondaryLabel', title: 'Secondary button label', type: 'string' }),
             defineField({ name: 'secondaryHref', title: 'Secondary button link', type: 'string' }),
@@ -458,7 +458,7 @@ export const landingPage = defineType({
             headline: 'Try it for 30 days. *Then decide.*',
             sub: 'Money back if it does not deliver. Your own judgement is enough.',
             steps: [
-              { _type: 'step', title: 'Buy it', body: 'Pick it up at Carl Ras or order online.' },
+              { _type: 'step', title: 'Buy it', body: 'Pick it up at the dealer or order online.' },
               { _type: 'step', title: 'Work it hard', body: 'Use it on real jobs for a month.' },
               { _type: 'step', title: 'Decide', body: 'Not convinced? Money back, no defect required.' },
             ],
@@ -493,7 +493,7 @@ export const landingPage = defineType({
               name: 'ctaHref',
               title: 'Primary button link',
               type: 'string',
-              description: 'Internal path or full URL. Empty = the Carl Ras shop.',
+              description: 'Internal path or full URL. Empty = the retailer’s webshop.',
             }),
             defineField({ name: 'secondaryLabel', title: 'Secondary button label', type: 'string' }),
             defineField({
@@ -517,7 +517,7 @@ export const landingPage = defineType({
               {
                 _type: 'faqItem',
                 q: 'How does the 30-day satisfaction guarantee work?',
-                a: 'Use the tool on real jobs for 30 days. Not satisfied? Money back at Carl Ras, your own judgement is enough.',
+                a: 'Use the tool on real jobs for 30 days. Not satisfied? Money back at the dealer, your own judgement is enough.',
               },
               {
                 _type: 'faqItem',
@@ -723,7 +723,7 @@ export const landingPage = defineType({
           title: 'Embed (form, map or video from another service)',
           type: 'object',
           description:
-            'Embeds a page from an APPROVED provider (Typeform, Microsoft/Google forms, Google Maps, YouTube, Vimeo, Carl Ras/STROXX pages). Visitors click before anything loads, GDPR-clean. Other providers: ask the developer to approve them. Script widgets are installed via GTM instead, never here.',
+            'Embeds a page from an APPROVED provider (Typeform, Microsoft/Google forms, Google Maps, YouTube, Vimeo, the retailer’s and STROXX’s own pages). Visitors click before anything loads, GDPR-clean. Other providers: ask the developer to approve them. Script widgets are installed via GTM instead, never here.',
           initialValue: {
             eyebrow: 'Take part',
             headline: 'A form, map or film *right here.*',

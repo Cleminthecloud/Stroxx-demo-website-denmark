@@ -12,7 +12,7 @@ export const productAugment = defineType({
     defineField({
       name: 'sku',
       title: 'Product SKU',
-      description: 'Carl Ras item number this augment applies to.',
+      description: 'Item number (SKU) this augment applies to.',
       type: 'string',
       validation: (r) => r.required(),
     }),
