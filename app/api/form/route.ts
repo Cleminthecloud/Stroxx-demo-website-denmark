@@ -14,7 +14,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 });
-  if (!rateLimit(`form:${clientIp(req.headers)}`, 5, 60000)) {
+  if (!(await rateLimit(`form:${clientIp(req.headers)}`, 5, 60000))) {
     return NextResponse.json({ ok: false, error: 'rate-limited' }, { status: 429 });
   }
   let name = '', email = '', phone = '', message = '', topic = '', honeypot = '';

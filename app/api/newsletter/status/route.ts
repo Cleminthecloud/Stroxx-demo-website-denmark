@@ -77,7 +77,7 @@ async function check(): Promise<Status> {
 
 export async function GET(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
-  if (!rateLimit(`nls:${clientIp(req.headers)}`, 10, 60000)) {
+  if (!(await rateLimit(`nls:${clientIp(req.headers)}`, 10, 60000))) {
     return NextResponse.json({ error: 'rate-limited' }, { status: 429 });
   }
   if (cache && Date.now() - cache.at < 60000) return NextResponse.json(cache.value);

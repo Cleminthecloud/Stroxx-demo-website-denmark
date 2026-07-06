@@ -44,7 +44,7 @@ function countSignup() {
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 });
-  if (!rateLimit(`nl:${clientIp(req.headers)}`, 5, 60000)) {
+  if (!(await rateLimit(`nl:${clientIp(req.headers)}`, 5, 60000))) {
     return NextResponse.json({ ok: false, error: 'rate-limited' }, { status: 429 });
   }
   let email = '';

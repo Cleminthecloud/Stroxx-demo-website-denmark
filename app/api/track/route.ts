@@ -44,7 +44,7 @@ const KNOWN_PATH =
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });
-  if (!rateLimit(`trk:${clientIp(req.headers)}`, 60, 60000)) return new NextResponse(null, { status: 204 });
+  if (!(await rateLimit(`trk:${clientIp(req.headers)}`, 60, 60000))) return new NextResponse(null, { status: 204 });
   const token = process.env.SANITY_API_WRITE_TOKEN;
   if (!token) return new NextResponse(null, { status: 204 });
 

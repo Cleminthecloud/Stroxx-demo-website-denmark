@@ -33,7 +33,7 @@ Rules:
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ fallback: true }, { status: 403 });
   // cost protection: 10 messages/minute per IP is generous for humans
-  if (!rateLimit(`chat:${clientIp(req.headers)}`, 10, 60000)) {
+  if (!(await rateLimit(`chat:${clientIp(req.headers)}`, 10, 60000))) {
     return NextResponse.json({ fallback: true }, { status: 429 });
   }
   const key = process.env.ANTHROPIC_API_KEY;

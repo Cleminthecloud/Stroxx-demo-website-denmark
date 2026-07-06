@@ -110,7 +110,7 @@ One line: the share image and OG title decide how the link looks on LinkedIn; ch
 export async function POST(req: NextRequest) {
   /* costs real money: same-origin only + tighter limit than the chat */
   if (!sameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
-  if (!rateLimit(`agent:${clientIp(req.headers)}`, 6, 60000)) {
+  if (!(await rateLimit(`agent:${clientIp(req.headers)}`, 6, 60000))) {
     return NextResponse.json({ error: 'rate-limited' }, { status: 429 });
   }
   const key = process.env.ANTHROPIC_API_KEY;

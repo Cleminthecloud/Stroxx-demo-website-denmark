@@ -30,11 +30,11 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
         <table className="w-full min-w-[640px] border-separate border-spacing-0">
           <thead>
             <tr>
-              <th className="text-left align-bottom pb-5 pr-4 w-[180px]">
+              <th scope="col" className="text-left align-bottom pb-5 pr-4 w-[180px]">
                 <span className="text-fog/60 text-xs uppercase tracking-wider font-medium">Specification</span>
               </th>
               {columns.map((p, i) => (
-                <th key={p.code} className="text-left align-bottom pb-5 px-4 min-w-[190px]">
+                <th scope="col" key={p.code} className="text-left align-bottom pb-5 px-4 min-w-[190px]">
                   <div className="relative h-24 w-24 mb-3 grid place-items-center">
                     <span className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.16), rgba(0,136,194,0) 70%)' }} />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -52,7 +52,7 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
           <tbody>
             {labels.map((label) => (
               <tr key={label}>
-                <td className="py-3 pr-4 text-fog text-sm border-t border-white/[0.07]">{label}</td>
+                <th scope="row" className="py-3 pr-4 text-left font-normal text-fog text-sm border-t border-white/[0.07]">{label}</th>
                 {columns.map((p, i) => (
                   <td key={p.code} className={`py-3 px-4 text-sm border-t border-white/[0.07] ${i === 0 ? 'text-white' : 'text-fog'}`}>
                     {value(p, label)}

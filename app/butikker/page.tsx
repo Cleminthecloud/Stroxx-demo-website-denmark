@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import StoreFinder from '@/components/StoreFinder';
 import { getSiteSettings } from '@/lib/cms';
 import { getStores } from '@/lib/cms';
+import { clock, type Store } from '@/lib/stores';
+import { SITE_URL as BASE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Find your store',
@@ -11,13 +13,52 @@ export const metadata: Metadata = {
   alternates: { canonical: '/butikker' },
 };
 
+/** schema.org HardwareStore per stockist: name, address, geo and opening
+ *  hours straight from the same store data the finder renders, so Google
+ *  understands every store as a physical place that sells STROXX. Zip/city
+ *  arrives as one string ("2730 Herlev"); split defensively. */
+function storeLd(s: Store) {
+  const [postalCode, ...cityParts] = s.zipCity.split(' ');
+  return {
+    '@type': 'HardwareStore',
+    name: s.name,
+    branchOf: { '@type': 'Organization', name: s.brand },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: s.address,
+      postalCode,
+      addressLocality: cityParts.join(' ') || s.zipCity,
+      addressCountry: 'DK',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
+    ...(s.manager.phone ? { telephone: `+45${s.manager.phone.replace(/\s/g, '')}` } : {}),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+        opens: clock(s.monThu[0]),
+        closes: clock(s.monThu[1]),
+      },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: clock(s.fri[0]), closes: clock(s.fri[1]) },
+    ],
+    url: `${BASE}/butikker`,
+  };
+}
+
 /** Full-screen, app-like finder: the map IS the page. The global footer is
  *  hidden on this route via body:has(main.fullscreen-map) in globals.css. */
 export default async function ButikkerPage() {
   const storeData = await getStores();
   const s = await getSiteSettings();
+  const storesLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'STROXX stockists in Denmark',
+    itemListElement: storeData.map((st, i) => ({ '@type': 'ListItem', position: i + 1, item: storeLd(st) })),
+  };
   return (
     <main className="fullscreen-map bg-ink">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(storesLd) }} />
       {/* StoreFinder reads useSearchParams (tab/q deep links) → needs Suspense */}
       <Suspense fallback={<div className="pt-40 text-center text-fog">Loading...</div>}>
         <StoreFinder storeData={storeData}  headlineStores={s?.butikkerHeadlineStores} headlineSpecialists={s?.butikkerHeadlineSpecialists} />

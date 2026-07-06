@@ -22,7 +22,7 @@ const IMG_MAX_BYTES = 3 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 });
-  if (!rateLimit(`fb:${clientIp(req.headers)}`, 5, 60000)) {
+  if (!(await rateLimit(`fb:${clientIp(req.headers)}`, 5, 60000))) {
     return NextResponse.json({ ok: false, error: 'rate-limited' }, { status: 429 });
   }
 
