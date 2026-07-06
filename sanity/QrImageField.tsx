@@ -41,6 +41,9 @@ export default function QrImageField() {
 
   return (
     <div style={{ display: 'grid', gap: 12, fontFamily: 'inherit' }}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- Studio-only admin
+          preview of a dynamic /api/qr-image route; next/image's optimizer adds
+          no value for a 168px field and would need remote-loader config. */}
       <img
         src={`${img}?format=png`}
         alt={`QR code for ${code}`}
