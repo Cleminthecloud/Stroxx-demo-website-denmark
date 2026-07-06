@@ -324,12 +324,22 @@ async function run() {
   }));
 
   console.log('Writing documents…');
-  const pages = [st2, xlock, cylinders, workLight, safety, keybox, tools, qrSt2];
-  let tx = client.transaction();
-  for (const doc of [...pages, ...redirectDocs]) tx = tx.createOrReplace(doc);
+  // Chain the pages individually (each has its own shape, so no union type),
+  // then loop the homogeneous redirect docs.
+  let tx = client
+    .transaction()
+    .createOrReplace(st2)
+    .createOrReplace(xlock)
+    .createOrReplace(cylinders)
+    .createOrReplace(workLight)
+    .createOrReplace(safety)
+    .createOrReplace(keybox)
+    .createOrReplace(tools)
+    .createOrReplace(qrSt2);
+  for (const doc of redirectDocs) tx = tx.createOrReplace(doc);
   await tx.commit();
 
-  console.log(`Done. ${pages.length} docs + ${redirectDocs.length} legacy redirects written.`);
+  console.log(`Done. 8 docs + ${redirectDocs.length} legacy redirects written.`);
   console.log('Check /support, /support/smart-locks-st2, /support/digital-cylinders and /qr/st2');
 }
 
