@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Find your store',
   description:
     'Find your nearest STROXX stockist. 26 stores across Denmark with addresses, opening hours and a direct line to the store manager.',
+  alternates: { canonical: '/butikker' },
 };
 
 /** Full-screen, app-like finder: the map IS the page. The global footer is

@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
+import NewsletterStatusField from '../NewsletterStatusField';
 
 const linkArray = (name: string, title: string, description: string, group: string) =>
   defineField({
@@ -163,6 +164,15 @@ export const siteSettings = defineType({
         ),
     }),
 
+    defineField({
+      name: 'newsletterStatus',
+      title: 'Connection status',
+      type: 'string',
+      readOnly: true,
+      group: 'newsletter',
+      components: { input: NewsletterStatusField },
+      description: 'Checked against the hosting environment as you open this tab. Nothing to fill in here.',
+    }),
     defineField({
       name: 'newsletterEnabled',
       title: 'Newsletter signup on the site',

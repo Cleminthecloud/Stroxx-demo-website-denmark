@@ -58,6 +58,11 @@ function Marquee({ text }: { text: string }) {
   );
 }
 
+export const metadata = {
+  /* the front page must declare itself canonical; every other page already does */
+  alternates: { canonical: '/' },
+};
+
 export default async function Home() {
   const SKA = await getSka();
   const hp = await getHomePage();

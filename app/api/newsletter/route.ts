@@ -1,9 +1,11 @@
 import { createHash } from 'crypto';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { createClient } from '@sanity/client';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
+import { projectId, dataset } from '@/sanity/env';
 
 /** Newsletter signups, provider-agnostic. Which platform (and its list ID)
  *  is chosen in Site settings → Newsletter; the matching API key lives in the
@@ -17,6 +19,28 @@ import { getSiteSettings } from '@/lib/cms';
 export const maxDuration = 30;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/** First-party funnel counter: one dayStats.signups tick per successful
+ *  subscribe. Runs via after() = post-response, so it can never delay or
+ *  fail a signup; missing write token = silent no-op (same as /api/track). */
+function countSignup() {
+  after(async () => {
+    try {
+      const token = process.env.SANITY_API_WRITE_TOKEN;
+      if (!token) return;
+      const day = new Date().toISOString().slice(0, 10);
+      const id = `dayStats.${day}`;
+      const client = createClient({ projectId, dataset, apiVersion: '2026-07-01', token, useCdn: false });
+      await client
+        .transaction()
+        .createIfNotExists({ _id: id, _type: 'dayStats', day, total: 0 })
+        .patch(id, (p) => p.setIfMissing({ signups: 0 }).inc({ signups: 1 }))
+        .commit({ visibility: 'async', returnDocuments: false });
+    } catch {
+      /* analytics must never surface an error to the signup flow */
+    }
+  });
+}
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 });
@@ -56,6 +80,7 @@ export async function POST(req: NextRequest) {
         signal: AbortSignal.timeout(15000),
       });
       if (!r.ok) throw new Error(`mailchimp ${r.status}`);
+      countSignup();
       return NextResponse.json({ ok: true });
     }
 
@@ -83,6 +108,7 @@ export async function POST(req: NextRequest) {
         signal: AbortSignal.timeout(15000),
       });
       if (!r.ok && r.status !== 202) throw new Error(`klaviyo ${r.status}`);
+      countSignup();
       return NextResponse.json({ ok: true });
     }
 
@@ -113,6 +139,7 @@ export async function POST(req: NextRequest) {
           signal: AbortSignal.timeout(15000),
         });
       }
+      countSignup();
       return NextResponse.json({ ok: true });
     }
 
@@ -126,6 +153,7 @@ export async function POST(req: NextRequest) {
         signal: AbortSignal.timeout(15000),
       });
       if (!r.ok) throw new Error(`webhook ${r.status}`);
+      countSignup();
       return NextResponse.json({ ok: true });
     }
 

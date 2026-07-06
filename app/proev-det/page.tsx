@@ -45,6 +45,7 @@ export const metadata: Metadata = {
   title: 'Afford more than just tools',
   description:
     'You pay for the logo, not the steel. STROXX is professional quality without the brand markup, backed by a 100% satisfaction guarantee. Try it for 30 days.',
+  alternates: { canonical: '/proev-det' },
 };
 
 /* Landing structure follows the conversion narrative:

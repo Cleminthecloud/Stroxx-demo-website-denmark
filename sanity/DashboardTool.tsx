@@ -20,6 +20,7 @@ type Day = {
   outbound?: Record<string, number>;
   shares?: Record<string, number>;
   qr?: Record<string, number>;
+  signups?: number;
 };
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -215,6 +216,7 @@ export default function DashboardTool() {
   const social = sources.filter(([k]) => ['linkedin', 'meta', 'x', 'whatsapp'].includes(k)).reduce((a, [, v]) => a + v, 0);
   const outTotal = outbound.reduce((a, [, v]) => a + v, 0);
   const qrTotal = qr.reduce((a, [, v]) => a + v, 0);
+  const signups = days.reduce((a, d) => a + (d.signups ?? 0), 0);
 
   /* daily bars, oldest → newest */
   const series = useMemo(() => {
@@ -233,6 +235,7 @@ export default function DashboardTool() {
     L.push('');
     L.push(`Total pageviews: ${total}`);
     L.push(`From social shares (LinkedIn, Meta, X, WhatsApp): ${social}`);
+    L.push(`Newsletter signups: ${signups}`);
     L.push('');
     L.push('## Where visitors came from');
     for (const [k, v] of sources) L.push(`- ${SOURCE_LABELS[k] ?? k}: ${v}`);
@@ -337,6 +340,7 @@ export default function DashboardTool() {
     ${kpi('From social', social, 'LinkedIn, Meta, X, WhatsApp')}
     ${kpi('QR scans', qrTotal, 'Print short links (/qr)')}
     ${kpi('Partner clicks', outTotal, 'Hand-offs to dealer webshops')}
+    ${kpi('Signups', signups, 'Newsletter subscriptions')}
   </div>
   ${section('Traffic, day by day', `<div class="chart">${daily}</div>`)}
   ${section('Where visitors came from', bars(sources, SOURCE_LABELS))}
@@ -441,6 +445,7 @@ export default function DashboardTool() {
               <Kpi label="From social" value={social} hint="Visits via LinkedIn, Meta, X, WhatsApp." />
               <Kpi label="QR scans" value={qrTotal} hint="Scans of the /qr print short links." />
               <Kpi label="Partner clicks" value={outTotal} hint="Hand-offs to the dealer webshops. The goal line." />
+              <Kpi label="Signups" value={signups} hint="Newsletter subscriptions from the site." />
             </div>
 
             {/* traffic + sources */}
