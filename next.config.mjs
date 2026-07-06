@@ -42,7 +42,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://images.carl-ras.dk https://assets.carl-ras.dk https://cdn.sanity.io https://cdn.prod.website-files.com https://*.basemaps.cartocdn.com https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.api.sanity.io wss://*.api.sanity.io https://*.apicdn.sanity.io https://api.dataforsyningen.dk https://*.google-analytics.com https://*.analytics.google.com https://consentcdn.cookiebot.com https://www.googletagmanager.com",
+      "connect-src 'self' https://*.api.sanity.io wss://*.api.sanity.io https://*.apicdn.sanity.io https://sanity-cdn.com https://api.dataforsyningen.dk https://*.google-analytics.com https://*.analytics.google.com https://consentcdn.cookiebot.com https://www.googletagmanager.com",
       "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.google.com https://docs.google.com https://forms.office.com https://form.typeform.com https://consentcdn.cookiebot.com https://*.carl-ras.dk https://*.stroxx.eu",
       "media-src 'self' https:",
       "worker-src 'self' blob:",
