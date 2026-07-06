@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import LandingSections from '@/components/cms/LandingSections';
-import BrandGuide from '@/components/BrandGuide';
 import { LandingSection } from '@/lib/cms';
 import { CR_BRAND, UTM } from '@/lib/data';
 
 export const metadata: Metadata = {
-  title: 'Brand guide + component library',
+  title: 'Component library',
   robots: { index: false, follow: false },
 };
 
@@ -268,15 +268,11 @@ export default function ComponentLibraryPage() {
           Every building block, <span className="text-stroxx-blue">live.</span>
         </h1>
         <p className="text-fog text-lg max-w-2xl">
-          First the brand guide: the colors, typography, elements and rules that make STROXX look like
-          STROXX. Then every landing-page block rendered live with sample content; the name above each
-          block is exactly what it's called in the Studio's "Add item" menu. This page is internal and
-          hidden from search engines.
+          Every landing-page block rendered live with sample content; the name above each block is
+          exactly what it's called in the Studio's &ldquo;Add item&rdquo; menu. The colors, typography and
+          brand rules live on the <Link href="/brand" className="text-stroxx-blue underline underline-offset-2">brand guide</Link>.
+          This page is internal and hidden from search engines.
         </p>
-      </div>
-      <BrandGuide />
-      <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-4 pb-2">
-        <div className="eyebrow">Component library</div>
       </div>
       {DEMOS.map((d) => (
         <div key={d.section._key}>

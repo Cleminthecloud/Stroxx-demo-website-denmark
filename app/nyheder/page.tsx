@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getPosts, getSiteSettings } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
@@ -27,6 +28,8 @@ function fmtDate(iso?: string) {
 export default async function NewsIndex() {
   const posts = await getPosts();
   const settings = await getSiteSettings();
+  /* market switch: Site settings → News section enabled */
+  if (settings?.newsEnabled === false) notFound();
   /* plain serializable cards for the client explorer; tags are stegaCleaned
      because the chips compare them as values */
   const cards: NewsCardData[] = posts

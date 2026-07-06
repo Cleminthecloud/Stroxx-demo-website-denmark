@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { PortableText } from 'next-sanity';
-import { getPost, getPosts, productsBySkus } from '@/lib/cms';
+import { getPost, getPosts, getSiteSettings, productsBySkus } from '@/lib/cms';
 import ProductCard from '@/components/ProductCard';
 import ArticleProductSlider from '@/components/ArticleProductSlider';
 import ReadingProgress from '@/components/ReadingProgress';
@@ -85,6 +85,8 @@ const components = {
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
+  /* market switch: Site settings → News section enabled */
+  if ((await getSiteSettings())?.newsEnabled === false) notFound();
   const doc = await getPost(slug);
   if (!doc) notFound();
   const relatedProducts = productsBySkus(doc.relatedSkus);

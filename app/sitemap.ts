@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
-import { getLandingSlugs, getPosts, getSupportPages, getTrades } from '@/lib/cms';
+import { getLandingSlugs, getPosts, getSupportPages, getTrades, getSiteSettings } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/komponenter, /guide) and the
@@ -9,7 +9,9 @@ import { SITE_URL as BASE } from '@/lib/site';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const landingSlugs = await getLandingSlugs();
-  const posts = await getPosts();
+  /* news drops out entirely when the market has the section switched off */
+  const newsOn = (await getSiteSettings())?.newsEnabled !== false;
+  const posts = newsOn ? await getPosts() : [];
   const supportPages = await getSupportPages();
   const trades = await getTrades();
   return [

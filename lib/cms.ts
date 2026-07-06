@@ -26,6 +26,7 @@ export type SiteSettings = {
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: string;
+  newsEnabled?: boolean;
   llmsTxt?: string;
   navLinks?: NavLink[];
   footerPageLinks?: NavLink[];
@@ -289,6 +290,19 @@ export async function getStores(): Promise<Store[]> {
     return mapped.length ? mapped : fallbackStores;
   } catch {
     return fallbackStores;
+  }
+}
+
+/* ── Brand guide page ───────────────────────────────────────────────────── */
+
+export type BrandPageDoc = { intro?: string; body?: any[] };
+
+export async function getBrandPage(): Promise<BrandPageDoc | null> {
+  try {
+    const { data } = await sanityFetch({ query: '*[_type == "brandPage"][0]' });
+    return (data as BrandPageDoc) ?? null;
+  } catch {
+    return null;
   }
 }
 

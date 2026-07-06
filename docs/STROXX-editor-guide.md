@@ -81,6 +81,8 @@ Landing pages are built from **sections** (blocks). The full menu:
 
 **Embed rules.** The Embed block accepts pages from **approved providers only** (Typeform, Microsoft and Google forms, Google Maps, YouTube, Vimeo, and Carl Ras/STROXX pages). Paste the provider's https share/embed address and set a height. Visitors see a "Load content" card first and nothing is fetched, and no cookies are set, until they click, which keeps embeds GDPR-clean. Need another provider? Ask the developer to approve it (one line of code, deliberately). Anything that wants a `<script>` tag never goes in the CMS; those widgets are installed via Google Tag Manager.
 
+**The brand itself** lives at **/brand** (also the Studio's **Brand** tab): the colors and rules, downloadable Adobe swatches and CSS tokens for designers and developers, and the written brand guide, which grows over the summer, including when you speak as STROXX the brand and when as the STROXX dealer.
+
 **See them all live**: open **/komponenter** on the site. Every block is rendered there with sample content, its exact Studio name and a short description. Browse it before building a page.
 
 1. In Edit site, click any section on the page (anywhere in the block works, not just text). The section opens on the right.
@@ -143,7 +145,8 @@ The document **Monthly lineup** drives the Tool of the Month page and the homepa
 
 Content → **Site settings**. One document that feeds the whole site, organized in tabs (Contact + legal, Menu + footer, SEO + AI engines, Tracking + consent, Integrations):
 
-- **Customer service phone + hours**: footer, nav, chat and guarantee modal all update together.
+- **Customer service phone + hours**: footer, nav, chat and guarantee modal all update together. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
+- **News section enabled**: markets without a blog switch news off here; /nyheder and every article return "page not found" and leave the sitemap. Remove News menu/footer links too.
 - **Legal line**: the company line at the very bottom.
 - **Retail partner logo**: upload your company logo (a light/white version with transparent background looks best) and it appears in the footer next to the legal line. Leave empty and the footer simply shows the text.
 - **Microcopy tab**: every small text on the site lives here: the footer's about paragraph (partner names turn into links automatically), the chat's button label, panel copy, greeting and fallback answer, the Pro Club box on product pages, the page headlines and intros for Products, Stores, Service and Trades (*word* = blue accent), the news page headline and empty state, the newsletter success message, and even the 404 page. Change the words, publish, done.

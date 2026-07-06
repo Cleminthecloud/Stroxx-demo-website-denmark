@@ -1,0 +1,18 @@
+/* STROXX design tokens - generated from the brand palette. */
+:root {
+  --stroxx-stroxx-blue: #0088C2;
+  --stroxx-blue-glow: #2FACE8;
+  --stroxx-stroxx-red: #EB0029;
+  --stroxx-ink: #0B0C0E;
+  --stroxx-carbon: #111317;
+  --stroxx-steel: #171B21;
+  --stroxx-line: #23272E;
+  --stroxx-fog: #8A9199;
+  --stroxx-paper: #F6F5F3;
+}
+
+/* Typography */
+:root {
+  --stroxx-font-display: "Helvetica Neue", Helvetica, Arial, sans-serif; /* weight 500 for display, never 800 */
+  --stroxx-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

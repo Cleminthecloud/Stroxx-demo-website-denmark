@@ -86,6 +86,15 @@ export const siteSettings = defineType({
 
     linkArray('navLinks', 'Menu: top navigation links',
       'The links in the top navigation, in order. The first four show on desktop; all show in the mobile menu. Leave empty for the built-in menu.', 'nav'),
+    defineField({
+      name: 'newsEnabled',
+      title: 'News section enabled',
+      type: 'boolean',
+      initialValue: true,
+      group: 'nav',
+      description:
+        'Toggle off for markets that do not blog: /nyheder and every article return "page not found" and leave the sitemap. Remember to remove News menu and footer links too.',
+    }),
     linkArray('footerPageLinks', 'Footer: "Pages" column links', 'Leave empty for the built-in list.', 'nav'),
     linkArray('footerBuyLinks', 'Footer: "Buy" column links', 'Leave empty for the built-in list.', 'nav'),
 

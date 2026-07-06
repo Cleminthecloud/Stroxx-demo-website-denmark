@@ -7,6 +7,7 @@ import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon } from '@sanity/i
 import { schemaTypes } from './sanity/schemaTypes';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
+import BrandTool from './sanity/BrandTool';
 import WelcomeTool from './sanity/WelcomeTool';
 import ArticleAgentTool from './sanity/ArticleAgentTool';
 import DashboardTool from './sanity/DashboardTool';
@@ -64,6 +65,10 @@ export default defineConfig({
             select: {},
             resolve: () => ({ locations: [{ title: 'Homepage', href: '/' }] }),
           }),
+          brandPage: defineLocations({
+            select: {},
+            resolve: () => ({ locations: [{ title: 'Brand guide', href: '/brand' }] }),
+          }),
           store: defineLocations({
             select: { name: 'name' },
             resolve: (doc) => ({
@@ -119,6 +124,7 @@ export default defineConfig({
   /* the editor guide as its own Studio tab, always the deployed version */
   tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },
     { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
+    { name: 'brand', title: 'Brand', icon: BookIcon, component: BrandTool },
     { name: 'article-ai', title: 'Article AI', icon: BulbOutlineIcon, component: ArticleAgentTool },
     /* the old "Share preview" tab was retired Jul 5 2026: the same live card
        sits at the bottom of every article, and SEO previews live under the
