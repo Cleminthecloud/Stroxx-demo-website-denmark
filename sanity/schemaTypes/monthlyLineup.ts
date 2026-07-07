@@ -1,9 +1,13 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import SkuInput from '../SkuInput';
+import SkuListInput from '../SkuListInput';
+import { skuLabel } from '../lib/skuOptions';
 
 /** Månedens STROXX, the SKA monthly engine (docs/STROXX KOMMERCIEL MOTOR.pdf):
  *  1 hero, 5 DB2 winners, 1-3 news items. Products are referenced by SKU and
  *  joined against the product feed at render (lib/cms.ts getSka), unknown SKUs
- *  are dropped with the hardcoded lineup as fallback. */
+ *  are dropped with the hardcoded lineup as fallback. The live lineup is the
+ *  latest one whose "Active from" date has passed (lib/cms.ts getSka). */
 export const monthlyLineup = defineType({
   name: 'monthlyLineup',
   title: 'Monthly lineup (Månedens STROXX)',
@@ -12,10 +16,19 @@ export const monthlyLineup = defineType({
     defineField({ name: 'month', title: 'Month', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'year', title: 'Year', type: 'string', validation: (r) => r.required() }),
     defineField({
+      name: 'activeFrom',
+      title: 'Active from',
+      type: 'date',
+      description:
+        'The date this lineup goes live. The site always shows the most recent lineup whose date has passed, so you can build next month ahead of time and it takes over on the day. Empty = falls back to whichever lineup was created last.',
+      options: { dateFormat: 'YYYY-MM-DD' },
+    }),
+    defineField({
       name: 'heroSku',
-      title: 'Hero product SKU',
+      title: 'Hero product',
       type: 'string',
-      description: 'The month’s main story. Item number (SKU) from the product range.',
+      components: { input: SkuInput },
+      description: 'The month’s main story. Search by product name or item number.',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -70,10 +83,11 @@ export const monthlyLineup = defineType({
     }),
     defineField({
       name: 'cashCowSkus',
-      title: 'The five winners (SKUs)',
-      description: 'Månedens fem, volume products at sharp prices.',
+      title: 'The five winners',
+      description: 'Månedens fem, volume products at sharp prices. Search and add; drag order is the display order.',
       type: 'array',
       of: [defineArrayMember({ type: 'string' })],
+      components: { input: SkuListInput },
       validation: (r) => r.max(5),
     }),
     defineField({
@@ -86,10 +100,16 @@ export const monthlyLineup = defineType({
           name: 'newsItem',
           fields: [
             defineField({ name: 'label', title: 'Type label', type: 'string', description: 'E.g. Premium new arrival, Problem solver.' }),
-            defineField({ name: 'sku', title: 'Product SKU', type: 'string' }),
+            defineField({ name: 'sku', title: 'Product', type: 'string', components: { input: SkuInput }, description: 'Search by product name or item number.' }),
             defineField({ name: 'pitch', title: 'Pitch', type: 'text', rows: 2 }),
           ],
-          preview: { select: { title: 'label', subtitle: 'sku' } },
+          preview: {
+            select: { label: 'label', sku: 'sku' },
+            prepare: ({ label, sku }: { label?: string; sku?: string }) => ({
+              title: label || 'News item',
+              subtitle: sku ? skuLabel(sku) : 'No product selected',
+            }),
+          },
         }),
       ],
       validation: (r) => r.max(3),

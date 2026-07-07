@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SharePreviewField from '../SharePreviewField';
+import SkuListInput from '../SkuListInput';
 
 /** News/blog articles at /nyheder. Formatted text with images; the index
  *  and article pages are code-owned, editors own the words. */
@@ -70,10 +71,10 @@ export const post = defineType({
             defineField({ name: 'title', title: 'Small heading above (optional)', type: 'string' }),
             defineField({
               name: 'skus',
-              title: 'Product SKUs (3-8 work best)',
+              title: 'Products (3-8 work best)',
               type: 'array',
               of: [defineArrayMember({ type: 'string' })],
-              options: { layout: 'tags' },
+              components: { input: SkuListInput },
             }),
           ],
           preview: {
@@ -95,10 +96,11 @@ export const post = defineType({
     }),
     defineField({
       name: 'relatedSkus',
-      title: 'Related products (SKUs)',
+      title: 'Related products',
       type: 'array',
       of: [defineArrayMember({ type: 'string' })],
-      description: 'Item numbers of products mentioned in the article. THE RULE: the first 4 show as a card row under the article ("Tools mentioned"), so put the most relevant first. Unknown SKUs are skipped silently.',
+      components: { input: SkuListInput },
+      description: 'Products mentioned in the article. THE RULE: the first 4 show as a card row under the article ("Tools mentioned"), so order them most-relevant first (use the ↑ ↓ buttons). Unknown item numbers are skipped silently.',
     }),
     defineField({ name: 'seoTitle', title: 'SEO title', type: 'string', description: 'The title Google and share cards show. Under 60 characters. Empty = the headline.' }),
     defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3, description: 'The snippet under the title in Google. Under 155 characters. Empty = the excerpt.' }),

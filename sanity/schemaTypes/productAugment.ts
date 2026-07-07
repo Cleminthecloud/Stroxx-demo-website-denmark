@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import SkuInput from '../SkuInput';
 
 /** Marketing layer ON TOP of the product feed, keyed by SKU. The PIM stays
  *  the source of truth for name/price/specs (production plan section 3); this
@@ -11,9 +12,10 @@ export const productAugment = defineType({
   fields: [
     defineField({
       name: 'sku',
-      title: 'Product SKU',
-      description: 'Item number (SKU) this augment applies to.',
+      title: 'Product',
+      description: 'The product this augment applies to. Search by name or item number.',
       type: 'string',
+      components: { input: SkuInput },
       validation: (r) => r.required(),
     }),
     defineField({

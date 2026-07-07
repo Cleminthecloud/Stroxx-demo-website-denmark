@@ -31,6 +31,7 @@ Last reviewed: 2026-07-07.
 | **A translucent panel behind the product cut-out** (`/produkt/[slug]`) | Any glass panel the travelling cut-out passes behind needs `.glass-panel--frost` or the product bleeds through. See Tier 2 "Layout geometry". |
 | **A support page slug** (`/support/[slug]`) | The slug is a PRINT contract: packaging QRs hit `/pages/<slug>`. Renaming breaks printed codes, add a CMS redirect if forced. Never rename a printed `qrCode` code, repoint its `target` instead. |
 | **Security headers / CSP** (`next.config.mjs`) | `X-Frame-Options` must stay `SAMEORIGIN` (not DENY), Sanity Presentation iframes the site at `/studio`. Adding any external script/API/image host means adding it to the CSP allow-list here (see "External services"). |
+| **A share-image (OG) fallback** | Change BOTH the live route's `generateMetadata` AND the matching Studio preview component (`SharePreviewField` for articles, `SeoPreviewField` for landing/site) in the same commit, or the Studio "Shared link" card lies. See Tier 2 "OG / social share image resolution". |
 | **A Sanity schema** (`sanity/schemaTypes/*.ts`) | The page(s) that read it (schema to route map in Tier 2), any custom Studio field component, and re-run the matching seed script if the shape changed. `productAugment` and `store`/`qrCode`/`redirect` have the widest reach. |
 | **A new external service, API, CDN or embed** | `next.config.mjs`: add the host to CSP (`script-src`/`img-src`/`connect-src`/`frame-src`) AND `images.remotePatterns` if it serves images. Add the env var to `.env.local` AND Vercel. Note it in Tier 2 "External services". |
 | **An env var** (add/rename/remove) | Set it in BOTH `.env.local` (local) and the Vercel dashboard (prod), or the feature silently no-ops in one environment. Newsletter/Marketo/chat all fail closed if their key is missing. |
@@ -87,6 +88,12 @@ If a change alters a brand fact that these docs assert (colour, tagline, store c
 ### Client-doc pipeline
 Client-facing docs are generated, not hand-formatted: `pandoc <doc>.md --reference-doc=docs/STROXX-editor-guide.docx -o "docs/client-docs/<Name (for Recipient)>.docx"` inherits the branded styles; PDFs come from `soffice` on the docx. The recipient belongs in the filename. The `.md` stays the source of truth, regenerate after every edit.
 
+### SKU pickers (searchable product inputs) and the catalogue
+Every SKU field in the Studio uses a searchable product picker instead of free text: `SkuInput` (single-SKU string fields) and `SkuListInput` (array-of-SKU fields, with reorder), both feeding off `SkuSearch` and the shared option list `sanity/lib/skuOptions.ts`. That module derives its options from the code-side catalogue (`lib/data.ts` `products`, needs `code` + `name` + `category`). COUPLINGS: (a) `sanity/lib/skuOptions.ts` imports `lib/data.ts`, which must stay client-safe (no `server-only`, no node APIs) or the Studio bundle breaks, when the PIM feed lands, swap ONLY this module to read the feed and every picker updates. (b) The pickers store plain item numbers and are wired via `components: { input: ... }` on: `monthlyLineup.heroSku` / `news[].sku` / `cashCowSkus`, `post.productSlider.skus` / `relatedSkus`, `landingPage.productProof.skus`, `collections` testimonial `productCode`, `productAugment.sku`. Adding a new SKU field means wiring the same component. (c) Studio inputs here use plain elements + inline styles ON PURPOSE (no `@sanity/ui` in this project, it is not an installed dep), match `EncryptedSecretField` if you add another.
+
+### Månedens STROXX is date-driven
+`getSka()` (`lib/cms.ts`) selects the latest `monthlyLineup` whose `activeFrom` date has passed: `... && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]`. So the live month is decided by the `activeFrom` field, NOT creation order (lineups without a date fall back to newest-created). Editors stage next month ahead by setting a future `activeFrom`. Changing this query or removing `activeFrom` reverts to "newest created wins". Still pairs with `lib/ska.ts` as the hardcoded fallback when no lineup matches or SKUs don't resolve.
+
 ### The Sanity Studio (`/studio`), schema to page map
 The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its config, schemas and custom tools all live in-repo under `sanity/` and ship with every deploy. Changing a schema ripples to whatever renders it:
 
@@ -106,6 +113,19 @@ The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its co
 | `collections` | product groupings |
 | `feedback` | `/test` bug reports land here |
 | `siteSettings` | global site config, referenced app-wide |
+
+The Studio SEO preview (`SeoPreviewField`) resolves a root-relative og-image path (e.g. `/brand/og.jpg`) against the CURRENT origin (localhost in dev, real domain in prod), NOT `SITE_URL`. Reason: while `SITE_URL` is the placeholder Vercel domain, prefixing it made the preview image 404 (broken-image icon). The shared-card URL label still shows `SITE_URL` on purpose (that's the canonical shared link). Local Studio "network error" console noise is almost always the embedded Studio's Sanity connection, add `http://localhost:3000` to the Sanity project CORS origins (sanity.io/manage), it is not our newsletter-status probe (that swallows its own errors).
+
+### OG / social share image resolution (preview MUST mirror the live page)
+Every page type resolves its share image through a fallback chain, and there are TWO places that must agree: the live route's `generateMetadata` (what actually gets shared) and the Studio preview component (what the editor sees). If they drift, the preview lies. The chains:
+
+| Page type | Live route | Studio preview | Fallback chain |
+|---|---|---|---|
+| **Site settings** (global default) | `app/layout.tsx` metadata | `SeoPreviewField` | `ogImage` string path only (resolved against origin in preview) |
+| **Article** (`/nyheder/[slug]`) | `app/nyheder/[slug]/page.tsx` | `SharePreviewField` | `ogImage` (upload) → `heroImage` (upload) |
+| **Landing page** (`/kampagne/...`, `/proev-det`) | `app/kampagne/[...slug]/page.tsx` | `SeoPreviewField` | `ogImage` (upload) → first `photoHero` section `imageUpload` → its `image` `/public` path |
+
+Field names differ by type: articles have a top-level `heroImage`; landing pages have NO top-level hero, the hero lives inside `sections[]` as a `photoHero` block (`imageUpload` upload, `image` path, defaulting to `/Images/campaign/rings.jpg`). RULE: if you change a share-image fallback, change BOTH the route and the matching preview component in the same commit, or the "Shared link" card in the Studio will disagree with the real share. (`SeoPreviewField` is shared by site settings AND landing pages, so it reads `sections` defensively, undefined on site settings is fine.)
 
 Custom Studio tools/fields (also in `sanity/`) have their own couplings: `DashboardTool` (analytics), `BrandTool`/`GuideTool`/`WelcomeTool` (embedded internal pages), `ArticleAgentTool` (`/api/blog-agent`), `EncryptedSecretField` (browser-side RSA, pairs with `NEXT_PUBLIC_NEWSLETTER_PUBKEY` + `NEWSLETTER_SECRET_KEY`), `QrImageField` (`/api/qr-image/[code]`), `ShareCard`/`SharePreviewField`/`SeoPreviewField`/`NewsletterStatusField` (live-preview components, unconditional hooks). Content lives in the `demo` dataset (see backup script). After a schema shape change, re-run the relevant `npm run seed*` script so seeded content still matches.
 

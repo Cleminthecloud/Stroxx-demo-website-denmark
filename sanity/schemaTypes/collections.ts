@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import SkuInput from '../SkuInput';
 
 /** The people, voices, films and legal texts of the site, each a small
  *  collection editors own. All have hardcoded fallbacks in code, so an empty
@@ -58,9 +59,10 @@ export const testimonial = defineType({
     defineField({ name: 'role', title: 'Trade + town', type: 'string', description: 'E.g. Carpenter, Aarhus.' }),
     defineField({
       name: 'productCode',
-      title: 'Product SKU (optional)',
+      title: 'Product (optional)',
       type: 'string',
-      description: 'If the quote is about a specific product, its item number. The product page then shows it as a review, incl. to Google.',
+      components: { input: SkuInput },
+      description: 'If the quote is about a specific product, search for it here. The product page then shows it as a review, incl. to Google.',
     }),
     defineField({
       name: 'trades',

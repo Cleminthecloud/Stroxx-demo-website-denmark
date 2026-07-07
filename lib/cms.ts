@@ -470,8 +470,13 @@ export type SkaData = typeof SKA;
 
 export async function getSka(): Promise<SkaData> {
   try {
+    // The live lineup is the most recent one whose "Active from" date has
+    // passed, so editors can stage next month ahead of time. Lineups with no
+    // date stay eligible and fall back to newest-created (backwards compatible).
     const { data } = await sanityFetch({
-      query: '*[_type == "monthlyLineup"] | order(_createdAt desc)[0]',
+      query:
+        '*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]',
+      params: { today: new Date().toISOString().slice(0, 10) },
     });
     if (!data) return SKA;
     const d = data as Record<string, any>;

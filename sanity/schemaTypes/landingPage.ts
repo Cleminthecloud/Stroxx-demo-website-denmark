@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
+import SkuListInput from '../SkuListInput';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
@@ -335,10 +336,11 @@ export const landingPage = defineType({
             defineField({ name: 'sub', title: 'Subline', type: 'text', rows: 3 }),
             defineField({
               name: 'skus',
-              title: 'Product SKUs',
-              description: 'Item numbers (SKU) from the product range, e.g. 34011573. Unknown numbers are skipped.',
+              title: 'Products',
+              description: 'Search and add products from the range; use ↑ ↓ to set the card order. Unknown item numbers are skipped.',
               type: 'array',
               of: [defineArrayMember({ type: 'string' })],
+              components: { input: SkuListInput },
             }),
           ],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Products · ${s.title || ''}` }) },
