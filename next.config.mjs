@@ -63,6 +63,13 @@ const nextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000' }
         ]
+      },
+      {
+        /* Brand motion + imagery are iterated on often. Force the browser to
+           revalidate (cheap 304 when unchanged) so a re-exported SVG/film/photo
+           always shows on the next load, no cache-busting query needed. */
+        source: '/brand/:seg(motion|applications|gallery)/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' }]
       }
     ];
   }

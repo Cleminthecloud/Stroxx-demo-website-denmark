@@ -18,8 +18,11 @@ export default function LogoMotion({ src, alt }: { src: string; alt: string }) {
           boxShadow: 'inset 0 0 60px rgba(0,136,194,0.07), 0 0 40px rgba(0,136,194,0.10)',
         }}
       >
+        {/* ?r=k restarts the SMIL animation on Replay. Freshness is handled by
+            the must-revalidate cache header on /brand/motion (next.config.mjs),
+            so no manual version bump is needed when the SVG changes. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img key={k} src={`${src}?v=6&r=${k}`} alt={alt} className="w-full" />
+        <img key={k} src={`${src}?r=${k}`} alt={alt} className="w-full" />
       </div>
       <button
         type="button"
