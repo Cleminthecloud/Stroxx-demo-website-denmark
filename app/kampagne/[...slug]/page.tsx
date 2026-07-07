@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { stegaClean } from '@sanity/client/stega';
 import { assetUrl } from '@/sanity/lib/image';
+import { SITE_URL } from '@/lib/site';
 import { getLandingPage } from '@/lib/cms';
 import LandingSections from '@/components/cms/LandingSections';
 import { CR_BRAND, UTM } from '@/lib/data';
@@ -15,7 +16,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const path = (await params).slug.join('/');
   const doc = await getLandingPage(path);
   if (!doc) return { title: 'STROXX' };
-  const og = assetUrl(doc.ogImage, 1200);
+  /* Share image falls back to the page's own hero (upload, then /public path)
+     when no explicit share image is set, matching the article behaviour and
+     the SEO preview in the Studio. */
+  const heroSec = doc.sections?.find((s) => s._type === 'photoHero');
+  const heroPath = stegaClean(heroSec?.image as string | undefined);
+  const og =
+    assetUrl(doc.ogImage, 1200) ||
+    assetUrl(heroSec?.imageUpload, 1200) ||
+    (heroPath && heroPath.startsWith('/') ? `${SITE_URL}${heroPath}` : undefined);
   return {
     title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
     description: stegaClean(doc.seoDescription) || undefined,

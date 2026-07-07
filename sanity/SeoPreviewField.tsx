@@ -32,15 +32,31 @@ export default function SeoPreviewField() {
   const seoTitle = useFormValue(['seoTitle']) as string | undefined;
   const seoDescription = useFormValue(['seoDescription']) as string | undefined;
   const ogImage = useFormValue(['ogImage']);
+  const sections = useFormValue(['sections']) as
+    | Array<{ _type?: string; imageUpload?: unknown; image?: unknown }>
+    | undefined; // landing pages: fall back to the hero image
   const docTitle = useFormValue(['title']) as string | undefined; // landing pages
   const slug = (useFormValue(['slug']) as { current?: string } | undefined)?.current;
 
   const title = seoTitle || docTitle || 'The SEO title goes here';
   const desc = seoDescription || 'The description Google shows under the title. Fill the field above and watch it land here.';
-  const img =
+  // Resolve a root-relative og path against wherever the Studio is running
+  // (localhost in dev, the real domain in prod) so the preview image loads,
+  // instead of the placeholder SITE_URL which may not serve it. SSR fallback = SITE_URL.
+  const origin = typeof window !== 'undefined' ? window.location.origin : SITE_URL;
+  const explicit =
     typeof ogImage === 'string'
-      ? (ogImage ? (ogImage.startsWith('/') ? `${SITE_URL}${ogImage}` : ogImage) : undefined)
+      ? (ogImage ? (ogImage.startsWith('/') ? `${origin}${ogImage}` : ogImage) : undefined)
       : assetUrl(ogImage, 1200) || undefined;
+  // Landing pages: no explicit share image → fall back to the hero (upload,
+  // then /public path), mirroring the live /kampagne route so the preview
+  // shows exactly what would actually be shared.
+  const hero = sections?.find((s) => s?._type === 'photoHero');
+  const heroPath = typeof hero?.image === 'string' ? hero.image : undefined;
+  const img =
+    explicit ||
+    assetUrl(hero?.imageUpload, 1200) ||
+    (heroPath && heroPath.startsWith('/') ? `${origin}${heroPath}` : undefined);
   const path = slug ? (slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug}`) : '/';
   const url = `${SITE_URL}${path}`;
 
