@@ -517,7 +517,17 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
             );
           }
 
-          case 'videoProof':
+          case 'videoProof': {
+            // Editor-picked films (dereferenced in getLandingPage) win; empty
+            // selection falls back to all active films.
+            const picked = (Array.isArray(s.films) ? s.films : [])
+              .filter((f: { youtubeId?: string }) => f?.youtubeId)
+              .map((f: { youtubeId?: string; title?: string; by?: string }): Video => ({
+                id: stegaClean(f.youtubeId) ?? (f.youtubeId as string),
+                title: stegaClean(f.title) ?? f.title ?? '',
+                by: stegaClean(f.by) ?? f.by ?? '',
+              }));
+            const vids = picked.length ? picked : videosData;
             return (
               <section key={s._key} className="relative">
                 <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,136,194,0.08), transparent 70%)' }} />
@@ -533,11 +543,12 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     )}
                   </div>
                   <Reveal delay={140}>
-                    <div className="max-w-5xl"><VideoProof videos={videosData} /></div>
+                    <div className="max-w-5xl"><VideoProof videos={vids} /></div>
                   </Reveal>
                 </div>
               </section>
             );
+          }
 
           case 'testimonialProof':
             return (

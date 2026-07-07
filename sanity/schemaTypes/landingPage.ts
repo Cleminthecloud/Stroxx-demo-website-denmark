@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
 import SkuListInput from '../SkuListInput';
+import FilmPicker from '../FilmPicker';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
@@ -355,7 +356,20 @@ export const landingPage = defineType({
             headline: 'See it *at work.*',
             sub: 'The films come from the Film collection; this block just gives them a home on this page.',
           },
-          fields: [eyebrow, headline, defineField({ name: 'sub', title: 'Subline', type: 'text', rows: 3 })],
+          fields: [
+            eyebrow,
+            headline,
+            defineField({ name: 'sub', title: 'Subline', type: 'text', rows: 3 }),
+            defineField({
+              name: 'films',
+              title: 'Films',
+              type: 'array',
+              of: [defineArrayMember({ type: 'reference', to: [{ type: 'video' }] })],
+              components: { input: FilmPicker },
+              description:
+                'Pick exactly which films show here, in order. Paste a YouTube link to add a new one to the collection on the fly. Leave empty to show all active films.',
+            }),
+          ],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Video · ${s.title || ''}` }) },
         }),
         defineArrayMember({

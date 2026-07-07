@@ -113,7 +113,10 @@ export type LandingDoc = {
 export async function getLandingPage(slug: string): Promise<LandingDoc | null> {
   try {
     const { data } = await sanityFetch({
-      query: '*[_type == "landingPage" && slug.current == $slug][0]',
+      // Dereference the film-section's picked films so the renderer gets their
+      // youtubeId/title/by (empty = section falls back to all active films).
+      query:
+        '*[_type == "landingPage" && slug.current == $slug][0]{ ..., sections[]{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } } } }',
       params: { slug },
     });
     return (data as LandingDoc) ?? null;
