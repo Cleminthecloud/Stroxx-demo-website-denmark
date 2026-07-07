@@ -223,7 +223,7 @@ export default function BrandPage() {
             <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
               <LogoMotion src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" />
               <div className="text-white text-sm font-medium mt-4">Living logo (loop)</div>
-              <div className="text-fog text-xs mb-4">A blue light travels the frame, forever. For screens and websites.</div>
+              <div className="text-fog text-xs mb-4">A calm breath, forever. Pure white, no accent. For screens and websites.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-loop.svg']} />
               </div>

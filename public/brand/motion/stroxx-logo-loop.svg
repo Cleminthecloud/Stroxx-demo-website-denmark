@@ -15,16 +15,17 @@
 
   <rect width="360" height="120" rx="14" fill="#0B0C0E"/>
 
-  <!-- the wordmark, steady -->
-  <use href="#mark" fill="#F6F5F3"/>
-
-  <!-- a blue light travels around the frame, forever (path animation, no gradient).
-       Thinner than the white frame and round-joined so it rides inside the border,
-       never poking past a corner. -->
-  <g transform="translate(58,26) scale(2.44)">
-    <rect x="0.73" y="0.73" width="98.88" height="26.85" fill="none" stroke="#0098E8" stroke-width="1.15"
-          stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="16 236">
-      <animate attributeName="stroke-dashoffset" from="0" to="-252" dur="2.8s" repeatCount="indefinite"/>
-    </rect>
+  <!-- the wordmark breathes: a calm scale + brightness pulse about its centre.
+       Pure white, no blue, no line, no gradient. -->
+  <g transform="translate(180 61)">
+    <animateTransform attributeName="transform" type="scale" additive="sum"
+                      values="1;1.03;1" dur="3.2s" repeatCount="indefinite"
+                      calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    <g transform="translate(-180 -61)">
+      <use href="#mark" fill="#F6F5F3">
+        <animate attributeName="opacity" values="1;0.78;1" dur="3.2s" repeatCount="indefinite"
+                 calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+      </use>
+    </g>
   </g>
 </svg>
