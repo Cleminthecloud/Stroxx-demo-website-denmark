@@ -105,8 +105,10 @@ export default async function Home() {
             <p data-sanity={hAttr('claim')} className="h-display text-[clamp(2rem,5.2vw,4.8rem)] leading-[1.04]">
               <ScrollText as="span" className="text-white" text={hp.claim} />
             </p>
-            <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
-              text={hp.claimSub} />
+            <div data-sanity={hAttr('claimSub')}>
+              <ScrollText as="p" className="mt-10 text-fog text-lg md:text-xl leading-relaxed max-w-xl"
+                text={hp.claimSub} />
+            </div>
           </div>
         </div>
       </section>
@@ -189,7 +191,7 @@ export default async function Home() {
       {hp.showSpecialists && (
       <section id="specialister" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
-          <div className="mb-16 max-w-3xl">
+          <div data-sanity={hAttr('specialistsHeadline')} className="mb-16 max-w-3xl">
             <Eyebrow>The specialists</Eyebrow>
             <ScrollText as="h2" text={hp.specialistsHeadline}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
@@ -238,12 +240,16 @@ export default async function Home() {
       <section className="relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,136,194,0.12), transparent 70%)' }} />
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40 grid gap-16 lg:grid-cols-2 lg:items-center">
-          <div data-sanity={hAttr('guaranteeHeadline')}>
-            <Eyebrow>Satisfaction guarantee</Eyebrow>
-            <ScrollText as="h2" text={hp.guaranteeHeadline}
-              className="h-display text-white text-[clamp(2rem,4.4vw,4rem)] leading-[0.95] mb-8" />
-            <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
-              text={hp.guaranteeText} />
+          <div>
+            <div data-sanity={hAttr('guaranteeHeadline')}>
+              <Eyebrow>Satisfaction guarantee</Eyebrow>
+              <ScrollText as="h2" text={hp.guaranteeHeadline}
+                className="h-display text-white text-[clamp(2rem,4.4vw,4rem)] leading-[0.95] mb-8" />
+            </div>
+            <div data-sanity={hAttr('guaranteeText')}>
+              <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-xl"
+                text={hp.guaranteeText} />
+            </div>
             <GuaranteeModal />
           </div>
           <Reveal delay={120} from="far-right">
@@ -273,7 +279,7 @@ export default async function Home() {
               <h2 data-sanity={hAttr('monthHeadline')} className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92] mb-6">
                 <Accent text={hp.monthHeadline} />
               </h2>
-              <p className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
+              <p data-sanity={hAttr('monthText')} className="text-fog text-lg leading-relaxed mb-9 max-w-xl">
                 {hp.monthText}
               </p>
               <div className="flex flex-wrap gap-3">
@@ -316,7 +322,7 @@ export default async function Home() {
       {hp.showCategories && (
       <section id="kategorier" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
-          <div className="max-w-3xl">
+          <div data-sanity={hAttr('categoriesHeadline')} className="max-w-3xl">
             <Eyebrow>The categories</Eyebrow>
             <ScrollText as="h2" text={hp.categoriesHeadline}
               className="h-display text-white text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.92]" />
