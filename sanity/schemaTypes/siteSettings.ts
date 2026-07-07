@@ -356,18 +356,20 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'pimFeedUrl',
-      title: 'PIM: product feed URL',
+      title: 'PIM: product feed URL — planned, not yet active',
       description:
-        'Base URL of the product API this market reads from (Carl Ras product API for DK). URL only; API keys and secrets NEVER go in the CMS, they live in the hosting environment.',
+        'ROADMAP FIELD — not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment.',
       type: 'url',
+      readOnly: true,
       group: 'integrations',
     }),
     defineField({
       name: 'damBaseUrl',
-      title: 'DAM: image base URL',
+      title: 'DAM: image base URL — planned, not yet active',
       description:
-        'Base URL of the image bank (Digizuite for DK). Used by the image pipeline once the DAM integration is live. URL only, no credentials.',
+        'ROADMAP FIELD — not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials.',
       type: 'url',
+      readOnly: true,
       group: 'integrations',
     }),
 
