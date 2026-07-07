@@ -93,7 +93,7 @@ export function ProductSearch({
             >
               <div style={{ fontWeight: 500 }}>{o.name}</div>
               <div style={{ opacity: 0.6, fontSize: 12 }}>
-                {o.value} · {o.category} · {o.price} kr
+                {o.value} · {o.category}
               </div>
             </button>
           ))}

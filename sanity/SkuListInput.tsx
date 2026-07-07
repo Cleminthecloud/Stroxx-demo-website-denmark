@@ -62,7 +62,7 @@ export default function SkuListInput(props: ArrayOfPrimitivesInputProps) {
                   <span style={{ opacity: 0.6 }}>
                     {'  '}
                     {code}
-                    {o ? ` · ${o.category} · ${o.price} kr` : ' · unknown item number, will be skipped on the site'}
+                    {o ? ` · ${o.category}` : ' · unknown item number, will be skipped on the site'}
                   </span>
                 </span>
                 <button type="button" style={iconBtn()} disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move up" title="Move up">↑</button>

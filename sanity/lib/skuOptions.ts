@@ -9,7 +9,7 @@ export type SkuOption = {
   value: string; // the item number stored in the document
   name: string;
   category: string;
-  price: string;
+  // No price: the brand site never shows or uses prices (dealer's job).
 };
 
 export const SKU_OPTIONS: SkuOption[] = products
@@ -18,7 +18,6 @@ export const SKU_OPTIONS: SkuOption[] = products
     value: p.code as string,
     name: p.name,
     category: categoryBySlug(p.category)?.name ?? p.category,
-    price: p.price,
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
 

@@ -2,9 +2,10 @@ import { defineField, defineType } from 'sanity';
 import SkuInput from '../SkuInput';
 
 /** Marketing layer ON TOP of the product feed, keyed by SKU. The PIM stays
- *  the source of truth for name/price/specs (production plan section 3); this
- *  document only augments: compare prices, copy overrides, featured flags.
- *  Joined at render by lib/cms.ts once the PIM pipeline lands. */
+ *  the source of truth for name/specs (production plan section 3); this
+ *  document only augments editorial marketing: copy overrides, featured flags.
+ *  NO PRICES — the brand site never shows or uses prices; pricing is the
+ *  dealer's job. Joined at render by lib/cms.ts once the PIM pipeline lands. */
 export const productAugment = defineType({
   name: 'productAugment',
   title: 'Product augment (marketing layer)',
@@ -25,13 +26,6 @@ export const productAugment = defineType({
       type: 'text',
       rows: 4,
     }),
-    defineField({
-      name: 'compareRefPrice',
-      title: 'Comparison reference price (DKK)',
-      description: 'A-brand reference for the price-comparison block. Legal sign-off required per market before use.',
-      type: 'number',
-    }),
-    defineField({ name: 'compareLabel', title: 'Comparison label', type: 'string' }),
     defineField({ name: 'featured', title: 'Featured product', type: 'boolean', initialValue: false }),
   ],
   preview: { select: { title: 'sku', subtitle: 'marketingCopy' } },
