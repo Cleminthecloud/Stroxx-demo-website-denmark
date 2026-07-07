@@ -11,6 +11,8 @@ import BrandTool from './sanity/BrandTool';
 import WelcomeTool from './sanity/WelcomeTool';
 import ArticleAgentTool from './sanity/ArticleAgentTool';
 import DashboardTool from './sanity/DashboardTool';
+import { seePageAction, openInPresentationAction } from './sanity/SeePageAction';
+import { wrapPublishWithRedirect, REDIRECTABLE } from './sanity/slugRedirectAction';
 
 /** Embedded Studio config, served at /studio (app/studio/[[...tool]]).
  *  Presentation = the visual editing workspace: the live site in an iframe,
@@ -121,6 +123,18 @@ export default defineConfig({
     structureTool({ title: 'Content' }),
   ],
   schema: { types: schemaTypes },
+  document: {
+    /* Per-document actions: quick "See page" (new tab) + "Open in Edit site"
+       on every page type, and auto-301-on-slug-change for the slug-bearing
+       ones (wraps Publish; see sanity/slugRedirectAction). */
+    actions: (prev, context) => {
+      type Named = (typeof prev)[number] & { action?: string };
+      const base = REDIRECTABLE.has(context.schemaType)
+        ? prev.map((a) => ((a as Named).action === 'publish' ? wrapPublishWithRedirect(a) : a))
+        : prev;
+      return [...base, seePageAction, openInPresentationAction];
+    },
+  },
   /* the editor guide as its own Studio tab, always the deployed version */
   tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },
     { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
