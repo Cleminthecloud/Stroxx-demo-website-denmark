@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Download } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
+import LogoCraft from '@/components/LogoCraft';
 import LogoMotion from '@/components/LogoMotion';
 import PhotoGallery from '@/components/PhotoGallery';
 import Reveal from '@/components/Reveal';
@@ -192,6 +193,9 @@ export default function BrandPage() {
           </p>
         </Reveal>
       </section>
+
+      {/* LOGO CRAFT: clear space, min size, misuse, co-branding */}
+      <LogoCraft />
 
       {/* MOTION + EMBEDS */}
       <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
