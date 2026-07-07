@@ -55,6 +55,16 @@ export default function BrandGuide() {
         </div>
       </div>
 
+      {/* colour downloads live with the swatches */}
+      <div className="flex flex-wrap gap-2 -mt-12 mb-16">
+        <a href="/brand/STROXX-colors.ase" download className="inline-flex items-center gap-1.5 rounded-full border border-line bg-ink/50 px-3.5 py-1.5 text-xs text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white">
+          Adobe swatches (.ase)
+        </a>
+        <a href="/brand/stroxx-tokens.css" download className="inline-flex items-center gap-1.5 rounded-full border border-line bg-ink/50 px-3.5 py-1.5 text-xs text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white">
+          CSS tokens (.css)
+        </a>
+      </div>
+
       {/* ── typography ── */}
       <div className="eyebrow mb-6">Brand guide · Typography</div>
       <div className="glass-panel rounded-xl p-8 md:p-10 mb-16 space-y-10">

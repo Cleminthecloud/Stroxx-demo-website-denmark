@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { Download } from 'lucide-react';
+import { Download, ExternalLink } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
+import LogoReveal from '@/components/LogoReveal';
 import Reveal from '@/components/Reveal';
 
 export const metadata: Metadata = {
@@ -9,10 +10,11 @@ export const metadata: Metadata = {
 };
 
 /** The brand hub, one shared, code-owned page for every market (DK / DE / FR /
- *  BE): the logo and its download pack, the palette / type / interface / motion
- *  rules (BrandGuide), and the positioning and voice, grounded in the 2024
- *  brandbook (INFO/Brand Information). Managed by us, not the CMS. The full
- *  Brand Playbook PDF stays internal (INFO/), not on the site. */
+ *  BE): the STROXX 3.0 story to rally the brand team and the dealers, the logo
+ *  and its download pack, an animated motion kit, the palette / type / motion
+ *  rules, positioning and voice. Grounded in the 2024 brandbook and the 2026
+ *  Brand Plan (INFO/). Managed by us, not the CMS. The full playbook stays
+ *  internal (INFO/), not on the site. */
 
 type Fmt = [label: string, href: string];
 
@@ -35,9 +37,19 @@ const LOGO_SETS: { name: string; note: string; src: string; dark: boolean; web: 
   },
 ];
 
-const ASSETS: { href: string; label: string; note: string }[] = [
-  { href: '/brand/STROXX-colors.ase', label: 'Adobe swatches (.ase)', note: 'Photoshop, Illustrator, InDesign' },
-  { href: '/brand/stroxx-tokens.css', label: 'CSS tokens (.css)', note: 'Web and email developers' },
+/** The markets and their dealers. If we name one, we name them all. */
+const DEALERS = [
+  { market: 'Denmark', name: 'Carl Ras' },
+  { market: 'Germany', name: 'Meesenburg' },
+  { market: 'France', name: 'Foussier' },
+  { market: 'Belgium', name: 'Lecot' },
+];
+
+/** The three moves from the STROXX 3.0 thinking (INFO/Bit more info). */
+const PRINCIPLES = [
+  { t: 'Act like the leader', b: 'Not the challenger apologising for the price. Show up with the confidence of the category benchmark.' },
+  { t: 'Look and act premium', b: 'Premium tools. The craft, the detail, the black-and-blue restraint. The quality has to be felt before it is explained.' },
+  { t: 'Price is the positive surprise', b: 'Unpremium prices, but never the opening line. Earn trust first; let the price land as the reward, not the reason.' },
 ];
 
 const DOS = [
@@ -50,7 +62,13 @@ const DONTS = [
   'Stretch, squash, rotate, recolour or add effects to the logo.',
   'Put the logo on a busy or light background where it loses contrast.',
   'Reach for the extended palette (green, red, pink, yellow) without STROXX marketing.',
-  'Talk price on the brand side, that is the dealer’s job.',
+  'Open with price, or talk price on the brand side. That is the dealers’ job.',
+];
+
+/** Brand imagery. Drop new files into /public/brand/gallery and add a row. */
+const GALLERY = [
+  { src: '/brand/gallery/workshop-cabinet.jpg', label: 'Workshop cabinet' },
+  { src: '/brand/gallery/tool-bag.jpg', label: 'Tool bag' },
 ];
 
 function FmtLink({ f }: { f: Fmt }) {
@@ -75,13 +93,47 @@ export default function BrandPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/logos/stroxx-white.svg" alt="STROXX" className="h-12 md:h-16 w-auto mb-10" />
           <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-            One brand. <span className="text-stroxx-blue">Two hats.</span>
+            Premium tools. <span className="text-stroxx-blue">Unpremium prices.</span>
           </h1>
           <p className="mt-6 text-fog text-lg leading-relaxed max-w-2xl">
-            {'Professional tools, developed and quality-assured by professionals, the quality is 1:1 with the branded tools a tradesman uses today; the price is simply better. This is the shared brand hub for every market: the logo, the rules, the voice. Take what you need.'}
+            {'Black, bold, and built to blend in, so your work can stand out. This is the shared brand hub for every market: the story, the logo, the motion, the rules and the voice. Take what you need, and let’s build STROXX 3.0 together.'}
           </p>
         </Reveal>
       </div>
+
+      {/* STROXX 3.0 — the rallying story for team + dealers */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
+        <Reveal><div className="eyebrow mb-6">Welcome to STROXX 3.0</div></Reveal>
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <Reveal>
+            <div className="space-y-5 text-fog leading-relaxed max-w-2xl">
+              <p>{'Over the past years STROXX has grown across markets, categories and partnerships. That growth created real opportunity, and some complexity. Now is the moment to sharpen, simplify and strengthen the foundation.'}</p>
+              <p>{'We are cleaning up the brand, not only visually but strategically: removing what dilutes clarity and focusing on what truly defines STROXX. Quality that makes sense. A strong, reliable alternative. A consistent value platform that works in every market.'}</p>
+              <p>{'Each year we back all markets with strong, centralised campaigns, shared themes, ready-to-use creative and clear activation frameworks, delivered through the DAM so local teams move faster and stay consistent. A Brand Board with every market represented steers the direction, chaired by Rik Lecot.'}</p>
+              <p className="text-white">{'The ambition is simple: a sharper, more focused brand that is easy to manage, easy to activate, and stronger in every market. The smart, reliable alternative in professional tools.'}</p>
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-8">
+              <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">The survey told us</div>
+              <p className="text-white text-xl leading-snug mb-4">{'“Good value for money” is a strong position, but on its own it reads cheap, and cheap erodes trust.'}</p>
+              <p className="text-fog text-sm leading-relaxed">{'So we add professional cues, raise awareness, and let quality carry the price. Same job, told with more pride. That is the whole move.'}</p>
+            </div>
+          </Reveal>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-3 mt-10">
+          {PRINCIPLES.map((p, i) => (
+            <Reveal key={p.t} delay={i * 90}>
+              <div className="glass glass-card rounded-2xl p-7 h-full">
+                <div className="text-stroxx-blue text-sm font-medium mb-2">0{i + 1}</div>
+                <div className="text-white text-lg font-medium mb-2">{p.t}</div>
+                <p className="text-fog text-sm leading-relaxed">{p.b}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
       {/* LOGO + DOWNLOADS */}
       <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
@@ -90,10 +142,7 @@ export default function BrandPage() {
           {LOGO_SETS.map((set) => (
             <Reveal key={set.name}>
               <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
-                <div
-                  className="rounded-xl grid place-items-center py-14 mb-5"
-                  style={{ background: set.dark ? '#0A0B0D' : '#F6F5F3', border: '1px solid rgba(255,255,255,0.06)' }}
-                >
+                <div className="rounded-xl grid place-items-center py-14 mb-5" style={{ background: set.dark ? '#0A0B0D' : '#F6F5F3', border: '1px solid rgba(255,255,255,0.06)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={set.src} alt={`STROXX ${set.name}`} className="h-10 md:h-12 w-auto" />
                 </div>
@@ -131,12 +180,9 @@ export default function BrandPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
             <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
-              <div className="rounded-xl overflow-hidden mb-5" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/motion/stroxx-logo-reveal.svg" alt="STROXX logo reveal animation" className="w-full" />
-              </div>
-              <div className="text-white text-sm font-medium">Logo reveal (sting)</div>
-              <div className="text-fog text-xs mb-4">Draws in with the blue accent. For intros, headers and video.</div>
+              <LogoReveal />
+              <div className="text-white text-sm font-medium mt-4">Logo reveal (sting)</div>
+              <div className="text-fog text-xs mb-4">Draws in on load. For intros, headers and video. Press Replay to watch it again.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-reveal.svg']} />
                 <FmtLink f={['MP4 film', '/brand/motion/stroxx-logo.mp4']} />
@@ -151,7 +197,7 @@ export default function BrandPage() {
                 <img src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" className="w-full" />
               </div>
               <div className="text-white text-sm font-medium">Living logo (loop)</div>
-              <div className="text-fog text-xs mb-4">Breathes and shimmers, forever. For screens and websites.</div>
+              <div className="text-fog text-xs mb-4">A steady light sweep and breathing glow, forever. For screens and websites.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-loop.svg']} />
               </div>
@@ -176,16 +222,41 @@ export default function BrandPage() {
             </div>
           </div>
         </Reveal>
-
-        <Reveal>
-          <p className="mt-6 text-fog/70 text-xs leading-relaxed max-w-2xl">
-            {'Use on black or very dark backgrounds; do not recolour the particles or the mark (blue is the only accent). The embed URL points at the production domain once the site is live.'}
-          </p>
-        </Reveal>
       </section>
 
-      {/* PALETTE / TYPE / INTERFACE / MOTION (code-owned rules) */}
+      {/* PALETTE / TYPE / INTERFACE / MOTION (code-owned rules, colour downloads live here) */}
       <BrandGuide />
+
+      {/* IMAGERY */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+        <Reveal><div className="eyebrow mb-6">Imagery</div></Reveal>
+        <Reveal>
+          <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
+            {'Brand photography, tools in real hands and workshops, dark and honest. A starter set is here; more is on the way. Click to view full size, or download.'}
+          </p>
+        </Reveal>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {GALLERY.map((g, i) => (
+            <Reveal key={g.src} delay={i * 80}>
+              <div className="glass glass-card rounded-2xl overflow-hidden">
+                <a href={g.src} target="_blank" rel="noreferrer" className="block relative group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={g.src} alt={g.label} className="w-full h-56 object-cover" />
+                  <span className="absolute inset-0 bg-ink/0 group-hover:bg-ink/30 transition-colors grid place-items-center opacity-0 group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-2 text-white text-sm"><ExternalLink size={15} /> View</span>
+                  </span>
+                </a>
+                <div className="flex items-center justify-between gap-2 px-4 py-3">
+                  <span className="text-white text-sm">{g.label}</span>
+                  <a href={g.src} download className="inline-flex items-center gap-1.5 text-fog text-xs hover:text-white transition-colors">
+                    <Download size={13} /> Download
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
       {/* POSITIONING + VOICE */}
       <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
@@ -195,24 +266,37 @@ export default function BrandPage() {
             <div className="glass glass-card rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">What STROXX is</div>
               <p className="text-fog leading-relaxed text-sm">
-                {'A full range of professional hand tools, made and quality-assured by professionals. Same feel and performance as the A-brands a tradesman already trusts, at a sharper price. Proud, precise, engineered, never cheap.'}
+                {'A full range of professional tools, made and quality-assured by professionals, at a 1:1 quality with the A-brands a tradesman already trusts. The first thing your tools should build is trust; the price is the reward for choosing smart.'}
               </p>
             </div>
           </Reveal>
           <Reveal delay={90}>
             <div className="glass glass-card rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">Two hats</div>
-              <p className="text-fog leading-relaxed text-sm">
-                {'STROXX the brand convinces on quality and identity and never talks price. STROXX at the dealer (Carl Ras in DK) is where the buying and the pricing happen. The brand site routes to the dealer, it does not sell.'}
+              <p className="text-fog leading-relaxed text-sm mb-4">
+                {'STROXX the brand convinces on quality and identity and never opens with price. STROXX at the dealer is where the buying and the pricing happen. The brand site routes to the dealer, it does not sell.'}
               </p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                {DEALERS.map((d) => (
+                  <div key={d.market} className="text-xs">
+                    <span className="text-fog/60">{d.market}</span>{' '}
+                    <span className="text-white">{d.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
           <Reveal delay={180}>
             <div className="glass glass-card rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">How it sounds</div>
-              <p className="text-fog leading-relaxed text-sm">
-                {'Plain-spoken and confident, like a skilled colleague, not a catalogue. Short lines. Proof over adjectives. Blue is the only accent; the tone is calm and engineered, never loud or bouncy.'}
+              <p className="text-fog leading-relaxed text-sm mb-4">
+                {'Plain-spoken and confident, like a skilled colleague, not a catalogue. Short lines. Proof over adjectives. Calm and engineered, never loud.'}
               </p>
+              <ul className="space-y-1.5 text-sm text-white/90">
+                <li>“Tough and reliable. Just like your colleague.”</li>
+                <li>“Cuts through everything. Including bullshit.”</li>
+                <li>“Same feel. Far from the price.”</li>
+              </ul>
             </div>
           </Reveal>
         </div>
@@ -246,33 +330,9 @@ export default function BrandPage() {
             </div>
           </Reveal>
         </div>
-      </section>
-
-      {/* DOWNLOADS (colours + tokens) */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8 pb-32">
-        <Reveal><div className="eyebrow mb-4">Take the colours with you</div></Reveal>
-        <div className="flex flex-wrap gap-3">
-          {ASSETS.map((d, i) => (
-            <Reveal key={d.href} delay={i * 80}>
-              <a
-                href={d.href}
-                download
-                className="glass glass-card flex items-center gap-4 rounded-xl px-6 py-4 transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/40 text-stroxx-blue">
-                  <Download size={17} strokeWidth={1.8} />
-                </span>
-                <span>
-                  <span className="block text-white text-sm font-medium">{d.label}</span>
-                  <span className="block text-fog text-xs">{d.note}</span>
-                </span>
-              </a>
-            </Reveal>
-          ))}
-        </div>
         <Reveal>
-          <p className="mt-6 text-fog/70 text-xs leading-relaxed max-w-2xl">
-            {'Brand font is Aller; the site uses the system Helvetica Neue stack as the licence-free stand-in. The full Brand Playbook and brandbook stay internal, ask STROXX marketing for the source files or the extended palette.'}
+          <p className="mt-8 text-fog/70 text-xs leading-relaxed max-w-2xl pb-24">
+            {'Brand font is Aller; the site uses the system Helvetica Neue stack as the licence-free stand-in. Colour swatches and CSS tokens download from the palette above. The full Brand Plan, playbook and brandbook stay internal, ask STROXX marketing for source files or the extended palette. One brand, four markets: Carl Ras, Meesenburg, Foussier, Lecot.'}
           </p>
         </Reveal>
       </section>
