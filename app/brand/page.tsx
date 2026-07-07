@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { Download, ExternalLink } from 'lucide-react';
+import { Download } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
 import LogoMotion from '@/components/LogoMotion';
+import PhotoGallery from '@/components/PhotoGallery';
 import Reveal from '@/components/Reveal';
 
 export const metadata: Metadata = {
@@ -78,26 +79,6 @@ const CAMPAIGN = [
   { src: '/Images/campaign/glasses.jpg', label: 'Afford more than just tools · Glasses' },
   { src: '/Images/campaign/rings.jpg', label: 'Afford more than just tools · Rings' },
 ];
-
-function PhotoCard({ src, label }: { src: string; label: string }) {
-  return (
-    <div className="glass glass-card glass-panel--glow rounded-2xl overflow-hidden">
-      <a href={src} target="_blank" rel="noreferrer" className="block relative group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={label} className="w-full h-56 object-cover" />
-        <span className="absolute inset-0 bg-ink/0 group-hover:bg-ink/30 transition-colors grid place-items-center opacity-0 group-hover:opacity-100">
-          <span className="inline-flex items-center gap-2 text-white text-sm"><ExternalLink size={15} /> View</span>
-        </span>
-      </a>
-      <div className="flex items-center justify-between gap-2 px-4 py-3">
-        <span className="text-white text-sm">{label}</span>
-        <a href={src} download className="inline-flex items-center gap-1.5 text-fog text-xs hover:text-white transition-colors">
-          <Download size={13} /> Download
-        </a>
-      </div>
-    </div>
-  );
-}
 
 function FmtLink({ f }: { f: Fmt }) {
   return (
@@ -260,11 +241,7 @@ export default function BrandPage() {
             {'The brand shoots in black and white, always. Tools in real hands, workshops, honest and unposed, high contrast on the dark. A starter set is here; more is on the way. Click to view full size, or download.'}
           </p>
         </Reveal>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {GALLERY.map((g, i) => (
-            <Reveal key={g.src} delay={i * 80}><PhotoCard src={g.src} label={g.label} /></Reveal>
-          ))}
-        </div>
+        <PhotoGallery images={GALLERY} />
       </section>
 
       {/* CAMPAIGN PHOTOGRAPHY */}
@@ -275,11 +252,7 @@ export default function BrandPage() {
             {'From the Prøv Det (Try It) campaign, the shared creative every market can run. Click to view full size, or download.'}
           </p>
         </Reveal>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {CAMPAIGN.map((g, i) => (
-            <Reveal key={g.src} delay={i * 80}><PhotoCard src={g.src} label={g.label} /></Reveal>
-          ))}
-        </div>
+        <PhotoGallery images={CAMPAIGN} />
       </section>
 
       {/* POSITIONING + VOICE */}
