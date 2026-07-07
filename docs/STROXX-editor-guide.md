@@ -48,7 +48,9 @@ Photography ground rules: the design converts photos to black and white automati
 
 The homepage is one document ("Homepage" under Content, or click any headline on the front page in Edit site). Editable: the giant hero headline (one field, press Enter where the line should break, each line animates in separately), the claim and its subtext, the marquee text, the range and scale sections with their two-column texts, the stats band (numbers, suffixes, labels), the specialists headline, the guarantee headline and text, the Tool of the Month intro, the categories headline, and the final buy-button label.
 
-Headlines that mix white and blue (the claim, the Tool of the Month headline) are one field: the part you wrap in *asterisks* renders blue, and Enter breaks the line. The **campaign band photos** (the cinematic cross-fading series) are uploadable too, three photos recommended.
+Headlines that mix white and blue (the claim, the Tool of the Month headline) are one field: the part you wrap in *asterisks* renders blue, and Enter breaks the line.
+
+**The campaign band (box 8 · Campaign photo band) is fully editable and swappable.** Its eyebrow, headline, text and both button labels are their own fields now, so you can click any of them on the page and edit them, and the cross-fading photos are uploadable (three recommended). The "Read more" button is wired to a campaign landing page rather than a fixed address: set **Read more → campaign page** to whichever Landing page the band should promote, and the button links straight to that page's /kampagne/… address. To **swap the campaign**, point that one reference at a different, or brand-new, Landing page, no developer and nothing else to touch. The current campaign, "Campaign: Try It", lives at /kampagne/proev-det (the older /proev-det address redirects there automatically).
 
 The panel is organised as **ten numbered, collapsible boxes in the order the page scrolls** (1 · Hero down to 10 · Categories + final CTA), so what you see in the panel mirrors what you see on the page. They start collapsed for the overview; clicking text on the page opens the right one automatically.
 
