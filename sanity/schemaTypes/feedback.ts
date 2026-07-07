@@ -60,10 +60,20 @@ export const feedback = defineType({
       readOnly: true,
     }),
     defineField({
+      name: 'screenshots',
+      title: 'Screenshots (attached by the tester)',
+      type: 'array',
+      of: [{ type: 'image' }],
+      readOnly: true,
+      description: 'Up to four, in the order the tester attached them.',
+    }),
+    defineField({
       name: 'screenshot',
-      title: 'Screenshot (attached by the tester)',
+      title: 'Screenshot (first, for the list preview)',
       type: 'image',
       readOnly: true,
+      hidden: true,
+      description: 'Mirror of the first screenshot, kept for the list thumbnail and older reports.',
     }),
     defineField({
       name: 'note',

@@ -16,40 +16,84 @@ const KINDS: { v: Kind; label: string }[] = [
   { v: 'other', label: 'Other' },
 ];
 
-const IMG_MAX = 3 * 1024 * 1024; // keep in sync with /api/feedback
+const MAX_IMAGES = 4;
+const MAX_EDGE = 1600; // longest side after downscale (px)
+
+/** Downscale + re-encode a picked image in the browser so several fit under
+ *  Vercel's ~4.5MB request cap. Longest edge capped at MAX_EDGE, encoded WebP
+ *  (JPEG fallback) at 0.85. Screenshots stay perfectly legible; a 4MB phone
+ *  photo drops to a few hundred KB. */
+async function downscale(file: File): Promise<string> {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((res, rej) => {
+      const im = new Image();
+      im.onload = () => res(im);
+      im.onerror = rej;
+      im.src = url;
+    });
+    const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+    const w = Math.max(1, Math.round(img.width * scale));
+    const h = Math.max(1, Math.round(img.height * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+    ctx.drawImage(img, 0, 0, w, h);
+    let out = canvas.toDataURL('image/webp', 0.85);
+    if (!out.startsWith('data:image/webp')) out = canvas.toDataURL('image/jpeg', 0.85);
+    return out;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
 
 export default function FeedbackForm() {
   const [state, setState] = useState<State>('idle');
   const [kind, setKind] = useState<Kind>('bug');
   const [form, setForm] = useState({ message: '', page: '', name: '', email: '' });
-  const [image, setImage] = useState(''); // data URL, '' = none
+  const [images, setImages] = useState<string[]>([]); // downscaled data URLs
+  const [imgBusy, setImgBusy] = useState(false);
   const [imgError, setImgError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  function pickImage(e: React.ChangeEvent<HTMLInputElement>) {
+  async function pickImages(e: React.ChangeEvent<HTMLInputElement>) {
     setImgError('');
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
-      setImgError('PNG, JPG or WebP only.');
+    const files = Array.from(e.target.files ?? []);
+    if (fileRef.current) fileRef.current.value = ''; // let the same file be re-picked
+    if (!files.length) return;
+
+    const room = MAX_IMAGES - images.length;
+    if (room <= 0) {
+      setImgError(`Up to ${MAX_IMAGES} images.`);
       return;
     }
-    if (file.size > IMG_MAX) {
-      setImgError('Keep the screenshot under 3 MB (a phone screenshot is fine).');
-      return;
+    const valid = files.filter((f) => /^image\/(png|jpeg|webp)$/.test(f.type));
+    const take = valid.slice(0, room);
+    if (valid.length < files.length) setImgError('PNG, JPG or WebP only; other files were skipped.');
+    else if (valid.length > room) setImgError(`Only ${MAX_IMAGES} images max; the extra ones were skipped.`);
+
+    setImgBusy(true);
+    const done: string[] = [];
+    for (const f of take) {
+      try {
+        const d = await downscale(f);
+        if (d) done.push(d);
+      } catch {
+        /* skip a file that won't decode */
+      }
     }
-    const reader = new FileReader();
-    reader.onload = () => setImage(String(reader.result || ''));
-    reader.readAsDataURL(file);
+    setImages((prev) => [...prev, ...done].slice(0, MAX_IMAGES));
+    setImgBusy(false);
   }
 
-  function clearImage() {
-    setImage('');
+  function removeImage(i: number) {
+    setImages((prev) => prev.filter((_, k) => k !== i));
     setImgError('');
-    if (fileRef.current) fileRef.current.value = '';
   }
 
   async function submit(e: React.FormEvent) {
@@ -63,7 +107,7 @@ export default function FeedbackForm() {
         body: JSON.stringify({
           ...form,
           kind,
-          image,
+          images,
           device: typeof navigator !== 'undefined' ? navigator.userAgent : '',
           company: '', // honeypot
         }),
@@ -137,25 +181,25 @@ export default function FeedbackForm() {
         />
       </div>
 
-      {/* optional screenshot */}
+      {/* optional screenshots (up to MAX_IMAGES, downscaled in the browser) */}
       <div className="flex flex-wrap items-center gap-3">
-        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={pickImage} className="hidden" id="fb-shot" />
-        {!image ? (
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" multiple onChange={pickImages} className="hidden" id="fb-shot" />
+        {images.map((src, i) => (
+          <span key={i} className="inline-flex items-center gap-2 rounded-2xl border border-line bg-ink/50 p-2 pr-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={`Screenshot ${i + 1} to attach`} className="h-12 w-12 rounded-lg object-cover" />
+            <button type="button" onClick={() => removeImage(i)} aria-label={`Remove screenshot ${i + 1}`} className="text-fog transition-colors hover:text-white">
+              <X size={15} />
+            </button>
+          </span>
+        ))}
+        {images.length < MAX_IMAGES && (
           <label
             htmlFor="fb-shot"
             className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-line bg-ink/50 px-4 py-2 text-sm text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white"
           >
-            <ImagePlus size={15} /> Attach a screenshot (optional)
+            <ImagePlus size={15} /> {imgBusy ? 'Adding…' : images.length ? 'Add another' : 'Attach screenshots (optional)'}
           </label>
-        ) : (
-          <span className="inline-flex items-center gap-3 rounded-2xl border border-line bg-ink/50 p-2 pr-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt="Screenshot to attach" className="h-12 w-12 rounded-lg object-cover" />
-            <span className="text-sm text-fog">Screenshot attached</span>
-            <button type="button" onClick={clearImage} aria-label="Remove screenshot" className="text-fog transition-colors hover:text-white">
-              <X size={15} />
-            </button>
-          </span>
         )}
         {imgError && <span className="text-sm text-fog">{imgError}</span>}
       </div>

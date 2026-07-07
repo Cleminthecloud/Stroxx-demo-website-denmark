@@ -15,10 +15,11 @@ export const maxDuration = 30;
 
 const KINDS = ['bug', 'idea', 'other'] as const;
 
-/* screenshot arrives as a data URL; keep well under Vercel's ~4.5MB body cap
-   (base64 inflates by ~33%, so 3MB of pixels ≈ 4MB on the wire) */
+/* screenshots arrive as data URLs (the form downscales them first); keep well
+   under Vercel's ~4.5MB body cap. Up to MAX_IMAGES per report, each guarded. */
 const IMG_RE = /^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$/;
 const IMG_MAX_BYTES = 3 * 1024 * 1024;
+const MAX_IMAGES = 4;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 });
@@ -26,7 +27,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'rate-limited' }, { status: 429 });
   }
 
-  let message = '', page = '', reporter = '', email = '', kind = '', device = '', honeypot = '', image = '';
+  let message = '', page = '', reporter = '', email = '', kind = '', device = '', honeypot = '';
+  let images: string[] = [];
   try {
     const b = await req.json();
     message = String(b?.message ?? '').trim().slice(0, 4000);
@@ -36,7 +38,12 @@ export async function POST(req: NextRequest) {
     kind = String(b?.kind ?? 'bug');
     device = String(b?.device ?? '').slice(0, 300);
     honeypot = String(b?.company ?? '');
-    image = String(b?.image ?? '');
+    // Accept an images[] array; fall back to a single `image` for older clients.
+    images = Array.isArray(b?.images)
+      ? b.images.map((x: unknown) => String(x ?? '')).filter(Boolean).slice(0, MAX_IMAGES)
+      : b?.image
+      ? [String(b.image)]
+      : [];
   } catch {
     return NextResponse.json({ ok: false, error: 'bad-request' }, { status: 400 });
   }
@@ -49,27 +56,42 @@ export async function POST(req: NextRequest) {
 
   const client = createClient({ projectId, dataset, apiVersion: '2026-07-01', token, useCdn: false });
   try {
-    /* optional screenshot: strictly validated data URL → Sanity image asset.
-       A bad/oversized image never sinks the report; it is simply dropped. */
-    let screenshot: { _type: 'image'; asset: { _type: 'reference'; _ref: string } } | undefined;
-    const m = image ? IMG_RE.exec(image) : null;
-    if (m) {
+    /* optional screenshots: each strictly validated data URL → Sanity image
+       asset. A bad/oversized image never sinks the report; it is dropped. */
+    type ImageRef = { _type: 'image'; _key: string; asset: { _type: 'reference'; _ref: string } };
+    const screenshots: ImageRef[] = [];
+    for (let i = 0; i < images.length && screenshots.length < MAX_IMAGES; i++) {
+      const m = IMG_RE.exec(images[i]);
+      if (!m) continue;
       const buf = Buffer.from(m[2], 'base64');
-      if (buf.byteLength > 0 && buf.byteLength <= IMG_MAX_BYTES) {
-        try {
-          const asset = await client.assets.upload('image', buf, {
-            filename: `feedback-${Date.now()}.${m[1] === 'jpeg' ? 'jpg' : m[1]}`,
-            contentType: `image/${m[1]}`,
-          });
-          screenshot = { _type: 'image', asset: { _type: 'reference', _ref: asset._id } };
-        } catch {
-          /* drop the image, keep the words */
-        }
+      if (buf.byteLength === 0 || buf.byteLength > IMG_MAX_BYTES) continue;
+      try {
+        const asset = await client.assets.upload('image', buf, {
+          filename: `feedback-${Date.now()}-${i + 1}.${m[1] === 'jpeg' ? 'jpg' : m[1]}`,
+          contentType: `image/${m[1]}`,
+        });
+        screenshots.push({ _type: 'image', _key: `shot-${i}-${asset._id.slice(-6)}`, asset: { _type: 'reference', _ref: asset._id } });
+      } catch {
+        /* drop this image, keep the report and the others */
       }
     }
+    // `screenshot` (first) kept for back-compat + the list thumbnail; the full
+    // set lives in `screenshots`.
+    const first = screenshots[0] ? { _type: 'image' as const, asset: screenshots[0].asset } : undefined;
 
     await client.create(
-      { _type: 'feedback', status: 'new', kind, message, page, reporter, email, device, ...(screenshot ? { screenshot } : {}) },
+      {
+        _type: 'feedback',
+        status: 'new',
+        kind,
+        message,
+        page,
+        reporter,
+        email,
+        device,
+        ...(first ? { screenshot: first } : {}),
+        ...(screenshots.length ? { screenshots } : {}),
+      },
       { visibility: 'async' }
     );
     return NextResponse.json({ ok: true });
