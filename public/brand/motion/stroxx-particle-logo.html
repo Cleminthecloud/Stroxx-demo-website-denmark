@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>STROXX particle logo</title>
+<style>
+  html,body{margin:0;height:100%;background:#0B0C0E;overflow:hidden}
+  #stx{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<canvas id="stx" aria-label="STROXX"></canvas>
+<script>
+/* STROXX particle logo — self-contained, no dependencies. Drop this file on any
+   host, or embed it: <iframe src="stroxx-particle-logo.html" style="border:0;width:520px;height:200px"></iframe>
+   Blue particles assemble into the STROXX wordmark, drift gently, and scatter
+   from the cursor. Brand: STROXX-blue only, calm and engineered. */
+(function () {
+  var BLUES = ['#2C7FC0', '#1E8FD5', '#0098E8', '#4FA8EE', '#8FC6F4', '#D2E8FC'];
+  var MR = 120, MF = 3.0, MAX = 2600;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // The real STROXX wordmark (white), inlined so the file is fully portable.
+  var LOGO = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.34 28.31"><g fill="#fff">'
+    + '<polygon points="21 8.2 24.14 8.2 24.14 22.97 26.86 22.97 26.86 8.2 30 8.2 30 5.89 21 5.89 21 8.2"/>'
+    + '<path d="M45.18,13.46c.35-.71.52-1.56.52-2.55,0-3.34-1.6-5.01-4.8-5.01h-4.37v17.07h2.72v-7.29h1.63l2.53,7.29h2.88l-2.93-7.79c.87-.43,1.48-1,1.83-1.71ZM42.9,12c-.05.33-.16.6-.31.83-.15.22-.37.4-.65.52-.28.12-.67.18-1.15.18h-1.55v-5.32h1.41c.5,0,.9.06,1.2.17.3.11.54.28.71.52.17.23.28.51.33.84.05.33.08.71.08,1.14s-.03.81-.08,1.14Z"/>'
+    + '<path d="M13.76,6.97c-.4-.37-.88-.66-1.44-.89-.56-.22-1.18-.34-1.85-.34-.78,0-1.47.12-2.05.37-.59.25-1.07.58-1.45,1-.38.42-.67.91-.87,1.49-.2.58-.29,1.18-.29,1.82,0,1.07.2,1.96.6,2.67.4.71,1.19,1.28,2.36,1.71l1.95.72c.34.13.61.25.81.36.2.11.36.26.48.43.12.18.19.41.23.7.04.29.05.66.05,1.1,0,.38-.02.74-.05,1.06-.04.32-.12.59-.25.8-.13.22-.33.38-.59.5-.26.12-.62.18-1.08.18-.69,0-1.19-.18-1.48-.54-.29-.36-.44-.76-.44-1.21v-.77h-2.72v.91c0,.58.12,1.11.36,1.61.24.5.56.92.97,1.28.41.36.9.64,1.47.85.57.21,1.18.31,1.84.31.87,0,1.61-.13,2.21-.38.6-.26,1.09-.6,1.45-1.04.36-.44.63-.97.79-1.58.16-.62.24-1.28.24-2,0-.62-.04-1.18-.11-1.67-.07-.49-.21-.92-.41-1.3-.2-.38-.49-.7-.87-.98-.37-.28-.86-.52-1.47-.73l-2.08-.74c-.36-.13-.64-.26-.84-.38-.2-.13-.36-.28-.47-.44-.11-.17-.17-.37-.2-.6-.03-.23-.04-.52-.04-.85,0-.29.03-.56.08-.83.05-.26.15-.5.28-.7.13-.2.32-.36.56-.49.24-.13.55-.19.92-.19.69,0,1.19.2,1.48.61.29.41.44.89.44,1.45v.55h2.72v-1.2c0-.48-.11-.95-.32-1.4-.21-.46-.52-.87-.92-1.24Z"/>'
+    + '<polygon points="78.74 5.89 75.86 5.89 73.78 10.95 71.73 5.89 68.85 5.89 72.4 14.02 68.56 22.97 71.44 22.97 73.78 17.21 76.15 22.97 79.03 22.97 75.11 14.02 78.74 5.89"/>'
+    + '<path d="M60.71,6.79c-.44-.34-.92-.6-1.47-.78-.54-.18-1.09-.26-1.64-.26s-1.1.09-1.64.26c-.54.18-1.03.44-1.47.78-.44.34-.79.78-1.05,1.31-.27.53-.4,1.14-.4,1.82v9.02c0,.7.13,1.32.4,1.83.27.52.62.95,1.05,1.29.44.34.92.6,1.47.78.54.18,1.09.26,1.64.26s1.1-.09,1.64-.26c.54-.18,1.03-.44,1.47-.78.43-.34.79-.78,1.05-1.29.27-.52.4-1.13.4-1.83v-9.02c0-.69-.13-1.29-.4-1.82-.27-.53-.62-.96-1.05-1.31ZM59.45,18.94c0,.59-.18,1.03-.55,1.31-.36.28-.8.42-1.29.42s-.93-.14-1.29-.42c-.36-.28-.55-.72-.55-1.31v-9.02c0-.59.18-1.03.55-1.31.36-.28.79-.42,1.29-.42s.93.14,1.29.42c.36.28.55.72.55,1.31v9.02Z"/>'
+    + '<polygon points="94.43 5.89 91.55 5.89 89.48 10.95 87.42 5.89 84.55 5.89 88.09 14.02 84.25 22.97 87.13 22.97 89.48 17.21 91.85 22.97 94.72 22.97 90.81 14.02 94.43 5.89"/>'
+    + '<path d="M0,0v28.31h100.34V0H0ZM98.88,26.85H1.46V1.46h97.42v25.4Z"/>'
+    + '</g></svg>';
+
+  var cv = document.getElementById('stx'), ctx = cv.getContext('2d');
+  var W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1);
+  var P = [], dot = 1.4, mx = -1e5, my = -1e5;
+
+  function size() {
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.max(1, W * dpr); cv.height = Math.max(1, H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function build() {
+    var img = new Image();
+    img.onload = function () {
+      var OW = 300, OH = Math.round(OW * (28.31 / 100.34));
+      var off = document.createElement('canvas'); off.width = OW; off.height = OH;
+      var o = off.getContext('2d'); o.drawImage(img, 0, 0, OW, OH);
+      var d;
+      try { d = o.getImageData(0, 0, OW, OH).data; } catch (e) { return; }
+      var cand = [], minX = OW, minY = OH, maxX = 0, maxY = 0, x, y, i, a;
+      for (y = 0; y < OH; y += 1) for (x = 0; x < OW; x += 1) {
+        i = (y * OW + x) * 4; a = d[i + 3];
+        if (a < 40) continue;
+        cand.push(x, y);
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (y < minY) minY = y; if (y > maxY) maxY = y;
+      }
+      var total = cand.length / 2; if (!total) return;
+      var stride = total > MAX ? Math.ceil(total / MAX) : 1;
+      var bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
+      var scale = Math.min((W * 0.66) / bw, (H * 0.66) / bh);
+      var bcx = (minX + maxX) / 2, bcy = (minY + maxY) / 2;
+      dot = Math.max(1, scale * 0.4);
+      P = [];
+      for (var k = 0; k < total; k += stride) {
+        var sx = cand[k * 2], sy = cand[k * 2 + 1];
+        var tx = W / 2 + (sx - bcx) * scale, ty = H / 2 + (sy - bcy) * scale;
+        var free = Math.random() < 0.24;
+        P.push({
+          x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: tx, ty: ty,
+          k: free ? 0.004 : 0.012 + Math.random() * 0.03, dr: 0.80 + Math.random() * 0.1,
+          wa: free ? 5 + Math.random() * 10 : 0.3 + Math.random() * 1.4, ws: 0.4 + Math.random() * 1.6,
+          wp: Math.random() * 6.28, c: BLUES[Math.min(BLUES.length - 1, Math.floor(Math.random() * BLUES.length))],
+          s: 0.7 + Math.random() * 0.5
+        });
+      }
+      if (reduce) { for (var m = 0; m < P.length; m++) { P[m].x = P[m].tx; P[m].y = P[m].ty; } draw(); }
+    };
+    img.src = 'data:image/svg+xml,' + encodeURIComponent(LOGO);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < P.length; i++) {
+      var p = P[i];
+      ctx.globalAlpha = 0.92; ctx.fillStyle = p.c;
+      ctx.beginPath(); ctx.arc(p.x, p.y, dot * p.s, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  var t = 0;
+  function frame() {
+    t += 0.016;
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < P.length; i++) {
+      var p = P[i];
+      var tx = p.tx + Math.cos(t * p.ws + p.wp) * p.wa;
+      var ty = p.ty + Math.sin(t * p.ws + p.wp) * p.wa;
+      p.vx += (tx - p.x) * p.k; p.vy += (ty - p.y) * p.k;
+      var ddx = p.x - mx, ddy = p.y - my, dd = ddx * ddx + ddy * ddy;
+      if (dd < MR * MR) { var f = (1 - Math.sqrt(dd) / MR) * MF; var inv = 1 / (Math.sqrt(dd) || 1); p.vx += ddx * inv * f; p.vy += ddy * inv * f; }
+      p.vx *= p.dr; p.vy *= p.dr; p.x += p.vx; p.y += p.vy;
+      ctx.globalAlpha = 0.92; ctx.fillStyle = p.c;
+      ctx.beginPath(); ctx.arc(p.x, p.y, dot * p.s, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('resize', function () { size(); build(); });
+  cv.addEventListener('pointermove', function (e) { var r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', function () { mx = -1e5; my = -1e5; });
+
+  size(); build();
+  if (!reduce) requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

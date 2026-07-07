@@ -120,6 +120,70 @@ export default function BrandPage() {
         </Reveal>
       </section>
 
+      {/* MOTION + EMBEDS */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
+        <Reveal><div className="eyebrow mb-6">Motion + embeds</div></Reveal>
+        <Reveal>
+          <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
+            {'An animated logo kit for reels, presentations and partner sites. Everything is self-contained, sits on a dark background, and keeps blue as the only accent. Grab a file or drop an embed onto any page.'}
+          </p>
+        </Reveal>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Reveal>
+            <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
+              <div className="rounded-xl overflow-hidden mb-5" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/motion/stroxx-logo-reveal.svg" alt="STROXX logo reveal animation" className="w-full" />
+              </div>
+              <div className="text-white text-sm font-medium">Logo reveal (sting)</div>
+              <div className="text-fog text-xs mb-4">Draws in with the blue accent. For intros, headers and video.</div>
+              <div className="mt-auto flex flex-wrap gap-2">
+                <FmtLink f={['SVG', '/brand/motion/stroxx-logo-reveal.svg']} />
+                <FmtLink f={['MP4 film', '/brand/motion/stroxx-logo.mp4']} />
+                <FmtLink f={['GIF', '/brand/motion/stroxx-logo.gif']} />
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={90}>
+            <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
+              <div className="rounded-xl overflow-hidden mb-5" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" className="w-full" />
+              </div>
+              <div className="text-white text-sm font-medium">Living logo (loop)</div>
+              <div className="text-fog text-xs mb-4">Breathes and shimmers, forever. For screens and websites.</div>
+              <div className="mt-auto flex flex-wrap gap-2">
+                <FmtLink f={['SVG', '/brand/motion/stroxx-logo-loop.svg']} />
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal>
+          <div className="glass glass-card rounded-2xl p-6 mt-6">
+            <div className="grid gap-6 lg:grid-cols-2 lg:items-center">
+              <div className="rounded-xl overflow-hidden" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <iframe src="/brand/motion/stroxx-particle-logo.html" title="STROXX particle logo" className="w-full" style={{ height: 220, border: 0 }} />
+              </div>
+              <div>
+                <div className="text-white text-sm font-medium mb-1">Particle logo (interactive)</div>
+                <p className="text-fog text-xs leading-relaxed mb-4">
+                  {'Blue particles assemble into the mark and scatter from the cursor. Self-contained, no dependencies, drops onto any site. Download the file, or embed it:'}
+                </p>
+                <pre className="text-fog/80 text-[11px] leading-relaxed bg-ink/60 border border-line rounded-lg p-3 overflow-x-auto"><code>{'<iframe src="https://stroxx.eu/brand/motion/stroxx-particle-logo.html"\n  style="border:0;width:520px;height:200px" title="STROXX"></iframe>'}</code></pre>
+                <div className="mt-4"><FmtLink f={['Download .html', '/brand/motion/stroxx-particle-logo.html']} /></div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <p className="mt-6 text-fog/70 text-xs leading-relaxed max-w-2xl">
+            {'Use on black or very dark backgrounds; do not recolour the particles or the mark (blue is the only accent). The embed URL points at the production domain once the site is live.'}
+          </p>
+        </Reveal>
+      </section>
+
       {/* PALETTE / TYPE / INTERFACE / MOTION (code-owned rules) */}
       <BrandGuide />
 

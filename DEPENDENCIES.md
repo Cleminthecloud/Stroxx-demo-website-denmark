@@ -123,7 +123,7 @@ The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its co
 | Schema (`sanity/schemaTypes/`) | Rendered by / drives |
 |---|---|
 | `homePage` | `app/page.tsx` (home section blocks) |
-| ~~`brandPage`~~ | REMOVED Jul 7, `/brand` is now fully code-owned (`app/brand/page.tsx`), no CMS doc. Logo pack in `public/brand/logos/` (Black/White × SVG/PNG/WebP/PDF/EPS/AI). `components/BrandMarks.tsx` is now an unused orphan. |
+| ~~`brandPage`~~ | REMOVED Jul 7, `/brand` is now fully code-owned (`app/brand/page.tsx`), no CMS doc. Logo pack in `public/brand/logos/` (Black/White × SVG/PNG/WebP/PDF/EPS/AI). Motion kit in `public/brand/motion/` (SMIL SVGs `stroxx-logo-reveal.svg` + `stroxx-logo-loop.svg`, self-contained particle embed `stroxx-particle-logo.html`, ffmpeg film `stroxx-logo.mp4` + `.gif`) surfaced in the /brand "Motion + embeds" section. `components/BrandMarks.tsx` is now an unused orphan. Motion SVGs use SMIL (animate as `<img>`); regenerate the film with ffmpeg (see memory). |
 | `landingPage` | `/proev-det`, `/maanedens` (CMS section blocks) |
 | `monthlyLineup` | Månedens STROXX, pairs with `lib/ska.ts` |
 | `post` | `/nyheder`, `/nyheder/[slug]`; carries the share-preview field |
