@@ -67,10 +67,6 @@ export default defineConfig({
             select: {},
             resolve: () => ({ locations: [{ title: 'Homepage', href: '/' }] }),
           }),
-          brandPage: defineLocations({
-            select: {},
-            resolve: () => ({ locations: [{ title: 'Brand guide', href: '/brand' }] }),
-          }),
           store: defineLocations({
             select: { name: 'name' },
             resolve: (doc) => ({

@@ -123,7 +123,7 @@ The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its co
 | Schema (`sanity/schemaTypes/`) | Rendered by / drives |
 |---|---|
 | `homePage` | `app/page.tsx` (home section blocks) |
-| `brandPage` | `app/brand` |
+| ~~`brandPage`~~ | REMOVED Jul 7, `/brand` is now fully code-owned (`app/brand/page.tsx`), no CMS doc. Logo pack in `public/brand/logos/` (Black/White × SVG/PNG/WebP/PDF/EPS/AI). `components/BrandMarks.tsx` is now an unused orphan. |
 | `landingPage` | `/proev-det`, `/maanedens` (CMS section blocks) |
 | `monthlyLineup` | Månedens STROXX, pairs with `lib/ska.ts` |
 | `post` | `/nyheder`, `/nyheder/[slug]`; carries the share-preview field |

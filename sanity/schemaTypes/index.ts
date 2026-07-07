@@ -11,7 +11,7 @@ import { redirect } from './redirect';
 import { supportPage } from './supportPage';
 import { qrCode } from './qrCode';
 import { feedback } from './feedback';
-import { brandPage } from './brandPage';
+/* brandPage removed from the Studio: /brand is now fully code-owned (we manage it) */
 
 export const schemaTypes = [
   siteSettings,
@@ -30,5 +30,4 @@ export const schemaTypes = [
   supportPage,
   qrCode,
   feedback,
-  brandPage,
 ];

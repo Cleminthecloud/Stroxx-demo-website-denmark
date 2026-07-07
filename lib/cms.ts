@@ -315,18 +315,7 @@ export async function getStores(): Promise<Store[]> {
   }
 }
 
-/* ── Brand guide page ───────────────────────────────────────────────────── */
-
-export type BrandPageDoc = { intro?: string; body?: any[] };
-
-export async function getBrandPage(): Promise<BrandPageDoc | null> {
-  try {
-    const { data } = await sanityFetch({ query: '*[_type == "brandPage"][0]' });
-    return (data as BrandPageDoc) ?? null;
-  } catch {
-    return null;
-  }
-}
+/* Brand guide page (/brand) is fully code-owned, no CMS document. */
 
 /* ── Trades (fag pages) ─────────────────────────────────────────────────── */
 
