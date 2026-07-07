@@ -1,7 +1,7 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.9 · July 2026
+Version 1.10 · July 2026
 
 ---
 
