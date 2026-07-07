@@ -19,7 +19,7 @@ export default function LogoMotion({ src, alt }: { src: string; alt: string }) {
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img key={k} src={`${src}?v=5&r=${k}`} alt={alt} className="w-full" />
+        <img key={k} src={`${src}?v=6&r=${k}`} alt={alt} className="w-full" />
       </div>
       <button
         type="button"

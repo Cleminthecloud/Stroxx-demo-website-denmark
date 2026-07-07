@@ -80,6 +80,21 @@ const CAMPAIGN = [
   { src: '/Images/campaign/rings.jpg', label: 'Afford more than just tools · Rings' },
 ];
 
+/** STROXX in the world, the Prøv Det campaign realised across touchpoints.
+ *  Previews rendered from the print-ready layouts. Drop new files into
+ *  /public/brand/applications and add a row. */
+const APPLICATIONS = [
+  { src: '/brand/applications/store-takeover.jpg', label: 'carl-ras.dk homepage takeover' },
+  { src: '/brand/applications/entrance.jpg', label: 'Entrance / storefront' },
+  { src: '/brand/applications/banner-facade.jpg', label: 'Facade banner' },
+  { src: '/brand/applications/poster-a3.jpg', label: 'A3 poster' },
+  { src: '/brand/applications/poster-abuk.jpg', label: 'A-frame poster (50×70)' },
+  { src: '/brand/applications/poster-info.jpg', label: 'Campaign info poster (A2)' },
+  { src: '/brand/applications/social-ad.jpg', label: 'Social ad (4:5)' },
+  { src: '/brand/applications/shelf-talker.jpg', label: 'Shelf-talker' },
+  { src: '/brand/applications/screensaver.jpg', label: 'Screensaver' },
+];
+
 function FmtLink({ f }: { f: Fmt }) {
   return (
     <a
@@ -253,6 +268,17 @@ export default function BrandPage() {
           </p>
         </Reveal>
         <PhotoGallery images={CAMPAIGN} />
+      </section>
+
+      {/* STROXX IN THE WORLD */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+        <Reveal><div className="eyebrow mb-6">STROXX in the world</div></Reveal>
+        <Reveal>
+          <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
+            {'The campaign, activated. One idea running everywhere a tradesperson looks, from the storefront to the feed. This is what every market can put up next month; the print-ready source files (all banner sizes, entrances, posters) live with STROXX marketing. Click to view, or download a preview.'}
+          </p>
+        </Reveal>
+        <PhotoGallery images={APPLICATIONS} />
       </section>
 
       {/* POSITIONING + VOICE */}
