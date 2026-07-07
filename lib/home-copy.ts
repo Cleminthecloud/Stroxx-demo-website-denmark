@@ -11,6 +11,8 @@ export type HomeCopy = {
   scaleHeadline: string; scaleCol1Label: string; scaleCol1Text: string; scaleCol2Label: string; scaleCol2Text: string;
   stats: HomeStat[];
   specialistsHeadline: string;
+  filmEyebrow: string; filmHeadline: string;
+  films?: unknown[]; // editor-picked films (dereferenced in getHomePage)
   guaranteeHeadline: string; guaranteeText: string;
   monthHeadline: string; monthText: string;
   categoriesHeadline: string;
@@ -28,6 +30,7 @@ export type HomeCopy = {
   showRange: boolean;
   showScale: boolean;
   showSpecialists: boolean;
+  showFilm: boolean;
   showGuarantee: boolean;
   showCampaign: boolean;
   showMonth: boolean;
@@ -63,6 +66,8 @@ export const HOME_DEFAULTS: HomeCopy = {
     { value: 227, suffix: '+', label: 'stores in Europe' },
   ],
   specialistsHeadline: 'Masters of the trade, majoring in STROXX',
+  filmEyebrow: 'On the job',
+  filmHeadline: 'See it *at work.*',
   guaranteeHeadline: '*100%* satisfaction \n or your money back.',
   guaranteeText:
     "We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started.",
@@ -83,6 +88,7 @@ export const HOME_DEFAULTS: HomeCopy = {
   showRange: true,
   showScale: true,
   showSpecialists: true,
+  showFilm: false, // net-new section, off until an editor enables it
   showGuarantee: true,
   showCampaign: true,
   showMonth: true,

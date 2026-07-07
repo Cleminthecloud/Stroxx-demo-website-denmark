@@ -141,7 +141,7 @@ export default async function MaanedensPage() {
           <Reveal><div className="eyebrow mb-5">Demonstration</div></Reveal>
           <ScrollText as="h2" text="See it. Judge it yourself."
             className="h-display text-white text-[clamp(2rem,4.5vw,3.4rem)] leading-[0.95] mb-12" />
-          <VideoProof videos={await getVideos()} />
+          <VideoProof videos={SKA.films.length ? SKA.films : await getVideos()} />
         </div>
       </section>
 

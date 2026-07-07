@@ -16,6 +16,7 @@ import KnockoutImage from '@/components/KnockoutImage';
 import ProvDet from '@/components/ProvDet';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import CampaignBand from '@/components/CampaignBand';
+import VideoProof from '@/components/VideoProof';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   featuredCategories,
@@ -26,7 +27,7 @@ import {
   UTM,
   CR_BRAND,
 } from '@/lib/data';
-import { getSka, getHomePage, getSpecialists } from '@/lib/cms';
+import { getSka, getHomePage, getSpecialists, getVideos } from '@/lib/cms';
 import { cardCols, statColsSm } from '@/lib/grid';
 import { Accent } from '@/components/cms/LandingSections';
 import { createDataAttribute } from 'next-sanity';
@@ -67,6 +68,9 @@ export default async function Home() {
   const SKA = await getSka();
   const hp = await getHomePage();
   const specs = await getSpecialists();
+  // Homepage featured-film section: editor-picked films, else all active films.
+  const pickedFilms = (hp.films as { id: string; title: string; by: string }[] | undefined) ?? [];
+  const filmVids = hp.showFilm ? (pickedFilms.length ? pickedFilms : await getVideos()) : [];
   /* click-to-edit target per homepage block (Presentation tool) */
   const hAttr = (path: string) =>
     hp._id
@@ -231,6 +235,21 @@ export default async function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+      )}
+
+      {/* FEATURED FILM (optional, off by default) */}
+      {hp.showFilm && (
+      <section className="relative">
+        <div aria-hidden className="absolute inset-0" style={{ background: 'radial-gradient(55% 45% at 50% 40%, rgba(0,136,194,0.09), transparent 70%)' }} />
+        <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
+          <div data-sanity={hAttr('filmHeadline')} className="mb-14 max-w-3xl">
+            <Eyebrow>{hp.filmEyebrow}</Eyebrow>
+            <ScrollText as="h2" text={hp.filmHeadline}
+              className="h-display text-white text-[clamp(2.4rem,6vw,5rem)] leading-[0.92]" />
+          </div>
+          <div className="max-w-5xl"><VideoProof videos={filmVids} /></div>
         </div>
       </section>
       )}

@@ -102,7 +102,14 @@ The landing-page film section (`videoProof` block) has a `films` field: an array
 1. The field is references `to: [{ type: 'video' }]`; changing the target type means changing `FilmPicker` and the render.
 2. `getLandingPage` (`lib/cms.ts`) dereferences the picked films in its query (`_type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } }`). Without this projection the renderer gets raw refs and shows nothing.
 3. `components/cms/LandingSections.tsx` `videoProof` case maps the dereferenced films to `Video[]` and falls back to all-active (`getVideos()`) when empty.
-Films created from a URL are `active: true` with an empty title (rename in the Film collection), so they also appear in any other section still using the all-active fallback. Applying this picker to another placement = add a `films` reference field there, dereference it in that page's query, and map it in the renderer.
+Films created from a URL are `active: true`, so they also appear in any other section still using the all-active fallback. Title + channel are auto-filled from YouTube via `app/api/film-meta/route.ts` (server-side oEmbed lookup; oEmbed sends no CORS headers so it can't be called from the browser, hence the route, same-origin + rate-limited, blanks on failure). No CSP change needed (the picker calls our same-origin route; the route calls YouTube server-side).
+
+**The film picker is used in three places, each with the same field → query-deref → renderer pattern:**
+1. Landing film section (`videoProof` block): `getLandingPage` deref, `LandingSections` videoProof case.
+2. Månedens (`monthlyLineup.films`): `getSka` deref + maps to `SkaData.films` (added to `lib/ska.ts` SKA fallback as `films: [] as Video[]`), rendered in `app/maanedens/page.tsx` (`SKA.films.length ? SKA.films : getVideos()`).
+3. Homepage featured film (`homePage.films` + `showFilm`/`filmEyebrow`/`filmHeadline`): `getHomePage` deref (sets `merged.films`), rendered in `app/page.tsx` after Specialists, before Guarantee, gated on `hp.showFilm` (default OFF in `HOME_DEFAULTS`). NOTE `lib/home-copy.ts` must stay import-free (seed script constraint), so `films` is typed `unknown[]` there and cast in the page. The section is toggleable like every other homepage section (the `show*` booleans).
+
+Applying the picker to a new placement = add a `films` reference field + dereference it in that page's query + map it in the renderer (+ a `show*` toggle if it's a homepage-style optional section).
 
 ### Månedens STROXX is date-driven
 `getSka()` (`lib/cms.ts`) selects the latest `monthlyLineup` whose `activeFrom` date has passed: `... && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]`. So the live month is decided by the `activeFrom` field, NOT creation order (lineups without a date fall back to newest-created). Editors stage next month ahead by setting a future `activeFrom`. Changing this query or removing `activeFrom` reverts to "newest created wins". Still pairs with `lib/ska.ts` as the hardcoded fallback when no lineup matches or SKUs don't resolve.

@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import FilmPicker from '../FilmPicker';
 
 const accentNote = 'Wrap a word in *asterisks* for the blue accent. Line breaks are respected.';
 const t = (name: string, title: string, rows = 2) =>
@@ -49,6 +50,7 @@ export const homePage = defineType({
     fs('fsRange', '4 · The range (two columns)'),
     fs('fsScale', '5 · The scale + stats band'),
     fs('fsSpecialists', '6 · Specialists'),
+    fs('fsFilm', '6b · Featured film'),
     fs('fsGuarantee', '7 · Guarantee'),
     fs('fsCampaign', '8 · Campaign photo band'),
     fs('fsMonth', '9 · Tool of the month'),
@@ -109,6 +111,21 @@ export const homePage = defineType({
 
     show('showSpecialists', 'fsSpecialists', 'proof'),
     defineField({ ...s('specialistsHeadline', 'Specialists headline'), description: accentNote, group: 'proof', fieldset: 'fsSpecialists' }),
+
+    show('showFilm', 'fsFilm', 'proof'),
+    defineField({ ...s('filmEyebrow', 'Film: eyebrow label'), group: 'proof', fieldset: 'fsFilm' }),
+    defineField({ ...t('filmHeadline', 'Film: headline'), description: accentNote, group: 'proof', fieldset: 'fsFilm' }),
+    defineField({
+      name: 'films',
+      title: 'Films',
+      type: 'array',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'video' }] })],
+      components: { input: FilmPicker },
+      group: 'proof',
+      fieldset: 'fsFilm',
+      description: 'Pick the film(s) shown in this homepage section. Paste a YouTube link to add a new one. Empty = all active films.',
+    }),
+
     show('showGuarantee', 'fsGuarantee', 'proof'),
     defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof', fieldset: 'fsGuarantee' }),
     defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof', fieldset: 'fsGuarantee' }),

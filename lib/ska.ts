@@ -1,4 +1,5 @@
 import { products, Product } from '@/lib/data';
+import type { Video } from '@/lib/videos';
 
 /** STROXX KOMMERCIELT AKTIVERINGSPROGRAM (SKA) — the monthly engine from the
  *  client's strategy (docs/STROXX KOMMERCIEL MOTOR.pdf):
@@ -76,6 +77,10 @@ export const SKA = {
     { type: 'Premium new arrival', product: byCode('64012039'), pitch: 'Compressor cool box for the site hut. Cold lunch in July, no ice needed.' },
     { type: 'Problem solver', product: byCode('63143492'), pitch: 'Beanie with a built-in head torch. Light on the job, hands free.' },
   ],
+
+  /** FILMS — editor-picked films for the month's film section; empty = the
+   *  site shows all active films from the Film collection. */
+  films: [] as Video[],
 };
 
 export type SkaNyhed = (typeof SKA.nyheder)[number];

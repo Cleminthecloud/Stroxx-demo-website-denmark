@@ -228,7 +228,8 @@ export type { HomeCopy, HomeStat } from '@/lib/home-copy';
 export async function getHomePage(): Promise<HomeCopy> {
   try {
     const { data } = await sanityFetch({
-      query: '*[_type == "homePage"][0]{..., "campaignSlug": campaignLink->slug.current}',
+      query:
+        '*[_type == "homePage"][0]{..., "campaignSlug": campaignLink->slug.current, "films": films[]->{ _id, youtubeId, title, by }}',
     });
     if (!data) return HOME_DEFAULTS;
     const d = data as Record<string, any>;
@@ -251,6 +252,13 @@ export async function getHomePage(): Promise<HomeCopy> {
       }
     }
     merged.campaignImages = Array.isArray(d.campaignImages) ? d.campaignImages : [];
+    merged.films = ((d.films ?? []) as Record<string, any>[])
+      .filter((f) => f?.youtubeId)
+      .map((f): Video => ({
+        id: stegaClean(f.youtubeId) ?? f.youtubeId,
+        title: stegaClean(f.title) ?? f.title ?? '',
+        by: stegaClean(f.by) ?? f.by ?? '',
+      }));
     const campaignSlug = typeof d.campaignSlug === 'string' ? stegaClean(d.campaignSlug).trim() : '';
     merged.campaignHref = campaignSlug ? `/kampagne/${campaignSlug}` : '/proev-det';
     return merged as HomeCopy;
@@ -478,7 +486,7 @@ export async function getSka(): Promise<SkaData> {
     // date stay eligible and fall back to newest-created (backwards compatible).
     const { data } = await sanityFetch({
       query:
-        '*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]',
+        '*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]{ ..., "films": films[]->{ _id, youtubeId, title, by } }',
       params: { today: new Date().toISOString().slice(0, 10) },
     });
     if (!data) return SKA;
@@ -489,6 +497,13 @@ export async function getSka(): Promise<SkaData> {
     const nyheder = ((d.news ?? []) as Record<string, any>[])
       .map((n) => ({ type: (n.label as string) ?? '', product: find(n.sku), pitch: (n.pitch as string) ?? '' }))
       .filter((n) => n.product) as SkaData['nyheder'];
+    const films = ((d.films ?? []) as Record<string, any>[])
+      .filter((f) => f.youtubeId)
+      .map((f): Video => ({
+        id: stegaClean(f.youtubeId) ?? f.youtubeId,
+        title: stegaClean(f.title) ?? f.title ?? '',
+        by: stegaClean(f.by) ?? f.by ?? '',
+      }));
     return {
       month: (d.month as string) || SKA.month,
       year: (d.year as string) || SKA.year,
@@ -504,6 +519,7 @@ export async function getSka(): Promise<SkaData> {
         : SKA.heroFaq,
       cashCows: cashCows.length ? cashCows : SKA.cashCows,
       nyheder: nyheder.length ? nyheder : SKA.nyheder,
+      films,
     };
   } catch {
     return SKA;

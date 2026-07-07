@@ -159,7 +159,20 @@ export default function FilmPicker(props: ArrayOfObjectsInputProps) {
         (await client.fetch<Film | null>('*[_type == "video" && youtubeId == $id][0]{_id, title, by, youtubeId}', { id }));
       let docId = existing?._id;
       if (!docId) {
-        const created = await client.create({ _type: 'video', youtubeId: id, title: '', active: true });
+        // Pull the real title + channel from YouTube (via our server route, so
+        // no "untitled" film) — blanks are fine if the lookup fails.
+        let title = '';
+        let by = '';
+        try {
+          const meta = await fetch(`/api/film-meta?id=${id}`).then((res) => (res.ok ? res.json() : null));
+          if (meta) {
+            title = typeof meta.title === 'string' ? meta.title : '';
+            by = typeof meta.author === 'string' ? meta.author : '';
+          }
+        } catch {
+          /* offline / blocked: create with blanks, editor can rename */
+        }
+        const created = await client.create({ _type: 'video', youtubeId: id, title, by, active: true });
         docId = created._id;
       }
       await load();
@@ -269,7 +282,7 @@ export default function FilmPicker(props: ArrayOfObjectsInputProps) {
       <div style={{ fontSize: 12, opacity: 0.7 }}>
         {err
           ? err
-          : 'Pasting a link that isn’t in the collection creates the film for you and links it here, then rename it in the Film collection when you have a moment.'}
+          : 'Pasting a link that isn’t in the collection creates the film for you (title and channel pulled from YouTube) and links it here.'}
       </div>
     </div>
   );

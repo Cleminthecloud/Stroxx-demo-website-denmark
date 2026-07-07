@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SkuInput from '../SkuInput';
 import SkuListInput from '../SkuListInput';
+import FilmPicker from '../FilmPicker';
 import { skuLabel } from '../lib/skuOptions';
 
 /** Månedens STROXX, the SKA monthly engine (docs/STROXX KOMMERCIEL MOTOR.pdf):
@@ -113,6 +114,15 @@ export const monthlyLineup = defineType({
         }),
       ],
       validation: (r) => r.max(3),
+    }),
+    defineField({
+      name: 'films',
+      title: 'Films',
+      type: 'array',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'video' }] })],
+      components: { input: FilmPicker },
+      description:
+        'Pick the films for this month’s film section, in order. Paste a YouTube link to add a new one on the fly. Leave empty to show all active films.',
     }),
   ],
   preview: {
