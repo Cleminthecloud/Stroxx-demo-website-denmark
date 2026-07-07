@@ -1,11 +1,11 @@
-# STROXX — brand experience (demo)
+# STROXX, brand site
 
-> **Dyrt værktøj til udyr pris.** A modern, experiential brand site for STROXX — the value-tier
+> **Dyrt værktøj til udyr pris.** A modern, experiential brand site for STROXX, the value-tier
 > professional tool brand from Carl Ras. The site introduces, convinces and **routes to the local
-> partner** (Carl Ras in DK) for the actual purchase. No cart lives here.
+> partner** (Carl Ras in DK) for the actual purchase. No cart lives here, and the brand pages show no prices.
 
-This is the **v1 demo**: a WebGL hero experience, a filterable product explorer, and one richly-built
-Focus Product page. Built to scale toward the full multi-market brand hub described in the strategy.
+The site is a full production build, not a prototype. It runs one codebase across all four markets
+(DK, DE, FR, BE), with all content editable in the Sanity CMS.
 
 ---
 
@@ -13,18 +13,30 @@ Focus Product page. Built to scale toward the full multi-market brand hub descri
 
 | Route | What it is |
 |---|---|
-| `/` | Scroll experience. A **physics tool-bag** (Three.js + Rapier) shuffles real Carl-Ras tools as you scroll, with dust, depth-of-field and brand ambience. Below it: range, focus product, category storytelling, specialists, EU footprint, campaign band. |
-| `/produkter` | **Product explorer** — filter by category, search, sort. Every "buy" deep-links to Carl Ras with the live UTM convention. |
-| `/produkt/[slug]` | **Focus Product page** — the heavy page type: hero, price-honest tagline, why-STROXX + specialist quote, in-use, spec table, Pro Club signup, related products, *Køb hos Carl Ras*. |
-| `/api/tool/[id]` | Image proxy. Pulls a real product photo from the Carl-Ras CDN, **knocks out the white background** with `sharp`, serves it CORS-safe for the WebGL textures. |
+| `/` | Home. A single scrolling page. The STROXX tool-bag is a **load-time intro** (`BagJourney`): it falls into the hero, settles, and the tools cascade in on load, then scrolls away with the hero. Below it: range, category storytelling, specialists, the month, guarantee, EU footprint, campaign band. |
+| `/produkter` | **Product finder**, filter by category, search, sort. A particle hero per category. Every "buy" deep-links to Carl Ras with the live UTM convention. |
+| `/produkt/[slug]` | **Product page**, the heavy page type. This is the one with the **scroll-driven experience**: a pinned product cut-out travels down the gutter as you scroll (`ProductExperience`), alongside selling points, a specialist quote, spec table, Pro Club signup and related products. |
+| `/butikker` | Full-screen store finder (Leaflet), opening hours, phone, and a Specialists tab. |
+| `/fag`, `/fag/[slug]` | Trade pages, tools grouped by craft. |
+| `/proev-det`, `/maanedens` | Campaign ("Try it") and month ("Tool of the Month") landing pages, built from CMS section blocks. |
+| `/nyheder`, `/nyheder/[slug]` | News and articles, with correct social share previews. |
+| `/support`, `/support/[slug]`, `/qr/[code]` | Manuals and the packaging QR system. `/qr/<code>` is a repointable 302 that counts scans. |
+| `/studio` | The Sanity Studio, visual (click-to-edit) editing on top of the live site, plus the analytics dashboard. |
+| `/test` | The tester landing page and bug-report form (noindex, no login). Reports land as `feedback` docs in the Studio. |
+| `/guide`, `/komponenter` | The content-team editor guide, and an internal gallery of every CMS section block. |
+| `/api/tool/[id]` | Image proxy. Pulls a real product photo from the Carl-Ras CDN, **knocks out the white background** with `sharp`, serves it CORS-safe. |
+
+Legal pages (`/privatliv`, `/cookies`, `/handelsbetingelser`, `/service`) and a PWA manifest ship too.
 
 ### Stack
-Next.js 14 (App Router, TS) · Tailwind · react-three-fiber · @react-three/rapier · drei ·
-@react-three/postprocessing · Lenis smooth-scroll · sharp.
+Next.js 16 (App Router, TS, React 19) · Tailwind · GSAP + Lenis smooth-scroll · Leaflet · Sanity CMS
+(`sanity` + `next-sanity`) · `sharp` (image knockout) · `qrcode`. The old Three.js/Rapier physics bag
+was retired in favour of the lighter load-time bag intro.
 
-### Brand tokens (pulled from stroxx.dk)
-Ink `#0A0A0B` · signature red `#E30613` · CTA blue `#0089CC` · paper `#F6F5F3` · fog `#7D8387`.
-Display type is a tight grotesk (Archivo, standing in for the brand's Helvetica-Neue-LT-Pro); body Inter (for Neo Sans).
+### Brand tokens
+Ink `#0B0C0E` · signature blue `#0088C2` (the single sanctioned accent) · red `#EB0029` (extended
+palette only) · fog for muted text. Display type is the system Helvetica Neue stack (no external font
+license); no prices appear on brand pages.
 
 ---
 
@@ -33,53 +45,46 @@ Display type is a tight grotesk (Archivo, standing in for the brand's Helvetica-
 ```bash
 npm install
 npm run dev          # http://localhost:3000
-```
-
-Production build:
-
-```bash
+npm run check        # tsc --noEmit + eslint (the push gate)
 npm run build && npm run start
 ```
 
-> Real product names, prices and imagery are pulled live from `carl-ras.dk` at request time, so the
-> dev machine needs internet. Nothing is committed from Carl Ras.
+> The public site works from built-in fallbacks with no env vars. The Studio's draft preview and
+> content writes need the Sanity env vars (`.env.local`); see the Sanity integration guide in `docs/`.
+> Product names, imagery and specs originate from `carl-ras.dk`; the proxy fetches photos at request time.
+
+Content seeding scripts (`npm run seed`, `seed:more`, `seed:news`, `seed:support`) populate the Sanity
+dataset; each runs `sanity exec ... --with-user-token`. Weekly content backups run via `npm run backup`
+and a GitHub Action.
 
 ---
 
-## Push to Git + deploy on Vercel
+## Deploy
 
-```bash
-git init
-git add .
-git commit -m "STROXX brand experience — v1 demo"
-git branch -M main
-git remote add origin <your-repo-url>
-git push -u origin main
-```
+Hosted on Vercel (GitHub connected). Every push builds; `npm run build` runs types + lint as the gate.
+Set the Sanity env vars in Vercel before deploy. `sharp` runs on the Node runtime out of the box.
+Security headers and a CSP ship in `next.config.mjs`; rate limiting uses Upstash Redis.
 
-On **vercel.com → New Project → Import** the repo. No env vars needed for the demo. Vercel
-auto-detects Next.js; `sharp` is supported on the Node runtime out of the box. Each push gets a
-preview URL.
+The production domain cutover (to `stroxx.eu` with locale subpaths) is a coordinated step; the domain
+constant lives in `lib/site.ts` (`SITE_URL`), swapped once at launch. See `docs/STROXX-domain-takeover.md`.
 
 ---
 
-## Where this goes next (per the strategy docs)
+## Where this goes next
 
-- **Supabase backend** — move the product catalogue, hero/variation model, badges and Focus-Product
-  content into Supabase (or sync from the Carl Ras PIM). The current `lib/data.ts` is the seam: swap
-  the static arrays for Supabase queries and nothing else changes. The Supabase connector is already
-  available in this workspace.
-- **Pro Club / Marketo** — the signup module (`components/ProClubSignup.tsx`) is a stub; wire it to a
-  Marketo Engage form per the digital-strategy doc.
-- **CMS / multi-market** — the data model (categories, multi-tag taxonomy, focus products) mirrors the
-  Webflow CMS plan, ready for hreflang locale variants (DK → DE → FR → BE).
-- **3D fidelity** — phase 2 can replace the photo-cutout tools with fully modeled GLTF hero tools.
+- **PIM/DAM** — join the Carl Ras product feed and Digizuite media into the catalogue. `lib/data.ts`
+  and the `productAugment` schema are the seams. See `docs/STROXX-pim-dam-integration.md`.
+- **Specialist chat** — scripted demo today; production is an LLM with retrieval over the CMS
+  FAQ/products/stores.
+- **Multi-market** — locale subpaths and hreflang for DE/FR/BE; see `docs/I18N-STRATEGY.md`.
 
 ## Project layout
 ```
-app/            routes (home, produkter, produkt/[slug], api/tool)
-components/      Nav, Footer, HeroStage, ProductExplorer, ProductCard, ProClubSignup, Reveal, SmoothScroll
-components/scene ToolBagScene — the r3f physics canvas
-lib/data.ts     categories, real products, brand tokens, image helpers
-docs/           the two strategy Word docs
+app/            routes (home, produkter, produkt/[slug], butikker, fag, nyheder,
+                support, qr, studio, test, api/*, legal pages)
+components/      Nav, Footer, BagJourney/BagFill, ProductExperience, ProductExplorer,
+                ParticleImage, FeedbackForm, GlassButton, Reveal, cms/*, ...
+lib/            data.ts (catalogue), cms.ts, stores.ts, ska.ts, site.ts (SITE_URL), ...
+sanity/         schema types, Studio config, Dashboard, QR + share preview fields
+docs/           strategy, editor guide, domain/security/CMS docs
 ```

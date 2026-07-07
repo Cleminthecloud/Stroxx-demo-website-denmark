@@ -26,3 +26,6 @@ _checkslug.ts
 
 # content backups (npm run backup)
 backups/
+
+# client handover pack (portable copy for Dropbox — not part of the app)
+/Client Handover - Carl Ras/

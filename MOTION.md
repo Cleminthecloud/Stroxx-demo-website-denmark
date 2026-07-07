@@ -4,7 +4,7 @@ The site should feel like **one continuous surface**, not a stack of sections. M
 
 ## Principles
 
-1. **One page, not sections.** Avoid hard cuts between blocks. Use generous `min-h` and let elements cross-fade/blur in as they enter, so scrolling feels like one flowing journey. The hero product (homepage bag, product cut-out) travels *through* the page rather than living in one section.
+1. **One page, not sections.** Avoid hard cuts between blocks. Use generous `min-h` and let elements cross-fade/blur in as they enter, so scrolling feels like one flowing journey. On the **product page**, the pinned product cut-out travels *through* the page as you scroll rather than living in one section. The **homepage bag** is a load-time intro that settles in the hero (it does not travel on scroll).
 2. **Soft reveal.** Content enters with a soft blur + rise, never a hard pop. `.reveal`: `opacity 0→1`, `translateY 26px→0`, `blur 8px→0`, over ~1s on `cubic-bezier(.16,1,.3,1)`. Stagger siblings by 70–90ms.
 3. **Scroll-driven, lerped.** Anything tied to scroll (bag, product, particles) is sampled from keyframes and **lerped** toward the target (~0.1 factor) so it glides — never snaps. Synced to Lenis smooth scroll.
 4. **Text reveal (GSAP).** Big statements use `ScrollText`: words fade from `opacity .16 → 1` with `scrub` ScrollTrigger as they pass through the viewport. Registered once; `window.ScrollTrigger.update()` driven by Lenis.

@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import QRCode from 'qrcode';
 import { SITE_URL } from '@/lib/site';
+import { rateLimit, clientIp } from '@/lib/rate-limit';
 
 /** Printable QR image for a managed short code. Encodes the CANONICAL
  *  `${SITE_URL}/qr/<code>` (never localhost, so a QR generated in the Studio
@@ -15,6 +16,11 @@ import { SITE_URL } from '@/lib/site';
 const CODE_RE = /^[a-z0-9-]{2,40}$/;
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ code: string }> }) {
+  // Generous per-IP cap: QR images are a print/Studio tool, not a hot path.
+  if (!(await rateLimit(`qr-image:${clientIp(req.headers)}`, 120, 60_000))) {
+    return new Response('Too many requests', { status: 429 });
+  }
+
   const raw = (await params).code.toLowerCase().replace(/\.(svg|png)$/, '');
   if (!CODE_RE.test(raw)) return new Response('Invalid code', { status: 400 });
 

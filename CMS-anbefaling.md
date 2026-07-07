@@ -1,5 +1,8 @@
 # Headless CMS — anbefaling for Carl Ras Gruppen & STROXX
 
+> **Historisk beslutningsgrundlag.** Dette dokument sammenligner CMS-muligheder som de stod tidligere. Beslutningen er nu truffet: sitet kører på **Sanity** (bygget og live) oven på **Next.js 16**. Webflow og de øvrige blev vurderet, men ikke valgt. Se **00 START HERE** for den aktuelle opsætning.
+
+
 *Udarbejdet juni 2026. Priser og features ændrer sig hurtigt — alt herunder er verificeret via kilderne nederst, men tjek de officielle prissider, før I beslutter.*
 
 ---
