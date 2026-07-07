@@ -30,7 +30,10 @@ Last reviewed: 2026-07-07.
 | **The bag hero geometry** | `components/BagJourney.tsx` and `components/BagFill.tsx` share constants (TOOLS, BAG_AR, panels). Change one dimension, recheck both, plus the hero headline padding in `app/page.tsx` (they overlap). |
 | **A translucent panel behind the product cut-out** (`/produkt/[slug]`) | Any glass panel the travelling cut-out passes behind needs `.glass-panel--frost` or the product bleeds through. See Tier 2 "Layout geometry". |
 | **A support page slug** (`/support/[slug]`) | The slug is a PRINT contract: packaging QRs hit `/pages/<slug>`. Renaming breaks printed codes, add a CMS redirect if forced. Never rename a printed `qrCode` code, repoint its `target` instead. |
-| **Security headers / CSP** (`next.config.mjs`) | `X-Frame-Options` must stay `SAMEORIGIN` (not DENY), Sanity Presentation iframes the site at `/studio`. |
+| **Security headers / CSP** (`next.config.mjs`) | `X-Frame-Options` must stay `SAMEORIGIN` (not DENY), Sanity Presentation iframes the site at `/studio`. Adding any external script/API/image host means adding it to the CSP allow-list here (see "External services"). |
+| **A Sanity schema** (`sanity/schemaTypes/*.ts`) | The page(s) that read it (schema to route map in Tier 2), any custom Studio field component, and re-run the matching seed script if the shape changed. `productAugment` and `store`/`qrCode`/`redirect` have the widest reach. |
+| **A new external service, API, CDN or embed** | `next.config.mjs`: add the host to CSP (`script-src`/`img-src`/`connect-src`/`frame-src`) AND `images.remotePatterns` if it serves images. Add the env var to `.env.local` AND Vercel. Note it in Tier 2 "External services". |
+| **An env var** (add/rename/remove) | Set it in BOTH `.env.local` (local) and the Vercel dashboard (prod), or the feature silently no-ops in one environment. Newsletter/Marketo/chat all fail closed if their key is missing. |
 | **A client-facing doc** (`docs/*.md`) | Regenerate the branded `.docx`/`.pdf` via the pandoc pipeline (Tier 2). The `.md` is the source of truth. |
 | **Brand facts** (colours, taglines, positioning, store count) | These originate in `INFO/` (brandbook, brand strategy, playbook). If site copy contradicts them, the docs win. See Tier 2 "Brand + strategy source docs". |
 
@@ -83,6 +86,76 @@ If a change alters a brand fact that these docs assert (colour, tagline, store c
 
 ### Client-doc pipeline
 Client-facing docs are generated, not hand-formatted: `pandoc <doc>.md --reference-doc=docs/STROXX-editor-guide.docx -o "docs/client-docs/<Name (for Recipient)>.docx"` inherits the branded styles; PDFs come from `soffice` on the docx. The recipient belongs in the filename. The `.md` stays the source of truth, regenerate after every edit.
+
+### The Sanity Studio (`/studio`), schema to page map
+The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its config, schemas and custom tools all live in-repo under `sanity/` and ship with every deploy. Changing a schema ripples to whatever renders it:
+
+| Schema (`sanity/schemaTypes/`) | Rendered by / drives |
+|---|---|
+| `homePage` | `app/page.tsx` (home section blocks) |
+| `brandPage` | `app/brand` |
+| `landingPage` | `/proev-det`, `/maanedens` (CMS section blocks) |
+| `monthlyLineup` | Månedens STROXX, pairs with `lib/ska.ts` |
+| `post` | `/nyheder`, `/nyheder/[slug]`; carries the share-preview field |
+| `productAugment` | overlays `lib/data.ts` product data (the PIM seam), touches every product surface |
+| `trade` | `/fag`, `/fag/[slug]` |
+| `store` | `/butikker` store finder + specialists |
+| `supportPage` | `/support/[slug]` (slug is the print contract) |
+| `qrCode` | `/qr/[code]`, dashboard scan stats (never rename a printed code) |
+| `redirect` | middleware (evaluated before legacy rules) |
+| `collections` | product groupings |
+| `feedback` | `/test` bug reports land here |
+| `siteSettings` | global site config, referenced app-wide |
+
+Custom Studio tools/fields (also in `sanity/`) have their own couplings: `DashboardTool` (analytics), `BrandTool`/`GuideTool`/`WelcomeTool` (embedded internal pages), `ArticleAgentTool` (`/api/blog-agent`), `EncryptedSecretField` (browser-side RSA, pairs with `NEXT_PUBLIC_NEWSLETTER_PUBKEY` + `NEWSLETTER_SECRET_KEY`), `QrImageField` (`/api/qr-image/[code]`), `ShareCard`/`SharePreviewField`/`SeoPreviewField`/`NewsletterStatusField` (live-preview components, unconditional hooks). Content lives in the `demo` dataset (see backup script). After a schema shape change, re-run the relevant `npm run seed*` script so seeded content still matches.
+
+### External services and env vars (the third-party map)
+Every service the site depends on, the env var(s) it hangs off, what it does, and the coupling if it changes. Env vars must be set in BOTH `.env.local` and Vercel. Any new host must also be added to the CSP in `next.config.mjs`.
+
+| Service | Env / config | Role | If it changes / breaks |
+|---|---|---|---|
+| **Vercel** | GitHub-connected; `VERCEL` env auto-set | Hosting + build + deploy | Every push builds (`npm run build` = types + lint gate). "Ready" can still mask a real failure, verify locally. Env vars set here, not in the repo. |
+| **Sanity** | `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` (`demo`), `SANITY_API_READ_TOKEN`, `SANITY_API_WRITE_TOKEN` | CMS: all editable content + the Studio | Public site falls back to built-in data without these; Studio draft preview + writes need them. CSP already allows `*.api.sanity.io`, `wss://*.api.sanity.io`, `cdn.sanity.io`. |
+| **Upstash Redis** | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (`lib/rate-limit.ts`) | Missing = limiter degrades. Used by chat/form/newsletter/feedback API routes. |
+| **Anthropic API** | `ANTHROPIC_API_KEY` | Specialist chat (`/api/chat`, `claude-haiku-4-5`) | Missing = chat can't reach the model. `api.anthropic.com` is server-side (not in CSP, which is browser-scoped). |
+| **Newsletter (self-serve crypto)** | `NEXT_PUBLIC_NEWSLETTER_PUBKEY`, `NEWSLETTER_SECRET_KEY`, `NEWSLETTER_WEBHOOK_URL` | Browser RSA-encrypts keys, server decrypts (`lib/newsletter-secrets.ts`) | Pubkey/secret are a matched pair, rotate together or decryption fails. |
+| **Marketo** | `MARKETO_BASE_URL`, `MARKETO_CLIENT_ID`, `MARKETO_CLIENT_SECRET` | Lead/newsletter delivery target | Fails closed if any of the three is missing. |
+| **Mailchimp / Klaviyo** | `MAILCHIMP_API_KEY`, `KLAVIYO_API_KEY` | Alternate email/marketing integrations | Optional providers, feature-gated on key presence. |
+| **Form webhook** | `FORM_WEBHOOK_URL` | Generic form submissions (`/api/form`) | Missing = submissions have nowhere to go. |
+| **Google Tag Manager + GA** | `GTM-XXXX` placeholder (swap at launch) | Analytics/tag loading | Injects scripts, which is why a full CSP is deferred. CSP allows `googletagmanager.com`, `*.google-analytics.com`. |
+| **Cookiebot** | consent script | Cookie consent gate | CSP allows `consent.cookiebot.com`, `consentcdn.cookiebot.com`. Consent gates GTM/GA. |
+| **Carl Ras CDN** | `images.carl-ras.dk`, `assets.carl-ras.dk` | Real product photos (proxied + knocked out via `/api/tool/[id]`) | In `remotePatterns` AND CSP `img-src`. The proxy adds a Referer the CDN needs. This is the product-image source of record until PIM/DAM. |
+| **Webflow CDN** | `cdn.prod.website-files.com` | Legacy asset host | In `remotePatterns` + CSP. From the old site; retire as assets migrate. |
+| **DAWA / Dataforsyningen** | `api.dataforsyningen.dk` | Danish address autocomplete (store finder) | CSP `connect-src`. DK-specific; other markets need their own provider. |
+| **Carto basemaps** | `*.basemaps.cartocdn.com` | Leaflet map tiles (`/butikker`) | CSP `img-src`. Tiles load AFTER globals, map bg needs `!important` to stay dark before they arrive. |
+| **YouTube / Vimeo** | `youtube-nocookie.com`, `player.vimeo.com`, `i.ytimg.com` | Video embeds + poster images | CSP `frame-src` + `img-src`. |
+| **GitHub Actions** | `.github/workflows/ci.yml`, `backup.yml` | CI gate + weekly Sanity dataset backup (`npm run backup`) | Backup exports the `demo` dataset; changing the dataset name means updating the backup script + workflow. |
+
+### Documentation, guides and memory (the index)
+Where knowledge about this project lives, so we update the right place, not just the code. When a change contradicts one of these, update the doc too.
+
+**Root docs**
+- `README.md` — overview, stack, routes, run/deploy. Links here.
+- `DEPENDENCIES.md` — this file, the coupling map.
+- `MOTION.md` — motion/animation conventions (GSAP, Lenis, reduced-motion rules).
+- `CMS-anbefaling.md` — the CMS recommendation writeup.
+
+**`docs/` (working project docs, `.md` is source of truth)**
+- Plans + status: `STROXX-production-plan.md`, `STROXX-realistic-plan.md`, `STROXX-status-and-next.md`, `STROXX-project-plan.html`.
+- Launch + infra: `STROXX-domain-takeover.md`, `STROXX-country-onboarding.md`, `I18N-STRATEGY.md`, `STROXX-production-and-multimarket-overview.md`.
+- Security: `SECURITY-REVIEW.md`, `STROXX-tech-stack-security.md`.
+- CMS + editing: `STROXX-sanity-guide.md`, `STROXX-editor-guide.md` (+ `.docx`, the pandoc reference doc).
+- Systems: `STROXX-support-qr-workflow.md`, `STROXX-pim-dam-integration.md`, `STROXX-feature-backlog.md`, `STROXX-engagement-plan.md`.
+- Legacy migration: `STROXX-legacy-files-manifest.md`, `STROXX-legacy-redirects.csv`, `legacy-pdfs/`.
+- Client + email: `client-docs/` (generated per recipient), `email-copydocs/`.
+- Demo: `STROXX-demo-cheatsheet.md`.
+
+**In-app guides (for the content team, live pages)**
+- `/guide` — editor guide, `/komponenter` — gallery of every CMS section block. Both should track schema changes.
+
+**`INFO/` (client-supplied brand source, see "Brand + strategy source docs" above)** — brandbook, brand strategy versions, playbook, logo pack, DK 2026 campaign, product-category sourcing.
+
+**Claude's memory (persists across sessions, not in the repo)** — the internal coupling map mirrors this file, plus notes on brand tokens, guarantee terms, copywriting principles, deploy-check habits, the WEB-STARTER template, and project posture. This `DEPENDENCIES.md` is the canonical, Clem-facing version; the memory is Claude's working copy and is kept in sync with it.
 
 ### Build / deploy gotchas
 - `npm run check` (tsc + eslint) is the push gate. Vercel "Ready" does NOT mean local-green; a passing Vercel build has silently masked failures before, verify locally.
