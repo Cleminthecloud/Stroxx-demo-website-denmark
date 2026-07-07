@@ -138,22 +138,34 @@ const landing = {
 };
 
 async function run() {
-  console.log('Writing the proev-det landing page…');
-  await client.createOrReplace(landing);
+  // Never create a duplicate: if a proev-det landing page already exists (any
+  // _id), wire the band to THAT one and leave its content untouched. Only seed
+  // the reconstruction when no such page exists yet.
+  const existingId: string | null = await client.fetch(
+    '*[_type == "landingPage" && slug.current == "proev-det"][0]._id'
+  );
+  let targetId = existingId;
+  if (existingId) {
+    console.log(`Found existing proev-det landing page (${existingId}) — keeping its content.`);
+  } else {
+    console.log('No proev-det landing page yet — writing the reconstruction…');
+    await client.createOrReplace(landing);
+    targetId = LANDING_ID;
+  }
 
   console.log('Pointing the homepage campaign band at it…');
   const homeId: string | null = await client.fetch('*[_type == "homePage"][0]._id');
-  if (homeId) {
+  if (homeId && targetId) {
     await client
       .patch(homeId)
-      .set({ campaignLink: { _type: 'reference', _ref: LANDING_ID } })
+      .set({ campaignLink: { _type: 'reference', _ref: targetId } })
       .commit({ visibility: 'async' });
-    console.log(`  homePage (${homeId}).campaignLink → ${LANDING_ID}`);
+    console.log(`  homePage (${homeId}).campaignLink → ${targetId}`);
   } else {
     console.log('  no homePage document yet — set the "Read more → campaign page" reference in the Studio.');
   }
 
-  console.log('Done. /kampagne/proev-det is now CMS-driven; /proev-det redirects to it.');
+  console.log('Done. /kampagne/proev-det is CMS-driven; /proev-det redirects to it.');
 }
 
 run().catch((e) => {
