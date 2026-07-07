@@ -3,6 +3,7 @@ import { Download } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
 import LogoCraft from '@/components/LogoCraft';
 import LogoMotion from '@/components/LogoMotion';
+import Messaging from '@/components/Messaging';
 import PhotoGallery from '@/components/PhotoGallery';
 import Reveal from '@/components/Reveal';
 
@@ -328,6 +329,9 @@ export default function BrandPage() {
           </Reveal>
         </div>
       </section>
+
+      {/* MESSAGING + COPY */}
+      <Messaging />
 
       {/* DO / DON'T */}
       <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
