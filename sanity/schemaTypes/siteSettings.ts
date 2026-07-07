@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
 import NewsletterStatusField from '../NewsletterStatusField';
+import EncryptedSecretField from '../EncryptedSecretField';
 
 const linkArray = (name: string, title: string, description: string, group: string) =>
   defineField({
@@ -184,7 +185,7 @@ export const siteSettings = defineType({
     defineField({
       name: 'newsletterProvider',
       title: 'Email platform',
-      description: 'Where signups are sent. The matching API key must be set in the hosting environment by your administrator (keys never go in the CMS).',
+      description: 'Where signups are sent. Pick your platform, then enter its keys in the fields that appear below. Keys are encrypted in your browser before saving, so it is safe to enter them here.',
       type: 'string',
       group: 'newsletter',
       options: {
@@ -197,12 +198,70 @@ export const siteSettings = defineType({
         layout: 'radio',
       },
     }),
+
+    /* ── Provider credentials. Encrypted in the browser before saving (see
+       EncryptedSecretField); the dataset only ever stores ciphertext. Each is
+       shown only when its platform is selected. ── */
+    defineField({
+      name: 'mailchimpApiKey',
+      title: 'Mailchimp API key',
+      description: 'From Mailchimp → Account → Extras → API keys. Looks like 0123abcd…-us21 (the -usNN part matters).',
+      type: 'string',
+      group: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'mailchimp',
+    }),
+    defineField({
+      name: 'klaviyoApiKey',
+      title: 'Klaviyo private API key',
+      description: 'From Klaviyo → Settings → API keys → Create Private API Key (needs List access). Starts with pk_.',
+      type: 'string',
+      group: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'klaviyo',
+    }),
+    defineField({
+      name: 'marketoBaseUrl',
+      title: 'Marketo REST endpoint',
+      description: 'Your Marketo REST base URL, e.g. https://123-ABC-456.mktorest.com (Marketo → Admin → Web Services → REST API, without the /rest suffix).',
+      type: 'url',
+      group: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'marketoClientId',
+      title: 'Marketo Client ID',
+      description: 'From the LaunchPoint custom service (Marketo → Admin → LaunchPoint → your service → View Details).',
+      type: 'string',
+      group: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'marketoClientSecret',
+      title: 'Marketo Client Secret',
+      description: 'The Client Secret from the same LaunchPoint custom service.',
+      type: 'string',
+      group: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'newsletterWebhookUrl',
+      title: 'Webhook URL',
+      description: 'The catch-hook URL from Zapier / Make (or any endpoint). Each signup is POSTed as JSON { email, source, at }.',
+      type: 'string',
+      group: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'webhook',
+    }),
     defineField({
       name: 'newsletterListId',
       title: 'Audience / list ID',
       description: 'Mailchimp: the Audience ID. Klaviyo: the List ID. Marketo: the static list ID (optional). Webhook: not needed.',
       type: 'string',
       group: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider === 'webhook',
     }),
     defineField({
       name: 'newsletterHeadline',

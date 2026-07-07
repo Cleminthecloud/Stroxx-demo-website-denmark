@@ -39,6 +39,13 @@ export type SiteSettings = {
   newsletterEnabled?: boolean;
   newsletterProvider?: string;
   newsletterListId?: string;
+  /* provider credentials — encrypted ciphertext (see lib/newsletter-secrets) */
+  mailchimpApiKey?: string;
+  klaviyoApiKey?: string;
+  marketoBaseUrl?: string;
+  marketoClientId?: string;
+  marketoClientSecret?: string;
+  newsletterWebhookUrl?: string;
   newsletterHeadline?: string;
   newsletterText?: string;
   newsletterButtonLabel?: string;

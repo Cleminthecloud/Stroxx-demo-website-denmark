@@ -23,8 +23,8 @@ const LABELS: Record<string, string> = {
 
 const TEXT: Record<S['status'], (p: string) => string> = {
   connected: (p) => `${p}: connected. Signups will land.`,
-  'key-missing': (p) => `${p}: API key missing in the hosting environment. Ask the developer to add it.`,
-  error: (p) => `${p}: key present but the provider did not accept it. Check the key with the developer.`,
+  'key-missing': (p) => `${p}: not connected yet. Enter the ${p} keys in the fields below and publish.`,
+  error: (p) => `${p}: keys entered but ${p} did not accept them. Double-check them in the fields below.`,
   'not-selected': () => 'No platform selected yet. Pick one below.',
   'not-pinged': (p) => `${p}: webhook address is set (catch hooks cannot be test-pinged).`,
 };

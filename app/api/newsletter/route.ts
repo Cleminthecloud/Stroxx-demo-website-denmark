@@ -5,6 +5,7 @@ import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
+import { resolveSecret } from '@/lib/newsletter-secrets';
 import { projectId, dataset } from '@/sanity/env';
 
 /** Newsletter signups, provider-agnostic. Which platform (and its list ID)
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
 
   try {
     if (provider === 'mailchimp') {
-      const key = process.env.MAILCHIMP_API_KEY;
+      const key = resolveSecret(s?.mailchimpApiKey, process.env.MAILCHIMP_API_KEY);
       const dc = key?.split('-')[1];
       if (!key || !dc || !listId) return NextResponse.json({ ok: false, error: 'not-configured' }, { status: 503 });
       const hash = createHash('md5').update(email).digest('hex');
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (provider === 'klaviyo') {
-      const key = process.env.KLAVIYO_API_KEY;
+      const key = resolveSecret(s?.klaviyoApiKey, process.env.KLAVIYO_API_KEY);
       if (!key || !listId) return NextResponse.json({ ok: false, error: 'not-configured' }, { status: 503 });
       const r = await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs', {
         method: 'POST',
@@ -113,9 +114,9 @@ export async function POST(req: NextRequest) {
     }
 
     if (provider === 'marketo') {
-      const base = process.env.MARKETO_BASE_URL;
-      const id = process.env.MARKETO_CLIENT_ID;
-      const secret = process.env.MARKETO_CLIENT_SECRET;
+      const base = stegaClean(s?.marketoBaseUrl)?.trim() || process.env.MARKETO_BASE_URL;
+      const id = resolveSecret(s?.marketoClientId, process.env.MARKETO_CLIENT_ID);
+      const secret = resolveSecret(s?.marketoClientSecret, process.env.MARKETO_CLIENT_SECRET);
       if (!base || !id || !secret) return NextResponse.json({ ok: false, error: 'not-configured' }, { status: 503 });
       const tokenRes = await fetch(
         `${base}/identity/oauth/token?grant_type=client_credentials&client_id=${encodeURIComponent(id)}&client_secret=${encodeURIComponent(secret)}`,
@@ -144,7 +145,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (provider === 'webhook') {
-      const url = process.env.NEWSLETTER_WEBHOOK_URL;
+      const url = resolveSecret(s?.newsletterWebhookUrl, process.env.NEWSLETTER_WEBHOOK_URL);
       if (!url) return NextResponse.json({ ok: false, error: 'not-configured' }, { status: 503 });
       const r = await fetch(url, {
         method: 'POST',

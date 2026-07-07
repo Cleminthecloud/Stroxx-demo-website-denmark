@@ -3,6 +3,7 @@ import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
+import { resolveSecret } from '@/lib/newsletter-secrets';
 
 /** Connection status for the Site settings newsletter tab: is the chosen
  *  provider's API key present in the hosting environment, and does the
@@ -35,7 +36,7 @@ async function check(): Promise<Status> {
 
   try {
     if (provider === 'mailchimp') {
-      const key = process.env.MAILCHIMP_API_KEY;
+      const key = resolveSecret(s?.mailchimpApiKey, process.env.MAILCHIMP_API_KEY);
       const dc = key?.split('-')[1];
       if (!key || !dc) return { ...base, status: 'key-missing' };
       const r = await fetch(`https://${dc}.api.mailchimp.com/3.0/ping`, {
@@ -45,7 +46,7 @@ async function check(): Promise<Status> {
       return { ...base, status: r.ok ? 'connected' : 'error' };
     }
     if (provider === 'klaviyo') {
-      const key = process.env.KLAVIYO_API_KEY;
+      const key = resolveSecret(s?.klaviyoApiKey, process.env.KLAVIYO_API_KEY);
       if (!key) return { ...base, status: 'key-missing' };
       const r = await fetch('https://a.klaviyo.com/api/lists/?page[size]=1', {
         headers: { Authorization: `Klaviyo-API-Key ${key}`, revision: '2024-10-15' },
@@ -54,9 +55,9 @@ async function check(): Promise<Status> {
       return { ...base, status: r.ok ? 'connected' : 'error' };
     }
     if (provider === 'marketo') {
-      const basePath = process.env.MARKETO_BASE_URL;
-      const id = process.env.MARKETO_CLIENT_ID;
-      const secret = process.env.MARKETO_CLIENT_SECRET;
+      const basePath = stegaClean(s?.marketoBaseUrl)?.trim() || process.env.MARKETO_BASE_URL;
+      const id = resolveSecret(s?.marketoClientId, process.env.MARKETO_CLIENT_ID);
+      const secret = resolveSecret(s?.marketoClientSecret, process.env.MARKETO_CLIENT_SECRET);
       if (!basePath || !id || !secret) return { ...base, status: 'key-missing' };
       const r = await fetch(
         `${basePath}/identity/oauth/token?grant_type=client_credentials&client_id=${encodeURIComponent(id)}&client_secret=${encodeURIComponent(secret)}`,
@@ -67,7 +68,8 @@ async function check(): Promise<Status> {
     }
     if (provider === 'webhook') {
       /* catch hooks are POST-only; presence is the only safe check */
-      return { ...base, status: process.env.NEWSLETTER_WEBHOOK_URL ? 'not-pinged' : 'key-missing' };
+      const url = resolveSecret(s?.newsletterWebhookUrl, process.env.NEWSLETTER_WEBHOOK_URL);
+      return { ...base, status: url ? 'not-pinged' : 'key-missing' };
     }
     return { ...base, status: 'not-selected' };
   } catch {
