@@ -358,7 +358,7 @@ export const siteSettings = defineType({
       name: 'pimFeedUrl',
       title: 'PIM: product feed URL — planned, not yet active',
       description:
-        'ROADMAP FIELD — not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment.',
+        'ROADMAP FIELD — not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
       type: 'url',
       readOnly: true,
       group: 'integrations',
@@ -367,7 +367,7 @@ export const siteSettings = defineType({
       name: 'damBaseUrl',
       title: 'DAM: image base URL — planned, not yet active',
       description:
-        'ROADMAP FIELD — not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials.',
+        'ROADMAP FIELD — not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
       type: 'url',
       readOnly: true,
       group: 'integrations',
