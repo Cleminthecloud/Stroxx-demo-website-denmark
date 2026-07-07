@@ -19,6 +19,7 @@ export type SiteSettings = {
   retailerName?: string;
   retailerLogo?: unknown; // Sanity image; render via assetUrl()
   retailerLogoHref?: string;
+  logo?: unknown; // Sanity image, optional header-logo override; render via assetUrl()
   supportPhone?: string;
   supportHours?: string;
   legalLine?: string;

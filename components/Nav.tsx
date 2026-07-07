@@ -16,7 +16,7 @@ const LINKS = [
   { href: '/service', label: 'Service and Support' },
 ];
 
-export default function Nav({ links = LINKS }: { links?: { href: string; label: string }[] }) {
+export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string; label: string }[]; logoSrc?: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -116,7 +116,7 @@ export default function Nav({ links = LINKS }: { links?: { href: string; label: 
           <Link href="/" aria-label="STROXX" className="flex items-center" onClick={() => setOpen(false)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={brandImages.logoWhite}
+              src={logoSrc || brandImages.logoWhite}
               alt="STROXX"
               className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
             />

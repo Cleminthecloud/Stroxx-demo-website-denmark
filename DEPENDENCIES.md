@@ -135,7 +135,7 @@ The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its co
 | `redirect` | middleware (evaluated before legacy rules) |
 | `collections` | product groupings |
 | `feedback` | `/test` bug reports land here |
-| `siteSettings` | global site config, referenced app-wide |
+| `siteSettings` | global site config, referenced app-wide. Header-logo override: `siteSettings.logo` (image) → `SiteSettings.logo` → `layout.tsx` `assetUrl(settings.logo)` → `Nav` `logoSrc` prop → falls back to `brandImages.logoWhite` (`/brand/logo-white.svg`) when empty. Guidelines live in the field description (white version, SVG/PNG transparent, ~28px tall, ~5:1). |
 
 The Studio SEO preview (`SeoPreviewField`) resolves a root-relative og-image path (e.g. `/brand/og.jpg`) against the CURRENT origin (localhost in dev, real domain in prod), NOT `SITE_URL`. Reason: while `SITE_URL` is the placeholder Vercel domain, prefixing it made the preview image 404 (broken-image icon). The shared-card URL label still shows `SITE_URL` on purpose (that's the canonical shared link). Local Studio "network error" console noise is almost always the embedded Studio's Sanity connection, add `http://localhost:3000` to the Sanity project CORS origins (sanity.io/manage), it is not our newsletter-status probe (that swallows its own errors).
 

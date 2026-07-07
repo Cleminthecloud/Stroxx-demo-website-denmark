@@ -86,6 +86,24 @@ export const siteSettings = defineType({
       group: 'contact',
     }),
 
+    defineField({
+      name: 'logo',
+      title: 'Site logo (header)',
+      type: 'image',
+      group: 'nav',
+      description:
+        'Swap the STROXX logo in the top header for a special occasion, e.g. a campaign or seasonal version. Leave empty for the standard STROXX logo (it reverts automatically when you remove this). GUIDELINES: use the WHITE / light version, the header is dark. SVG is best (crisp at any size); otherwise a PNG with a transparent background. Keep the standard wordmark proportions, wide and short (about 5:1). It displays about 28px tall, so a PNG should be at least ~120px tall (3x) to stay sharp on retina screens. Leave clear space around it and add no shadows or effects. Under ~200KB.',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+          initialValue: 'STROXX',
+          description: 'Read by screen readers. Keep it as the brand name unless the special logo says something different.',
+        }),
+      ],
+    }),
+
     linkArray('navLinks', 'Menu: top navigation links',
       'The links in the top navigation, in order. The first four show on desktop; all show in the mobile menu. Leave empty for the built-in menu.', 'nav'),
     defineField({

@@ -5,6 +5,7 @@ import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
 import { getSiteSettings, getStores, cleanLinks } from '@/lib/cms';
+import { assetUrl } from '@/sanity/lib/image';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Analytics from '@/components/Analytics';
@@ -182,7 +183,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* keyboard users skip the fixed nav straight to the page content */}
         <a href="#indhold" className="skip-link">Skip to content</a>
         <SmoothScroll>
-          <Nav links={cleanLinks(settings?.navLinks) ?? undefined} />
+          <Nav links={cleanLinks(settings?.navLinks) ?? undefined} logoSrc={assetUrl(settings?.logo, 240) ?? undefined} />
           <div id="indhold">{children}</div>
           {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} />}
           <Footer />
