@@ -9,7 +9,7 @@ import { CR_BRAND, UTM } from '@/lib/data';
 /** Every landingPage document an editor creates in the Studio gets a URL here
  *  automatically: slug "sommer" → /kampagne/sommer, and slugs may nest with
  *  slashes: "sommer/tilbud" → /kampagne/sommer/tilbud. Moving a page is
- *  editing its slug. (/proev-det keeps its own historic route.) */
+ *  editing its slug. (/proev-det now redirects here to /kampagne/proev-det.) */
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }): Promise<Metadata> {
   const path = (await params).slug.join('/');
@@ -27,8 +27,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string[] }> }) {
   const path = (await params).slug.join('/');
-  // /proev-det owns its own route; don't render it twice
-  if (path === 'proev-det') notFound();
   const doc = await getLandingPage(path);
   if (!doc?.sections?.length) notFound();
   const buy = `${CR_BRAND}/?${UTM}`;

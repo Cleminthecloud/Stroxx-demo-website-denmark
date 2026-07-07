@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import ScrollText from '@/components/ScrollText';
@@ -11,10 +12,7 @@ import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products, CR_BRAND, UTM } from '@/lib/data';
-import { getTestimonials } from '@/lib/cms';
-import { stegaClean } from '@sanity/client/stega';
-import { getLandingPage } from '@/lib/cms';
-import LandingSections from '@/components/cms/LandingSections';
+import { getTestimonials, getLandingPage } from '@/lib/cms';
 
 /* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
    Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
@@ -83,23 +81,18 @@ export default async function ProevDetPage() {
   const proof = PROOF_CODES.map((c) => products.find((p) => p.code === c)).filter(Boolean);
   const buy = `${CR_BRAND}/?${UTM}`;
 
-  /* CMS-driven when the landing page document exists (Sanity, slug
-     "proev-det"); otherwise the hand-built page below renders unchanged. */
+  /* This campaign now lives in the CMS as a landingPage (slug "proev-det").
+     When that document exists, this historic URL permanently redirects to the
+     canonical /kampagne/proev-det. The hand-built page below only renders as a
+     safety fallback if that document is ever removed. */
   const doc = await getLandingPage('proev-det');
+  if (doc?.sections?.length) permanentRedirect('/kampagne/proev-det');
   const testimonials = await getTestimonials();
-  const cms = doc?.sections?.length ? doc.sections : null;
 
   /* Structured data: FAQ + the trial steps as HowTo, so answer engines can
-     quote the guarantee mechanics directly. Sourced from the CMS when active;
-     stegaClean strips draft-mode edit-tracking characters from LD strings. */
-  const faqSrc = cms
-    ? (((cms.find((x) => x._type === 'faqSection')?.items ?? []) as { q?: string; a?: string }[])
-        .map((f) => ({ q: stegaClean(f.q) || '', a: stegaClean(f.a) || '' })))
-    : FAQ_ITEMS;
-  const stepsSrc = cms
-    ? (((cms.find((x) => x._type === 'guaranteeAsk')?.steps ?? []) as { title?: string; body?: string }[])
-        .map((st, i) => ({ n: String(i + 1).padStart(2, '0'), t: stegaClean(st.title) || '', d: stegaClean(st.body) || '' })))
-    : STEPS;
+     quote the guarantee mechanics directly (fallback copy). */
+  const faqSrc = FAQ_ITEMS;
+  const stepsSrc = STEPS;
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -123,16 +116,6 @@ export default async function ProevDetPage() {
       text: s.d,
     })),
   };
-
-  if (cms) {
-    return (
-      <main className="bg-ink">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
-        <LandingSections sections={cms} buy={buy} docId={doc?._id} />
-      </main>
-    );
-  }
 
   return (
     <main className="bg-ink">
