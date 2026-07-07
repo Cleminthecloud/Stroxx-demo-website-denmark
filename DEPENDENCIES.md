@@ -153,7 +153,7 @@ Field names differ by type: articles have a top-level `heroImage`; landing pages
 Custom Studio tools/fields (also in `sanity/`) have their own couplings: `DashboardTool` (analytics), `BrandTool`/`GuideTool`/`WelcomeTool` (embedded internal pages), `ArticleAgentTool` (`/api/blog-agent`), `EncryptedSecretField` (browser-side RSA, pairs with `NEXT_PUBLIC_NEWSLETTER_PUBKEY` + `NEWSLETTER_SECRET_KEY`), `QrImageField` (`/api/qr-image/[code]`), `ShareCard`/`SharePreviewField`/`SeoPreviewField`/`NewsletterStatusField` (live-preview components, unconditional hooks). Content lives in the `demo` dataset (see backup script). After a schema shape change, re-run the relevant `npm run seed*` script so seeded content still matches.
 
 ### External services and env vars (the third-party map)
-Every service the site depends on, the env var(s) it hangs off, what it does, and the coupling if it changes. Env vars must be set in BOTH `.env.local` and Vercel. Any new host must also be added to the CSP in `next.config.mjs`.
+Every service the site depends on, the env var(s) it hangs off, what it does, and the coupling if it changes. Env vars must be set in BOTH `.env.local` and Vercel. Any new host must also be added to the CSP in `next.config.mjs`. Full launch-facing env reference (required vs optional, what breaks if missing, current status): `docs/STROXX-env-vars.md`.
 
 | Service | Env / config | Role | If it changes / breaks |
 |---|---|---|---|

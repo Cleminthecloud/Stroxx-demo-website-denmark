@@ -51,6 +51,7 @@ npm run build && npm run start
 
 > The public site works from built-in fallbacks with no env vars. The Studio's draft preview and
 > content writes need the Sanity env vars (`.env.local`); see the Sanity integration guide in `docs/`.
+> Full list of every env var, what it powers and what breaks if missing: [`docs/STROXX-env-vars.md`](docs/STROXX-env-vars.md).
 > Product names, imagery and specs originate from `carl-ras.dk`; the proxy fetches photos at request time.
 
 Content seeding scripts (`npm run seed`, `seed:more`, `seed:news`, `seed:support`) populate the Sanity
