@@ -78,6 +78,12 @@ constant lives in `lib/site.ts` (`SITE_URL`), swapped once at launch. See `docs/
   FAQ/products/stores.
 - **Multi-market** — locale subpaths and hreflang for DE/FR/BE; see `docs/I18N-STRATEGY.md`.
 
+## Before you change something
+
+See [`DEPENDENCIES.md`](DEPENDENCIES.md), the "if I change X, also update Y and Z" map for the whole
+project (code, design tokens, CMS, printed QR codes, brand docs). Check it before any non-trivial edit
+so a change doesn't ship half-done. It's kept current with every dependency-touching change.
+
 ## Project layout
 ```
 app/            routes (home, produkter, produkt/[slug], butikker, fag, nyheder,
@@ -87,4 +93,5 @@ components/      Nav, Footer, BagJourney/BagFill, ProductExperience, ProductExpl
 lib/            data.ts (catalogue), cms.ts, stores.ts, ska.ts, site.ts (SITE_URL), ...
 sanity/         schema types, Studio config, Dashboard, QR + share preview fields
 docs/           strategy, editor guide, domain/security/CMS docs
+DEPENDENCIES.md the coupling map, read before changing anything
 ```
