@@ -114,6 +114,21 @@ export const homePage = defineType({
     defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof', fieldset: 'fsGuarantee' }),
 
     show('showCampaign', 'fsCampaign', 'month'),
+    defineField({ ...s('campaignEyebrow', 'Campaign band: eyebrow label'), group: 'month', fieldset: 'fsCampaign' }),
+    defineField({ ...t('campaignHeadline', 'Campaign band: headline'), group: 'month', fieldset: 'fsCampaign' }),
+    defineField({ ...t('campaignText', 'Campaign band: text', 4), group: 'month', fieldset: 'fsCampaign' }),
+    defineField({ ...s('campaignPrimaryLabel', 'Campaign band: primary button label'), description: 'Links to the retailer’s webshop.', group: 'month', fieldset: 'fsCampaign' }),
+    defineField({ ...s('campaignSecondaryLabel', 'Campaign band: “read more” button label'), group: 'month', fieldset: 'fsCampaign' }),
+    defineField({
+      name: 'campaignLink',
+      title: 'Campaign band: “read more” → campaign page',
+      description:
+        'The campaign landing page the band links to. SWAP THE CAMPAIGN by pointing this at a different page — or create a new Landing page (it publishes at /kampagne/…) and select it here. Empty = links to the Try-it page.',
+      type: 'reference',
+      to: [{ type: 'landingPage' }],
+      group: 'month',
+      fieldset: 'fsCampaign',
+    }),
     defineField({
       name: 'campaignImages',
       title: 'Campaign band photos (3 recommended)',

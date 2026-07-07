@@ -1,8 +1,25 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import GlassButton from '@/components/GlassButton';
+import Accent from '@/components/Accent';
 import { ArrowRight } from 'lucide-react';
 import { CR_BRAND, UTM } from '@/lib/data';
+
+type CampaignBandProps = {
+  images?: string[];
+  eyebrow?: string;
+  headline?: string;
+  text?: string;
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  href?: string; // resolved "read more" target (campaign landing page or /proev-det)
+  // click-to-edit targets (Presentation) — data-sanity strings from the homepage
+  eyebrowAttr?: string;
+  headlineAttr?: string;
+  textAttr?: string;
+  primaryAttr?: string;
+  secondaryAttr?: string;
+};
 
 /** Full-bleed cinematic campaign band — the print campaign as motion: three B&W
  *  lifestyle shots cross-fade with a slow Ken Burns drift while the headline /
@@ -15,7 +32,20 @@ const SLIDES = [
 ];
 const DWELL = 3400; // ms per slide
 
-export default function CampaignBand({ images }: { images?: string[] }) {
+export default function CampaignBand({
+  images,
+  eyebrow = 'Campaign',
+  headline = 'Now you can afford\nmore than just tools',
+  text = 'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
+  primaryLabel = 'Buy at Carl Ras',
+  secondaryLabel = 'Read more',
+  href = '/proev-det',
+  eyebrowAttr,
+  headlineAttr,
+  textAttr,
+  primaryAttr,
+  secondaryAttr,
+}: CampaignBandProps) {
   // CMS uploads when present, the built-in campaign shots otherwise
   const slides = images && images.length
     ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
@@ -96,28 +126,26 @@ export default function CampaignBand({ images }: { images?: string[] }) {
         {/* text — bottom-left on phones, centered-left on desktop */}
         <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-12 lg:items-center lg:pb-0">
           <div className="max-w-xl">
-            <div className="eyebrow mb-5">Campaign</div>
-            <h2 className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
-              Now you can afford<br className="hidden sm:block" /> more than just tools
+            <div className="eyebrow mb-5" data-sanity={eyebrowAttr}>{eyebrow}</div>
+            <h2 data-sanity={headlineAttr} className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
+              <Accent text={headline} />
             </h2>
-            <p className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
-              STROXX is exactly like your pricey tools and good gear. It just does not cost
-              nearly as much. And if you think that sounds too good to be true, we simply
-              say:{' '}
-              <span className="text-stroxx-blue font-semibold tracking-wide">TRY IT.</span>{' '}
-              Not for you, or not happy? You get your money back. Simple as that.
+            <p data-sanity={textAttr} className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
+              <Accent text={text} />
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
-                Buy at Carl Ras <ArrowRight size={16} />
+                <span data-sanity={primaryAttr}>{primaryLabel}</span> <ArrowRight size={16} />
               </GlassButton>
-              <GlassButton href="/proev-det" variant="ghost">Read more</GlassButton>
+              <GlassButton href={href} variant="ghost">
+                <span data-sanity={secondaryAttr}>{secondaryLabel}</span>
+              </GlassButton>
             </div>
 
             {/* progress indicator */}
             <div className="mt-7 md:mt-10 flex gap-2.5" role="tablist" aria-label="Choose campaign image">
-              {SLIDES.map((s, idx) => (
+              {slides.map((s, idx) => (
                 <button
                   key={s.src}
                   type="button"

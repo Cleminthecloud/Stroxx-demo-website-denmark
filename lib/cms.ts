@@ -224,7 +224,9 @@ export type { HomeCopy, HomeStat } from '@/lib/home-copy';
 
 export async function getHomePage(): Promise<HomeCopy> {
   try {
-    const { data } = await sanityFetch({ query: '*[_type == "homePage"][0]' });
+    const { data } = await sanityFetch({
+      query: '*[_type == "homePage"][0]{..., "campaignSlug": campaignLink->slug.current}',
+    });
     if (!data) return HOME_DEFAULTS;
     const d = data as Record<string, any>;
     const merged: Record<string, any> = { ...HOME_DEFAULTS, _id: d._id };
@@ -246,6 +248,8 @@ export async function getHomePage(): Promise<HomeCopy> {
       }
     }
     merged.campaignImages = Array.isArray(d.campaignImages) ? d.campaignImages : [];
+    const campaignSlug = typeof d.campaignSlug === 'string' ? stegaClean(d.campaignSlug).trim() : '';
+    merged.campaignHref = campaignSlug ? `/kampagne/${campaignSlug}` : '/proev-det';
     return merged as HomeCopy;
   } catch {
     return HOME_DEFAULTS;

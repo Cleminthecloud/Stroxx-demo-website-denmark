@@ -263,7 +263,20 @@ export default async function Home() {
 
       {/* CAMPAIGN — print campaign as a cinematic image series */}
       {hp.showCampaign && (
-      <CampaignBand images={(hp.campaignImages ?? []).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[]} />
+      <CampaignBand
+        images={(hp.campaignImages ?? []).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[]}
+        eyebrow={hp.campaignEyebrow}
+        headline={hp.campaignHeadline}
+        text={hp.campaignText}
+        primaryLabel={hp.campaignPrimaryLabel}
+        secondaryLabel={hp.campaignSecondaryLabel}
+        href={hp.campaignHref}
+        eyebrowAttr={hAttr('campaignEyebrow')}
+        headlineAttr={hAttr('campaignHeadline')}
+        textAttr={hAttr('campaignText')}
+        primaryAttr={hAttr('campaignPrimaryLabel')}
+        secondaryAttr={hAttr('campaignSecondaryLabel')}
+      />
       )}
 
       {/* MÅNEDENS STROXX — the SKA engine: one hero story + the month's five
