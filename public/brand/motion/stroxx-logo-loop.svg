@@ -18,10 +18,12 @@
   <!-- the wordmark, steady -->
   <use href="#mark" fill="#F6F5F3"/>
 
-  <!-- a blue light travels around the frame, forever (path animation, no gradient) -->
+  <!-- a blue light travels around the frame, forever (path animation, no gradient).
+       Thinner than the white frame and round-joined so it rides inside the border,
+       never poking past a corner. -->
   <g transform="translate(58,26) scale(2.44)">
-    <rect x="0.73" y="0.73" width="98.88" height="26.85" fill="none" stroke="#0088C2" stroke-width="1.7"
-          stroke-linecap="round" stroke-dasharray="15 237">
+    <rect x="0.73" y="0.73" width="98.88" height="26.85" fill="none" stroke="#0098E8" stroke-width="1.15"
+          stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="16 236">
       <animate attributeName="stroke-dashoffset" from="0" to="-252" dur="2.8s" repeatCount="indefinite"/>
     </rect>
   </g>

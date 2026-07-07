@@ -91,7 +91,10 @@ export default function BrandGuide() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3 -mt-12 mb-16">
-        <span className="text-fog text-xs">Type is the system Helvetica Neue stack, licence-free, no font file to ship.</span>
+        <span className="text-fog text-xs">Helvetica Neue, the system stack on screen, the full family for design.</span>
+        <a href="/brand/fonts/HelveticaNeue.zip" download className="inline-flex items-center gap-1.5 rounded-full border border-line bg-ink/50 px-3.5 py-1.5 text-xs text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white">
+          Helvetica Neue (.zip)
+        </a>
         <a href="/brand/stroxx-type.css" download className="inline-flex items-center gap-1.5 rounded-full border border-line bg-ink/50 px-3.5 py-1.5 text-xs text-fog transition-colors hover:border-stroxx-blue/50 hover:text-white">
           Type stack (.css)
         </a>

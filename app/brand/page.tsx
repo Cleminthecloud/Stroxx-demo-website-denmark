@@ -71,16 +71,17 @@ const GALLERY = [
   { src: '/brand/gallery/tool-bag.jpg', label: 'Tool bag' },
 ];
 
-/** Campaign photography (Prøv Det). Drop new files into /public/brand/campaign. */
+/** Campaign photography, the Prøv Det (Try It) heroes: "Now you can afford
+ *  more than just tools". Black and white, the brand's photographic language. */
 const CAMPAIGN = [
-  { src: '/brand/campaign/campaign-1.jpg', label: 'Prøv Det · 01' },
-  { src: '/brand/campaign/campaign-2.jpg', label: 'Prøv Det · 02' },
-  { src: '/brand/campaign/campaign-3.jpg', label: 'Prøv Det · 03' },
+  { src: '/Images/campaign/tea.jpg', label: 'Afford more than just tools · Tea' },
+  { src: '/Images/campaign/glasses.jpg', label: 'Afford more than just tools · Glasses' },
+  { src: '/Images/campaign/rings.jpg', label: 'Afford more than just tools · Rings' },
 ];
 
 function PhotoCard({ src, label }: { src: string; label: string }) {
   return (
-    <div className="glass glass-card rounded-2xl overflow-hidden">
+    <div className="glass glass-card glass-panel--glow rounded-2xl overflow-hidden">
       <a href={src} target="_blank" rel="noreferrer" className="block relative group">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt={label} className="w-full h-56 object-cover" />
@@ -152,7 +153,7 @@ export default function BrandPage() {
         <div className="grid gap-6 sm:grid-cols-3 mt-10">
           {PRINCIPLES.map((p, i) => (
             <Reveal key={p.t} delay={i * 90}>
-              <div className="glass glass-card rounded-2xl p-7 h-full">
+              <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
                 <div className="text-stroxx-blue text-sm font-medium mb-2">0{i + 1}</div>
                 <div className="text-white text-lg font-medium mb-2">{p.t}</div>
                 <p className="text-fog text-sm leading-relaxed">{p.b}</p>
@@ -168,7 +169,7 @@ export default function BrandPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           {LOGO_SETS.map((set) => (
             <Reveal key={set.name}>
-              <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
+              <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
                 <div className="rounded-xl grid place-items-center py-14 mb-5" style={{ background: set.dark ? '#0A0B0D' : '#F6F5F3', border: '1px solid rgba(255,255,255,0.06)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={set.src} alt={`STROXX ${set.name}`} className="h-10 md:h-12 w-auto" />
@@ -206,7 +207,7 @@ export default function BrandPage() {
         </Reveal>
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
-            <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
               <LogoMotion src="/brand/motion/stroxx-logo-reveal.svg" alt="STROXX logo reveal animation" />
               <div className="text-white text-sm font-medium mt-4">Logo reveal (sting)</div>
               <div className="text-fog text-xs mb-4">The frame draws, then the letters rise in. For intros, headers and video.</div>
@@ -218,7 +219,7 @@ export default function BrandPage() {
             </div>
           </Reveal>
           <Reveal delay={90}>
-            <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
               <LogoMotion src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" />
               <div className="text-white text-sm font-medium mt-4">Living logo (loop)</div>
               <div className="text-fog text-xs mb-4">A blue light travels the frame, forever. For screens and websites.</div>
@@ -230,7 +231,7 @@ export default function BrandPage() {
         </div>
 
         <Reveal>
-          <div className="glass glass-card rounded-2xl p-6 mt-6">
+          <div className="glass glass-card glass-panel--glow rounded-2xl p-6 mt-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:items-center">
               <div className="rounded-xl overflow-hidden" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <iframe src="/brand/motion/stroxx-particle-logo.html" title="STROXX particle logo" className="w-full" style={{ height: 220, border: 0 }} />
@@ -256,7 +257,7 @@ export default function BrandPage() {
         <Reveal><div className="eyebrow mb-6">Imagery</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
-            {'Brand photography, tools in real hands and workshops, dark and honest. A starter set is here; more is on the way. Click to view full size, or download.'}
+            {'The brand shoots in black and white, always. Tools in real hands, workshops, honest and unposed, high contrast on the dark. A starter set is here; more is on the way. Click to view full size, or download.'}
           </p>
         </Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -286,7 +287,7 @@ export default function BrandPage() {
         <Reveal><div className="eyebrow mb-6">Positioning + voice</div></Reveal>
         <div className="grid gap-6 lg:grid-cols-3">
           <Reveal>
-            <div className="glass glass-card rounded-2xl p-7 h-full">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">What STROXX is</div>
               <p className="text-fog leading-relaxed text-sm">
                 {'A full range of professional tools, made and quality-assured by professionals, at a 1:1 quality with the A-brands a tradesman already trusts. The first thing your tools should build is trust; the price is the reward for choosing smart.'}
@@ -294,7 +295,7 @@ export default function BrandPage() {
             </div>
           </Reveal>
           <Reveal delay={90}>
-            <div className="glass glass-card rounded-2xl p-7 h-full">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">Two hats</div>
               <p className="text-fog leading-relaxed text-sm mb-4">
                 {'STROXX the brand convinces on quality and identity and never opens with price. STROXX at the dealer is where the buying and the pricing happen. The brand site routes to the dealer, it does not sell.'}
@@ -310,7 +311,7 @@ export default function BrandPage() {
             </div>
           </Reveal>
           <Reveal delay={180}>
-            <div className="glass glass-card rounded-2xl p-7 h-full">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
               <div className="text-white text-lg font-medium mb-3">How it sounds</div>
               <p className="text-fog leading-relaxed text-sm mb-4">
                 {'Plain-spoken and confident, like a skilled colleague, not a catalogue. Short lines. Proof over adjectives. Calm and engineered, never loud.'}
@@ -329,7 +330,7 @@ export default function BrandPage() {
       <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
-            <div className="glass glass-card rounded-2xl p-7 h-full">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
               <div className="eyebrow mb-5" style={{ color: '#22c55e' }}>Do</div>
               <ul className="space-y-3">
                 {DOS.map((d) => (
@@ -341,7 +342,7 @@ export default function BrandPage() {
             </div>
           </Reveal>
           <Reveal delay={90}>
-            <div className="glass glass-card rounded-2xl p-7 h-full">
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">
               <div className="eyebrow mb-5" style={{ color: 'rgba(239,120,120,1)' }}>Don’t</div>
               <ul className="space-y-3">
                 {DONTS.map((d) => (
