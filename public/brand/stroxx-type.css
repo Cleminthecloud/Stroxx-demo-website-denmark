@@ -1,0 +1,6 @@
+/* STROXX type — the system Helvetica Neue stack (licence-free; no font file to ship).
+   Display weight 500, never 800. Body is fog on ink; white for headlines + emphasis. */
+:root {
+  --stroxx-font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --stroxx-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

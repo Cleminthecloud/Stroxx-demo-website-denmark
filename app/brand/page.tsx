@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Download, ExternalLink } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
-import LogoReveal from '@/components/LogoReveal';
+import LogoMotion from '@/components/LogoMotion';
 import Reveal from '@/components/Reveal';
 
 export const metadata: Metadata = {
@@ -70,6 +70,33 @@ const GALLERY = [
   { src: '/brand/gallery/workshop-cabinet.jpg', label: 'Workshop cabinet' },
   { src: '/brand/gallery/tool-bag.jpg', label: 'Tool bag' },
 ];
+
+/** Campaign photography (Prøv Det). Drop new files into /public/brand/campaign. */
+const CAMPAIGN = [
+  { src: '/brand/campaign/campaign-1.jpg', label: 'Prøv Det · 01' },
+  { src: '/brand/campaign/campaign-2.jpg', label: 'Prøv Det · 02' },
+  { src: '/brand/campaign/campaign-3.jpg', label: 'Prøv Det · 03' },
+];
+
+function PhotoCard({ src, label }: { src: string; label: string }) {
+  return (
+    <div className="glass glass-card rounded-2xl overflow-hidden">
+      <a href={src} target="_blank" rel="noreferrer" className="block relative group">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={label} className="w-full h-56 object-cover" />
+        <span className="absolute inset-0 bg-ink/0 group-hover:bg-ink/30 transition-colors grid place-items-center opacity-0 group-hover:opacity-100">
+          <span className="inline-flex items-center gap-2 text-white text-sm"><ExternalLink size={15} /> View</span>
+        </span>
+      </a>
+      <div className="flex items-center justify-between gap-2 px-4 py-3">
+        <span className="text-white text-sm">{label}</span>
+        <a href={src} download className="inline-flex items-center gap-1.5 text-fog text-xs hover:text-white transition-colors">
+          <Download size={13} /> Download
+        </a>
+      </div>
+    </div>
+  );
+}
 
 function FmtLink({ f }: { f: Fmt }) {
   return (
@@ -180,9 +207,9 @@ export default function BrandPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
             <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
-              <LogoReveal />
+              <LogoMotion src="/brand/motion/stroxx-logo-reveal.svg" alt="STROXX logo reveal animation" />
               <div className="text-white text-sm font-medium mt-4">Logo reveal (sting)</div>
-              <div className="text-fog text-xs mb-4">Draws in on load. For intros, headers and video. Press Replay to watch it again.</div>
+              <div className="text-fog text-xs mb-4">The frame draws, then the letters rise in. For intros, headers and video.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-reveal.svg']} />
                 <FmtLink f={['MP4 film', '/brand/motion/stroxx-logo.mp4']} />
@@ -192,12 +219,9 @@ export default function BrandPage() {
           </Reveal>
           <Reveal delay={90}>
             <div className="glass glass-card rounded-2xl p-6 h-full flex flex-col">
-              <div className="rounded-xl overflow-hidden mb-5" style={{ background: '#0B0C0E', border: '1px solid rgba(255,255,255,0.06)' }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" className="w-full" />
-              </div>
-              <div className="text-white text-sm font-medium">Living logo (loop)</div>
-              <div className="text-fog text-xs mb-4">A steady light sweep and breathing glow, forever. For screens and websites.</div>
+              <LogoMotion src="/brand/motion/stroxx-logo-loop.svg" alt="STROXX living logo loop" />
+              <div className="text-white text-sm font-medium mt-4">Living logo (loop)</div>
+              <div className="text-fog text-xs mb-4">A blue light travels the frame, forever. For screens and websites.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-loop.svg']} />
               </div>
@@ -237,23 +261,22 @@ export default function BrandPage() {
         </Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {GALLERY.map((g, i) => (
-            <Reveal key={g.src} delay={i * 80}>
-              <div className="glass glass-card rounded-2xl overflow-hidden">
-                <a href={g.src} target="_blank" rel="noreferrer" className="block relative group">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={g.src} alt={g.label} className="w-full h-56 object-cover" />
-                  <span className="absolute inset-0 bg-ink/0 group-hover:bg-ink/30 transition-colors grid place-items-center opacity-0 group-hover:opacity-100">
-                    <span className="inline-flex items-center gap-2 text-white text-sm"><ExternalLink size={15} /> View</span>
-                  </span>
-                </a>
-                <div className="flex items-center justify-between gap-2 px-4 py-3">
-                  <span className="text-white text-sm">{g.label}</span>
-                  <a href={g.src} download className="inline-flex items-center gap-1.5 text-fog text-xs hover:text-white transition-colors">
-                    <Download size={13} /> Download
-                  </a>
-                </div>
-              </div>
-            </Reveal>
+            <Reveal key={g.src} delay={i * 80}><PhotoCard src={g.src} label={g.label} /></Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* CAMPAIGN PHOTOGRAPHY */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+        <Reveal><div className="eyebrow mb-6">Campaign photography</div></Reveal>
+        <Reveal>
+          <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
+            {'From the Prøv Det (Try It) campaign, the shared creative every market can run. Click to view full size, or download.'}
+          </p>
+        </Reveal>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {CAMPAIGN.map((g, i) => (
+            <Reveal key={g.src} delay={i * 80}><PhotoCard src={g.src} label={g.label} /></Reveal>
           ))}
         </div>
       </section>
@@ -332,7 +355,7 @@ export default function BrandPage() {
         </div>
         <Reveal>
           <p className="mt-8 text-fog/70 text-xs leading-relaxed max-w-2xl pb-24">
-            {'Brand font is Aller; the site uses the system Helvetica Neue stack as the licence-free stand-in. Colour swatches and CSS tokens download from the palette above. The full Brand Plan, playbook and brandbook stay internal, ask STROXX marketing for source files or the extended palette. One brand, four markets: Carl Ras, Meesenburg, Foussier, Lecot.'}
+            {'Type is the system Helvetica Neue stack, licence-free (download it from the type block above). Colour swatches and CSS tokens download from the palette. The full Brand Plan, playbook and brandbook stay internal, ask STROXX marketing for source files or the extended palette. One brand, four markets: Carl Ras, Meesenburg, Foussier, Lecot.'}
           </p>
         </Reveal>
       </section>
