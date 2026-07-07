@@ -16,6 +16,7 @@
     "seed:news": "sanity exec scripts/seed-news.ts --with-user-token",
     "seed:support": "sanity exec scripts/seed-support.ts --with-user-token",
     "seed:proevdet": "sanity exec scripts/seed-proevdet.ts --with-user-token",
+    "seed:qr": "sanity exec scripts/seed-qr.ts --with-user-token",
     "backup": "mkdir -p backups && sanity dataset export demo backups/demo-backup.tar.gz --overwrite"
   },
   "dependencies": {

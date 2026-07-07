@@ -65,6 +65,9 @@ These are pixel/scroll couplings that look fine in isolation and break when comb
 ### CMS / Sanity
 The Studio (`/studio`) does click-to-edit on top of the live site via Presentation, which is why `X-Frame-Options` must be `SAMEORIGIN`. `sanity/ShareCard.tsx` renders the social preview for both the Share tab and the in-document `SharePreviewField` (reads live form values via `useFormValue`, hooks must stay unconditional). The post schema has a display-only `sharePreview` field whose input is `SharePreviewField`, deleting it kills the in-article preview.
 
+### Managed /qr codes seed
+`scripts/seed-qr.ts` (`npm run seed:qr`) creates the repointable `/qr/<code>` codes, one per support page (`st2`, `xlock`, `cylinders`, `worklight`, `ppe`, `keybox`, `tools`), idempotent via `qr-<code>` ids. These are PROVISIONAL proposals, the `code` is a print contract, so confirm with packaging before print and never rename a printed code (repoint `target` instead). Legacy in-circulation codes are NOT seeded here, they resolve via middleware (`docs/STROXX-legacy-redirects.csv` + `/pages/<slug>` → `/support/<slug>`).
+
 ### QR and support (the print contract)
 Physical packaging is the hard constraint here. Printed QRs hit `/pages/<slug>`, middleware 301s them to `/support/<slug>`, so a support slug is effectively immutable once printed (repoint via a CMS redirect if forced). `qrCode` codes: never rename a printed code, repoint its `target`. `/qr/[code]` is deliberately a 302 (a 301 would let scanners cache a stale target). `dayStats` has a `qr` map keyed by code with `-` to `_`. Middleware order matters: CMS `redirect` docs are evaluated first, then legacy rules, so an editor redirect can override a legacy one.
 
