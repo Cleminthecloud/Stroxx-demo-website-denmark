@@ -279,7 +279,7 @@ export default function BrandPage() {
         <Reveal><div className="eyebrow mb-6">STROXX in the world</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
-            {'The campaign, activated. One idea running everywhere a tradesperson looks, from the storefront to the feed. This is what every market can put up next month; the print-ready source files (all banner sizes, entrances, posters) live with STROXX marketing. Click to view, or download a preview.'}
+            {'The campaign, activated. One idea running everywhere a tradesperson looks, from the storefront to the feed. This is what every market can put up next month. Click any preview to view it large. The editable templates live in Carl Ras’s Digizuite DAM as InDesign IDML packages (translate the copy, keep the layout), an English master is the base each market localises from. Grabbing a JPEG here is just a reference; the real, editable file comes from the DAM.'}
           </p>
         </Reveal>
         <PhotoGallery images={APPLICATIONS} />
