@@ -16,9 +16,9 @@
  * run (Sanity dedupes identical files by hash, so no storage bloat).
  *
  * Legacy inventory this mirrors: docs/STROXX-legacy-redirects.csv (32 QR
- * short-paths) and docs/STROXX-legacy-files-manifest.md (~40 PDFs). Video
- * targets (MMEXO promos, ST-2 tutorials) are intentionally NOT wired here —
- * they await a hosting decision (see the manifest).
+ * short-paths) and docs/STROXX-legacy-files-manifest.md (~40 PDFs). MMEXO
+ * videos are wired separately by scripts/seed-videos.ts (Sanity-hosted, at
+ * /support/mmexo); ST-2 lock tutorials were never produced (Meena, 2026-07-08).
  */
 import { getCliClient } from 'sanity/cli';
 
@@ -99,8 +99,8 @@ const group = (key: string, heading: string, items: unknown[]) => ({
 
 /** Legacy QR short-path → new support target. Mirrors STROXX-legacy-redirects.csv.
  *  These become `redirect` docs the middleware serves, so old printed codes keep
- *  working after the domain cutover. Video-only and external (zegsu) short-paths
- *  are intentionally excluded pending a hosting decision. */
+ *  working after the domain cutover. The MMEXO video short-paths are wired in
+ *  seed-videos.ts; the external (zegsu) short-path is excluded pending ownership. */
 const REDIRECTS: [from: string, to: string][] = [
   // ST-2 smart lock
   ['/smart-locks-st2', '/support/smart-locks-st2'],

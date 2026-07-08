@@ -34,7 +34,7 @@ never invent behaviour.
   /komponenter.
 - Monthly lineup (Manedens STROXX): the tool of the month.
 - News article: blog posts at /nyheder.
-- Support page: manuals/downloads at /support/<slug>; the QR system points here.
+- Support page: manuals, downloads and product videos at /support/<slug>; the QR system points here.
 - QR code: the repointable /qr/<code> short links for packaging.
 - Store, Trade (fag page), Specialist, Testimonial, Film (YouTube), Legal page,
   Product augment: supporting collections.
@@ -97,6 +97,11 @@ it. So do not rename a support-page slug once it is printed; if you must, the
 developer adds a redirect. Renaming other page slugs (news, landing) is safe,
 the site auto-creates a redirect when you publish, so old links keep working.
 
+A support page can hold PDFs or videos: each download item takes a PDF or a
+video (MP4) that plays inline on the page. The MMEXO exoskeleton films are set
+up this way at /support/mmexo (instruction + promo, in Danish, German, Dutch
+and French). ST-2 lock tutorial videos were never produced, so there are none.
+
 ### SEO and share images
 Every page type has SEO title/description fields with a live preview underneath
 (Google result + shared-link card). Leave them empty to use the page's own
@@ -116,6 +121,12 @@ shows which you are viewing. Presentation ("Edit site") previews drafts live.
 "Article AI" (top tab) drafts and polishes news articles and social posts.
 "Dashboard" shows visits and QR scans. "Brand" and "Guide" tabs are the brand
 hub and this editor guide.
+
+## Learning Sanity itself
+This Studio is built on Sanity (the CMS engine). For general Sanity how-tos
+beyond STROXX, editors can learn at sanity.io/learn (guided courses) and
+sanity.io/docs (reference). If a question is about a generic Sanity feature
+rather than something STROXX-specific, point them there as well as answering.
 
 ## Things you cannot change here (code-owned, ask the developer)
 Page layout, animations, the bag intro, the palette/type/motion rules, the
