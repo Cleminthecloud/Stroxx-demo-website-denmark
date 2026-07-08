@@ -3,7 +3,7 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
-import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon } from '@sanity/icons';
+import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon, HelpCircleIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
@@ -11,6 +11,7 @@ import BrandTool from './sanity/BrandTool';
 import WelcomeTool from './sanity/WelcomeTool';
 import ArticleAgentTool from './sanity/ArticleAgentTool';
 import DashboardTool from './sanity/DashboardTool';
+import HelpTool from './sanity/HelpTool';
 import { seePageAction, openInPresentationAction } from './sanity/SeePageAction';
 import { wrapPublishWithRedirect, REDIRECTABLE } from './sanity/slugRedirectAction';
 
@@ -133,6 +134,7 @@ export default defineConfig({
   },
   /* the editor guide as its own Studio tab, always the deployed version */
   tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },
+    { name: 'help', title: 'Help', icon: HelpCircleIcon, component: HelpTool },
     { name: 'guide', title: 'Guide', icon: BookIcon, component: GuideTool },
     { name: 'brand', title: 'Brand', icon: BookIcon, component: BrandTool },
     { name: 'article-ai', title: 'Article AI', icon: BulbOutlineIcon, component: ArticleAgentTool },
