@@ -101,6 +101,10 @@ A support page can hold PDFs or videos: each download item takes a PDF or a
 video (MP4) that plays inline on the page. The MMEXO exoskeleton films are set
 up this way at /support/mmexo (instruction + promo, in Danish, German, Dutch
 and French). ST-2 lock tutorial videos were never produced, so there are none.
+Each download has a Language field so the site knows the file's language and
+can show each market its own language later. The Service & Support page copy
+(/service: guarantee, returns, FAQ, documents, contact) is editable in Site
+settings, Microcopy, alongside the Support index headline and intro.
 
 ### SEO and share images
 Every page type has SEO title/description fields with a live preview underneath

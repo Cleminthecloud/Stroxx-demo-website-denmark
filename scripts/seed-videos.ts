@@ -60,12 +60,13 @@ async function uploadAll(): Promise<Record<string, string>> {
 const videoRef = (ids: Record<string, string>, key: string) =>
   ids[key] ? { _type: 'file', asset: { _type: 'reference', _ref: ids[key] } } : undefined;
 
-const item = (key: string, label: string, video?: unknown, note?: string) => ({
+const item = (key: string, label: string, video?: unknown, note?: string, language?: string) => ({
   _type: 'downloadItem',
   _key: key,
   label,
   ...(video ? { video } : {}),
   ...(note ? { note } : {}),
+  ...(language ? { language } : {}),
 });
 
 const group = (key: string, heading: string, items: unknown[]) => ({
@@ -100,20 +101,20 @@ async function run() {
     seoDescription: 'Watch the STROXX MMEXO instruction video and product film in Danish, German, Dutch or French.',
     groups: [
       group('dk', 'Dansk', [
-        item('dk-instr', 'Instruktionsvideo', videoRef(ids, 'dk_instr'), 'Sådan bruger du MMEXO'),
-        item('dk-promo', 'Produktfilm', videoRef(ids, 'dk_promo')),
+        item('dk-instr', 'Instruktionsvideo', videoRef(ids, 'dk_instr'), 'Sådan bruger du MMEXO', 'da'),
+        item('dk-promo', 'Produktfilm', videoRef(ids, 'dk_promo'), undefined, 'da'),
       ]),
       group('de', 'Deutsch', [
-        item('de-instr', 'Anleitungsvideo', videoRef(ids, 'de_instr'), 'So verwenden Sie MMEXO'),
-        item('de-promo', 'Produktfilm', videoRef(ids, 'de_promo')),
+        item('de-instr', 'Anleitungsvideo', videoRef(ids, 'de_instr'), 'So verwenden Sie MMEXO', 'de'),
+        item('de-promo', 'Produktfilm', videoRef(ids, 'de_promo'), undefined, 'de'),
       ]),
       group('nl', 'Nederlands', [
-        item('nl-instr', 'Instructievideo', videoRef(ids, 'nl_instr'), 'Zo gebruik je MMEXO'),
-        item('nl-promo', 'Productfilm', videoRef(ids, 'nl_promo')),
+        item('nl-instr', 'Instructievideo', videoRef(ids, 'nl_instr'), 'Zo gebruik je MMEXO', 'nl'),
+        item('nl-promo', 'Productfilm', videoRef(ids, 'nl_promo'), undefined, 'nl'),
       ]),
       group('fr', 'Français', [
-        item('fr-instr', 'Vidéo d’instructions', videoRef(ids, 'fr_instr'), 'Comment utiliser MMEXO'),
-        item('fr-promo', 'Film produit', videoRef(ids, 'fr_promo')),
+        item('fr-instr', 'Vidéo d’instructions', videoRef(ids, 'fr_instr'), 'Comment utiliser MMEXO', 'fr'),
+        item('fr-promo', 'Film produit', videoRef(ids, 'fr_promo'), undefined, 'fr'),
       ]),
     ],
   };

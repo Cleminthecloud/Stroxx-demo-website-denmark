@@ -88,6 +88,23 @@ export const supportPage = defineType({
                       description: 'Upload a video instead of a PDF. It plays inline on the page. Swapping the file updates the player instantly.',
                     }),
                     defineField({
+                      name: 'language',
+                      title: 'Language',
+                      type: 'string',
+                      description: 'What language is this file in? So the site knows, and can show each market its own language.',
+                      options: {
+                        layout: 'dropdown',
+                        list: [
+                          { title: 'Danish', value: 'da' },
+                          { title: 'German', value: 'de' },
+                          { title: 'Dutch', value: 'nl' },
+                          { title: 'French', value: 'fr' },
+                          { title: 'English', value: 'en' },
+                          { title: 'Spanish', value: 'es' },
+                        ],
+                      },
+                    }),
+                    defineField({
                       name: 'note',
                       title: 'Note (optional)',
                       type: 'string',

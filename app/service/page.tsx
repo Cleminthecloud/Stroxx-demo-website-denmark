@@ -1,4 +1,5 @@
 import { getSiteSettings } from '@/lib/cms';
+import { stegaClean } from '@sanity/client/stega';
 import Accent from '@/components/Accent';
 import type { Metadata } from 'next';
 import Reveal from '@/components/Reveal';
@@ -68,17 +69,39 @@ const RETURN_STEPS = [
 ];
 
 export default async function ServicePage() {
+  const cms = await getSiteSettings();
+
+  const guaranteeHeading = cms?.serviceGuaranteeHeading || '30-day satisfaction guarantee';
+  const guaranteeBody =
+    cms?.serviceGuaranteeBody ||
+    "Try STROXX on real work for 30 days. If you're not happy, you get your money back. No need for faults, your judgment is enough. Applies to all STROXX products except access control, for business customers with an account at Carl Ras.";
+  const returnsHeading = cms?.serviceReturnsHeading || 'How to return';
+  const returnSteps = cms?.serviceReturnSteps?.length
+    ? cms.serviceReturnSteps.map((s) => ({ t: s.title ?? '', d: s.body ?? '' }))
+    : RETURN_STEPS;
+  const docsHeading = cms?.serviceDocsHeading || 'Documents';
+  const docs = cms?.serviceDocs?.length
+    ? cms.serviceDocs.map((d) => ({ label: d.label ?? '', href: stegaClean(d.href) ?? '' })).filter((d) => d.label && d.href)
+    : DOCS;
+  const docsPending =
+    cms?.serviceDocsPending ||
+    'Product catalogues and safety data sheets for chemicals will appear here once the DAM integration is in place.';
+  const contactHeading = cms?.serviceContactHeading || 'Talk to a human';
+  const faqEyebrow = cms?.serviceFaqEyebrow || 'Questions and answers';
+  const faqHeadingText = cms?.serviceFaqHeading || 'The practical stuff, in brief.';
+  const faqSrc: { q: string; a: string; linkText?: string; linkUrl?: string }[] = cms?.serviceFaq?.length
+    ? cms.serviceFaq.map((f) => ({ q: f.question ?? '', a: f.answer ?? '', linkText: f.linkText, linkUrl: f.linkUrl }))
+    : SERVICE_FAQ.map((f) => ({ q: f.q, a: f.a }));
+
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: SERVICE_FAQ.map((f) => ({
+    mainEntity: faqSrc.map((f) => ({
       '@type': 'Question',
-      name: f.q,
-      acceptedAnswer: { '@type': 'Answer', text: f.a },
+      name: stegaClean(f.q),
+      acceptedAnswer: { '@type': 'Answer', text: stegaClean(f.a) },
     })),
   };
-
-  const cms = await getSiteSettings();
   return (
     <main className="bg-ink min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
@@ -102,13 +125,9 @@ export default async function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><ShieldCheck size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">30-day satisfaction guarantee</h2>
+                <h2 className="text-white font-display font-bold text-2xl">{guaranteeHeading}</h2>
               </div>
-              <p className="text-fog leading-relaxed mb-4">
-                Try STROXX on real work for 30 days. If you're not happy, you get your money
-                back. No need for faults, your judgment is enough. Applies to all STROXX products
-                except access control, for business customers with an account at Carl Ras.
-              </p>
+              <p className="text-fog leading-relaxed mb-4">{guaranteeBody}</p>
               <div className="flex flex-wrap items-center gap-3 mt-6">
                 <GlassButton href="/proev-det">How it works <ArrowRight size={15} /></GlassButton>
                 <GuaranteeModal />
@@ -121,10 +140,10 @@ export default async function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><RotateCcw size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">How to return</h2>
+                <h2 className="text-white font-display font-bold text-2xl">{returnsHeading}</h2>
               </div>
               <div className="space-y-5">
-                {RETURN_STEPS.map((s, i) => (
+                {returnSteps.map((s, i) => (
                   <div key={s.t} className="flex gap-4">
                     <span className="h-display text-stroxx-blue text-xl leading-snug">{String(i + 1).padStart(2, '0')}</span>
                     <div>
@@ -144,7 +163,7 @@ export default async function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><FileText size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">Documents</h2>
+                <h2 className="text-white font-display font-bold text-2xl">{docsHeading}</h2>
               </div>
               <div className="space-y-3">
                 <Link href="/support" className="flex items-center justify-between gap-4 rounded-lg border border-stroxx-blue/40 bg-stroxx-blue/[0.06] px-5 py-4 text-white transition-colors hover:border-stroxx-blue/70">
@@ -154,7 +173,7 @@ export default async function ServicePage() {
                   </span>
                   <ArrowRight size={15} className="shrink-0 text-stroxx-blue" />
                 </Link>
-                {DOCS.map((d) => (
+                {docs.map((d) => (
                   <a key={d.href} href={d.href} target="_blank" rel="noopener noreferrer"
                     className="flex items-center justify-between gap-4 rounded-lg border border-line px-5 py-4 text-sm text-white transition-colors hover:border-stroxx-blue/50">
                     {d.label}
@@ -162,8 +181,7 @@ export default async function ServicePage() {
                   </a>
                 ))}
                 <div className="rounded-lg border border-dashed border-line px-5 py-4 text-sm text-fog">
-                  Product catalogues and safety data sheets for chemicals will appear here once the
-                  DAM integration is in place.
+                  {docsPending}
                 </div>
               </div>
             </div>
@@ -174,14 +192,18 @@ export default async function ServicePage() {
             <div className="glass glass-card rounded-xl p-8 h-full">
               <div className="flex items-center gap-3 mb-5">
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-stroxx-blue/50 text-stroxx-blue"><Phone size={18} /></span>
-                <h2 className="text-white font-display font-bold text-2xl">Talk to a human</h2>
+                <h2 className="text-white font-display font-bold text-2xl">{contactHeading}</h2>
               </div>
-              <p className="text-fog leading-relaxed mb-5">
-                Carl Ras customer service is ready on{' '}
-                <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>{' '}
-                (Mon-Thu 07-16, Fri 07-15). Or skip the queue and call a specialist
-                directly at your nearest store.
-              </p>
+              {cms?.serviceContactBody ? (
+                <p className="text-fog leading-relaxed mb-5">{cms.serviceContactBody}</p>
+              ) : (
+                <p className="text-fog leading-relaxed mb-5">
+                  Carl Ras customer service is ready on{' '}
+                  <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>{' '}
+                  (Mon-Thu 07-16, Fri 07-15). Or skip the queue and call a specialist
+                  directly at your nearest store.
+                </p>
+              )}
               <div className="flex flex-wrap items-center gap-3">
                 <GlassButton href="/butikker?tab=specialister">Find your specialist <ArrowRight size={15} /></GlassButton>
                 <GlassButton href="/butikker" variant="ghost">All stores</GlassButton>
@@ -194,15 +216,15 @@ export default async function ServicePage() {
         <section className="mt-24 border-t border-line pt-16">
           <div className="text-center mb-10">
             <Reveal>
-              <div className="eyebrow mb-3">Questions and answers</div>
+              <div className="eyebrow mb-3">{faqEyebrow}</div>
               <h2 className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.96]">
-                The practical stuff, in brief.
+                <Accent text={faqHeadingText} />
               </h2>
             </Reveal>
           </div>
           <Reveal delay={100}>
             <Faq
-              items={SERVICE_FAQ.map((f) => ({
+              items={faqSrc.map((f) => ({
                 q: f.q,
                 a:
                   f.q === 'Who can use the satisfaction guarantee?' ? (
@@ -220,6 +242,13 @@ export default async function ServicePage() {
                         terms of sale and delivery
                       </a>
                       . Bring the item to the store or call customer service on <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>.
+                    </>
+                  ) : f.linkText && f.linkUrl ? (
+                    <>
+                      {f.a}{' '}
+                      <a href={stegaClean(f.linkUrl)} target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
+                        {f.linkText}
+                      </a>
                     </>
                   ) : (
                     f.a
