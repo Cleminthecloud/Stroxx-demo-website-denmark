@@ -9,6 +9,8 @@ import { specialists as fallbackSpecialists, Specialist } from '@/lib/data';
 import { testimonials as fallbackTestimonials, Testimonial } from '@/lib/testimonials';
 import { videos as fallbackVideos, Video } from '@/lib/videos';
 import { trades as fallbackTrades, Trade } from '@/lib/trades';
+import { markets as fallbackMarkets, Market } from '@/lib/markets';
+export type { Market } from '@/lib/markets';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -94,6 +96,20 @@ export type SiteSettings = {
   notFoundHeadline?: string;
   notFoundText?: string;
 };
+
+/** Market registry: the international reference + the dealer markets. Empty/
+ *  unreachable dataset falls back to lib/markets.ts, same seam as everything else. */
+export async function getMarkets(): Promise<Market[]> {
+  try {
+    const { data } = await sanityFetch({
+      query:
+        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLinks[]{ label, href }, order }',
+    });
+    return Array.isArray(data) && data.length ? (data as Market[]) : fallbackMarkets;
+  } catch {
+    return fallbackMarkets;
+  }
+}
 
 /** CMS link lists → clean {label, href}[] or null when unset/empty. */
 export function cleanLinks(links: NavLink[] | undefined): { label: string; href: string }[] | null {
