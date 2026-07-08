@@ -11,7 +11,7 @@
 2. **Tier 2 (Deep reference)** explains the *why* behind the trickier couplings (layout geometry, the CMS, the QR print contract, brand docs).
 3. This file is the canonical list. Claude keeps it current: whenever we make a change that creates or touches a dependency, it updates this file in the **same** push. If you spot a coupling that's missing, add a row and it'll be folded in.
 
-Last reviewed: 2026-07-07.
+Last reviewed: 2026-07-08.
 
 ---
 
@@ -30,8 +30,10 @@ Last reviewed: 2026-07-07.
 | **The bag hero geometry** | `components/BagJourney.tsx` and `components/BagFill.tsx` share constants (TOOLS, BAG_AR, panels). Change one dimension, recheck both, plus the hero headline padding in `app/page.tsx` (they overlap). |
 | **A translucent panel behind the product cut-out** (`/produkt/[slug]`) | Any glass panel the travelling cut-out passes behind needs `.glass-panel--frost` or the product bleeds through. See Tier 2 "Layout geometry". |
 | **A support page slug** (`/support/[slug]`) | The slug is a PRINT contract: packaging QRs hit `/pages/<slug>`. Renaming breaks printed codes, add a CMS redirect if forced. Never rename a printed `qrCode` code, repoint its `target` instead. |
+| **A support-page video** (MMEXO films; `supportPage` `video` field) | Hosted in Sanity, NOT the repo (promos are ~117MB, over GitHub's 100MB/file limit). Masters live in the gitignored `Meena videos/`; run `npm run seed:videos` to upload or swap. CSP `media-src 'self' https:` in `next.config.mjs` already allows Sanity's CDN. Legacy QR paths `/mmexo-skeleton-{dk,de,nl,fr}-video` redirect to `/support/mmexo` (wired in `scripts/seed-videos.ts`). ST-2 lock tutorial videos do not exist (never produced). |
 | **Security headers / CSP** (`next.config.mjs`) | `X-Frame-Options` must stay `SAMEORIGIN` (not DENY), Sanity Presentation iframes the site at `/studio`. Adding any external script/API/image host means adding it to the CSP allow-list here (see "External services"). |
 | **A share-image (OG) fallback** | Change BOTH the live route's `generateMetadata` AND the matching Studio preview component (`SharePreviewField` for articles, `SeoPreviewField` for landing/site) in the same commit, or the Studio "Shared link" card lies. See Tier 2 "OG / social share image resolution". |
+| **How the CMS works for editors** (new field, new section, changed workflow, renamed thing) | Update the THREE editor-facing surfaces together so they don't drift: `lib/help-knowledge.ts` (the Help assistant's brain), `docs/STROXX-editor-guide.md` (the Guide tab), and `sanity/WelcomeTool.tsx` (the Welcome text). If any is stale, editors get wrong answers. |
 | **A Sanity schema** (`sanity/schemaTypes/*.ts`) | The page(s) that read it (schema to route map in Tier 2), any custom Studio field component, and re-run the matching seed script if the shape changed. `productAugment` and `store`/`qrCode`/`redirect` have the widest reach. |
 | **A new external service, API, CDN or embed** | `next.config.mjs`: add the host to CSP (`script-src`/`img-src`/`connect-src`/`frame-src`) AND `images.remotePatterns` if it serves images. Add the env var to `.env.local` AND Vercel. Note it in Tier 2 "External services". |
 | **An env var** (add/rename/remove) | Set it in BOTH `.env.local` (local) and the Vercel dashboard (prod), or the feature silently no-ops in one environment. Newsletter/Marketo/chat all fail closed if their key is missing. |

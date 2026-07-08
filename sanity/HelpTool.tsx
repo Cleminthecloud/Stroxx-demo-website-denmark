@@ -105,6 +105,13 @@ export default function HelpTool() {
           {busy ? 'Asking…' : 'Ask'}
         </button>
       </div>
+
+      <p style={{ fontSize: 12.5, opacity: 0.7, marginTop: 16, lineHeight: 1.5 }}>
+        Want to learn the CMS itself? This Studio runs on Sanity, take the free courses at{' '}
+        <a href="https://www.sanity.io/learn" target="_blank" rel="noopener noreferrer" style={{ color: '#0088C2' }}>sanity.io/learn</a>{' '}
+        or browse the{' '}
+        <a href="https://www.sanity.io/docs" target="_blank" rel="noopener noreferrer" style={{ color: '#0088C2' }}>docs</a>. For STROXX-specific how-tos, use the Guide tab.
+      </p>
     </div>
   );
 }

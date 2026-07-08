@@ -81,6 +81,13 @@ export const supportPage = defineType({
                       description: 'Upload the document. Swapping the file updates every link instantly.',
                     }),
                     defineField({
+                      name: 'video',
+                      title: 'Video (MP4)',
+                      type: 'file',
+                      options: { accept: 'video/*' },
+                      description: 'Upload a video instead of a PDF. It plays inline on the page. Swapping the file updates the player instantly.',
+                    }),
+                    defineField({
                       name: 'note',
                       title: 'Note (optional)',
                       type: 'string',
