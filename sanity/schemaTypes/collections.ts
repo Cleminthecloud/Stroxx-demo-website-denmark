@@ -103,6 +103,7 @@ export const legalPage = defineType({
   type: 'document',
   description: 'Privacy, cookies and terms. Plain formatted text, one document per page.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'title', title: 'Page title', type: 'string', validation: (r) => r.required() }),
     defineField({
       name: 'slug',

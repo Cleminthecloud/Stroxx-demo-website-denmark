@@ -36,6 +36,7 @@ export const trade = defineType({
   type: 'document',
   description: 'A trade area: card on /fag plus its own page at /fag/<slug>.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
       name: 'name',
       title: 'Trade name',

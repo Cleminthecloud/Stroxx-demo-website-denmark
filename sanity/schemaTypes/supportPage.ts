@@ -15,6 +15,7 @@ export const supportPage = defineType({
   type: 'document',
   description: 'Manuals, guides and downloads for a product. Lives at /support/<slug>.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
       name: 'title',
       title: 'Title',

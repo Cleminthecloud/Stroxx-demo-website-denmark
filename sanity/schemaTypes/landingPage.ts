@@ -25,6 +25,7 @@ export const landingPage = defineType({
   title: 'Landing page',
   type: 'document',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'title', title: 'Internal title', type: 'string', validation: (r) => r.required() }),
     defineField({
       name: 'slug',
