@@ -75,6 +75,20 @@ export type SiteSettings = {
   butikkerHeadlineSpecialists?: string;
   serviceHeadline?: string;
   serviceIntro?: string;
+  serviceGuaranteeHeading?: string;
+  serviceGuaranteeBody?: string;
+  serviceReturnsHeading?: string;
+  serviceReturnSteps?: { title?: string; body?: string }[];
+  serviceDocsHeading?: string;
+  serviceDocs?: { label?: string; href?: string }[];
+  serviceDocsPending?: string;
+  serviceContactHeading?: string;
+  serviceContactBody?: string;
+  serviceFaqEyebrow?: string;
+  serviceFaqHeading?: string;
+  serviceFaq?: { question?: string; answer?: string; linkText?: string; linkUrl?: string }[];
+  supportIndexHeadline?: string;
+  supportIndexIntro?: string;
   fagHeadline?: string;
   fagIntro?: string;
   notFoundHeadline?: string;
@@ -170,7 +184,7 @@ export async function getPost(slug: string): Promise<PostDoc | null> {
 
 /* ── Support & downloads pages ──────────────────────────────────────────── */
 
-export type SupportDownload = { label?: string; note?: string; url?: string; ext?: string; size?: number; videoUrl?: string; videoMime?: string; videoSize?: number };
+export type SupportDownload = { label?: string; note?: string; language?: string; url?: string; ext?: string; size?: number; videoUrl?: string; videoMime?: string; videoSize?: number };
 export type SupportGroup = { heading?: string; items?: SupportDownload[] };
 export type SupportPageDoc = {
   _id?: string;
@@ -184,7 +198,7 @@ export type SupportPageDoc = {
 
 const SUPPORT_PROJECTION = `{
   _id, title, slug, intro, seoTitle, seoDescription,
-  groups[]{ heading, items[]{ label, note,
+  groups[]{ heading, items[]{ label, note, language,
     "url": file.asset->url, "ext": file.asset->extension, "size": file.asset->size,
     "videoUrl": video.asset->url, "videoMime": video.asset->mimeType, "videoSize": video.asset->size } }
 }`;

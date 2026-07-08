@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, FileText } from 'lucide-react';
-import { getSupportPages } from '@/lib/cms';
+import { getSupportPages, getSiteSettings } from '@/lib/cms';
+import Accent from '@/components/Accent';
 import { stegaClean } from '@sanity/client/stega';
 
 /** Support & downloads index: every supportPage document as a glass card.
@@ -15,16 +16,17 @@ export const metadata: Metadata = {
 };
 
 export default async function SupportIndex() {
-  const pages = await getSupportPages();
+  const [pages, cms] = await Promise.all([getSupportPages(), getSiteSettings()]);
   return (
     <main className="bg-ink min-h-screen">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-28">
         <div className="eyebrow mb-6">Support</div>
         <h1 className="h-display text-white text-[clamp(2.6rem,6vw,5rem)] leading-[0.92] mb-6">
-          Manuals &amp; downloads.
+          <Accent text={cms?.supportIndexHeadline || 'Manuals & downloads.'} />
         </h1>
         <p className="text-fog text-lg max-w-xl leading-relaxed mb-12">
-          User instructions, software guides and product documentation, in your language. Scan the code on the box and you land here.
+          {cms?.supportIndexIntro ||
+            'User instructions, software guides and product documentation, in your language. Scan the code on the box and you land here.'}
         </p>
 
         {pages.length === 0 ? (

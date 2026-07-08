@@ -21,6 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const LANG_NAMES: Record<string, string> = { da: 'Dansk', de: 'Deutsch', nl: 'Nederlands', fr: 'Français', en: 'English', es: 'Español' };
+const langName = (code?: string) => {
+  const c = stegaClean(code);
+  return c ? LANG_NAMES[c] ?? undefined : undefined;
+};
+
 function fmtSize(bytes?: number) {
   if (!bytes || bytes <= 0) return null;
   const mb = bytes / 1048576;
@@ -48,14 +54,16 @@ export default async function SupportPage({ params }: { params: Promise<{ slug: 
               <ul className="space-y-1">
                 {(g.items ?? []).map((it, ii) => {
                   const size = fmtSize(it.size);
-                  const meta = [it.ext?.toUpperCase(), size].filter(Boolean).join(' · ');
+                  const meta = [langName(it.language), it.ext?.toUpperCase(), size].filter(Boolean).join(' · ');
                   return (
                     <li key={ii}>
                       {it.videoUrl ? (
                         <figure className="py-2">
                           <figcaption className="text-white text-[15px] leading-snug mb-2">
                             {it.label}
-                            {it.note ? <span className="text-fog/70 text-xs"> · {it.note}</span> : null}
+                            {[it.note, langName(it.language)].filter(Boolean).length ? (
+                              <span className="text-fog/70 text-xs"> · {[it.note, langName(it.language)].filter(Boolean).join(' · ')}</span>
+                            ) : null}
                           </figcaption>
                           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                           <video
