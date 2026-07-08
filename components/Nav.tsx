@@ -93,6 +93,7 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
               transition: `opacity .55s cubic-bezier(.16,1,.3,1) ${90 + links.length * 50}ms, transform .55s cubic-bezier(.16,1,.3,1) ${90 + links.length * 50}ms`,
             }}
           >
+            <LocaleSwitcher variant="inline" />
             <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
               <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Customer service 44 85 55 11
             </a>

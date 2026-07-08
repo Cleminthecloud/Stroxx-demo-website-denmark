@@ -2,6 +2,7 @@
 
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
+import { structure } from './sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
 import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon, HelpCircleIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
@@ -119,7 +120,7 @@ export default defineConfig({
         },
       },
     }),
-    structureTool({ title: 'Content' }),
+    structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
       schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment'],
