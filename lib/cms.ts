@@ -11,6 +11,7 @@ import { videos as fallbackVideos, Video } from '@/lib/videos';
 import { trades as fallbackTrades, Trade } from '@/lib/trades';
 import { markets as fallbackMarkets, Market } from '@/lib/markets';
 export type { Market } from '@/lib/markets';
+import { getLocale } from '@/lib/locale';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -119,9 +120,17 @@ export function cleanLinks(links: NavLink[] | undefined): { label: string; href:
   return out.length ? out : null;
 }
 
+/** The active content language for this request (from the middleware header),
+ *  falling back to the English reference. */
+async function langId(): Promise<string> {
+  return (await getLocale()).id;
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
-    const { data } = await sanityFetch({ query: '*[_type == "siteSettings"][0]' });
+    const lang = await langId();
+    let { data } = await sanityFetch({ query: '*[_type == "siteSettings" && language == $lang][0]', params: { lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: '*[_type == "siteSettings" && language == "en"][0]' }));
     return (data as SiteSettings) ?? null;
   } catch {
     return null;
@@ -223,9 +232,10 @@ const SUPPORT_PROJECTION = `{
  *  when the CMS is empty/unreachable, same contract as getPosts. */
 export async function getSupportPages(): Promise<SupportPageDoc[]> {
   try {
-    const { data } = await sanityFetch({
-      query: `*[_type == "supportPage" && defined(slug.current)] | order(title asc) ${SUPPORT_PROJECTION}`,
-    });
+    const lang = await langId();
+    const q = (l: string) => `*[_type == "supportPage" && language == "${l}" && defined(slug.current)] | order(title asc) ${SUPPORT_PROJECTION}`;
+    let { data } = await sanityFetch({ query: q(lang) });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q('en') }));
     return Array.isArray(data) ? (data as SupportPageDoc[]) : [];
   } catch {
     return [];
@@ -234,10 +244,15 @@ export async function getSupportPages(): Promise<SupportPageDoc[]> {
 
 export async function getSupportPage(slug: string): Promise<SupportPageDoc | null> {
   try {
-    const { data } = await sanityFetch({
-      query: `*[_type == "supportPage" && slug.current == $slug][0] ${SUPPORT_PROJECTION}`,
-      params: { slug },
+    const lang = await langId();
+    let { data } = await sanityFetch({
+      query: `*[_type == "supportPage" && slug.current == $slug && language == $lang][0] ${SUPPORT_PROJECTION}`,
+      params: { slug, lang },
     });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({
+      query: `*[_type == "supportPage" && slug.current == $slug && language == "en"][0] ${SUPPORT_PROJECTION}`,
+      params: { slug },
+    }));
     return (data as SupportPageDoc) ?? null;
   } catch {
     return null;
@@ -259,10 +274,11 @@ export type { HomeCopy, HomeStat } from '@/lib/home-copy';
 
 export async function getHomePage(): Promise<HomeCopy> {
   try {
-    const { data } = await sanityFetch({
-      query:
-        '*[_type == "homePage"][0]{..., "campaignSlug": campaignLink->slug.current, "films": films[]->{ _id, youtubeId, title, by }}',
-    });
+    const lang = await langId();
+    const query =
+      '*[_type == "homePage" && language == $lang][0]{..., "campaignSlug": campaignLink->slug.current, "films": films[]->{ _id, youtubeId, title, by }}';
+    let { data } = await sanityFetch({ query, params: { lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query, params: { lang: 'en' } }));
     if (!data) return HOME_DEFAULTS;
     const d = data as Record<string, any>;
     const merged: Record<string, any> = { ...HOME_DEFAULTS, _id: d._id };
