@@ -29,3 +29,7 @@ backups/
 
 # client handover pack (portable copy for Dropbox — not part of the app)
 /Client Handover - Carl Ras/
+
+# MMEXO video masters from Meena (~600MB), hosted in Sanity via npm run seed:videos,
+# never committed. Kept locally to re-run the seed.
+/Meena videos/

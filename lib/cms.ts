@@ -170,7 +170,7 @@ export async function getPost(slug: string): Promise<PostDoc | null> {
 
 /* ── Support & downloads pages ──────────────────────────────────────────── */
 
-export type SupportDownload = { label?: string; note?: string; url?: string; ext?: string; size?: number };
+export type SupportDownload = { label?: string; note?: string; url?: string; ext?: string; size?: number; videoUrl?: string; videoMime?: string; videoSize?: number };
 export type SupportGroup = { heading?: string; items?: SupportDownload[] };
 export type SupportPageDoc = {
   _id?: string;
@@ -185,7 +185,8 @@ export type SupportPageDoc = {
 const SUPPORT_PROJECTION = `{
   _id, title, slug, intro, seoTitle, seoDescription,
   groups[]{ heading, items[]{ label, note,
-    "url": file.asset->url, "ext": file.asset->extension, "size": file.asset->size } }
+    "url": file.asset->url, "ext": file.asset->extension, "size": file.asset->size,
+    "videoUrl": video.asset->url, "videoMime": video.asset->mimeType, "videoSize": video.asset->size } }
 }`;
 
 /** All support pages (for the /support index and the sitemap). Empty array

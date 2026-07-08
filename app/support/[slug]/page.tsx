@@ -51,7 +51,30 @@ export default async function SupportPage({ params }: { params: Promise<{ slug: 
                   const meta = [it.ext?.toUpperCase(), size].filter(Boolean).join(' · ');
                   return (
                     <li key={ii}>
-                      {it.url ? (
+                      {it.videoUrl ? (
+                        <figure className="py-2">
+                          <figcaption className="text-white text-[15px] leading-snug mb-2">
+                            {it.label}
+                            {it.note ? <span className="text-fog/70 text-xs"> · {it.note}</span> : null}
+                          </figcaption>
+                          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                          <video
+                            controls
+                            preload="metadata"
+                            playsInline
+                            className="w-full rounded-lg border border-white/10 bg-black"
+                          >
+                            <source src={it.videoUrl} type={it.videoMime || 'video/mp4'} />
+                          </video>
+                          <a
+                            href={`${it.videoUrl}?dl=`}
+                            className="mt-2 inline-flex items-center gap-1.5 text-stroxx-blue text-xs hover:text-[#2FACE8]"
+                          >
+                            <Download size={13} className="shrink-0" />
+                            Download{fmtSize(it.videoSize) ? ` · ${fmtSize(it.videoSize)}` : ''}
+                          </a>
+                        </figure>
+                      ) : it.url ? (
                         <a
                           href={`${it.url}?dl=`}
                           className="group flex items-center gap-3.5 rounded-lg px-3 py-3 -mx-3 hover:bg-white/[0.04] transition-colors"
