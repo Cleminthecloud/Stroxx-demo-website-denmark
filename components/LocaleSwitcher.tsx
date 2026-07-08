@@ -49,14 +49,20 @@ export default function LocaleSwitcher() {
         <ChevronDown size={13} strokeWidth={2} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="glass-panel absolute right-0 top-full mt-3 min-w-[210px] rounded-xl p-1.5 z-[110]" role="menu">
+        <div
+          className="glass-panel absolute right-0 top-full mt-3 min-w-[210px] rounded-xl p-1.5 z-[110]"
+          role="menu"
+          /* near-opaque fill so the rows stay legible (WCAG AA) over the hero;
+             keeps glass-panel's blur, border and shadow for the look */
+          style={{ background: 'rgba(11, 13, 16, 0.97)' }}
+        >
           {locales.map((l) => (
             <a
               key={l.id}
               href={hrefFor(l)}
               role="menuitem"
               className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
-                l.id === current.id ? 'text-white bg-white/[0.06]' : 'text-fog hover:text-white hover:bg-white/[0.05]'
+                l.id === current.id ? 'text-white bg-white/[0.08]' : 'text-white/80 hover:text-white hover:bg-white/[0.06]'
               }`}
             >
               {l.title}
