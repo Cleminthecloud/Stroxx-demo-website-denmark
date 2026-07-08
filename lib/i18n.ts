@@ -3,7 +3,8 @@ export type Locale = {
   title: string; // native display name (used in the switcher)
   htmlLang: string; // value for <html lang>
   market: string; // market code (int/dk/de/fr/be), joins to lib/markets.ts
-  path: string; // URL prefix: '' for the reference root, else '/dk', '/be/nl', ...
+  path: string; // subpath under the .eu fallback domain: '' for the root, else '/dk', '/be/nl', ...
+  domain: string; // primary ccTLD host for this locale (client owns them all)
   isReference?: boolean;
 };
 
@@ -13,12 +14,12 @@ export type Locale = {
  *  locale ids are region-qualified to keep them distinct.
  *  See docs/STROXX-market-localisation-plan.md. */
 export const locales: Locale[] = [
-  { id: 'en', title: 'English', htmlLang: 'en', market: 'int', path: '', isReference: true },
-  { id: 'da-DK', title: 'Dansk', htmlLang: 'da', market: 'dk', path: '/dk' },
-  { id: 'de-DE', title: 'Deutsch', htmlLang: 'de', market: 'de', path: '/de' },
-  { id: 'fr-FR', title: 'Français', htmlLang: 'fr', market: 'fr', path: '/fr' },
-  { id: 'nl-BE', title: 'Nederlands (België)', htmlLang: 'nl', market: 'be', path: '/be/nl' },
-  { id: 'fr-BE', title: 'Français (Belgique)', htmlLang: 'fr', market: 'be', path: '/be/fr' },
+  { id: 'en', title: 'English', htmlLang: 'en', market: 'int', path: '', domain: 'stroxx.eu', isReference: true },
+  { id: 'da-DK', title: 'Dansk', htmlLang: 'da', market: 'dk', path: '/dk', domain: 'stroxx.dk' },
+  { id: 'de-DE', title: 'Deutsch', htmlLang: 'de', market: 'de', path: '/de', domain: 'stroxx.de' },
+  { id: 'fr-FR', title: 'Français', htmlLang: 'fr', market: 'fr', path: '/fr', domain: 'stroxx.fr' },
+  { id: 'nl-BE', title: 'Nederlands (België)', htmlLang: 'nl', market: 'be', path: '/be/nl', domain: 'stroxx.be' },
+  { id: 'fr-BE', title: 'Français (Belgique)', htmlLang: 'fr', market: 'be', path: '/be/fr', domain: 'stroxx.be' },
 ];
 
 export const REFERENCE_LOCALE: Locale = locales.find((l) => l.isReference) ?? locales[0];

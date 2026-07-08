@@ -11,6 +11,7 @@ export const productAugment = defineType({
   title: 'Product augment (marketing layer)',
   type: 'document',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
       name: 'sku',
       title: 'Product',
