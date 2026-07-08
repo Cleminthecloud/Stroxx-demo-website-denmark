@@ -47,3 +47,21 @@ export function stripLocale(pathname: string, locale: Locale): string {
   const rest = pathname.slice(locale.path.length) || '/';
   return rest.startsWith('/') ? rest : '/' + rest;
 }
+
+/** Resolve the request's locale. A country domain (stroxx.dk/.de/.fr/.be) wins
+ *  first; on the bilingual Belgian domain, French lives under /fr and Dutch is
+ *  the default. Otherwise (stroxx.eu, preview, localhost) the locale comes from
+ *  the sub-path (/dk, /de, /be/nl, ...), falling back to the English reference.
+ *  `strip` is the sub-path prefix to remove before matching the app route. */
+export function resolveLocale(host: string, pathname: string): { locale: Locale; strip: string } {
+  const h = (host || '').replace(/^www\./, '').toLowerCase();
+  const onDomain = locales.filter((l) => !l.isReference && l.domain === h);
+  if (onDomain.length === 1) return { locale: onDomain[0], strip: '' };
+  if (onDomain.length > 1) {
+    const fr = onDomain.find((l) => l.htmlLang === 'fr');
+    if (fr && (pathname === '/fr' || pathname.startsWith('/fr/'))) return { locale: fr, strip: '/fr' };
+    return { locale: onDomain.find((l) => l.htmlLang !== 'fr') ?? onDomain[0], strip: '' };
+  }
+  const loc = localeFromPath(pathname);
+  return { locale: loc, strip: loc.path };
+}

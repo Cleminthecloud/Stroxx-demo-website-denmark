@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { resolveLocale } from '@/lib/i18n';
 
 /** CMS-managed redirects (the `redirect` document type in the Studio).
  *  Editors rename a campaign page, add a redirect, and old QR codes /
@@ -65,16 +66,31 @@ async function getRules(): Promise<Map<string, Rule>> {
 
 export async function middleware(req: NextRequest) {
   try {
-    const path = req.nextUrl.pathname.replace(/\/+$/, '') || '/';
+    const host = req.nextUrl.hostname;
+    const rawPath = req.nextUrl.pathname.replace(/\/+$/, '') || '/';
+    const { locale, strip } = resolveLocale(host, rawPath);
+    // the in-app route with any locale sub-path prefix removed
+    const appPath = strip && (rawPath === strip || rawPath.startsWith(strip + '/')) ? rawPath.slice(strip.length) || '/' : rawPath;
+
+    // redirects (CMS + legacy) run on the app path; keep the locale prefix on the destination
     const rules = await getRules();
-    const hit = rules.get(path);
+    const hit = rules.get(appPath);
     if (hit) {
-      const dest = hit.to.startsWith('/') ? new URL(hit.to + req.nextUrl.search, req.url) : new URL(hit.to);
+      const dest = hit.to.startsWith('/') ? new URL(strip + hit.to + req.nextUrl.search, req.url) : new URL(hit.to);
       return NextResponse.redirect(dest, hit.permanent ? 308 : 307);
     }
-    const legacy = legacyTarget(path);
-    if (legacy) return NextResponse.redirect(new URL(legacy, req.url), 308);
-    return NextResponse.next();
+    const legacy = legacyTarget(appPath);
+    if (legacy) return NextResponse.redirect(new URL(strip + legacy, req.url), 308);
+
+    // carry the resolved locale to the app via a request header
+    const headers = new Headers(req.headers);
+    headers.set('x-stroxx-locale', locale.id);
+    if (appPath !== rawPath) {
+      const url = req.nextUrl.clone();
+      url.pathname = appPath;
+      return NextResponse.rewrite(url, { request: { headers } });
+    }
+    return NextResponse.next({ request: { headers } });
   } catch {
     return NextResponse.next();
   }

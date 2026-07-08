@@ -5,6 +5,7 @@ import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
 import { getSiteSettings, getStores, cleanLinks } from '@/lib/cms';
+import { getLocale } from '@/lib/locale';
 import { assetUrl } from '@/sanity/lib/image';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
@@ -121,6 +122,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
      a deploy. Strict GTM-XXXX validation so a CMS string can never inject
      arbitrary script. Production adds a CMP + Consent Mode v2 in front. */
   const settings = await getSiteSettings();
+  const locale = await getLocale();
   const storeData = await getStores();
   const rawGtm = stegaClean(settings?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
@@ -146,7 +148,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     fallback: settings?.chatFallback || '',
   };
   return (
-    <html lang="en">
+    <html lang={locale.htmlLang}>
       <body>
         {cookiebotId && (
           <Script
