@@ -1,7 +1,7 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.10 · July 2026
+Version 1.11 · July 2026
 
 ---
 
@@ -20,7 +20,7 @@ Two golden rules:
 2. Log in with your invited account (Google login works).
 3. You land in the Studio. Your first stop is the **Welcome** tab: a personal hello, the two golden rules, and three steps that take you from zero to editing. After that, the two tabs you'll live in:
    - **Edit site**: the visual editor. The live site on the left, editing panel on the right. This is where you'll spend 95% of your time.
-   - **Content**: a plain list of all documents (homepage, landing pages, stores, monthly lineup, settings). Useful for creating new things and finding things.
+   - **Content**: every document, grouped into labelled sections so it reads top to bottom the way you think about the site, Pages, Support & QR codes, Products, News, Social proof & media, Stores, then Settings and System at the bottom. Open a group to see what's inside. Useful for creating new things and finding things.
 
 ## 3. Editing text on a page
 

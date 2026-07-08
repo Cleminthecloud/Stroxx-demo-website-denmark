@@ -23,7 +23,11 @@ never invent behaviour.
 - Leave a field empty to use the built-in default; fill it to override.
 - No em or en dashes in copy: use commas or "to" for ranges.
 
-## Where things live (Content list, left of the Studio)
+## Where things live (Content menu, left of the Studio)
+The Content menu is grouped into labelled sections (not a flat A-Z list), in the
+order the site is built: Pages, Support & QR codes, Products, News, Social proof
+& media, Stores, then Settings and System at the bottom. Open a group to see the
+document types inside it. What's in each:
 - Site settings: global stuff, contact + legal, top menu + footer links, the
   header logo, SEO defaults, tracking (GTM + Cookiebot IDs), newsletter setup,
   and microcopy. One document per market.
@@ -39,6 +43,9 @@ never invent behaviour.
 - Store, Trade (fag page), Specialist, Testimonial, Film (YouTube), Legal page,
   Product augment: supporting collections.
 - Feedback (test reports): bug reports submitted from the /test page land here.
+- Languages / markets: readers switch language with the globe switcher in the
+  top bar (a dropdown on desktop, a row of language pills inside the menu on
+  mobile). The list of languages is set in code, not the Studio.
 
 ## Common tasks
 
