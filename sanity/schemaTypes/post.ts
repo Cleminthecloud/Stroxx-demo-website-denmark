@@ -11,6 +11,7 @@ export const post = defineType({
   type: 'document',
   description: 'News and stories at /nyheder. Newest first on the index.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'title', title: 'Headline', type: 'string', validation: (r) => r.required() }),
     defineField({
       name: 'slug',

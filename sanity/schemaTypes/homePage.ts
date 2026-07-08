@@ -57,6 +57,7 @@ export const homePage = defineType({
     fs('fsCategories', '10 · Categories + final CTA'),
   ],
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
       ...t('heroHeadline', 'Hero headline', 3),
       description:

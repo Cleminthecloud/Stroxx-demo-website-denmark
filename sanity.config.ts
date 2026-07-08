@@ -5,6 +5,8 @@ import { structureTool } from 'sanity/structure';
 import { presentationTool, defineLocations } from 'sanity/presentation';
 import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon, HelpCircleIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
+import { documentInternationalization } from '@sanity/document-internationalization';
+import { supportedLanguages } from './lib/i18n';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
 import BrandTool from './sanity/BrandTool';
@@ -118,6 +120,11 @@ export default defineConfig({
       },
     }),
     structureTool({ title: 'Content' }),
+    documentInternationalization({
+      supportedLanguages,
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade'],
+      languageField: 'language',
+    }),
   ],
   schema: { types: schemaTypes },
   document: {

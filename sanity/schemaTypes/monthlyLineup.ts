@@ -14,6 +14,7 @@ export const monthlyLineup = defineType({
   title: 'Monthly lineup (Månedens STROXX)',
   type: 'document',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'month', title: 'Month', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'year', title: 'Year', type: 'string', validation: (r) => r.required() }),
     defineField({

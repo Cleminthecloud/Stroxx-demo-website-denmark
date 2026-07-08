@@ -18,12 +18,14 @@
     "seed:videos": "sanity exec scripts/seed-videos.ts --with-user-token",
     "seed:service": "sanity exec scripts/seed-service-copy.ts --with-user-token",
     "seed:markets": "sanity exec scripts/seed-markets.ts --with-user-token",
+    "seed:i18n-base": "sanity exec scripts/seed-i18n-base.ts --with-user-token",
     "seed:proevdet": "sanity exec scripts/seed-proevdet.ts --with-user-token",
     "seed:qr": "sanity exec scripts/seed-qr.ts --with-user-token",
     "backup": "mkdir -p backups && sanity dataset export demo backups/demo-backup.tar.gz --overwrite"
   },
   "dependencies": {
     "@sanity/client": "^7.23.0",
+    "@sanity/document-internationalization": "^6.2.17",
     "@sanity/image-url": "^1.2.0",
     "@types/leaflet": "^1.9.21",
     "gsap": "3.12.5",
