@@ -5,6 +5,7 @@ import Reveal from '@/components/Reveal';
 import GlassButton from '@/components/GlassButton';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import Faq from '@/components/Faq';
+import Link from 'next/link';
 import { ArrowRight, FileText, Phone, RotateCcw, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -146,6 +147,13 @@ export default async function ServicePage() {
                 <h2 className="text-white font-display font-bold text-2xl">Documents</h2>
               </div>
               <div className="space-y-3">
+                <Link href="/support" className="flex items-center justify-between gap-4 rounded-lg border border-stroxx-blue/40 bg-stroxx-blue/[0.06] px-5 py-4 text-white transition-colors hover:border-stroxx-blue/70">
+                  <span>
+                    <span className="block text-sm font-medium">Product manuals, guides &amp; videos</span>
+                    <span className="block text-fog/70 text-xs mt-0.5">User instructions and software guides by product, in your language.</span>
+                  </span>
+                  <ArrowRight size={15} className="shrink-0 text-stroxx-blue" />
+                </Link>
                 {DOCS.map((d) => (
                   <a key={d.href} href={d.href} target="_blank" rel="noopener noreferrer"
                     className="flex items-center justify-between gap-4 rounded-lg border border-line px-5 py-4 text-sm text-white transition-colors hover:border-stroxx-blue/50">
