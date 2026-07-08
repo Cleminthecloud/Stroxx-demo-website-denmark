@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
 import BuyButton from '@/components/BuyButton';
+import LocaleSwitcher from '@/components/LocaleSwitcher';
 import { brandImages, CR_BRAND, UTM } from '@/lib/data';
 
 const LINKS = [
@@ -128,6 +129,7 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
                 {l.label}
               </Link>
             ))}
+            <span className="hidden sm:inline-flex"><LocaleSwitcher /></span>
             {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
                 utilities in the cascade, so `hidden` directly on it loses */}
             <span className="hidden sm:inline-flex">

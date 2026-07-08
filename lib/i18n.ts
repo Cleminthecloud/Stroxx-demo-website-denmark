@@ -5,6 +5,7 @@ export type Locale = {
   market: string; // market code (int/dk/de/fr/be), joins to lib/markets.ts
   path: string; // subpath under the .eu fallback domain: '' for the root, else '/dk', '/be/nl', ...
   domain: string; // primary ccTLD host for this locale (client owns them all)
+  domainPath: string; // path within that ccTLD ('' for most; '/fr' for Belgian French on stroxx.be)
   isReference?: boolean;
 };
 
@@ -14,12 +15,12 @@ export type Locale = {
  *  locale ids are region-qualified to keep them distinct.
  *  See docs/STROXX-market-localisation-plan.md. */
 export const locales: Locale[] = [
-  { id: 'en', title: 'English', htmlLang: 'en', market: 'int', path: '', domain: 'stroxx.eu', isReference: true },
-  { id: 'da-DK', title: 'Dansk', htmlLang: 'da', market: 'dk', path: '/dk', domain: 'stroxx.dk' },
-  { id: 'de-DE', title: 'Deutsch', htmlLang: 'de', market: 'de', path: '/de', domain: 'stroxx.de' },
-  { id: 'fr-FR', title: 'Français', htmlLang: 'fr', market: 'fr', path: '/fr', domain: 'stroxx.fr' },
-  { id: 'nl-BE', title: 'Nederlands (België)', htmlLang: 'nl', market: 'be', path: '/be/nl', domain: 'stroxx.be' },
-  { id: 'fr-BE', title: 'Français (Belgique)', htmlLang: 'fr', market: 'be', path: '/be/fr', domain: 'stroxx.be' },
+  { id: 'en', title: 'English', htmlLang: 'en', market: 'int', path: '', domain: 'stroxx.eu', domainPath: '', isReference: true },
+  { id: 'da-DK', title: 'Dansk', htmlLang: 'da', market: 'dk', path: '/dk', domain: 'stroxx.dk', domainPath: '' },
+  { id: 'de-DE', title: 'Deutsch', htmlLang: 'de', market: 'de', path: '/de', domain: 'stroxx.de', domainPath: '' },
+  { id: 'fr-FR', title: 'Français', htmlLang: 'fr', market: 'fr', path: '/fr', domain: 'stroxx.fr', domainPath: '' },
+  { id: 'nl-BE', title: 'Nederlands (België)', htmlLang: 'nl', market: 'be', path: '/be/nl', domain: 'stroxx.be', domainPath: '' },
+  { id: 'fr-BE', title: 'Français (Belgique)', htmlLang: 'fr', market: 'be', path: '/be/fr', domain: 'stroxx.be', domainPath: '/fr' },
 ];
 
 export const REFERENCE_LOCALE: Locale = locales.find((l) => l.isReference) ?? locales[0];
