@@ -17,6 +17,7 @@ import ProvDet from '@/components/ProvDet';
 import GuaranteeModal from '@/components/GuaranteeModal';
 import CampaignBand from '@/components/CampaignBand';
 import VideoProof from '@/components/VideoProof';
+import WhereToBuy from '@/components/WhereToBuy';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   featuredCategories,
@@ -27,7 +28,8 @@ import {
   UTM,
   CR_BRAND,
 } from '@/lib/data';
-import { getSka, getHomePage, getSpecialists, getVideos } from '@/lib/cms';
+import { getSka, getHomePage, getSpecialists, getVideos, getMarkets } from '@/lib/cms';
+import { getLocale } from '@/lib/locale';
 import { cardCols, statColsSm } from '@/lib/grid';
 import { Accent } from '@/components/cms/LandingSections';
 import { createDataAttribute } from 'next-sanity';
@@ -68,6 +70,10 @@ export default async function Home() {
   const SKA = await getSka();
   const hp = await getHomePage();
   const specs = await getSpecialists();
+  const marketList = await getMarkets();
+  const locale = await getLocale();
+  const isReferenceMarket = locale.market === 'int';
+  const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
   // Homepage featured-film section: editor-picked films, else all active films.
   const pickedFilms = (hp.films as { id: string; title: string; by: string }[] | undefined) ?? [];
   const filmVids = hp.showFilm ? (pickedFilms.length ? pickedFilms : await getVideos()) : [];
@@ -392,11 +398,19 @@ export default async function Home() {
       </section>
       )}
 
+      {/* WHERE TO BUY — international only: no single dealer, so route the
+          visitor to every market's distributor (built from the market docs). */}
+      {isReferenceMarket && <WhereToBuy dealers={dealers} />}
+
       {/* FINAL CTA */}
       {hp.showFinalCta && (
       <section className="relative h-[80vh] flex flex-col items-center justify-center text-center px-6">
         <ProvDet />
-        <BuyButton href={`${CR_BRAND}/?${UTM}`}>{hp.ctaLabel}</BuyButton>
+        {isReferenceMarket ? (
+          <GlassButton href="#where-to-buy">{hp.ctaLabel || 'Where to buy'}</GlassButton>
+        ) : (
+          <BuyButton href={`${CR_BRAND}/?${UTM}`}>{hp.ctaLabel}</BuyButton>
+        )}
       </section>
       )}
     </main>
