@@ -12,7 +12,6 @@ import type { Market } from '@/lib/markets';
  *  is created with international=false and BuyCTA links straight to the dealer
  *  instead of opening this. See docs/STROXX-market-localisation-plan.md. */
 type Ctx = {
-  international: boolean;
   currentDealer: Market | null;
   dealers: Market[];
   isOpen: boolean;
@@ -21,7 +20,6 @@ type Ctx = {
 };
 
 const DealerChooserContext = createContext<Ctx>({
-  international: false,
   currentDealer: null,
   dealers: [],
   isOpen: false,
@@ -56,7 +54,7 @@ export default function DealerChooserProvider({
   }, [isOpen, close]);
 
   return (
-    <DealerChooserContext.Provider value={{ international: !currentDealer, currentDealer, dealers, isOpen, open, close }}>
+    <DealerChooserContext.Provider value={{ currentDealer, dealers, isOpen, open, close }}>
       {children}
       {isOpen && (
         <div

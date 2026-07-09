@@ -5,13 +5,17 @@ import { useDealerChooser } from '@/components/DealerChooser';
 import { dealerBuyUrl } from '@/lib/buy';
 
 /** Buy CTA inside CMS landing sections. Honors an editor-chosen destination
- *  (`ctaHref`) when set; otherwise resolves the current market's dealer, the
- *  international market opens the chooser. `buy` is a last-resort fallback. */
+ *  (`ctaHref`); otherwise resolves the current market's dealer, and the
+ *  international market (no single dealer) opens the dealer chooser. */
 export default function LandingBuyButton({
-  ctaHref, buy, label,
-}: { ctaHref?: string; buy: string; label: string }) {
+  ctaHref,
+  label,
+}: {
+  ctaHref?: string;
+  label: string;
+}) {
   const { currentDealer, open } = useDealerChooser();
-  const explicit = typeof ctaHref === 'string' && ctaHref.trim().length > 0;
+  const explicit = typeof ctaHref === 'string' && ctaHref.trim().length > 0 ? ctaHref.trim() : '';
   const dealerUrl = dealerBuyUrl(currentDealer);
   if (!explicit && !dealerUrl) {
     return (
@@ -20,7 +24,7 @@ export default function LandingBuyButton({
       </GlassButton>
     );
   }
-  const href = explicit ? (ctaHref as string).trim() : (dealerUrl || buy);
+  const href = explicit || (dealerUrl as string);
   return (
     <GlassButton href={href} external={/^https?:/i.test(href)}>
       <span>{label}</span> <ArrowRight size={16} />

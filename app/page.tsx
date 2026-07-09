@@ -5,7 +5,6 @@ import ScrollText from '@/components/ScrollText';
 import ScrollHint from '@/components/ScrollHint';
 import GuaranteeSeal from '@/components/GuaranteeSeal';
 import ProductCard from '@/components/ProductCard';
-import BuyButton from '@/components/BuyButton';
 import BuyCTA from '@/components/BuyCTA';
 import GlassButton from '@/components/GlassButton';
 import GlassLink from '@/components/GlassLink';
@@ -26,8 +25,6 @@ import {
   categoryBuyUrl,
   toolTexture,
   brandImages,
-  UTM,
-  CR_BRAND,
 } from '@/lib/data';
 import { getSka, getHomePage, getSpecialists, getVideos, getMarkets } from '@/lib/cms';
 import { getLocale } from '@/lib/locale';
@@ -410,7 +407,7 @@ export default async function Home() {
         {isReferenceMarket ? (
           <GlassButton href="#where-to-buy">{hp.ctaLabel || 'Where to buy'}</GlassButton>
         ) : (
-          <BuyButton href={`${CR_BRAND}/?${UTM}`}>{hp.ctaLabel}</BuyButton>
+          <BuyCTA arrow />
         )}
       </section>
       )}

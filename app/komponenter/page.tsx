@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LandingSections from '@/components/cms/LandingSections';
 import { LandingSection } from '@/lib/cms';
-import { CR_BRAND, UTM } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Component library',
@@ -269,7 +268,6 @@ const DEMOS: Demo[] = [
 ];
 
 export default function ComponentLibraryPage() {
-  const buy = `${CR_BRAND}/?${UTM}`;
   return (
     <main className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-10">
@@ -292,7 +290,7 @@ export default function ComponentLibraryPage() {
               <div className="text-fog text-sm max-w-2xl">{d.description}</div>
             </div>
           </div>
-          <LandingSections sections={[d.section]} buy={buy} />
+          <LandingSections sections={[d.section]} />
         </div>
       ))}
     </main>

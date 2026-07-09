@@ -12,7 +12,7 @@ import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
 import Testimonials from '@/components/Testimonials';
 import { ArrowRight, ArrowDown } from 'lucide-react';
-import { products, CR_BRAND, UTM } from '@/lib/data';
+import { products } from '@/lib/data';
 import { getTestimonials, getLandingPage } from '@/lib/cms';
 
 /* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
@@ -80,7 +80,6 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 export default async function ProevDetPage() {
   const proof = PROOF_CODES.map((c) => products.find((p) => p.code === c)).filter(Boolean);
-  const buy = `${CR_BRAND}/?${UTM}`;
 
   /* This campaign now lives in the CMS as a landingPage (slug "proev-det").
      When that document exists, this historic URL permanently redirects to the

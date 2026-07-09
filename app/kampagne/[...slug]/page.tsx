@@ -5,7 +5,6 @@ import { assetUrl } from '@/sanity/lib/image';
 import { SITE_URL } from '@/lib/site';
 import { getLandingPage } from '@/lib/cms';
 import LandingSections from '@/components/cms/LandingSections';
-import { CR_BRAND, UTM } from '@/lib/data';
 
 /** Every landingPage document an editor creates in the Studio gets a URL here
  *  automatically: slug "sommer" → /kampagne/sommer, and slugs may nest with
@@ -38,11 +37,10 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
   const path = (await params).slug.join('/');
   const doc = await getLandingPage(path);
   if (!doc?.sections?.length) notFound();
-  const buy = `${CR_BRAND}/?${UTM}`;
 
   return (
     <main className="bg-ink">
-      <LandingSections sections={doc.sections} buy={buy} docId={doc._id} />
+      <LandingSections sections={doc.sections} docId={doc._id} />
     </main>
   );
 }

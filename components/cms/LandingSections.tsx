@@ -45,11 +45,9 @@ export { default as Accent } from '@/components/Accent';
 
 export default async function LandingSections({
   sections,
-  buy,
   docId,
 }: {
   sections: LandingSection[];
-  buy: string;
   docId?: string;
 }) {
   /* collections some blocks render (CMS-managed with hardcoded fallbacks) */
@@ -73,14 +71,14 @@ export default async function LandingSections({
     <>
       {sections.map((s) => (
         <div key={s._key} data-sanity={sectionAttr(s._key)} style={{ display: 'contents' }}>
-          {renderSection(s, buy, videosData, testimonialsData)}
+          {renderSection(s, videosData, testimonialsData)}
         </div>
       ))}
     </>
   );
 }
 
-function renderSection(s: LandingSection, buy: string, videosData?: Video[], testimonialsData?: Testimonial[]) {
+function renderSection(s: LandingSection, videosData?: Video[], testimonialsData?: Testimonial[]) {
   switch (s._type) {
           case 'photoHero': {
             const height =
@@ -133,7 +131,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     </p>
                     <div className={`flex flex-wrap items-center gap-3 ${btnJustify}`}>
                       {s.ctaLabel && (
-                        <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
+                        <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
                       )}
                       {s.secondaryLabel && (
                         <a href={s.secondaryHref || '#section-1'} className="link-arrow text-sm">
@@ -167,7 +165,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                       className="h-display text-white text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] mb-6" />
                     {s.body && <p className="text-fog text-lg leading-relaxed max-w-xl mb-8">{s.body}</p>}
                     {s.ctaLabel && (
-                      <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
+                      <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
                     )}
                   </Reveal>
                 </div>
@@ -245,7 +243,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   <Reveal delay={160}>
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       {s.primaryLabel && (
-                        <LandingBuyButton ctaHref={s.primaryHref} buy={buy} label={s.primaryLabel} />
+                        <LandingBuyButton ctaHref={s.primaryHref} label={s.primaryLabel} />
                       )}
                       {s.secondaryLabel && (
                         <GlassButton href={sHref} external={/^https?:/i.test(sHref)} variant="ghost">{s.secondaryLabel}</GlassButton>
@@ -613,7 +611,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     <div className="text-center">
                       <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
                         {s.ctaLabel && (
-                          <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
+                          <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
                         )}
                         {s.secondaryLabel && (
                           <GlassButton href={s.secondaryHref || '/butikker'} external={/^https?:/i.test(s.secondaryHref || '')} variant="ghost">

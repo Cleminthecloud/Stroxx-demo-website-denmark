@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import FooterBuyLink from '@/components/FooterBuyLink';
 import { Phone } from 'lucide-react';
-import { UTM, CR_BRAND, brandImages } from '@/lib/data';
+import { CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
@@ -59,7 +59,6 @@ export default async function Footer() {
   const s = await getSiteSettings();
   const pageLinks = cleanLinks(s?.footerPageLinks) ?? PAGES_FALLBACK;
   const buyLinks = cleanLinks(s?.footerBuyLinks) ?? [
-    { label: 'Buy STROXX', href: `${CR_BRAND}/?${UTM}` },
     { label: 'Find a store', href: '/butikker' },
     { label: 'Satisfaction guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
   ];
