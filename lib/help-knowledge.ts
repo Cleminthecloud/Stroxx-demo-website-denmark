@@ -83,6 +83,16 @@ pick "Guarantee seal (peeling sticker)", then edit its lines, tilt and peel dept
 right there. Each market edits its own, and the text auto-fits so it can never
 break out of the circle.
 
+### How "Buy" works (and the dealer chooser)
+Buy is market-aware, not something you set per button. On a single-dealer market
+the Buy buttons link to that market's dealer (Denmark to Carl Ras, Germany to
+Meesenburg, France to Foussier, Belgium to Lecot). On the international site
+(no single dealer) every Buy opens a "Where to buy" chooser listing the dealers
+with their phone and website; the homepage carries the same directory. Dealer
+names and contact details live on the Market documents and are looked after by
+the developer (a change there is pushed to the CMS with a seed), so if a dealer
+detail is wrong, tell the developer rather than hunting for a field.
+
 ### Turn a homepage section on or off
 Open Homepage; each section has a "Shown on the site" toggle. Off hides the
 whole section. If a menu link points at a hidden section, remove that link too

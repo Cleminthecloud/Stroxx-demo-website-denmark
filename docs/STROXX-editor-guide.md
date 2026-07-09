@@ -136,6 +136,10 @@ Four more collections under Content, all with the same pattern (edit, Active on/
 
 Also worth knowing: the **Contact form** block (in the landing-page "Add item" menu) gives any page a name/email/message form. Where submissions land (inbox, CRM) is configured once by the developer; until then the form politely points to the phone.
 
+## 7c. Where to buy and the dealer chooser
+
+Buy is market-aware, and you do not set it per button. On a single-dealer market the Buy buttons link straight to that market's dealer: Denmark to Carl Ras, Germany to Meesenburg, France to Foussier, Belgium to Lecot. On the international site there is no single dealer, so every Buy opens a **Where to buy** chooser that lists all the dealers with their phone and website, and the homepage carries the same directory as a section. Dealer names and contact details live on the **Market** documents; they are looked after by the developer (a change is pushed to the CMS with a short seed step), so if a dealer detail is ever wrong, tell the developer rather than hunting for a field. The guarantee seal, the guarantee text and page copy stay yours to edit as normal.
+
 ## 8. Månedens STROXX (the monthly lineup)
 
 The document **Monthly lineup** drives the Tool of the Month page and the homepage section. Changing the month is one edit:
@@ -170,7 +174,7 @@ The site loads Google Tag Manager when a container ID is set in Site settings. T
 3. From now on, everything happens inside GTM: GA4, Meta pixel, LinkedIn tag, conversion events. No deploys, no developer.
 4. Leave the field empty to switch tracking off entirely.
 
-What to measure first: clicks on "Buy at Carl Ras" (the site's money event, the links carry UTM tags already), store-finder usage, and guarantee-PDF downloads.
+What to measure first: clicks on the **Buy** button (the site's money event, market-aware: it links to the local dealer, or opens the "Where to buy" chooser on the international site, and the dealer links carry UTM tags), store-finder usage, and guarantee-PDF downloads.
 
 Before full launch, a cookie consent banner (CMP) with Google Consent Mode v2 goes in front of GTM. That is a planned build step.
 
