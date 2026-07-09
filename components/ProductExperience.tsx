@@ -1,11 +1,13 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 import KnockoutImage from '@/components/KnockoutImage';
 import Reveal from '@/components/Reveal';
 import ScrollText from '@/components/ScrollText';
 import GlassLink from '@/components/GlassLink';
 import GlassButton from '@/components/GlassButton';
+import BuyCTA from '@/components/BuyCTA';
+import { useDealerChooser } from '@/components/DealerChooser';
 import ProductCard from '@/components/ProductCard';
 import ProClubSignup from '@/components/ProClubSignup';
 import { Hammer, Wallet, ShieldCheck, Phone, Mail, ArrowRight } from 'lucide-react';
@@ -46,6 +48,8 @@ export default function ProductExperience({
   product, related, spec, buyUrl, categoryName, categorySlug, proClubHeadline, proClubText,}: {
   product: Product; related: Product[]; spec: Specialist;
   buyUrl: string; categoryName: string; categorySlug: string; proClubHeadline?: string; proClubText?: string;}) {
+  const { international, open } = useDealerChooser();
+  const onBuyClick = international ? (e: MouseEvent) => { e.preventDefault(); open(); } : undefined;
   const prodRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const tagRef = useRef<HTMLAnchorElement>(null);
@@ -159,10 +163,10 @@ export default function ProductExperience({
         </div>
       </div>
       <div className="flex flex-wrap gap-3 mb-6">
-        <GlassButton href={buyUrl} external>Buy at Carl Ras <ArrowRight size={16} /></GlassButton>
+        <BuyCTA code={product.code} label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
         <GlassButton href="#specifikationer" variant="ghost">Technical specs</GlassButton>
       </div>
-      <div className="flex items-center gap-2 text-sm text-fog"><span className="h-2 w-2 rounded-full bg-green-500" /> 100% satisfaction guarantee · purchase happens at Carl Ras</div>
+      <div className="flex items-center gap-2 text-sm text-fog"><span className="h-2 w-2 rounded-full bg-green-500" /> 100% satisfaction guarantee · {international ? 'sold through your local STROXX dealer' : 'purchase happens at Carl Ras'}</div>
     </>
   );
 
@@ -257,7 +261,7 @@ export default function ProductExperience({
           pill is clickable (layer is pointer-events-none; only the pill is auto,
           so it never blocks scroll or text selection elsewhere) */}
       <div className="fixed inset-0 z-[50] pointer-events-none hidden lg:block">
-        <a ref={tagRef} href={buyUrl} target="_blank" rel="noopener noreferrer"
+        <a ref={tagRef} href={buyUrl} onClick={onBuyClick} target="_blank" rel="noopener noreferrer"
           className="group absolute left-1/2 top-1/2 flex items-center gap-3.5 rounded-2xl pl-4 pr-2.5 py-2.5 backdrop-blur-xl border border-white/[0.12]"
           style={{ opacity: 0, transform: 'translate(-50%,-50%)', willChange: 'transform, opacity',
             background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))',
@@ -297,7 +301,7 @@ export default function ProductExperience({
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block text-white text-sm font-medium truncate">{product.name}</span>
           </span>
-          <a href={buyUrl} target="_blank" rel="noopener noreferrer"
+          <a href={buyUrl} onClick={onBuyClick} target="_blank" rel="noopener noreferrer"
             className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-stroxx-blue px-5 py-2.5 text-sm font-semibold text-white">
             Buy <ArrowRight size={15} strokeWidth={2} />
           </a>

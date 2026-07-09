@@ -20,6 +20,7 @@ export default function GlassButton({
   size = 'md',
   external = false,
   submit = false,
+  onClick,
   className = '',
 }: {
   href?: string;
@@ -28,6 +29,7 @@ export default function GlassButton({
   size?: 'sm' | 'md';
   external?: boolean;
   submit?: boolean;
+  onClick?: () => void;
   className?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -61,9 +63,16 @@ export default function GlassButton({
   ].filter(Boolean).join(' ');
   const inner = (<><span className="glass-cta__glow" aria-hidden />{children}</>);
 
-  if (submit || !href) {
+  if (submit || onClick || !href) {
     return (
-      <button ref={ref as never} type="submit" onMouseMove={onMove} onMouseLeave={onLeave} className={cls}>
+      <button
+        ref={ref as never}
+        type={submit ? 'submit' : 'button'}
+        onClick={onClick}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className={cls}
+      >
         {inner}
       </button>
     );

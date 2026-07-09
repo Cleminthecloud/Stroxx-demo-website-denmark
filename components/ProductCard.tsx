@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import GlassButton from '@/components/GlassButton';
 import GlassCardGlow from '@/components/GlassCardGlow';
-import { Product, toolTexture, productBuyUrl } from '@/lib/data';
+import { Product, toolTexture } from '@/lib/data';
+import BuyCTA from '@/components/BuyCTA';
 
 // Carl Ras splash colours, matched to the real badges on carl-ras.dk
 const badgeStyle: Record<string, string> = {
@@ -15,7 +16,6 @@ const badgeStyle: Record<string, string> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
-  const buyUrl = productBuyUrl(product.code);
   return (
     <div className="relative group h-full">
       <GlassCardGlow className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">
@@ -52,7 +52,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.name}
           </Link>
           <div className="flex gap-2 mt-auto">
-            <GlassButton href={buyUrl} external size="sm" className="flex-1">Buy</GlassButton>
+            <BuyCTA code={product.code} size="sm" className="flex-1" />
             <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Explore</GlassButton>
           </div>
         </div>

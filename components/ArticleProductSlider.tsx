@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
-import GlassButton from '@/components/GlassButton';
 import CarouselRow from '@/components/CarouselRow';
 import { productsBySkus } from '@/lib/cms';
-import { toolTexture, productBuyUrl } from '@/lib/data';
+import { toolTexture } from '@/lib/data';
+import BuyCTA from '@/components/BuyCTA';
 
 /** The in-article product slider: editors drop a "Product slider" block into
  *  the article body and type item numbers; the product feed (PIM) supplies
@@ -38,9 +37,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
                   {p.name}
                 </Link>
                 <div className="mt-auto">
-                  <GlassButton href={productBuyUrl(p.code)} external size="sm" className="w-full justify-center">
-                    Buy <ArrowUpRight size={13} />
-                  </GlassButton>
+                  <BuyCTA code={p.code} size="sm" className="w-full justify-center" arrow />
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import ScrollHint from '@/components/ScrollHint';
 import GuaranteeSeal from '@/components/GuaranteeSeal';
 import ProductCard from '@/components/ProductCard';
 import BuyButton from '@/components/BuyButton';
+import BuyCTA from '@/components/BuyCTA';
 import GlassButton from '@/components/GlassButton';
 import GlassLink from '@/components/GlassLink';
 import CountUp from '@/components/CountUp';
@@ -322,7 +323,7 @@ export default async function Home() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <GlassButton href="/maanedens">The full story <ArrowRight size={16} /></GlassButton>
-                <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">Buy at Carl Ras</GlassButton>
+                <BuyCTA variant="ghost" label="Buy at Carl Ras" intlLabel="Where to buy" />
               </div>
             </Reveal>
             <Reveal delay={120} from="far-right">

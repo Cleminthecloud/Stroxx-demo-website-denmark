@@ -10,7 +10,8 @@ import CursorGlow from '@/components/CursorGlow';
 import VideoProof from '@/components/VideoProof';
 import Faq from '@/components/Faq';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
-import { productBuyUrl, toolTexture, particleSrc, CR_BRAND, UTM } from '@/lib/data';
+import { toolTexture, particleSrc } from '@/lib/data';
+import BuyCTA from '@/components/BuyCTA';
 import { getSka, getSpecialists, getVideos, pickSpecialist } from '@/lib/cms';
 import { cardCols, productColsWide } from '@/lib/grid';
 import { SITE_URL } from '@/lib/site';
@@ -37,7 +38,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MaanedensPage() {
   const SKA = await getSka();
   const hero = SKA.hero;
-  const buyUrl = productBuyUrl(hero.code);
   const spec = pickSpecialist(await getSpecialists(), hero);
 
   const faqLd = {
@@ -78,7 +78,7 @@ export default async function MaanedensPage() {
               360-degree planes, visible all day long.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <GlassButton href={buyUrl} external>Buy at Carl Ras <ArrowRight size={16} /></GlassButton>
+              <BuyCTA code={hero.code} label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
               <GlassButton href="#historien" variant="ghost">Why it wins</GlassButton>
             </div>
             <div className="mt-6 flex items-center gap-2 text-sm text-fog">
@@ -231,8 +231,8 @@ export default async function MaanedensPage() {
         </Reveal>
         <Reveal delay={100}>
           <div className="flex flex-wrap justify-center gap-3">
-            <GlassButton href={buyUrl} external>Buy the {hero.name} <ArrowRight size={16} /></GlassButton>
-            <GlassButton href={`${CR_BRAND}/?${UTM}`} external variant="ghost">All of STROXX at Carl Ras</GlassButton>
+            <BuyCTA code={hero.code} label={`Buy the ${hero.name}`} intlLabel="Where to buy" arrow />
+            <BuyCTA variant="ghost" label="All of STROXX at Carl Ras" intlLabel="Where to buy" />
           </div>
         </Reveal>
       </section>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import GlassButton from '@/components/GlassButton';
-import { toolTexture, productBuyUrl, type Product } from '@/lib/data';
+import { toolTexture, type Product } from '@/lib/data';
+import BuyCTA from '@/components/BuyCTA';
 
 /** Side-by-side spec comparison on product pages, the feature every pro
  *  expects from the big tool brands: the current product against up to two
@@ -64,7 +64,7 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
               <td className="pt-6 border-t border-white/[0.07]" />
               {columns.map((p) => (
                 <td key={p.code} className="pt-6 px-4 border-t border-white/[0.07]">
-                  <GlassButton href={productBuyUrl(p.code)} external size="sm">Buy</GlassButton>
+                  <BuyCTA code={p.code} size="sm" />
                 </td>
               ))}
             </tr>

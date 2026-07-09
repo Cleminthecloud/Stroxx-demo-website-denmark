@@ -4,13 +4,14 @@ import Script from 'next/script';
 import { stegaClean } from '@sanity/client/stega';
 import { VisualEditing } from 'next-sanity/visual-editing';
 import { SanityLive } from '@/sanity/lib/live';
-import { getSiteSettings, getStores, cleanLinks } from '@/lib/cms';
+import { getSiteSettings, getStores, cleanLinks, getMarkets } from '@/lib/cms';
 import { getLocale } from '@/lib/locale';
 import { assetUrl } from '@/sanity/lib/image';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Analytics from '@/components/Analytics';
 import Nav from '@/components/Nav';
+import DealerChooserProvider from '@/components/DealerChooser';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import ExitPreview from '@/components/ExitPreview';
@@ -124,6 +125,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const settings = await getSiteSettings();
   const locale = await getLocale();
   const storeData = await getStores();
+  const marketList = await getMarkets();
+  const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
+  const international = locale.market === 'int';
   const rawGtm = stegaClean(settings?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
   /* Cookiebot CMP from CMS: consent banner + auto-blocking of tracking until
@@ -184,6 +188,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}
         <a href="#indhold" className="skip-link">Skip to content</a>
+        <DealerChooserProvider international={international} dealers={dealers}>
         <SmoothScroll>
           <Nav links={cleanLinks(settings?.navLinks) ?? undefined} logoSrc={assetUrl(settings?.logo, 240) ?? undefined} />
           <div id="indhold">{children}</div>
@@ -192,6 +197,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* editors can hide the chat entirely: Site settings → Integrations */}
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} copy={fabCopy} />}
         </SmoothScroll>
+        </DealerChooserProvider>
         {/* first-party anonymous stats (no cookies): feeds the Studio Dashboard */}
         <Analytics />
         {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
