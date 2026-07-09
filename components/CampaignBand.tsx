@@ -1,4 +1,5 @@
 'use client';
+import { useDealerChooser } from '@/components/DealerChooser';
 import { useEffect, useRef, useState } from 'react';
 import GlassButton from '@/components/GlassButton';
 import Accent from '@/components/Accent';
@@ -46,6 +47,7 @@ export default function CampaignBand({
   primaryAttr,
   secondaryAttr,
 }: CampaignBandProps) {
+  const { international, open: openChooser } = useDealerChooser();
   // CMS uploads when present, the built-in campaign shots otherwise
   const slides = images && images.length
     ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
@@ -135,9 +137,13 @@ export default function CampaignBand({
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
-              <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
-                <span data-sanity={primaryAttr}>{primaryLabel}</span> <ArrowRight size={16} />
-              </GlassButton>
+              {international ? (
+                <GlassButton onClick={openChooser}><span>Where to buy</span> <ArrowRight size={16} /></GlassButton>
+              ) : (
+                <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
+                  <span data-sanity={primaryAttr}>{primaryLabel}</span> <ArrowRight size={16} />
+                </GlassButton>
+              )}
               <GlassButton href={href} variant="ghost">
                 <span data-sanity={secondaryAttr}>{secondaryLabel}</span>
               </GlassButton>

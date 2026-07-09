@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import LandingBuyButton from '@/components/LandingBuyButton';
 import Accent from '@/components/Accent';
 import ScrollText from '@/components/ScrollText';
 import GlassButton from '@/components/GlassButton';
@@ -132,9 +133,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     </p>
                     <div className={`flex flex-wrap items-center gap-3 ${btnJustify}`}>
                       {s.ctaLabel && (
-                        <GlassButton href={s.ctaHref || buy} external={/^https?:/i.test(s.ctaHref || buy)}>
-                          {s.ctaLabel} <ArrowRight size={16} />
-                        </GlassButton>
+                        <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
                       )}
                       {s.secondaryLabel && (
                         <a href={s.secondaryHref || '#section-1'} className="link-arrow text-sm">
@@ -150,8 +149,6 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
 
           case 'splitMedia': {
             const imgLeft = s.imageSide === 'left';
-            const href = s.ctaHref || buy;
-            const external = /^https?:/i.test(href);
             return (
               <section key={s._key} className="relative">
                 <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
@@ -170,7 +167,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                       className="h-display text-white text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] mb-6" />
                     {s.body && <p className="text-fog text-lg leading-relaxed max-w-xl mb-8">{s.body}</p>}
                     {s.ctaLabel && (
-                      <GlassButton href={href} external={external}>{s.ctaLabel} <ArrowRight size={16} /></GlassButton>
+                      <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
                     )}
                   </Reveal>
                 </div>
@@ -232,7 +229,6 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
             );
 
           case 'ctaBanner': {
-            const pHref = s.primaryHref || buy;
             const sHref = s.secondaryHref || '/butikker';
             return (
               <section key={s._key} className="relative">
@@ -249,7 +245,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                   <Reveal delay={160}>
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       {s.primaryLabel && (
-                        <GlassButton href={pHref} external={/^https?:/i.test(pHref)}>{s.primaryLabel} <ArrowRight size={16} /></GlassButton>
+                        <LandingBuyButton ctaHref={s.primaryHref} buy={buy} label={s.primaryLabel} />
                       )}
                       {s.secondaryLabel && (
                         <GlassButton href={sHref} external={/^https?:/i.test(sHref)} variant="ghost">{s.secondaryLabel}</GlassButton>
@@ -617,9 +613,7 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                     <div className="text-center">
                       <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
                         {s.ctaLabel && (
-                          <GlassButton href={s.ctaHref || buy} external={/^https?:/i.test(s.ctaHref || buy)}>
-                            {s.ctaLabel} <ArrowRight size={16} />
-                          </GlassButton>
+                          <LandingBuyButton ctaHref={s.ctaHref} buy={buy} label={s.ctaLabel} />
                         )}
                         {s.secondaryLabel && (
                           <GlassButton href={s.secondaryHref || '/butikker'} external={/^https?:/i.test(s.secondaryHref || '')} variant="ghost">

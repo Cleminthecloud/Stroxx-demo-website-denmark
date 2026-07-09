@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import FooterBuyLink from '@/components/FooterBuyLink';
 import { Phone } from 'lucide-react';
 import { UTM, CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
@@ -104,7 +105,10 @@ export default async function Footer() {
           <div className="text-sm">
             <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">Buy</div>
             <div className="space-y-3">
-              {buyLinks.map((l) => <FooterLink key={l.href} {...l} />)}
+              <FooterBuyLink />
+              {buyLinks
+                .filter((l) => !/carl-ras\.dk/i.test(l.href) && !l.href.startsWith(CR_BRAND))
+                .map((l) => <FooterLink key={l.href} {...l} />)}
             </div>
           </div>
         </div>

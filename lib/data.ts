@@ -39,6 +39,11 @@ export const categoryBuyUrl = (path: string) => `${CR_BRAND}/${path}/?${UTM}`;
  *  (varenummer), using the harvested PDP_PATHS map. Products not in the map
  *  (a few secondary variants) fall back to a single-item search that resolves
  *  to the product. UTM preserved. */
+/** Carl Ras (Denmark) product deep-link. INTERNAL to the buy layer: only
+ *  `BuyCTA` / `LandingBuyButton` / `FooterBuyLink` call this, they decide
+ *  per-market whether to link to a dealer or open the dealer chooser. Do NOT
+ *  hand-write a Carl Ras buy link in a component, route every buy through the
+ *  buy primitive so the international market never dead-ends. See DEPENDENCIES.md. */
 export const productBuyUrl = (code?: string) => {
   if (code && PDP_PATHS[code]) {
     const path = PDP_PATHS[code];
