@@ -75,6 +75,14 @@ Site settings, "Menu + footer" group, "Site logo (header)". Upload the WHITE
 version (the header is dark), SVG best or a transparent PNG, roughly 5:1 and
 about 28px tall. Remove it to go back to the standard STROXX logo.
 
+### Edit the guarantee sticker (the peeling seal)
+The peeling "satisfied or refunded" sticker is text you control. On the homepage
+it is the "Seal — line 1 / connector / line 2 / sub line" fields in the guarantee
+section. You can also drop the sticker onto any landing page: add a section and
+pick "Guarantee seal (peeling sticker)", then edit its lines, tilt and peel depth
+right there. Each market edits its own, and the text auto-fits so it can never
+break out of the circle.
+
 ### Turn a homepage section on or off
 Open Homepage; each section has a "Shown on the site" toggle. Off hides the
 whole section. If a menu link points at a hidden section, remove that link too

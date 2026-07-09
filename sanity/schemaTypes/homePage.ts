@@ -130,6 +130,11 @@ export const homePage = defineType({
     show('showGuarantee', 'fsGuarantee', 'proof'),
     defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof', fieldset: 'fsGuarantee' }),
     defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof', fieldset: 'fsGuarantee' }),
+    defineField({ name: 'sealLine1', title: 'Seal — line 1 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'The peeling guarantee sticker. Top word, e.g. SATISFIED (uppercase reads best).' }),
+    defineField({ name: 'sealConnector', title: 'Seal — connector (small)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'Small word between the two big lines, e.g. "or".' }),
+    defineField({ name: 'sealLine2', title: 'Seal — line 2 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'e.g. REFUNDED.' }),
+    defineField({ name: 'sealSub1', title: 'Seal — sub line 1', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
+    defineField({ name: 'sealSub2', title: 'Seal — sub line 2', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
 
     show('showCampaign', 'fsCampaign', 'month'),
     defineField({ ...s('campaignEyebrow', 'Campaign band: eyebrow label'), group: 'month', fieldset: 'fsCampaign' }),

@@ -161,6 +161,16 @@ const DEMOS: Demo[] = [
     },
   },
   {
+    studioName: 'Guarantee seal (peeling sticker)',
+    description: 'The animated satisfaction-guarantee sticker. Peels open when scrolled into view; the lines are edited on the block, so each market shows its own. Tilt and peel depth are adjustable, and the text auto-fits so it never breaks out of the circle.',
+    section: {
+      _type: 'guaranteeSeal', _key: 'd12b',
+      line1: 'SATISFIED', connector: 'or', line2: 'REFUNDED',
+      subLine1: 'Not happy with STROXX?', subLine2: 'Your money back, right away.',
+      tilt: -8, peelDepth: 0.22,
+    },
+  },
+  {
     studioName: 'FAQ accordion',
     description: 'Questions and answers. Also feeds Google and AI answer engines via structured data.',
     section: {

@@ -14,6 +14,7 @@ export type HomeCopy = {
   filmEyebrow: string; filmHeadline: string;
   films?: unknown[]; // editor-picked films (dereferenced in getHomePage)
   guaranteeHeadline: string; guaranteeText: string;
+  sealLine1: string; sealConnector: string; sealLine2: string; sealSub1: string; sealSub2: string;
   monthHeadline: string; monthText: string;
   categoriesHeadline: string;
   ctaLabel: string;
@@ -71,6 +72,8 @@ export const HOME_DEFAULTS: HomeCopy = {
   guaranteeHeadline: '*100%* satisfaction \n or your money back.',
   guaranteeText:
     "We'll stand behind it. If you're not happy with your STROXX tool, you get your money back. So there's not much to think over. Just get started.",
+  sealLine1: 'SATISFIED', sealConnector: 'or', sealLine2: 'REFUNDED',
+  sealSub1: 'Not happy with STROXX?', sealSub2: 'Your money back, right away.',
   monthHeadline: 'Check it out.\n*Green line laser 3D*',
   monthText:
     'Every month, one tool gets the full story: why it wins, where it earns its keep, and what the trade says. The rest of the month takes care of itself.',

@@ -1,7 +1,7 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.11 · July 2026
+Version 1.12 · July 2026
 
 ---
 
@@ -46,7 +46,7 @@ Photography ground rules: the design converts photos to black and white automati
 
 ## 4. Editing the homepage
 
-The homepage is one document ("Homepage" under Content, or click any headline on the front page in Edit site). Editable: the giant hero headline (one field, press Enter where the line should break, each line animates in separately), the claim and its subtext, the marquee text, the range and scale sections with their two-column texts, the stats band (numbers, suffixes, labels), the specialists headline, the guarantee headline and text, the Tool of the Month intro, the categories headline, and the final buy-button label.
+The homepage is one document ("Homepage" under Content, or click any headline on the front page in Edit site). Editable: the giant hero headline (one field, press Enter where the line should break, each line animates in separately), the claim and its subtext, the marquee text, the range and scale sections with their two-column texts, the stats band (numbers, suffixes, labels), the specialists headline, the guarantee headline and text (and the peeling guarantee sticker's lines), the Tool of the Month intro, the categories headline, and the final buy-button label.
 
 Headlines that mix white and blue (the claim, the Tool of the Month headline) are one field: the part you wrap in *asterisks* renders blue, and Enter breaks the line.
 
@@ -74,6 +74,7 @@ Landing pages are built from **sections** (blocks). The full menu:
 - **Photo break**, a full-width cinematic image with caption
 - **Call-to-action banner**, headline + buttons on the blue glow
 - **Guarantee + numbered steps**
+- **Guarantee seal (peeling sticker)**, the animated satisfaction sticker that peels open when scrolled into view; edit its lines here so each market shows its own, and set its tilt and peel depth
 - **FAQ accordion**
 - **Before / after slider**, two photos with a draggable divider, let people see the difference
 - **Story cards**, a 3-5 chapter narrative that stacks as the reader scrolls (the job, the tool, the result)

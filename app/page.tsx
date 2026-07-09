@@ -3,7 +3,7 @@ import BagJourney from '@/components/BagJourney';
 import Reveal from '@/components/Reveal';
 import ScrollText from '@/components/ScrollText';
 import ScrollHint from '@/components/ScrollHint';
-import LumaVideo from '@/components/LumaVideo';
+import GuaranteeSeal from '@/components/GuaranteeSeal';
 import ProductCard from '@/components/ProductCard';
 import BuyButton from '@/components/BuyButton';
 import GlassButton from '@/components/GlassButton';
@@ -278,8 +278,8 @@ export default async function Home() {
             <GuaranteeModal />
           </div>
           <Reveal delay={120} from="far-right">
-            <div className="max-w-md mx-auto">
-              <LumaVideo src={brandImages.guaranteeFilm} size={560} className="w-full" />
+            <div className="max-w-md mx-auto" data-sanity={hAttr('sealLine1')}>
+              <GuaranteeSeal line1={hp.sealLine1} connector={hp.sealConnector} line2={hp.sealLine2} subLine1={hp.sealSub1} subLine2={hp.sealSub2} />
             </div>
           </Reveal>
         </div>
