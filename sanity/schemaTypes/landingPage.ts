@@ -523,6 +523,27 @@ export const landingPage = defineType({
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Guarantee · ${s.title || ''}` }) },
         }),
         defineArrayMember({
+          name: 'guaranteeSeal',
+          title: 'Guarantee seal (peeling sticker)',
+          type: 'object',
+          description: 'The animated satisfaction-guarantee sticker. Drop it into any page; its lines are edited right here, so each market shows its own. The corner peels open when scrolled into view.',
+          initialValue: {
+            line1: 'SATISFIED', connector: 'or', line2: 'REFUNDED',
+            subLine1: 'Not happy with STROXX?', subLine2: 'Your money back, right away.',
+            tilt: -8, peelDepth: 0.22,
+          },
+          fields: [
+            defineField({ name: 'line1', title: 'Line 1 (big)', type: 'string', description: 'e.g. SATISFIED. One word, uppercase reads best.' }),
+            defineField({ name: 'connector', title: 'Connector (small word)', type: 'string', description: 'The small word between the two big lines, e.g. "or".' }),
+            defineField({ name: 'line2', title: 'Line 2 (big)', type: 'string', description: 'e.g. REFUNDED.' }),
+            defineField({ name: 'subLine1', title: 'Sub line 1', type: 'string' }),
+            defineField({ name: 'subLine2', title: 'Sub line 2', type: 'string' }),
+            defineField({ name: 'tilt', title: 'Tilt (degrees)', type: 'number', description: 'Hand-placed sticker angle, e.g. -8. Use 0 for straight.' }),
+            defineField({ name: 'peelDepth', title: 'Peel depth', type: 'number', description: 'How far the corner peels: 0 = flat, 0.22 = default, up to ~0.4.', validation: (r) => r.min(0).max(0.5) }),
+          ],
+          preview: { select: { l1: 'line1', l2: 'line2' }, prepare: ({ l1, l2 }) => ({ title: 'Guarantee seal', subtitle: `${l1 || '…'} / ${l2 || '…'}` }) },
+        }),
+        defineArrayMember({
           name: 'faqSection',
           title: 'FAQ accordion',
           type: 'object',

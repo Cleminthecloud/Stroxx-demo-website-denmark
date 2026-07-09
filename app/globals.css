@@ -421,3 +421,34 @@ a, button, [role='button'], input, select, textarea, label { touch-action: manip
   margin: 0 auto 1rem;
 }
 @media (min-width: 640px) { .sheet-handle { display: none; } }
+
+/* ============================================================
+   Guarantee seal — peeling sticker (akapowl overflow-mask peel).
+   Reusable component: components/GuaranteeSeal.tsx. Fixed 450px
+   design scaled to fit its container; text auto-fits so CMS copy
+   can never break out. Peel is masked with overflow (can't spill).
+   ============================================================ */
+.gseal-stage{ width:min(470px,86vw); aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; margin:0 auto;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+.gseal{ position:relative; width:450px; height:450px; transform-origin:center center; }
+.gseal::after{ content:""; position:absolute; inset:0; border-radius:999px; z-index:0; box-shadow:0 26px 55px rgba(0,0,0,.55); }
+.gseal-sticky{ position:absolute; top:0; left:0; width:450px; height:450px; transform:rotate(52deg); }
+.gseal-wrap{ position:absolute; width:450px; height:450px; left:0; top:0; overflow:hidden; will-change:height,top; }
+.gseal-circle{ position:absolute; width:350px; height:350px; margin:50px; border-radius:999px; }
+.gseal-reveal{ z-index:1; }
+.gseal-recess{ background:radial-gradient(circle at 55% 42%, #17181b 0%, #060607 100%); }
+.gseal-front{ z-index:2; }
+.gseal-front .gseal-wrap{ height:400px; bottom:0; top:auto; }
+.gseal-front-face{ margin-top:0px; background:radial-gradient(circle at 50% 50%, #0088C2 0%, #006E9F 48%, #003D5A 100%); }
+.gseal-grain{ position:absolute; inset:0; border-radius:inherit; mix-blend-mode:soft-light; opacity:.34;
+  background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>"); }
+.gseal-ring{ position:absolute; inset:14px; border-radius:999px; border:3px solid rgba(255,255,255,.5); }
+.gseal-holder{ position:absolute; inset:0; z-index:4; filter:drop-shadow(-7px 11px 9px rgba(0,0,0,.7)); }
+.gseal-back .gseal-wrap{ height:0px; top:50px; }
+.gseal-back-face{ margin-top:-350px; background:linear-gradient(158deg, #eef2f4 0%, #bcc6cd 32%, #6a7982 68%, #2c3a43 100%); }
+.gseal-text{ position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; color:#fff; pointer-events:none; }
+.gseal-big{ font-weight:800; font-size:42px; line-height:.92; letter-spacing:-1px; }
+.gseal-big .gseal-conn{ font-weight:600; font-size:21px; }
+.gseal-gap{ height:14px; }
+.gseal-sub{ font-weight:400; font-size:15.5px; opacity:.94; }

@@ -5,6 +5,7 @@ import ScrollText from '@/components/ScrollText';
 import GlassButton from '@/components/GlassButton';
 import ProductCard from '@/components/ProductCard';
 import GuaranteeModal from '@/components/GuaranteeModal';
+import GuaranteeSeal from '@/components/GuaranteeSeal';
 import VideoProof from '@/components/VideoProof';
 import CountUp from '@/components/CountUp';
 import Faq from '@/components/Faq';
@@ -629,6 +630,23 @@ function renderSection(s: LandingSection, buy: string, videosData?: Video[], tes
                       <GuaranteeModal />
                     </div>
                   </Reveal>
+                </div>
+              </section>
+            );
+
+          case 'guaranteeSeal':
+            return (
+              <section key={s._key} className="relative">
+                <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 flex justify-center">
+                  <GuaranteeSeal
+                    line1={s.line1}
+                    connector={s.connector}
+                    line2={s.line2}
+                    subLine1={s.subLine1}
+                    subLine2={s.subLine2}
+                    tilt={typeof s.tilt === 'number' ? s.tilt : undefined}
+                    peelDepth={typeof s.peelDepth === 'number' ? s.peelDepth : undefined}
+                  />
                 </div>
               </section>
             );
