@@ -37,7 +37,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
                   {p.name}
                 </Link>
                 <div className="mt-auto">
-                  <BuyCTA code={p.code} size="sm" className="w-full justify-center" arrow />
+                  <BuyCTA code={p.code} label="Buy" size="sm" className="w-full justify-center" arrow />
                 </div>
               </div>
             </div>

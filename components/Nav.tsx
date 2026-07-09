@@ -97,7 +97,7 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
             <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
               <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Customer service 44 85 55 11
             </a>
-            <BuyCTA label="Buy at Carl Ras" intlLabel="Where to buy" arrow className="w-full justify-center" />
+            <BuyCTA arrow className="w-full justify-center" />
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
             {/* wrapper handles the hide: .glass-cta sets display AFTER tailwind's
                 utilities in the cascade, so `hidden` directly on it loses */}
             <span className="hidden sm:inline-flex">
-              <BuyCTA label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
+              <BuyCTA arrow />
             </span>
             {/* mobile: burger replaces the link row; the buy CTA lives inside the menu */}
             <button

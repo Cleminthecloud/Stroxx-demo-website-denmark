@@ -127,7 +127,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const storeData = await getStores();
   const marketList = await getMarkets();
   const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
-  const international = locale.market === 'int';
+  const currentDealer = marketList.find((m) => m.code === locale.market && m.dealerName) ?? null;
   const rawGtm = stegaClean(settings?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
   /* Cookiebot CMP from CMS: consent banner + auto-blocking of tracking until
@@ -188,7 +188,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
         {/* keyboard users skip the fixed nav straight to the page content */}
         <a href="#indhold" className="skip-link">Skip to content</a>
-        <DealerChooserProvider international={international} dealers={dealers}>
+        <DealerChooserProvider currentDealer={currentDealer} dealers={dealers}>
         <SmoothScroll>
           <Nav links={cleanLinks(settings?.navLinks) ?? undefined} logoSrc={assetUrl(settings?.logo, 240) ?? undefined} />
           <div id="indhold">{children}</div>

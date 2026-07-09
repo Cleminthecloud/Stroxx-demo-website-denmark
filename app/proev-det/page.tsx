@@ -146,7 +146,7 @@ export default async function ProevDetPage() {
               to be true. That's why you get <span className="text-stroxx-blue font-semibold">30 days</span> to prove us wrong.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <BuyCTA label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
+              <BuyCTA arrow />
               <a href="#fornemmelsen" className="link-arrow text-sm">Why so affordable? <ArrowDown size={15} /></a>
             </div>
           </div>
@@ -359,7 +359,7 @@ export default async function ProevDetPage() {
           <Reveal delay={200}>
             <div className="text-center">
               <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-                <BuyCTA label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
+                <BuyCTA arrow />
                 <GlassButton href="/butikker" variant="ghost">Find your store</GlassButton>
               </div>
               <GuaranteeModal />

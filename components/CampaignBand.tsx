@@ -1,5 +1,6 @@
 'use client';
 import { useDealerChooser } from '@/components/DealerChooser';
+import { dealerBuyUrl } from '@/lib/buy';
 import { useEffect, useRef, useState } from 'react';
 import GlassButton from '@/components/GlassButton';
 import Accent from '@/components/Accent';
@@ -38,16 +39,14 @@ export default function CampaignBand({
   eyebrow = 'Campaign',
   headline = 'Now you can afford\nmore than just tools',
   text = 'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
-  primaryLabel = 'Buy at Carl Ras',
   secondaryLabel = 'Read more',
   href = '/proev-det',
   eyebrowAttr,
   headlineAttr,
   textAttr,
-  primaryAttr,
   secondaryAttr,
 }: CampaignBandProps) {
-  const { international, open: openChooser } = useDealerChooser();
+  const { currentDealer, open: openChooser } = useDealerChooser();
   // CMS uploads when present, the built-in campaign shots otherwise
   const slides = images && images.length
     ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
@@ -137,12 +136,12 @@ export default function CampaignBand({
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
-              {international ? (
-                <GlassButton onClick={openChooser}><span>Where to buy</span> <ArrowRight size={16} /></GlassButton>
-              ) : (
-                <GlassButton href={`${CR_BRAND}/?${UTM}`} external>
-                  <span data-sanity={primaryAttr}>{primaryLabel}</span> <ArrowRight size={16} />
+              {currentDealer ? (
+                <GlassButton href={dealerBuyUrl(currentDealer) || `${CR_BRAND}/?${UTM}`} external>
+                  <span>Buy at {currentDealer.dealerName}</span> <ArrowRight size={16} />
                 </GlassButton>
+              ) : (
+                <GlassButton onClick={openChooser}><span>Where to buy</span> <ArrowRight size={16} /></GlassButton>
               )}
               <GlassButton href={href} variant="ghost">
                 <span data-sanity={secondaryAttr}>{secondaryLabel}</span>

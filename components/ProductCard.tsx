@@ -52,7 +52,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.name}
           </Link>
           <div className="flex gap-2 mt-auto">
-            <BuyCTA code={product.code} size="sm" className="flex-1" />
+            <BuyCTA code={product.code} label="Buy" size="sm" className="flex-1" />
             <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Explore</GlassButton>
           </div>
         </div>

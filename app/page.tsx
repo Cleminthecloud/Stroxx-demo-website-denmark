@@ -323,7 +323,7 @@ export default async function Home() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <GlassButton href="/maanedens">The full story <ArrowRight size={16} /></GlassButton>
-                <BuyCTA variant="ghost" label="Buy at Carl Ras" intlLabel="Where to buy" />
+                <BuyCTA variant="ghost" />
               </div>
             </Reveal>
             <Reveal delay={120} from="far-right">

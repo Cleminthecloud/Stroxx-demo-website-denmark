@@ -1,13 +1,13 @@
 'use client';
 import { useDealerChooser } from '@/components/DealerChooser';
-import { CR_BRAND, UTM } from '@/lib/data';
+import { dealerBuyUrl } from '@/lib/buy';
 
-/** Footer "Buy" link, market-aware. International (no single dealer) opens the
- *  dealer chooser instead of dead-ending on Carl Ras; single-dealer markets
- *  link straight to the dealer. Styled to match FooterLink. */
+/** Footer "Buy" link, market-first: single-dealer markets link to their dealer,
+ *  the international market opens the dealer chooser. Styled like FooterLink. */
 export default function FooterBuyLink() {
-  const { international, open } = useDealerChooser();
-  if (international) {
+  const { currentDealer, open } = useDealerChooser();
+  const url = dealerBuyUrl(currentDealer);
+  if (!url) {
     return (
       <button type="button" onClick={open} className="block text-left text-fog hover:text-white">
         Where to buy
@@ -15,7 +15,7 @@ export default function FooterBuyLink() {
     );
   }
   return (
-    <a href={`${CR_BRAND}/?${UTM}`} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">
+    <a href={url} target="_blank" rel="noopener noreferrer" className="block text-fog hover:text-white">
       Buy STROXX
     </a>
   );

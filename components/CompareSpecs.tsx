@@ -64,7 +64,7 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
               <td className="pt-6 border-t border-white/[0.07]" />
               {columns.map((p) => (
                 <td key={p.code} className="pt-6 px-4 border-t border-white/[0.07]">
-                  <BuyCTA code={p.code} size="sm" />
+                  <BuyCTA code={p.code} label="Buy" size="sm" />
                 </td>
               ))}
             </tr>

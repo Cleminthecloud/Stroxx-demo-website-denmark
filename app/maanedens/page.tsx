@@ -78,7 +78,7 @@ export default async function MaanedensPage() {
               360-degree planes, visible all day long.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <BuyCTA code={hero.code} label="Buy at Carl Ras" intlLabel="Where to buy" arrow />
+              <BuyCTA code={hero.code} arrow />
               <GlassButton href="#historien" variant="ghost">Why it wins</GlassButton>
             </div>
             <div className="mt-6 flex items-center gap-2 text-sm text-fog">
@@ -231,8 +231,8 @@ export default async function MaanedensPage() {
         </Reveal>
         <Reveal delay={100}>
           <div className="flex flex-wrap justify-center gap-3">
-            <BuyCTA code={hero.code} label={`Buy the ${hero.name}`} intlLabel="Where to buy" arrow />
-            <BuyCTA variant="ghost" label="All of STROXX at Carl Ras" intlLabel="Where to buy" />
+            <BuyCTA code={hero.code} label={`Buy the ${hero.name}`} arrow />
+            <BuyCTA variant="ghost" />
           </div>
         </Reveal>
       </section>

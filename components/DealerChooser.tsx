@@ -13,6 +13,7 @@ import type { Market } from '@/lib/markets';
  *  instead of opening this. See docs/STROXX-market-localisation-plan.md. */
 type Ctx = {
   international: boolean;
+  currentDealer: Market | null;
   dealers: Market[];
   isOpen: boolean;
   open: () => void;
@@ -21,6 +22,7 @@ type Ctx = {
 
 const DealerChooserContext = createContext<Ctx>({
   international: false,
+  currentDealer: null,
   dealers: [],
   isOpen: false,
   open: () => {},
@@ -32,11 +34,11 @@ export function useDealerChooser() {
 }
 
 export default function DealerChooserProvider({
-  international,
+  currentDealer,
   dealers,
   children,
 }: {
-  international: boolean;
+  currentDealer: Market | null;
   dealers: Market[];
   children: React.ReactNode;
 }) {
@@ -54,7 +56,7 @@ export default function DealerChooserProvider({
   }, [isOpen, close]);
 
   return (
-    <DealerChooserContext.Provider value={{ international, dealers, isOpen, open, close }}>
+    <DealerChooserContext.Provider value={{ international: !currentDealer, currentDealer, dealers, isOpen, open, close }}>
       {children}
       {isOpen && (
         <div
