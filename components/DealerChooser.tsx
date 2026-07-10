@@ -2,13 +2,8 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Phone, ArrowUpRight, X } from 'lucide-react';
 import type { Market } from '@/lib/markets';
-
-const DEALER_LOGO: Record<string, string> = {
-  dk: '/brand/partners/carl-ras.svg',
-  de: '/brand/partners/meesenburg.svg',
-  fr: '/brand/partners/foussier.svg',
-  be: '/brand/partners/lecot.svg',
-};
+import DealerMark from '@/components/DealerMark';
+import { dealerLogoByCode } from '@/lib/dealer-logos';
 
 /** Shared dealer-chooser overlay for the international (stroxx.eu) experience.
  *  There is no single international dealer, so a product "Buy" doesn't link to
@@ -95,26 +90,25 @@ export default function DealerChooserProvider({
               {dealers.map((m) => (
                 <div key={m._id ?? m.code} className="glass-panel glass-panel--glow flex h-full flex-col rounded-2xl p-6">
                   <div className="mb-2 text-xs uppercase tracking-wider text-fog/60">{m.name}</div>
-                  {m.code && DEALER_LOGO[m.code] ? (
-                    <div
-                      role="img"
-                      aria-label={m.dealerName}
-                      className="mb-6 h-7 w-full max-w-[150px] text-white"
-                      style={{
-                        backgroundColor: 'currentColor',
-                        WebkitMaskImage: `url(${DEALER_LOGO[m.code]})`,
-                        maskImage: `url(${DEALER_LOGO[m.code]})`,
-                        WebkitMaskRepeat: 'no-repeat',
-                        maskRepeat: 'no-repeat',
-                        WebkitMaskPosition: 'left center',
-                        maskPosition: 'left center',
-                        WebkitMaskSize: 'contain',
-                        maskSize: 'contain',
-                      }}
-                    />
-                  ) : (
-                    <div className="h-display mb-6 text-[1.5rem] leading-tight text-white">{m.dealerName}</div>
-                  )}
+                  <div className="mb-6">
+                    {dealerLogoByCode(m.code) ? (
+                      m.dealerCtaUrl ? (
+                        <a
+                          href={m.dealerCtaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${m.dealerName}`}
+                          className="inline-block text-white transition-opacity hover:opacity-80"
+                        >
+                          <DealerMark src={dealerLogoByCode(m.code)!.src} ar={dealerLogoByCode(m.code)!.ar} label={m.dealerName} height={30} />
+                        </a>
+                      ) : (
+                        <DealerMark src={dealerLogoByCode(m.code)!.src} ar={dealerLogoByCode(m.code)!.ar} label={m.dealerName} height={30} className="text-white" />
+                      )
+                    ) : (
+                      <div className="h-display text-[1.5rem] leading-tight text-white">{m.dealerName}</div>
+                    )}
+                  </div>
                   <div className="mt-auto space-y-3">
                     {m.supportPhone && (
                       <a

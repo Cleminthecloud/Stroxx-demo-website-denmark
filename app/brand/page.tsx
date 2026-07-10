@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import DealerMark from '@/components/DealerMark';
 import { Download } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
 import LogoCraft from '@/components/LogoCraft';
@@ -42,10 +43,10 @@ const LOGO_SETS: { name: string; note: string; src: string; dark: boolean; web: 
 
 /** The markets and their dealers. If we name one, we name them all. */
 const DEALERS = [
-  { market: 'Denmark', name: 'Carl Ras', logo: '/brand/partners/carl-ras.svg' },
-  { market: 'Germany', name: 'Meesenburg', logo: '/brand/partners/meesenburg.svg' },
-  { market: 'France', name: 'Foussier', logo: '/brand/partners/foussier.svg' },
-  { market: 'Belgium', name: 'Lecot', logo: '/brand/partners/lecot.svg' },
+  { market: 'Denmark', name: 'Carl Ras', logo: '/brand/partners/carl-ras.svg', ar: '211 / 60' },
+  { market: 'Germany', name: 'Meesenburg', logo: '/brand/partners/meesenburg.svg', ar: '214 / 51' },
+  { market: 'France', name: 'Foussier', logo: '/brand/partners/foussier.svg', ar: '203 / 35' },
+  { market: 'Belgium', name: 'Lecot', logo: '/brand/partners/lecot.svg', ar: '217 / 45' },
 ];
 
 /** The three moves from the STROXX 3.0 thinking (INFO/Bit more info). */
@@ -343,22 +344,7 @@ export default function BrandPage() {
             <Reveal key={d.name} delay={(i % 4) * 70}>
               <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full flex flex-col">
                 <div className="text-fog/60 text-xs uppercase tracking-wider mb-5">{d.market}</div>
-                <div
-                  role="img"
-                  aria-label={d.name}
-                  className="h-9 w-full max-w-[180px] text-white"
-                  style={{
-                    backgroundColor: 'currentColor',
-                    WebkitMaskImage: `url(${d.logo})`,
-                    maskImage: `url(${d.logo})`,
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'left center',
-                    maskPosition: 'left center',
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                  }}
-                />
+                <DealerMark src={d.logo} ar={d.ar} label={d.name} height={34} className="text-white" />
               </div>
             </Reveal>
           ))}

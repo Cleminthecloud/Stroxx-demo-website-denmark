@@ -4,6 +4,8 @@ import { Phone } from 'lucide-react';
 import { CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
 import { getLocale } from '@/lib/locale';
+import DealerMark from '@/components/DealerMark';
+import { DEALER_LOGOS } from '@/lib/dealer-logos';
 
 const PAGES_FALLBACK = [
   { label: 'Tool of the Month', href: '/maanedens' },
@@ -22,15 +24,6 @@ const PARTNER_URLS: Record<string, string> = {
   Foussier: 'https://www.foussier.fr',
   Lecot: 'https://lecot.be',
 };
-
-/* Dealer partner logos, shown in the footer on the international site (no single
-   retailer). Single-colour SVGs tinted via CSS mask so they sit on the dark bg. */
-const PARTNER_LOGOS: { code: string; name: string; src: string; href: string }[] = [
-  { code: 'dk', name: 'Carl Ras', src: '/brand/partners/carl-ras.svg', href: 'https://www.carl-ras.dk' },
-  { code: 'de', name: 'Meesenburg', src: '/brand/partners/meesenburg.svg', href: 'https://www.meesenburg.com' },
-  { code: 'fr', name: 'Foussier', src: '/brand/partners/foussier.svg', href: 'https://www.foussier.fr' },
-  { code: 'be', name: 'Lecot', src: '/brand/partners/lecot.svg', href: 'https://lecot.be' },
-];
 
 function linkify(text: string, keyBase: string) {
   return text.split(/(Meesenburg|Foussier|Lecot)/g).map((p, i) =>
@@ -67,7 +60,7 @@ export default async function Footer() {
   const { market } = await getLocale();
   /* International (stroxx.eu) shows every dealer; a local market shows only its own. */
   const footerDealers =
-    market && market !== 'int' ? PARTNER_LOGOS.filter((p) => p.code === market) : PARTNER_LOGOS;
+    market && market !== 'int' ? DEALER_LOGOS.filter((p) => p.code === market) : DEALER_LOGOS;
   const pageLinks = cleanLinks(s?.footerPageLinks) ?? PAGES_FALLBACK;
   const buyLinks = cleanLinks(s?.footerBuyLinks) ?? [
     { label: 'Find a store', href: '/butikker' },
@@ -75,7 +68,12 @@ export default async function Footer() {
   ];
   const phone = s?.supportPhone || '+45 44 85 55 11';
   const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
-  const legal = s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
+  /* International has no single legal entity; a local market shows its own line.
+     (The Carl Ras address only belongs on the Danish site.) */
+  const legal =
+    market === 'int'
+      ? '© STROXX'
+      : s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
@@ -127,22 +125,7 @@ export default async function Footer() {
                   aria-label={pl.name}
                   className="text-fog/60 hover:text-white transition-colors"
                 >
-                  <span
-                    role="img"
-                    aria-label={pl.name}
-                    className="block h-5 w-[74px]"
-                    style={{
-                      backgroundColor: 'currentColor',
-                      WebkitMaskImage: `url(${pl.src})`,
-                      maskImage: `url(${pl.src})`,
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'left center',
-                      maskPosition: 'left center',
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                    }}
-                  />
+                  <DealerMark src={pl.src} ar={pl.ar} label={pl.name} height={22} />
                 </a>
               ))}
           </span>
