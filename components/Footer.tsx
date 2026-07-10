@@ -24,6 +24,15 @@ const PARTNER_URLS: Record<string, string> = {
   Lecot: 'https://lecot.be',
 };
 
+/* Dealer partner logos, shown in the footer on the international site (no single
+   retailer). Single-colour SVGs tinted via CSS mask so they sit on the dark bg. */
+const PARTNER_LOGOS: { name: string; src: string; href: string }[] = [
+  { name: 'Carl Ras', src: '/brand/partners/carl-ras.svg', href: 'https://www.carl-ras.dk' },
+  { name: 'Meesenburg', src: '/brand/partners/meesenburg.svg', href: 'https://www.meesenburg.com' },
+  { name: 'Foussier', src: '/brand/partners/foussier.svg', href: 'https://www.foussier.fr' },
+  { name: 'Lecot', src: '/brand/partners/lecot.svg', href: 'https://lecot.be' },
+];
+
 function linkify(text: string, keyBase: string) {
   return text.split(/(Meesenburg|Foussier|Lecot)/g).map((p, i) =>
     PARTNER_URLS[p] ? (
@@ -112,8 +121,8 @@ export default async function Footer() {
         </div>
 
         <div className="mt-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fog/50">
-          {retailerLogo &&
-            (retailerLogoHref ? (
+          {retailerLogo ? (
+            retailerLogoHref ? (
               <a href={retailerLogoHref} target="_blank" rel="noopener noreferrer"
                 className="opacity-80 hover:opacity-100 transition-opacity" aria-label={retailerName}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -122,7 +131,38 @@ export default async function Footer() {
             ) : (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img src={retailerLogo} alt={retailerName} className="h-6 w-auto opacity-80" />
-            ))}
+            )
+          ) : (
+            <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {PARTNER_LOGOS.map((pl) => (
+                <a
+                  key={pl.href}
+                  href={pl.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={pl.name}
+                  className="text-fog/60 hover:text-white transition-colors"
+                >
+                  <span
+                    role="img"
+                    aria-label={pl.name}
+                    className="block h-5 w-[74px]"
+                    style={{
+                      backgroundColor: 'currentColor',
+                      WebkitMaskImage: `url(${pl.src})`,
+                      maskImage: `url(${pl.src})`,
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskPosition: 'left center',
+                      maskPosition: 'left center',
+                      WebkitMaskSize: 'contain',
+                      maskSize: 'contain',
+                    }}
+                  />
+                </a>
+              ))}
+            </span>
+          )}
           <span>{legal}</span>
           <span className="flex gap-4">
             <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>

@@ -42,10 +42,10 @@ const LOGO_SETS: { name: string; note: string; src: string; dark: boolean; web: 
 
 /** The markets and their dealers. If we name one, we name them all. */
 const DEALERS = [
-  { market: 'Denmark', name: 'Carl Ras' },
-  { market: 'Germany', name: 'Meesenburg' },
-  { market: 'France', name: 'Foussier' },
-  { market: 'Belgium', name: 'Lecot' },
+  { market: 'Denmark', name: 'Carl Ras', logo: '/brand/partners/carl-ras.svg' },
+  { market: 'Germany', name: 'Meesenburg', logo: '/brand/partners/meesenburg.svg' },
+  { market: 'France', name: 'Foussier', logo: '/brand/partners/foussier.svg' },
+  { market: 'Belgium', name: 'Lecot', logo: '/brand/partners/lecot.svg' },
 ];
 
 /** The three moves from the STROXX 3.0 thinking (INFO/Bit more info). */
@@ -327,6 +327,41 @@ export default function BrandPage() {
               </ul>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* PARTNERS */}
+      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+        <Reveal><div className="eyebrow mb-6">Sold across Europe</div></Reveal>
+        <Reveal>
+          <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
+            {'STROXX reaches tradespeople through a trusted distributor in each market. The brand travels; the dealer sells, delivers and services locally. Partner marks are shown in a single ink so they sit as one family on the brand\'s dark canvas.'}
+          </p>
+        </Reveal>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {DEALERS.map((d, i) => (
+            <Reveal key={d.name} delay={(i % 4) * 70}>
+              <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full flex flex-col">
+                <div className="text-fog/60 text-xs uppercase tracking-wider mb-5">{d.market}</div>
+                <div
+                  role="img"
+                  aria-label={d.name}
+                  className="h-9 w-full max-w-[180px] text-white"
+                  style={{
+                    backgroundColor: 'currentColor',
+                    WebkitMaskImage: `url(${d.logo})`,
+                    maskImage: `url(${d.logo})`,
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'left center',
+                    maskPosition: 'left center',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                  }}
+                />
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
