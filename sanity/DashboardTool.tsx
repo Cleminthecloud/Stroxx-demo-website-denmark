@@ -183,7 +183,7 @@ export default function DashboardTool() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [qrLabels, setQrLabels] = useState<Record<string, string>>({});
-  const [footprint, setFootprint] = useState<{ stores: number; specialists: number }>({ stores: 0, specialists: 0 });
+  const [footprint, setFootprint] = useState<{ stores: number; specialists: number; dk: number; de: number; fr: number; be: number }>({ stores: 0, specialists: 0, dk: 0, de: 0, fr: 0, be: 0 });
 
   useEffect(() => {
     client
@@ -202,10 +202,10 @@ export default function DashboardTool() {
       .catch(() => setQrLabels({}));
     /* brand footprint: live totals, not period-based */
     client
-      .fetch<{ stores: number; specialists: number }>(
-        `{ "stores": count(*[_type == "store" && active != false]), "specialists": count(*[_type == "store" && active != false && defined(specialist.name)]) }`,
+      .fetch<{ stores: number; specialists: number; dk: number; de: number; fr: number; be: number }>(
+        `{ "stores": count(*[_type == "store" && active != false]), "specialists": count(*[_type == "store" && active != false && defined(specialist.name)]), "dk": count(*[_type == "store" && active != false && country == "dk"]), "de": count(*[_type == "store" && active != false && country == "de"]), "fr": count(*[_type == "store" && active != false && country == "fr"]), "be": count(*[_type == "store" && active != false && country == "be"]) }`,
       )
-      .then((r) => setFootprint(r || { stores: 0, specialists: 0 }))
+      .then((r) => setFootprint(r || { stores: 0, specialists: 0, dk: 0, de: 0, fr: 0, be: 0 }))
       .catch(() => {});
   }, [client]);
 
@@ -463,6 +463,14 @@ export default function DashboardTool() {
             <div style={S.grid(200)}>
               <Kpi label="STROXX stores" value={footprint.stores} hint="Physical stores carrying STROXX across the markets." />
               <Kpi label="STROXX specialists" value={footprint.specialists} hint="Stores with a dedicated STROXX specialist on the ground." />
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
+              {([['Denmark', footprint.dk], ['Germany', footprint.de], ['France', footprint.fr], ['Belgium', footprint.be]] as [string, number][]).map(([name, val]) => (
+                <div key={name} style={{ display: 'inline-flex', alignItems: 'baseline', gap: 6, padding: '6px 12px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)' }}>
+                  <span style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>{val}</span>
+                  <span style={{ color: FOG, fontSize: 12 }}>{name}</span>
+                </div>
+              ))}
             </div>
 
             {/* traffic + sources */}
