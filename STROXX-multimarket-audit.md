@@ -37,10 +37,10 @@ document, not changing code:
    documents, service copy, llms.txt, about text) and every surface above
    localises with no code change. This is editor / launch work.
 2. (DONE, awaiting seed) **European store data** — captured. `lib/stores.ts` now
-   carries the real dealer networks: Meesenburg (DE, 6 Fachmärkte), Foussier
+   carries the real dealer networks: Meesenburg (DE, 28 locations), Foussier
    (FR, 84 stores), Lecot (BE, 84 stores), each with real address + coordinates
    (FR/BE read from the dealers' own store-locator data; DE geocoded via Google
-   Maps). 200 stores total (26 DK + 174 EU). Dealer stores abroad have no named
+   Maps). 222 stores total (26 DK + 196 EU). Dealer stores abroad have no named
    manager, so the model gained an optional `manager` plus a store-level
    `phone`/`email` contact line, and `StoreBrand` gained Meesenburg/Foussier/Lecot.
    Goes live once Clem runs `npm run seed:more`.
