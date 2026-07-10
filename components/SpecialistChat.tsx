@@ -26,7 +26,6 @@ const norm = (s: string) =>
  *  the recommended page is warm before the tap. */
 const PATH_LABELS: [RegExp, string][] = [
   [/^\/produkter/, 'Products'],
-  [/^\/butikker\?tab=specialister/, 'The specialists'],
   [/^\/butikker/, 'Store finder'],
   [/^\/proev-det/, 'The 30-day guarantee'],
   [/^\/maanedens/, 'Tool of the Month'],

@@ -115,16 +115,18 @@ Tip: fastest way to a new page is duplicating an existing one: three-dot menu on
 
 Every store on /butikker is a **Store** document (Content → Store). The map, the list, the search and the "nearest store" suggestions all read from these documents.
 
+- **Country decides where a store shows.** Every store has a **Country** (Denmark, Germany, France or Belgium). Each local site shows only its own country's stores; the international (English) site shows every store across Europe and zooms out to the whole map, which is the point, it puts STROXX's real reach on show. So set the country correctly and the store lands on the right maps automatically. (Fallback if a market has no stores of its own yet: all countries, all stores.)
 - **Edit a store**: opening hours (decimal clock: 6.3 means 06:30, 16 means 16:00), address, manager name, photo, email and direct phone, shop-in-shop flags.
-- **Add a store**: create a new Store document. It needs coordinates (latitude/longitude, copy them from Google Maps: right-click the location → the numbers at the top), region, and address. Publish and it appears on the map.
+- **Add a store**: create a new Store document. It needs a **Country**, coordinates (latitude/longitude, copy them from Google Maps: right-click the location → the numbers at the top), and address. Region is a free-text label (optional) used to group stores in the list. Publish and it appears on the map.
+- **STROXX Specialist (optional).** Each store can name one person as its STROXX Specialist, a dedicated contact who knows the range. Open the collapsible "STROXX Specialist" block on the store and fill in name, role, photo, email and phone. When set, it shows as a small card on that store, so customers reach the right person directly. Leave it empty and the store simply shows no specialist. This replaced the old separate "Specialists" page: specialists now live on the store they belong to. The count of stores that have a named specialist also feeds the Dashboard's brand-footprint tiles (section 9).
 - **Take a store off the site**: flip "Active" off, no deleting needed.
-- **Privacy matters**: the manager's photo and direct phone are personal data. The "Manager consent given" flag must be on before publishing those details. If a manager leaves or withdraws consent, clear the fields or flip the flag.
+- **Privacy matters**: both the manager's and the STROXX Specialist's photo and direct phone are personal data. The relevant "consent given" flag must be on before publishing those details. If someone leaves or withdraws consent, clear the fields or flip the flag.
 
 ## 7b. People, voices, films and legal pages
 
 Four more collections under Content, all with the same pattern (edit, Active on/off, publish):
 
-- **Specialist**: the trade specialists on the homepage cards and product pages. The "Quote topic" field matters: if a quote names a product or category, set that category slug so the quote only ever appears on matching products. Consent flag before publishing photo and direct phone.
+- **Specialist**: the trade specialists on the homepage cards and product pages (this is separate from a store's STROXX Specialist in section 7, which is the per-store contact). The "Quote topic" field matters: if a quote names a product or category, set that category slug so the quote only ever appears on matching products. Consent flag before publishing photo and direct phone.
 - **Testimonial**: customer quotes. Link one to a product SKU and the product page shows it as a review, including to Google. The trades list controls which trade pages show it.
 - **Trade (fag page)**: the trade areas on /fag, each with its own page at /fag/<slug> (Carpenter, Electrician, Plumber, Painter, Bricklayer today). You can add a trade, retire one (Active off), reorder them (Sort order) and edit the headline, blue accent, blurb and trade FAQ. Tick the product categories the trade buys from and the product cards pick themselves, top 3 on the card, top 8 on the page. The "Blue part of the headline" must match the headline text exactly, letter for letter. Testimonials whose trades list includes the trade's slug appear on the page automatically.
 - **Film (YouTube)**: the partner films. Paste the YouTube video ID, mark one as featured for the big player.
@@ -238,6 +240,8 @@ Also on articles, and the card rules (so pages always look intentional):
 Every product card links on to the partner webshop, and those clicks show up in the Dashboard.
 
 The Dashboard always shows the full layout, even before the first visit: zeroed cards are the map of what will fill up. A **QR scans** card counts every scan of the managed /qr/ short links (section 10e).
+
+A **Brand footprint** row shows two live totals pulled straight from your content: **STROXX stores** (every active Store document) and **STROXX specialists** (the active stores that have a named STROXX Specialist, section 7). They update themselves as you add stores and name specialists, a running measure of the brand's real-world reach, good for a meeting slide or a partner update.
 
 ## 10e. Support pages and QR codes (the packaging workflow)
 

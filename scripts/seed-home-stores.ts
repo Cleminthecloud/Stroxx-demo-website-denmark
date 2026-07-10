@@ -32,6 +32,7 @@ const storeDocs = stores.map((s) => ({
   _type: 'store',
   name: s.name,
   brand: s.brand,
+  country: s.country,
   region: s.region,
   address: s.address,
   zipCity: s.zipCity,
@@ -51,6 +52,18 @@ const storeDocs = stores.map((s) => ({
   festool: s.festool,
   sikring: s.sikring,
   aktive3: s.aktive3,
+  ...(s.specialist
+    ? {
+        specialist: {
+          name: s.specialist.name,
+          ...(s.specialist.role ? { role: s.specialist.role } : {}),
+          ...(s.specialist.email ? { email: s.specialist.email } : {}),
+          ...(s.specialist.phone ? { phone: s.specialist.phone } : {}),
+          ...(s.specialist.photo ? { photo: s.specialist.photo } : {}),
+          consent: true, // snapshot data was already public on the dealer site
+        },
+      }
+    : {}),
   active: true,
 }));
 
@@ -146,7 +159,6 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
     lk('Tool of the Month', '/maanedens', 1),
     lk('Products', '/produkter', 2),
     lk('Stores', '/butikker', 3),
-    lk('Specialists', '/butikker?tab=specialister', 4),
     lk('Trades', '/fag', 5),
     lk('Try It', '/proev-det', 6),
     lk('Service and Support', '/service', 7),
@@ -158,7 +170,6 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
     lk('Trades', '/fag', 3),
     lk('Stores', '/butikker', 4),
     lk('Campaign: Try It', '/proev-det', 5),
-    lk('Specialists', '/butikker?tab=specialister', 6),
     lk('Service and Support', '/service', 7),
   ],
   footerBuyLinks: [
@@ -183,7 +194,6 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   produkterIntro:
     'Filter the range and jump straight to the buy at Carl Ras. A selection of the 1,400+ item numbers. The purchase always happens on the partner platform.',
   butikkerHeadlineStores: 'Get the tool in your hand before you buy it.',
-  butikkerHeadlineSpecialists: 'Talk to people who use the tools themselves.',
   serviceHeadline: 'Help is as straightforward *as the tools.*',
   serviceIntro:
     "No ten-step forms and no hold music. Here's the guarantee, the returns, the documents and the people, all in one place.",

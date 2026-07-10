@@ -24,18 +24,23 @@ document, not changing code:
   + label (DK Carl Ras, DE Meesenburg, FR Foussier, BE Lecot, international
   chooser). Dead Carl-Ras fallbacks, the unused `international` field and the
   orphaned `BuyButton` removed. See stroxx-buy-foundation.md.
+- Store finder is market-scoped: every `store` carries a `country` (dk/de/fr/be);
+  `getStores()` filters to the current market's country, the international site
+  shows all of Europe (`fitBounds` auto-zooms to the set), and empty markets fall
+  back to all-countries-all-stores. The separate "specialists" tab/map was folded
+  into an optional per-store **STROXX Specialist** on the store card; store +
+  specialist totals feed the Studio Dashboard's brand-footprint tiles.
 
 ## Genuinely still single-market (the real remainder)
 1. (content) **Per-market `siteSettings` documents** — the biggest lever. Author
    the German / French / Belgian settings (contact, hours, legal line, legal
    documents, service copy, llms.txt, about text) and every surface above
    localises with no code change. This is editor / launch work.
-2. (code + content) **Store finder** (`components/StoreFinder.tsx`, `getStores`):
-   fetches ALL stores globally and is modeled around Danish regions; it is not
-   market-scoped, so a non-Danish market would show the Danish Carl Ras stores.
-   Needs a `market`/`language` field on the store schema + each market's store
-   data (or hide the finder on markets without stores). Schema + content, do at
-   launch.
+2. (content) **European store data** — the store finder is now market-scoped in
+   code (see "Done in code"); what remains is populating the German / French /
+   Belgian store documents so the international map lights up beyond Denmark.
+   Until they exist, non-DK markets fall back to showing all stores (currently
+   the 26 Danish ones). This is content/seed work, not code.
 3. (content) **Guarantee terms PDF** (`/STROXX-tilfredshedsgaranti.pdf`): a static
    Danish file. The guarantee seal + guarantee copy are already per-market in the
    CMS; a per-market terms PDF is content.
