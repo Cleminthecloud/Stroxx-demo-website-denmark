@@ -51,6 +51,7 @@ export const market = defineType({
     defineField({ name: 'dealerCtaUrl', title: 'Buy-at CTA link', type: 'url', description: 'Where the "Buy at <dealer>" button points for this market.' }),
     defineField({ name: 'supportPhone', title: 'Customer service phone', type: 'string' }),
     defineField({ name: 'supportHours', title: 'Customer service hours', type: 'string' }),
+    defineField({ name: 'legalLine', title: 'Footer legal line (local HQ)', type: 'string', description: 'The dealer / HQ address shown at the bottom of the footer for this market, e.g. "© Meesenburg GmbH & Co. KG | Westerallee 162 | 24941 Flensburg". The international (reference) version shows a neutral STROXX line.' }),
     defineField({
       name: 'legalLinks',
       title: 'Legal links',

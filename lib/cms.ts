@@ -104,7 +104,7 @@ export async function getMarkets(): Promise<Market[]> {
   try {
     const { data } = await sanityFetch({
       query:
-        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLinks[]{ label, href }, order }',
+        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLine, legalLinks[]{ label, href }, order }',
     });
     return Array.isArray(data) && data.length ? (data as Market[]) : fallbackMarkets;
   } catch {

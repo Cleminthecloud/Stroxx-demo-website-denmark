@@ -2,8 +2,9 @@ import Link from 'next/link';
 import FooterBuyLink from '@/components/FooterBuyLink';
 import { Phone } from 'lucide-react';
 import { CR_BRAND, brandImages } from '@/lib/data';
-import { getSiteSettings, cleanLinks } from '@/lib/cms';
+import { getSiteSettings, cleanLinks, getMarkets } from '@/lib/cms';
 import { getLocale } from '@/lib/locale';
+import { marketByCode } from '@/lib/markets';
 import DealerMark from '@/components/DealerMark';
 import { DEALER_LOGOS } from '@/lib/dealer-logos';
 
@@ -58,6 +59,9 @@ function FooterLink({ label, href }: { label: string; href: string }) {
 export default async function Footer() {
   const s = await getSiteSettings();
   const { market } = await getLocale();
+  /* Current market's own record: CMS first, then the code fallback (which carries the
+     dealer HQ legal lines) so it works before the market docs are seeded. */
+  const currentMarket = marketByCode(market, await getMarkets()) ?? marketByCode(market);
   /* International (stroxx.eu) shows every dealer; a local market shows only its own. */
   const footerDealers =
     market && market !== 'int' ? DEALER_LOGOS.filter((p) => p.code === market) : DEALER_LOGOS;
@@ -68,12 +72,10 @@ export default async function Footer() {
   ];
   const phone = s?.supportPhone || '+45 44 85 55 11';
   const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
-  /* International has no single legal entity; a local market shows its own line.
-     (The Carl Ras address only belongs on the Danish site.) */
-  const legal =
-    market === 'int'
-      ? '© STROXX'
-      : s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
+  /* Footer legal line is the market's local HQ address (Market.legalLine): Carl Ras
+     for DK, Meesenburg for DE, Foussier for FR, Lecot for BE; a neutral STROXX line
+     internationally. NEVER hardcode one market's address here. See DEPENDENCIES.md. */
+  const legal = currentMarket?.legalLine || '© STROXX';
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">

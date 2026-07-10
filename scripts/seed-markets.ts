@@ -31,6 +31,7 @@ async function run() {
       ...(m.dealerCtaUrl ? { dealerCtaUrl: m.dealerCtaUrl } : {}),
       ...(m.supportPhone ? { supportPhone: m.supportPhone } : {}),
       ...(m.supportHours ? { supportHours: m.supportHours } : {}),
+      ...(m.legalLine ? { legalLine: m.legalLine } : {}),
       ...(m.legalLinks ? { legalLinks: m.legalLinks } : {}),
     });
   }
