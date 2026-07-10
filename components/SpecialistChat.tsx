@@ -111,7 +111,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null, fal
     if (nearest) {
       return [{
         from: 'bot',
-        text: `Your nearest store is ${nearest.store.name}, ${nearest.store.address}, ${nearest.store.zipCity}, about ${nearest.km < 10 ? nearest.km.toFixed(1) : Math.round(nearest.km)} km from you. The store manager is ${nearest.store.manager.name}.`,
+        text: `Your nearest store is ${nearest.store.name}, ${nearest.store.address}, ${nearest.store.zipCity}, about ${nearest.km < 10 ? nearest.km.toFixed(1) : Math.round(nearest.km)} km from you.${nearest.store.manager ? ` The store manager is ${nearest.store.manager.name}.` : ''}`,
         links: [
           { label: 'See on the map', href: '/butikker' },
           { label: 'Directions', href: nearest.store.maps, external: true },
@@ -286,7 +286,7 @@ export default function SpecialistChat({
               )}
               {m.handoff && (
                 <div className="mt-3 rounded-xl bg-ink/60 border border-white/10 p-3">
-                  {ho ? (
+                  {ho && ho.manager ? (
                     <>
                       <div className="flex items-center gap-2.5 mb-2.5">
                         {/* eslint-disable-next-line @next/next/no-img-element */}

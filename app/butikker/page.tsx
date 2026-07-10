@@ -31,16 +31,20 @@ function storeLd(s: Store) {
       addressCountry: 'DK',
     },
     geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
-    ...(s.manager.phone ? { telephone: `+45${s.manager.phone.replace(/\s/g, '')}` } : {}),
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-        opens: clock(s.monThu[0]),
-        closes: clock(s.monThu[1]),
-      },
-      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: clock(s.fri[0]), closes: clock(s.fri[1]) },
-    ],
+    ...(s.manager?.phone ? { telephone: `+45${s.manager.phone.replace(/\s/g, '')}` } : {}),
+    ...(s.monThu && s.fri
+      ? {
+          openingHoursSpecification: [
+            {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+              opens: clock(s.monThu[0]),
+              closes: clock(s.monThu[1]),
+            },
+            { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: clock(s.fri[0]), closes: clock(s.fri[1]) },
+          ],
+        }
+      : {}),
     url: `${BASE}/butikker`,
   };
 }

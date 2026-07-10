@@ -14,7 +14,7 @@ export const store = defineType({
       name: 'brand',
       title: 'Brand',
       type: 'string',
-      options: { list: ['Carl Ras', '3Aktive'], layout: 'radio' },
+      options: { list: ['Carl Ras', '3Aktive', 'Meesenburg', 'Foussier', 'Lecot'], layout: 'radio' },
       initialValue: 'Carl Ras',
     }),
     defineField({
@@ -44,6 +44,8 @@ export const store = defineType({
     defineField({ name: 'lat', title: 'Latitude', type: 'number', validation: (r) => r.required().min(34).max(72) }),
     defineField({ name: 'lng', title: 'Longitude', type: 'number', validation: (r) => r.required().min(-11).max(32) }),
     defineField({ name: 'mapsUrl', title: 'Google Maps link', type: 'url' }),
+    defineField({ name: 'storePhone', title: 'Store phone (general)', type: 'string', description: 'The store\'s general line, shown when there is no named manager (typical for the dealer stores abroad).' }),
+    defineField({ name: 'storeEmail', title: 'Store email (general)', type: 'string' }),
     defineField({ name: 'managerName', title: 'Manager name', type: 'string' }),
     defineField({ name: 'managerEmail', title: 'Manager email', type: 'string' }),
     defineField({ name: 'managerPhone', title: 'Manager direct phone', type: 'string' }),

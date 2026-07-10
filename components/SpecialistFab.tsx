@@ -122,7 +122,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
           <span className="text-[9px] uppercase tracking-wider rounded-full border border-white/25 px-1.5 py-0.5 ml-1 text-white/80">AI</span>
         </button>
 
-        {nearest ? (
+        {nearest && nearest.store.manager ? (
           <div className="rounded-xl bg-white/[0.04] border border-white/10 p-4 mb-4">
             <div className="flex items-center gap-3 mb-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}

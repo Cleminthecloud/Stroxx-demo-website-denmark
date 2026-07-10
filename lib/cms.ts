@@ -343,12 +343,16 @@ export async function getStores(): Promise<Store[]> {
           lat,
           lng,
           maps: d.mapsUrl ?? '',
-          manager: {
-            name: d.managerName ?? '',
-            email: d.managerEmail ?? '',
-            phone: d.managerPhone ?? '',
-            photo: assetUrl(d.managerPhotoUpload, 300) ?? d.managerPhoto ?? '',
-          },
+          phone: stegaClean(d.storePhone) || undefined,
+          email: stegaClean(d.storeEmail) || undefined,
+          manager: d.managerName
+            ? {
+                name: d.managerName,
+                email: d.managerEmail ?? '',
+                phone: d.managerPhone ?? '',
+                photo: assetUrl(d.managerPhotoUpload, 300) ?? d.managerPhoto ?? '',
+              }
+            : undefined,
           specialist: d.specialist?.name
             ? {
                 name: d.specialist.name,

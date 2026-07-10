@@ -156,7 +156,7 @@ The Studio is embedded in the app (`app/studio/[[...tool]]/page.tsx`), so its co
 | `post` | `/nyheder`, `/nyheder/[slug]`; carries the share-preview field |
 | `productAugment` | overlays `lib/data.ts` product data (the PIM seam), touches every product surface |
 | `trade` | `/fag`, `/fag/[slug]` |
-| `store` | `/butikker` store finder (each store carries its own optional STROXX Specialist); country-scoped, see the store-scoping coupling below |
+| `store` | `/butikker` store finder (each store carries its own optional STROXX Specialist); country-scoped, see the store-scoping coupling below. `brand` spans Carl Ras/3Aktive (DK) + Meesenburg/Foussier/Lecot (DE/FR/BE). Dealer stores abroad have no named `manager`; they use the store-level `storePhone`/`storeEmail` contact instead, and `monThu`/`fri` hours are optional (hidden when unknown). |
 | `supportPage` | `/support/[slug]` (slug is the print contract) |
 | `qrCode` | `/qr/[code]`, dashboard scan stats (never rename a printed code) |
 | `redirect` | middleware (evaluated before legacy rules) |

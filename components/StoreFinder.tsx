@@ -365,10 +365,12 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
                   </a>
                 </div>
 
+                {s.monThu && (
                 <div className="flex items-center gap-1.5 text-[12px] text-fog mb-2.5">
                   <Clock size={12} className="shrink-0" />
                   <span>{hoursLabel(s)}</span>
                 </div>
+                )}
 
                 {(s.festool || s.sikring || s.aktive3) && (
                   <div className="flex flex-wrap gap-1.5 mb-2.5">
@@ -409,6 +411,7 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
                 {/* store manager: expands on selection */}
                 <div className={`grid transition-all duration-400 ${active ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                   <div className="overflow-hidden">
+                    {s.manager?.name ? (
                     <div className="flex items-center gap-3 pt-3 border-t border-white/[0.07]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={s.manager.photo} alt={s.manager.name} loading="lazy"
@@ -418,20 +421,50 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
                         <div className="text-[11px] text-fog">Store manager</div>
                       </div>
                       <div className="ml-auto flex items-center gap-2">
+                        {s.manager.phone && (
                         <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()} aria-label={`Call ${s.manager.name}`}
                           className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
                           <Phone size={13} />
                         </a>
+                        )}
+                        {s.manager.email && (
                         <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()} aria-label={`Email ${s.manager.name}`}
                           className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
                           <Mail size={13} />
                         </a>
+                        )}
                         <a href={s.maps} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
                           className="inline-flex items-center gap-1 text-[12px] text-stroxx-blue hover:underline pl-1">
                           Route <ArrowUpRight size={12} />
                         </a>
                       </div>
                     </div>
+                    ) : (
+                    <div className="flex items-center gap-3 pt-3 border-t border-white/[0.07]">
+                      <div className="min-w-0">
+                        <div className="text-[13px] text-white leading-tight">Contact the store</div>
+                        {s.phone && <div className="text-[11px] text-fog">{s.phone}</div>}
+                      </div>
+                      <div className="ml-auto flex items-center gap-2">
+                        {s.phone && (
+                        <a href={`tel:${s.phone.replace(/\s/g, '')}`} onClick={(e) => e.stopPropagation()} aria-label={`Call ${s.name}`}
+                          className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
+                          <Phone size={13} />
+                        </a>
+                        )}
+                        {s.email && (
+                        <a href={`mailto:${s.email}`} onClick={(e) => e.stopPropagation()} aria-label={`Email ${s.name}`}
+                          className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
+                          <Mail size={13} />
+                        </a>
+                        )}
+                        <a href={s.maps} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 text-[12px] text-stroxx-blue hover:underline pl-1">
+                          Route <ArrowUpRight size={12} />
+                        </a>
+                      </div>
+                    </div>
+                    )}
                   </div>
                 </div>
               </div>

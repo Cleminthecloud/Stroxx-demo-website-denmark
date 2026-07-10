@@ -36,11 +36,14 @@ document, not changing code:
    the German / French / Belgian settings (contact, hours, legal line, legal
    documents, service copy, llms.txt, about text) and every surface above
    localises with no code change. This is editor / launch work.
-2. (content) **European store data** — the store finder is now market-scoped in
-   code (see "Done in code"); what remains is populating the German / French /
-   Belgian store documents so the international map lights up beyond Denmark.
-   Until they exist, non-DK markets fall back to showing all stores (currently
-   the 26 Danish ones). This is content/seed work, not code.
+2. (DONE, awaiting seed) **European store data** — captured. `lib/stores.ts` now
+   carries the real dealer networks: Meesenburg (DE, 6 Fachmärkte), Foussier
+   (FR, 84 stores), Lecot (BE, 84 stores), each with real address + coordinates
+   (FR/BE read from the dealers' own store-locator data; DE geocoded via Google
+   Maps). 200 stores total (26 DK + 174 EU). Dealer stores abroad have no named
+   manager, so the model gained an optional `manager` plus a store-level
+   `phone`/`email` contact line, and `StoreBrand` gained Meesenburg/Foussier/Lecot.
+   Goes live once Clem runs `npm run seed:more`.
 3. (content) **Guarantee terms PDF** (`/STROXX-tilfredshedsgaranti.pdf`): a static
    Danish file. The guarantee seal + guarantee copy are already per-market in the
    CMS; a per-market terms PDF is content.

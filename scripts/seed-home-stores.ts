@@ -39,15 +39,19 @@ const storeDocs = stores.map((s) => ({
   lat: s.lat,
   lng: s.lng,
   mapsUrl: s.maps,
-  managerName: s.manager.name,
-  managerEmail: s.manager.email,
-  managerPhone: s.manager.phone,
-  managerPhoto: s.manager.photo,
-  managerConsent: true, // snapshot data was already public on carl-ras.dk
-  openMonThu: s.monThu[0],
-  closeMonThu: s.monThu[1],
-  openFri: s.fri[0],
-  closeFri: s.fri[1],
+  ...(s.phone ? { storePhone: s.phone } : {}),
+  ...(s.email ? { storeEmail: s.email } : {}),
+  ...(s.manager
+    ? {
+        managerName: s.manager.name,
+        managerEmail: s.manager.email,
+        managerPhone: s.manager.phone,
+        managerPhoto: s.manager.photo,
+        managerConsent: true, // snapshot data was already public on carl-ras.dk
+      }
+    : {}),
+  ...(s.monThu ? { openMonThu: s.monThu[0], closeMonThu: s.monThu[1] } : {}),
+  ...(s.fri ? { openFri: s.fri[0], closeFri: s.fri[1] } : {}),
   weekendClosed: s.weekendClosed,
   festool: s.festool,
   sikring: s.sikring,
