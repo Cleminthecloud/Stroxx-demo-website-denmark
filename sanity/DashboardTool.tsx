@@ -183,6 +183,7 @@ export default function DashboardTool() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [qrLabels, setQrLabels] = useState<Record<string, string>>({});
+  const [footprint, setFootprint] = useState<{ stores: number; specialists: number }>({ stores: 0, specialists: 0 });
 
   useEffect(() => {
     client
@@ -199,6 +200,13 @@ export default function DashboardTool() {
         setQrLabels(m);
       })
       .catch(() => setQrLabels({}));
+    /* brand footprint: live totals, not period-based */
+    client
+      .fetch<{ stores: number; specialists: number }>(
+        `{ "stores": count(*[_type == "store" && active != false]), "specialists": count(*[_type == "store" && active != false && defined(specialist.name)]) }`,
+      )
+      .then((r) => setFootprint(r || { stores: 0, specialists: 0 }))
+      .catch(() => {});
   }, [client]);
 
   const days = useMemo(() => {
@@ -446,6 +454,15 @@ export default function DashboardTool() {
               <Kpi label="QR scans" value={qrTotal} hint="Scans of the /qr print short links." />
               <Kpi label="Partner clicks" value={outTotal} hint="Hand-offs to the dealer webshops. The goal line." />
               <Kpi label="Signups" value={signups} hint="Newsletter subscriptions from the site." />
+            </div>
+
+            {/* brand footprint · live totals (not period-based) */}
+            <div style={{ fontSize: 13, color: FOG, fontWeight: 600, marginTop: 28, marginBottom: 10 }}>
+              Brand footprint · live totals
+            </div>
+            <div style={S.grid(200)}>
+              <Kpi label="STROXX stores" value={footprint.stores} hint="Physical stores carrying STROXX across the markets." />
+              <Kpi label="STROXX specialists" value={footprint.specialists} hint="Stores with a dedicated STROXX specialist on the ground." />
             </div>
 
             {/* traffic + sources */}
