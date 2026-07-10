@@ -3,8 +3,7 @@ import FooterBuyLink from '@/components/FooterBuyLink';
 import { Phone } from 'lucide-react';
 import { CR_BRAND, brandImages } from '@/lib/data';
 import { getSiteSettings, cleanLinks } from '@/lib/cms';
-import { assetUrl } from '@/sanity/lib/image';
-import { stegaClean } from '@sanity/client/stega';
+import { getLocale } from '@/lib/locale';
 
 const PAGES_FALLBACK = [
   { label: 'Tool of the Month', href: '/maanedens' },
@@ -26,11 +25,11 @@ const PARTNER_URLS: Record<string, string> = {
 
 /* Dealer partner logos, shown in the footer on the international site (no single
    retailer). Single-colour SVGs tinted via CSS mask so they sit on the dark bg. */
-const PARTNER_LOGOS: { name: string; src: string; href: string }[] = [
-  { name: 'Carl Ras', src: '/brand/partners/carl-ras.svg', href: 'https://www.carl-ras.dk' },
-  { name: 'Meesenburg', src: '/brand/partners/meesenburg.svg', href: 'https://www.meesenburg.com' },
-  { name: 'Foussier', src: '/brand/partners/foussier.svg', href: 'https://www.foussier.fr' },
-  { name: 'Lecot', src: '/brand/partners/lecot.svg', href: 'https://lecot.be' },
+const PARTNER_LOGOS: { code: string; name: string; src: string; href: string }[] = [
+  { code: 'dk', name: 'Carl Ras', src: '/brand/partners/carl-ras.svg', href: 'https://www.carl-ras.dk' },
+  { code: 'de', name: 'Meesenburg', src: '/brand/partners/meesenburg.svg', href: 'https://www.meesenburg.com' },
+  { code: 'fr', name: 'Foussier', src: '/brand/partners/foussier.svg', href: 'https://www.foussier.fr' },
+  { code: 'be', name: 'Lecot', src: '/brand/partners/lecot.svg', href: 'https://lecot.be' },
 ];
 
 function linkify(text: string, keyBase: string) {
@@ -65,6 +64,10 @@ function FooterLink({ label, href }: { label: string; href: string }) {
 
 export default async function Footer() {
   const s = await getSiteSettings();
+  const { market } = await getLocale();
+  /* International (stroxx.eu) shows every dealer; a local market shows only its own. */
+  const footerDealers =
+    market && market !== 'int' ? PARTNER_LOGOS.filter((p) => p.code === market) : PARTNER_LOGOS;
   const pageLinks = cleanLinks(s?.footerPageLinks) ?? PAGES_FALLBACK;
   const buyLinks = cleanLinks(s?.footerBuyLinks) ?? [
     { label: 'Find a store', href: '/butikker' },
@@ -73,13 +76,6 @@ export default async function Footer() {
   const phone = s?.supportPhone || '+45 44 85 55 11';
   const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
   const legal = s?.legalLine || '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14';
-  /* retail partner logo from Site settings (Contact tab); nothing renders
-     until one is uploaded, so the footer works with or without it */
-  const retailerLogo = assetUrl(s?.retailerLogo, 400);
-  const retailerName = s?.retailerName || 'Carl Ras';
-  /* optional click-through, e.g. https://www.carl-ras.dk (internal paths work too) */
-  const rawHref = stegaClean(s?.retailerLogoHref) || '';
-  const retailerLogoHref = /^(https:\/\/|\/)[^\s]*$/.test(rawHref) ? rawHref : null;
   return (
     <footer className="bg-ink">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24">
@@ -121,20 +117,8 @@ export default async function Footer() {
         </div>
 
         <div className="mt-20 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fog/50">
-          {retailerLogo ? (
-            retailerLogoHref ? (
-              <a href={retailerLogoHref} target="_blank" rel="noopener noreferrer"
-                className="opacity-80 hover:opacity-100 transition-opacity" aria-label={retailerName}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={retailerLogo} alt={retailerName} className="h-6 w-auto" />
-              </a>
-            ) : (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={retailerLogo} alt={retailerName} className="h-6 w-auto opacity-80" />
-            )
-          ) : (
-            <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              {PARTNER_LOGOS.map((pl) => (
+          <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {footerDealers.map((pl) => (
                 <a
                   key={pl.href}
                   href={pl.href}
@@ -161,8 +145,7 @@ export default async function Footer() {
                   />
                 </a>
               ))}
-            </span>
-          )}
+          </span>
           <span>{legal}</span>
           <span className="flex gap-4">
             <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
