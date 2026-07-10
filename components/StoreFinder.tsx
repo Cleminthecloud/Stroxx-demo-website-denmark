@@ -3,15 +3,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import type { Map as LeafletMap, LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X, MessageCircle } from 'lucide-react';
-import { stores as fallbackStores, distanceKm, hoursLabel, Store, StoreRegion } from '@/lib/stores';
+import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X } from 'lucide-react';
+import { stores as fallbackStores, distanceKm, hoursLabel, Store } from '@/lib/stores';
 
 /** Full-screen, app-like store finder: the map fills the viewport and the
  *  search/list floats over it as a dark glass panel (left card on desktop,
  *  bottom sheet on mobile). Data: Webflow CMS snapshot in lib/stores. */
 
-const REGIONS: ('Alle' | StoreRegion)[] = ['Alle', 'Sjælland', 'Fyn', 'Jylland'];
-const REGION_LABEL: Record<string, string> = { Alle: 'All', Sjælland: 'Zealand', Fyn: 'Funen', Jylland: 'Jutland' };
+const COUNTRY_LABEL: Record<string, string> = { dk: 'Denmark', de: 'Germany', fr: 'France', be: 'Belgium' };
+const REGION_LABEL: Record<string, string> = { Sjælland: 'Zealand', Fyn: 'Funen', Jylland: 'Jutland' };
 const PANEL_W = 464; // desktop panel + margin, used to offset map focus
 const SHEET_H = 240; // collapsed mobile sheet height, used to offset map focus
 
@@ -20,12 +20,23 @@ const norm = (s: string) =>
 
 const isLg = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
-export default function StoreFinder({ storeData, headlineStores, headlineSpecialists,}: { storeData?: Store[]; headlineStores?: string; headlineSpecialists?: string;}) {
+export default function StoreFinder({ storeData, headlineStores }: { storeData?: Store[]; headlineStores?: string }) {
   // CMS store documents when present, static Webflow snapshot otherwise
   const stores = storeData && storeData.length ? storeData : fallbackStores;
-  const [tab, setTab] = useState<'butikker' | 'specialister'>('butikker');
   const [q, setQ] = useState('');
-  const [region, setRegion] = useState<'Alle' | StoreRegion>('Alle');
+  const [filterVal, setFilterVal] = useState<string>('Alle');
+  // Filter by country when stores span more than one (international / fallback),
+  // otherwise by region within the single country.
+  const countries = useMemo(() => Array.from(new Set(stores.map((s) => s.country))), [stores]);
+  const multiCountry = countries.length > 1;
+  const filterOptions = useMemo(() => {
+    const vals = multiCountry
+      ? countries
+      : (Array.from(new Set(stores.map((s) => s.region).filter(Boolean))) as string[]);
+    return ['Alle', ...vals];
+  }, [stores, multiCountry, countries]);
+  const filterLabel = (v: string) => (v === 'Alle' ? 'All' : multiCountry ? COUNTRY_LABEL[v] ?? v : REGION_LABEL[v] ?? v);
+  const scopeLabel = multiCountry ? 'across Europe' : `across ${COUNTRY_LABEL[countries[0]] ?? 'Denmark'}`;
   const [festool, setFestool] = useState(false);
   const [sikring, setSikring] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -44,15 +55,11 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
   const L = useRef<typeof import('leaflet') | null>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
-  /* deep-linkable: /butikker?tab=specialister (nav + footer) and ?q=<postnr/by>
-     (Marketo emails prefill the search with the lead's postal code).
-     useSearchParams (not a mount-only read of location.search) so clicking
-     "Specialister" in the nav WHILE already on /butikker switches the tab —
-     the route doesn't remount on a same-page param change. Requires the
-     <Suspense> wrapper in app/butikker/page.tsx. */
+  /* deep-linkable: /butikker?q=<postnr/by> (Marketo emails prefill the search
+     with the lead's postal code). useSearchParams needs the <Suspense> wrapper
+     in app/butikker/page.tsx. */
   const params = useSearchParams();
   useEffect(() => {
-    setTab(params.get('tab') === 'specialister' ? 'specialister' : 'butikker');
     const qq = params.get('q');
     if (qq) setQ(qq);
   }, [params]);
@@ -62,7 +69,7 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
   const filtered = useMemo(() => {
     const nq = norm(q.trim());
     const base = stores.filter((s) => {
-      if (region !== 'Alle' && s.region !== region) return false;
+      if (filterVal !== 'Alle' && (multiCountry ? s.country !== filterVal : s.region !== filterVal)) return false;
       if (festool && !s.festool) return false;
       if (sikring && !s.sikring) return false;
       return true;
@@ -79,7 +86,7 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
       );
     }
     return list;
-  }, [q, region, festool, sikring, pos, searchPos, stores]);
+  }, [q, filterVal, multiCountry, festool, sikring, pos, searchPos, stores]);
 
   /* ── geocode unmatched queries via DAWA (official DK postcode API, free) ── */
   useEffect(() => {
@@ -159,20 +166,12 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
     markers.current.clearLayers();
     filtered.forEach((s) => {
       const active = s.id === selected;
-      // specialist mode: the pin IS the person (circular photo marker)
-      const icon = tab === 'specialister'
-        ? leaflet.divIcon({
-            className: '',
-            iconSize: [40, 40],
-            iconAnchor: [20, 20],
-            html: `<div class="sf-face${active ? ' sf-face--active' : ''}"><img src="${s.manager.photo}" alt="${s.manager.name}" /></div>`,
-          })
-        : leaflet.divIcon({
-            className: '',
-            iconSize: [26, 26],
-            iconAnchor: [13, 13],
-            html: `<div class="sf-pin${active ? ' sf-pin--active' : ''}"><span></span></div>`,
-          });
+      const icon = leaflet.divIcon({
+        className: '',
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        html: `<div class="sf-pin${active ? ' sf-pin--active' : ''}"><span></span></div>`,
+      });
       const mk = leaflet.marker([s.lat, s.lng], { icon, title: s.name });
       mk.on('click', () => {
         setSelected(s.id);
@@ -182,7 +181,7 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
       });
       mk.addTo(markers.current!);
     });
-  }, [filtered, selected, ready, tab]);
+  }, [filtered, selected, ready]);
 
   /* ── origin markers: user position and/or searched place ── */
   useEffect(() => {
@@ -273,29 +272,10 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
         </button>
 
         <div className="px-5 lg:px-6 lg:pt-6 pb-3 shrink-0">
-          <div className="hidden lg:block eyebrow mb-2">Stores · Denmark</div>
+          <div className="hidden lg:block eyebrow mb-2">Stores · {multiCountry ? 'Europe' : COUNTRY_LABEL[countries[0]] ?? 'Denmark'}</div>
           <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
-            {tab === 'specialister'
-              ? headlineSpecialists || 'Talk to people who use the tools themselves.'
-              : headlineStores || 'Get the tool in your hand before you buy it.'}
+            {headlineStores || 'Get the tool in your hand before you buy it.'}
           </h1>
-
-          {/* tabs */}
-          <div className="flex gap-1 p-1 rounded-full bg-white/[0.05] border border-white/10 mb-3">
-            {(['butikker', 'specialister'] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                className={`flex-1 px-4 py-2 rounded-full text-[12px] tracking-wide transition-all cursor-pointer ${
-                  tab === t
-                    ? 'bg-stroxx-blue text-white shadow-[0_0_18px_rgba(0,136,194,0.35)]'
-                    : 'text-fog hover:text-white'
-                }`}
-              >
-                {t === 'butikker' ? 'Stores' : 'Specialists'}
-              </button>
-            ))}
-          </div>
 
           {/* search */}
           <div className="relative mb-3">
@@ -318,15 +298,11 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
 
           {/* filters */}
           <div data-lenis-prevent className="flex items-center gap-2 overflow-x-auto sf-scroll pb-1 mb-1.5">
-            {REGIONS.map((r) => (
-              <button key={r} onClick={() => setRegion(r)} className={chip(region === r)}>{REGION_LABEL[r] ?? r}</button>
+            {filterOptions.map((r) => (
+              <button key={r} onClick={() => setFilterVal(r)} className={chip(filterVal === r)}>{filterLabel(r)}</button>
             ))}
-            {tab === 'butikker' && (
-              <>
-                <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
-                <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Security</button>
-              </>
-            )}
+            <button onClick={() => setFestool(!festool)} className={chip(festool)}>Festool</button>
+            <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Security</button>
             <button onClick={locate} disabled={locating}
               className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
               <LocateFixed size={12} className={locating ? 'animate-spin' : ''} />
@@ -337,7 +313,7 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
           <div className="text-[11px] text-fog">
             {searchPos
               ? <>No store in <span className="text-white">{searchPos.label}</span>, nearest shown first</>
-              : <>{filtered.length} {filtered.length === 1 ? 'store' : 'stores'}{region !== 'Alle' ? ` · ${REGION_LABEL[region] ?? region}` : ' across Denmark'}</>}
+              : <>{filtered.length} {filtered.length === 1 ? 'store' : 'stores'}{filterVal !== 'Alle' ? ` · ${filterLabel(filterVal)}` : ` ${scopeLabel}`}</>}
           </div>
         </div>
 
@@ -347,7 +323,7 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
             <div className="glass rounded-xl p-8 text-center">
               <p className="text-white mb-2">No stores match.</p>
               <button
-                onClick={() => { setQ(''); setRegion('Alle'); setFestool(false); setSikring(false); }}
+                onClick={() => { setQ(''); setFilterVal('Alle'); setFestool(false); setSikring(false); }}
                 className="text-stroxx-blue text-sm hover:underline cursor-pointer">
                 Reset filters
               </button>
@@ -357,53 +333,6 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
           {filtered.map((s) => {
             const active = s.id === selected;
             const km = origin ? distanceKm(origin.lat, origin.lng, s.lat, s.lng) : null;
-
-            // ── specialist card: the person first, the place second ──
-            if (tab === 'specialister') {
-              return (
-                <div
-                  key={s.id}
-                  ref={(el) => { cardEls.current[s.id] = el; }}
-                  onClick={() => focusStore(s)}
-                  className={`rounded-xl p-4 lg:p-5 cursor-pointer transition-all duration-300 border bg-white/[0.03] ${
-                    active
-                      ? 'border-stroxx-blue/60 shadow-[0_0_30px_rgba(0,136,194,0.22)] bg-white/[0.06]'
-                      : 'border-white/[0.06] hover:border-white/20 hover:bg-white/[0.05]'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 mb-3.5">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.manager.photo} alt={s.manager.name} loading="lazy"
-                      className="h-14 w-14 rounded-full object-cover border border-white/15 shrink-0" />
-                    <div className="min-w-0">
-                      <div className="text-white font-medium leading-snug">{s.manager.name}</div>
-                      <div className="text-fog text-[12px]">Store manager · {s.name}</div>
-                      <div className="text-fog text-[12px] mt-0.5">
-                        {s.address}, {s.zipCity}
-                        {km !== null && (
-                          <span className="text-stroxx-blue ml-2 font-medium">{km < 10 ? km.toFixed(1) : Math.round(km)} km</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <a href={`tel:${s.manager.phone}`} onClick={(e) => e.stopPropagation()}
-                      className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                      <Phone size={12} /> Call
-                    </a>
-                    <a href={`mailto:${s.manager.email}`} onClick={(e) => e.stopPropagation()}
-                      className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white">
-                      <Mail size={12} /> Mail
-                    </a>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('stroxx:open-chat')); }}
-                      className="glass-cta glass-cta--ghost glass-cta--sm flex-1 justify-center text-white cursor-pointer">
-                      <MessageCircle size={12} /> Chat
-                    </button>
-                  </div>
-                </div>
-              );
-            }
 
             return (
               <div
@@ -449,7 +378,35 @@ export default function StoreFinder({ storeData, headlineStores, headlineSpecial
                   </div>
                 )}
 
-                {/* manager: expands on selection */}
+                {s.specialist?.name && (
+                  <div className="flex items-center gap-3 pt-3 mt-0.5 border-t border-white/[0.07]">
+                    {s.specialist.photo && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={s.specialist.photo} alt={s.specialist.name} loading="lazy"
+                        className="h-11 w-11 rounded-full object-cover border border-stroxx-blue/40 shrink-0" />
+                    )}
+                    <div className="min-w-0">
+                      <div className="text-[13px] text-white leading-tight">{s.specialist.name}</div>
+                      <div className="text-[11px] text-stroxx-blue">{s.specialist.role || 'STROXX Specialist'}</div>
+                    </div>
+                    <div className="ml-auto flex items-center gap-2">
+                      {s.specialist.phone && (
+                        <a href={`tel:${s.specialist.phone}`} onClick={(e) => e.stopPropagation()} aria-label={`Call ${s.specialist.name}`}
+                          className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
+                          <Phone size={13} />
+                        </a>
+                      )}
+                      {s.specialist.email && (
+                        <a href={`mailto:${s.specialist.email}`} onClick={(e) => e.stopPropagation()} aria-label={`Email ${s.specialist.name}`}
+                          className="grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] border border-white/10 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors">
+                          <Mail size={13} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* store manager: expands on selection */}
                 <div className={`grid transition-all duration-400 ${active ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                   <div className="overflow-hidden">
                     <div className="flex items-center gap-3 pt-3 border-t border-white/[0.07]">

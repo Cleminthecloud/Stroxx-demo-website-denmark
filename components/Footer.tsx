@@ -13,7 +13,6 @@ const PAGES_FALLBACK = [
   { label: 'Stores', href: '/butikker' },
   { label: 'News', href: '/nyheder' },
   { label: 'Campaign: Try It', href: '/proev-det' },
-  { label: 'Specialists', href: '/butikker?tab=specialister' },
   { label: 'Service and Support', href: '/service' },
 ];
 

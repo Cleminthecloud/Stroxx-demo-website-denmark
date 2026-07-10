@@ -3,7 +3,7 @@ import { assetUrl } from '@/sanity/lib/image';
 import { sanityFetch } from '@/sanity/lib/live';
 import { products, Product } from '@/lib/data';
 import { SKA } from '@/lib/ska';
-import { stores as fallbackStores, Store, StoreBrand, StoreRegion } from '@/lib/stores';
+import { stores as fallbackStores, Store, StoreBrand, StoreCountry } from '@/lib/stores';
 import { HOME_DEFAULTS, type HomeCopy } from '@/lib/home-copy';
 import { specialists as fallbackSpecialists, Specialist } from '@/lib/data';
 import { testimonials as fallbackTestimonials, Testimonial } from '@/lib/testimonials';
@@ -336,7 +336,8 @@ export async function getStores(): Promise<Store[]> {
           id: stegaClean(d._id) ?? String(d._id),
           name: d.name,
           brand: (stegaClean(d.brand) as StoreBrand) || 'Carl Ras',
-          region: (stegaClean(d.region) as StoreRegion) || 'Sjælland',
+          country: (stegaClean(d.country) as StoreCountry) || 'dk',
+          region: stegaClean(d.region) || undefined,
           address: d.address ?? '',
           zipCity: d.zipCity ?? '',
           lat,
@@ -348,6 +349,15 @@ export async function getStores(): Promise<Store[]> {
             phone: d.managerPhone ?? '',
             photo: assetUrl(d.managerPhotoUpload, 300) ?? d.managerPhoto ?? '',
           },
+          specialist: d.specialist?.name
+            ? {
+                name: d.specialist.name,
+                role: stegaClean(d.specialist.role) || undefined,
+                email: d.specialist.email ?? '',
+                phone: d.specialist.phone ?? '',
+                photo: assetUrl(d.specialist.photoUpload, 300) ?? d.specialist.photo ?? '',
+              }
+            : undefined,
           monThu: [Number(d.openMonThu ?? 7), Number(d.closeMonThu ?? 16)],
           fri: [Number(d.openFri ?? 7), Number(d.closeFri ?? 15)],
           weekendClosed: d.weekendClosed !== false,
@@ -357,7 +367,19 @@ export async function getStores(): Promise<Store[]> {
         };
       })
       .filter(Boolean) as Store[];
-    return mapped.length ? mapped : fallbackStores;
+    let out = mapped.length ? mapped : fallbackStores;
+    // Market scope: international shows every country (the European reach); a
+    // local market shows its own country; fallback is all-countries-all-stores.
+    try {
+      const locale = await getLocale();
+      if (locale.market && locale.market !== 'int') {
+        const scoped = out.filter((s) => s.country === locale.market);
+        if (scoped.length) out = scoped;
+      }
+    } catch {
+      /* keep all */
+    }
+    return out;
   } catch {
     return fallbackStores;
   }

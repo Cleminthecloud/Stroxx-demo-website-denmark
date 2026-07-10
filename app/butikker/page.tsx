@@ -61,7 +61,7 @@ export default async function ButikkerPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(storesLd) }} />
       {/* StoreFinder reads useSearchParams (tab/q deep links) → needs Suspense */}
       <Suspense fallback={<div className="pt-40 text-center text-fog">Loading...</div>}>
-        <StoreFinder storeData={storeData}  headlineStores={s?.butikkerHeadlineStores} headlineSpecialists={s?.butikkerHeadlineSpecialists} />
+        <StoreFinder storeData={storeData} headlineStores={s?.butikkerHeadlineStores} />
       </Suspense>
     </main>
   );

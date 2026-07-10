@@ -205,7 +205,7 @@ export default async function ServicePage() {
                 </p>
               )}
               <div className="flex flex-wrap items-center gap-3">
-                <GlassButton href="/butikker?tab=specialister">Find your specialist <ArrowRight size={15} /></GlassButton>
+                <GlassButton href="/butikker">Find your specialist <ArrowRight size={15} /></GlassButton>
                 <GlassButton href="/butikker" variant="ghost">All stores</GlassButton>
               </div>
             </div>

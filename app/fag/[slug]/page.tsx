@@ -168,7 +168,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
         <Reveal delay={120}>
           <div className="mt-16 flex flex-wrap items-center gap-3">
             <GlassButton href="/produkter">See the full range <ArrowRight size={15} /></GlassButton>
-            <GlassButton href="/butikker?tab=specialister" variant="ghost">Ask a specialist</GlassButton>
+            <GlassButton href="/butikker" variant="ghost">Ask a specialist</GlassButton>
             <Link href="/proev-det" className="link-arrow text-sm ml-1">
               30-day satisfaction guarantee <ArrowRight size={15} strokeWidth={2} />
             </Link>
