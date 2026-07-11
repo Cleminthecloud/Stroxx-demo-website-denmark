@@ -81,6 +81,7 @@ const slugify = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, '-').repla
 const specialistDocs = specialists.map((sp) => ({
   _id: `specialist-${slugify(sp.name)}`,
   _type: 'specialist',
+  language: 'en', // English base tag, a re-run must never strip it
   name: sp.name,
   role: sp.role,
   location: sp.location,
@@ -96,6 +97,7 @@ const specialistDocs = specialists.map((sp) => ({
 const testimonialDocs = testimonials.map((t, i) => ({
   _id: `testimonial-${slugify(t.name)}-${i}`,
   _type: 'testimonial',
+  language: 'en', // English base tag, a re-run must never strip it
   quote: t.quote,
   name: t.name,
   role: t.role,

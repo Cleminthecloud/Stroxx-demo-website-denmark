@@ -444,11 +444,16 @@ export async function getTrades(): Promise<Trade[]> {
 
 /* ── Specialists, testimonials, films, legal pages ──────────────────────── */
 
+/** Specialists are per language/market (social proof is local): the current
+ *  locale's docs, falling back to the English base when a market has none
+ *  yet. Sharing across markets = the Studio's Translations menu (copies the
+ *  doc into the other language), never a live cross-market read. */
 export async function getSpecialists(): Promise<Specialist[]> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "specialist" && active != false] | order(name asc)',
-    });
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "specialist" && active != false && ${pred}] | order(name asc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
     const docs = (data ?? []) as Record<string, any>[];
     if (!docs.length) return fallbackSpecialists;
     const mapped = docs
@@ -481,11 +486,15 @@ export function pickSpecialist(list: Specialist[], p: Product): Specialist {
   return pool[hash % pool.length];
 }
 
+/** Testimonials are per language/market, same rule and fallback chain as
+ *  specialists: a Danish "Carpenter, Aarhus" quote must never surface on the
+ *  German site. */
 export async function getTestimonials(): Promise<Testimonial[]> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "testimonial" && active != false] | order(_createdAt asc)',
-    });
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "testimonial" && active != false && ${pred}] | order(_createdAt asc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
     const docs = (data ?? []) as Record<string, any>[];
     if (!docs.length) return fallbackTestimonials;
     const mapped = docs

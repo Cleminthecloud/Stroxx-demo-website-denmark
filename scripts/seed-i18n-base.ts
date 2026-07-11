@@ -13,7 +13,7 @@ import { getCliClient } from 'sanity/cli';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
-const TYPES = ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment'];
+const TYPES = ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment', 'specialist', 'testimonial'];
 
 async function run() {
   const ids: string[] = await client.fetch('*[_type in $types && !defined(language)]._id', { types: TYPES });
