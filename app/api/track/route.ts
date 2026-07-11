@@ -46,7 +46,10 @@ export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });
   if (!(await rateLimit(`trk:${clientIp(req.headers)}`, 60, 60000))) return new NextResponse(null, { status: 204 });
   const token = process.env.SANITY_API_WRITE_TOKEN;
-  if (!token) return new NextResponse(null, { status: 204 });
+  if (!token) {
+    console.warn('[track] SANITY_API_WRITE_TOKEN missing; analytics collection disabled');
+    return new NextResponse(null, { status: 204 });
+  }
 
   let t = '', path = '', src = '', to = '', channel = '';
   try {
@@ -84,6 +87,11 @@ export async function POST(req: NextRequest) {
       return new NextResponse(null, { status: 204 });
     }
 
+    /* inc() fails on a key that does not exist yet, and every counter key is
+       missing on its first hit of the day, so each incremented key must be
+       seeded with 0 in the same patch (setIfMissing applies before inc) */
+    for (const k of Object.keys(inc)) setIfMissing[k] = 0;
+
     await client
       .transaction()
       .createIfNotExists({ _id: id, _type: 'dayStats', day, total: 0 })
@@ -93,8 +101,12 @@ export async function POST(req: NextRequest) {
         return q;
       })
       .commit({ visibility: 'async', returnDocuments: false });
-  } catch {
-    /* analytics must never surface an error to the site */
+  } catch (err) {
+    /* analytics must never surface an error to the site, but it must be
+       visible to operators: this line is what appears in the hosting
+       provider's function logs when writes fail (bad token, wrong dataset) */
+    const e = err as { statusCode?: number; message?: string };
+    console.error('[track] dayStats write failed:', e?.statusCode ?? '', e?.message ?? err);
   }
   return new NextResponse(null, { status: 204 });
 }
