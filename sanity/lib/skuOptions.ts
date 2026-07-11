@@ -1,9 +1,12 @@
-import { products, categoryBySlug } from '../../lib/data';
+import { categoryBySlug } from '../../lib/data';
+import { getCatalog } from '../../lib/catalog';
 
 /** Shared product option list for the Studio SKU pickers (SkuInput +
- *  SkuListInput). Sourced from the code-side catalogue (lib/data.ts) today;
- *  when the PIM feed lands, swap this one module to read the feed and every
- *  picker updates with it. Keyed by item number (code / SKU). */
+ *  SkuListInput). Sourced from the catalogue seam (lib/catalog getCatalog(),
+ *  the validated, price-firewalled feed); when the PIM feed lands, the seam
+ *  swaps its adapter and every picker updates with no change here. Keyed by
+ *  item number (SKU). Category display names still come from lib/data.ts
+ *  categories (the catalogue carries slugs only). */
 
 export type SkuOption = {
   value: string; // the item number stored in the document
@@ -12,12 +15,11 @@ export type SkuOption = {
   // No price: the brand site never shows or uses prices (dealer's job).
 };
 
-export const SKU_OPTIONS: SkuOption[] = products
-  .filter((p) => p.code)
+export const SKU_OPTIONS: SkuOption[] = getCatalog()
   .map((p) => ({
-    value: p.code as string,
+    value: p.sku,
     name: p.name,
-    category: categoryBySlug(p.category)?.name ?? p.category,
+    category: categoryBySlug(p.categorySlugs[0])?.name ?? p.categorySlugs[0],
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
 

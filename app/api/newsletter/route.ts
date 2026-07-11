@@ -4,13 +4,19 @@ import { createClient } from '@sanity/client';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
-import { getSiteSettings } from '@/lib/cms';
+import { getMarkets } from '@/lib/cms';
+import { resolveOpsMarket } from '@/lib/markets';
 import { resolveSecret } from '@/lib/newsletter-secrets';
 import { projectId, dataset } from '@/sanity/env';
 
-/** Newsletter signups, provider-agnostic. Which platform (and its list ID)
- *  is chosen in Site settings → Newsletter; the matching API key lives in the
- *  hosting environment:
+/** Newsletter signups, provider-agnostic and PER MARKET. Which platform (and
+ *  its list ID + encrypted keys) is chosen on the MARKET document (Settings →
+ *  Markets). The client POSTs its market code (middleware skips /api, so
+ *  headers cannot tell us); it is validated against the market registry via
+ *  resolveOpsMarket, and anything missing or bogus falls back to the REFERENCE
+ *  market, which normally has no credentials, so a bad code can never reach
+ *  another market's list. CMS keys are ciphertext (lib/newsletter-secrets);
+ *  the hosting environment can still supply a key as fallback:
  *    Mailchimp      MAILCHIMP_API_KEY        (key like xxxx-us21)
  *    Klaviyo        KLAVIYO_API_KEY          (private key, pk_...)
  *    Adobe Marketo  MARKETO_BASE_URL + MARKETO_CLIENT_ID + MARKETO_CLIENT_SECRET
@@ -50,17 +56,21 @@ export async function POST(req: NextRequest) {
   }
   let email = '';
   let honeypot = '';
+  let marketCode: unknown;
   try {
     const body = await req.json();
     email = String(body?.email ?? '').trim().toLowerCase();
     honeypot = String(body?.company ?? '');
+    marketCode = body?.market;
   } catch {
     return NextResponse.json({ ok: false, error: 'bad-request' }, { status: 400 });
   }
   if (honeypot) return NextResponse.json({ ok: true }); // bots think they won
   if (!EMAIL_RE.test(email)) return NextResponse.json({ ok: false, error: 'invalid-email' }, { status: 400 });
 
-  const s = await getSiteSettings();
+  /* Provider config from the market doc the client claims (validated), else
+     the reference market (normally unconfigured, so this fails closed). */
+  const s = resolveOpsMarket(marketCode, await getMarkets());
   if (s?.newsletterEnabled !== true) return NextResponse.json({ ok: false, error: 'disabled' }, { status: 404 });
   const provider = stegaClean(s?.newsletterProvider) || '';
   const listId = stegaClean(s?.newsletterListId) || '';

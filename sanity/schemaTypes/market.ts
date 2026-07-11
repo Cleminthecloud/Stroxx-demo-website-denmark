@@ -1,4 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import NewsletterStatusField from '../NewsletterStatusField';
+import EncryptedSecretField from '../EncryptedSecretField';
 
 const LANGS = [
   { title: 'Danish', value: 'da' },
@@ -31,6 +33,20 @@ export const market = defineType({
       options: { collapsible: true, collapsed: false },
     },
     { name: 'footer', title: 'Footer contact + legal', options: { collapsible: true, collapsed: false } },
+    {
+      name: 'tracking',
+      title: 'Tracking + consent',
+      description:
+        'This market\'s Google Tag Manager container and Cookiebot consent banner. Per MARKET, not per language: Belgium\'s Dutch and French pages share this one market document, so its IDs are entered once here. On the international (reference) market these are normally EMPTY: no tracking on the reference site unless deliberately set. Moved here from Site settings 2026-07-11.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'newsletter',
+      title: 'Newsletter (provider + keys)',
+      description:
+        'Which email platform this market\'s signups go to, and its keys. Per MARKET, not per language: Belgium\'s two language versions share this one setup. The signup form\'s WORDS (headline, button, consent line, popup rules) stay on each language\'s Site settings document. On the international (reference) market this is normally EMPTY unless the international site deliberately collects signups. Moved here from Site settings 2026-07-11.',
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({ name: 'name', title: 'Market name', type: 'string', fieldset: 'identity', description: 'e.g. Denmark, Germany, International (English).', validation: (r) => r.required() }),
@@ -82,6 +98,137 @@ export const market = defineType({
         }),
       ],
     }),
+    /* ── Tracking + consent: per-market operations, read by app/layout.tsx for
+       whichever market the visitor is on. Cookiebot gates GTM (consent first). ── */
+    defineField({
+      name: 'gtmId',
+      title: 'Google Tag Manager container ID',
+      description:
+        'Format GTM-XXXXXXX. Loads GTM on every page of THIS market (used by the site layout); leave empty to disable. Manage tags, pixels, analytics AND third-party chat widgets inside GTM, no deploy needed. One market, one container: Belgium\'s two languages share this ID. Normally empty on the international (reference) market.',
+      type: 'string',
+      fieldset: 'tracking',
+      validation: (r) =>
+        r.custom((v) => (!v || /^GTM-[A-Z0-9]+$/i.test(v) ? true : 'Must look like GTM-XXXXXXX')),
+    }),
+    defineField({
+      name: 'cookiebotId',
+      title: 'Cookiebot consent banner ID (CBID)',
+      description:
+        'From manage.cookiebot.com, this market\'s domain group ID (a UUID like 12345678-1234-1234-1234-123456789012). Shows the cookie consent banner on every page of THIS market and auto-blocks tracking until consent; consent gates GTM. Required before real traffic in the EU. One market, one CBID: Belgium\'s two languages share it. Normally empty on the international (reference) market. Leave empty to disable.',
+      type: 'string',
+      fieldset: 'tracking',
+      validation: (r) =>
+        r.custom((v) =>
+          !v || /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)
+            ? true
+            : 'Must be a Cookiebot CBID (UUID format)'
+        ),
+    }),
+
+    /* ── Newsletter operations: provider choice, keys and list ID for THIS
+       market's signups (read by /api/newsletter). The form's copy stays on the
+       per-language Site settings documents. ── */
+    defineField({
+      name: 'newsletterStatus',
+      title: 'Connection status',
+      type: 'string',
+      readOnly: true,
+      fieldset: 'newsletter',
+      components: { input: NewsletterStatusField },
+      description: 'Checked for this market as you open this box. Nothing to fill in here.',
+    }),
+    defineField({
+      name: 'newsletterEnabled',
+      title: 'Newsletter signup on the site',
+      description:
+        'Shows the signup form on THIS market\'s pages (footer band, popup, landing-page signup blocks; Belgium: both languages). Configure the provider below before switching on. Normally off on the international (reference) market.',
+      type: 'boolean',
+      initialValue: false,
+      fieldset: 'newsletter',
+    }),
+    defineField({
+      name: 'newsletterProvider',
+      title: 'Email platform',
+      description:
+        'Where THIS market\'s signups are sent. Pick your platform, then enter its keys in the fields that appear below. Keys are encrypted in your browser before saving, so it is safe to enter them here.',
+      type: 'string',
+      fieldset: 'newsletter',
+      options: {
+        list: [
+          { title: 'Mailchimp', value: 'mailchimp' },
+          { title: 'Klaviyo', value: 'klaviyo' },
+          { title: 'Adobe Marketo', value: 'marketo' },
+          { title: 'Other (webhook, e.g. Zapier/Make)', value: 'webhook' },
+        ],
+        layout: 'radio',
+      },
+    }),
+
+    /* ── Provider credentials. Encrypted in the browser before saving (see
+       EncryptedSecretField); the dataset only ever stores ciphertext. Each is
+       shown only when its platform is selected. ── */
+    defineField({
+      name: 'mailchimpApiKey',
+      title: 'Mailchimp API key',
+      description: 'This market\'s key, used by the signup API. From Mailchimp → Account → Extras → API keys. Looks like 0123abcd…-us21 (the -usNN part matters).',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'mailchimp',
+    }),
+    defineField({
+      name: 'klaviyoApiKey',
+      title: 'Klaviyo private API key',
+      description: 'This market\'s key, used by the signup API. From Klaviyo → Settings → API keys → Create Private API Key (needs List access). Starts with pk_.',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'klaviyo',
+    }),
+    defineField({
+      name: 'marketoBaseUrl',
+      title: 'Marketo REST endpoint',
+      description: 'This market\'s Marketo REST base URL, e.g. https://123-ABC-456.mktorest.com (Marketo → Admin → Web Services → REST API, without the /rest suffix).',
+      type: 'url',
+      fieldset: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'marketoClientId',
+      title: 'Marketo Client ID',
+      description: 'From the LaunchPoint custom service (Marketo → Admin → LaunchPoint → your service → View Details). Used by the signup API for this market.',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'marketoClientSecret',
+      title: 'Marketo Client Secret',
+      description: 'The Client Secret from the same LaunchPoint custom service. Used by the signup API for this market.',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
+    }),
+    defineField({
+      name: 'newsletterWebhookUrl',
+      title: 'Webhook URL',
+      description: 'The catch-hook URL from Zapier / Make (or any endpoint) that receives THIS market\'s signups. Each signup is POSTed as JSON { email, source, at }.',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'webhook',
+    }),
+    defineField({
+      name: 'newsletterListId',
+      title: 'Audience / list ID',
+      description: 'The list THIS market\'s signups land in. Mailchimp: the Audience ID. Klaviyo: the List ID. Marketo: the static list ID (optional). Webhook: not needed.',
+      type: 'string',
+      fieldset: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider === 'webhook',
+    }),
+
     defineField({ name: 'order', title: 'Sort order', type: 'number', fieldset: 'identity', initialValue: 0, description: 'Order in the market/language switcher.' }),
   ],
   preview: {

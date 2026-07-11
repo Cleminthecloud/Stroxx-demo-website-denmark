@@ -30,7 +30,7 @@ export const FRONT_PANEL = '/Images/Bag-test/newfront_trythis.png';
 // badge widths gave the 75% panel width). height auto keeps aspect.
 export const PANEL = { left: 19, top: 45, width: 75 }; // % of stage
 
-// each tool: id (from bagTools), x/y rest centre (% of stage), w (% of stage
+// each tool: Carl Ras image asset id, x/y rest centre (% of stage), w (% of stage
 // width), rotation (deg). Order = drop order = depth (later drops in front).
 export type Slot = { id: number; x: number; y: number; w: number; rot: number };
 // Dark / clean-knockout tools only. `w` is sized to the tools' REAL relative

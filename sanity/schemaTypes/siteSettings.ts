@@ -1,7 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
-import NewsletterStatusField from '../NewsletterStatusField';
-import EncryptedSecretField from '../EncryptedSecretField';
 import { langLabel, langPath } from '../lib/langLabel';
 
 const linkArray = (name: string, title: string, description: string, group: string) =>
@@ -33,37 +31,96 @@ const linkArray = (name: string, title: string, description: string, group: stri
 
 /** One document per market. Everything an editor may legitimately change
  *  without a deploy lives here (production plan section 8). API keys and
- *  secrets NEVER go in the CMS; they live in the hosting environment. */
+ *  secrets NEVER go in the CMS; they live in the hosting environment.
+ *
+ *  Editor UX: groups are ordered everyday-first and the document opens on
+ *  Menu + footer (default: true), never on the "All fields" wall. The
+ *  Microcopy group is subdivided into collapsible per-page fieldsets (same
+ *  pattern as market.ts / store.ts). Display metadata only: no field name,
+ *  no type changed, stored data loads unchanged. */
 export const siteSettings = defineType({
   name: 'siteSettings',
   title: 'Site settings',
   type: 'document',
   groups: [
-    { name: 'contact', title: 'Contact + legal' },
-    { name: 'nav', title: 'Menu + footer' },
-    { name: 'seo', title: 'SEO + AI engines' },
-    { name: 'tracking', title: 'Tracking + consent' },
-    { name: 'newsletter', title: 'Newsletter' },
-    { name: 'integrations', title: 'Integrations (PIM/DAM/AI)' },
+    { name: 'nav', title: 'Menu + footer', default: true },
     { name: 'copy', title: 'Microcopy' },
+    { name: 'seo', title: 'SEO + AI engines' },
+    { name: 'newsletter', title: 'Newsletter' },
+    { name: 'integrations', title: 'Technical (developer)' },
+  ],
+  fieldsets: [
+    {
+      name: 'fsFooter',
+      title: 'Footer',
+      description: 'The words in the footer at the bottom of every page.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsChat',
+      title: 'Chat',
+      description: 'The floating "Talk to a specialist" chat: its two switches and every line of its copy, together.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsProClub',
+      title: 'Pro Club (product pages)',
+      description: 'The Pro Club signup box shown on product pages.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsNews',
+      title: 'News page',
+      description: 'The news index at /news.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsNewsletterCopy',
+      title: 'Newsletter form',
+      description: 'Messages shown by the signup form itself (the form words and popup rules live on the Newsletter tab; the provider and keys live on the Market document, Settings, then Markets).',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsProducts',
+      title: 'Products page',
+      description: 'The product overview at /products.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsStores',
+      title: 'Stores page',
+      description: 'The store finder at /stores.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsService',
+      title: 'Service page',
+      description: 'The whole Service and Support page at /service: guarantee, returns, documents, contact and FAQ.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsSupportIndex',
+      title: 'Support index',
+      description: 'The support overview at /support (the page the packaging QR codes point into).',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsTrades',
+      title: 'Trades page',
+      description: 'The trades overview at /trades.',
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: 'fsNotFound',
+      title: '404 page',
+      description: 'What visitors read when a link leads nowhere.',
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    /* Dealer identity + contact live on the MARKET document (Settings → Markets):
-       dealer name, Buy-at CTA link, customer service phone, footer legal line.
-       The old retailerName / retailerLogo / retailerLogoHref / supportPhone /
-       legalLine fields here were dead or duplicated that source, removed
-       2026-07-11 (see the dealer-contact row in DEPENDENCIES.md). Only the
-       localized HOURS text stays here: it is per-language display copy. */
-    defineField({
-      name: 'supportHours',
-      title: 'Customer service hours',
-      description: 'Localized hours text shown in the footer under the dealer’s phone (the phone itself comes from the Market document). Press Enter for a new line. Leave empty on the international version.',
-      type: 'text',
-      rows: 2,
-      group: 'contact',
-    }),
 
+    /* ── Menu + footer: the everyday group, the document opens here ── */
     defineField({
       name: 'logo',
       title: 'Site logo (header)',
@@ -96,6 +153,143 @@ export const siteSettings = defineType({
     linkArray('footerPageLinks', 'Footer: "Pages" column links', 'Leave empty for the built-in list.', 'nav'),
     linkArray('footerBuyLinks', 'Footer: "Buy" column links', 'Leave empty for the built-in list.', 'nav'),
 
+    /* Dealer identity + contact live on the MARKET document (Settings → Markets):
+       dealer name, Buy-at CTA link, customer service phone, footer legal line.
+       The old retailerName / retailerLogo / retailerLogoHref / supportPhone /
+       legalLine fields here were dead or duplicated that source, removed
+       2026-07-11 (see the dealer-contact row in DEPENDENCIES.md). Only the
+       localized HOURS text stays here: it is per-language display copy. */
+    defineField({
+      name: 'supportHours',
+      title: 'Customer service hours',
+      description:
+        'Localized hours text shown in the footer under the dealer’s phone. The phone itself, the dealer name and the footer legal line come from the Market document (Settings, then Markets). Press Enter for a new line. Leave empty on the international version: the seed:more script clears this field on the English base by design, so the dealer-neutral site never shows one dealer’s hours.',
+      type: 'text',
+      rows: 2,
+      group: 'nav',
+    }),
+
+    /* ── Microcopy: every small user-facing text on the site, grouped by
+       the page it appears on (collapsible fieldsets) ── */
+    defineField({ name: 'footerAbout', title: 'Footer: about paragraph', type: 'text', rows: 3, group: 'copy', fieldset: 'fsFooter',
+      description: 'The paragraph under the logo in the footer. Partner names (Meesenburg, Foussier, Lecot) become links automatically.' }),
+
+    defineField({
+      name: 'chatEnabled',
+      title: 'Show "Talk to a specialist" chat',
+      description:
+        'OFF hides the chat button on the whole site (the floating blue pill in the corner of every page). Independent of the AI toggle below.',
+      type: 'boolean',
+      initialValue: true,
+      group: 'copy',
+      fieldset: 'fsChat',
+    }),
+    defineField({
+      name: 'aiChatEnabled',
+      title: 'AI specialist chat',
+      description:
+        'ON: the chat answers free-form questions with AI (grounded in the site facts; requires the AI key in the hosting environment). OFF: the built-in scripted answers only. The scripted product/store/guarantee answers and the human handoff always remain.',
+      type: 'boolean',
+      initialValue: false,
+      group: 'copy',
+      fieldset: 'fsChat',
+    }),
+    defineField({ name: 'chatFabLabel', title: 'Chat: floating button label', type: 'string', group: 'copy', fieldset: 'fsChat',
+      description: 'The text on the floating blue chat pill visitors see in the corner of every page.' }),
+    defineField({ name: 'chatPanelHeadline', title: 'Chat: panel headline', type: 'string', group: 'copy', fieldset: 'fsChat',
+      description: 'The headline at the top of the chat panel once it opens.' }),
+    defineField({ name: 'chatPanelText', title: 'Chat: panel text', type: 'text', rows: 2, group: 'copy', fieldset: 'fsChat',
+      description: 'The short line under the chat panel headline.' }),
+    defineField({ name: 'chatGreeting', title: 'Chat: greeting message', type: 'text', rows: 2, group: 'copy', fieldset: 'fsChat',
+      description: 'The first message the chat sends when a visitor opens it.' }),
+    defineField({ name: 'chatFallback', title: 'Chat: fallback answer', type: 'text', rows: 2, group: 'copy', fieldset: 'fsChat',
+      description: 'Shown when neither the built-in answers nor the AI can help. Should offer the human handoff ("type yes").' }),
+
+    defineField({ name: 'proClubHeadline', title: 'Pro Club: headline', type: 'string', group: 'copy', fieldset: 'fsProClub',
+      description: 'The headline of the Pro Club signup box on product pages.' }),
+    defineField({ name: 'proClubText', title: 'Pro Club: text', type: 'text', rows: 2, group: 'copy', fieldset: 'fsProClub',
+      description: 'The signup box on product pages. Submissions go to the Newsletter platform.' }),
+
+    defineField({ name: 'newsHeadline', title: 'News: index headline', type: 'string', group: 'copy', fieldset: 'fsNews',
+      description: 'The big headline at the top of the news page (/news).' }),
+    defineField({ name: 'newsIntro', title: 'News: intro line', type: 'text', rows: 2, group: 'copy', fieldset: 'fsNews',
+      description: 'The line under the news page headline.' }),
+    defineField({ name: 'newsEmpty', title: 'News: empty-state text', type: 'string', group: 'copy', fieldset: 'fsNews',
+      description: 'Shown on the news page while no articles are published yet.' }),
+
+    defineField({ name: 'newsletterSuccess', title: 'Newsletter: success message', type: 'string', group: 'copy', fieldset: 'fsNewsletterCopy',
+      description: 'The thank-you line after a successful signup, wherever the form appears (footer, signup band, popup, landing pages).' }),
+
+    defineField({ name: 'produkterHeadline', title: 'Products page: headline', type: 'string', group: 'copy', fieldset: 'fsProducts',
+      description: 'The headline at the top of the product overview (/products). *word* = blue accent.' }),
+    defineField({ name: 'produkterIntro', title: 'Products page: intro', type: 'text', rows: 2, group: 'copy', fieldset: 'fsProducts',
+      description: 'The line under the products page headline.' }),
+
+    defineField({ name: 'butikkerHeadlineStores', title: 'Stores page: headline (stores tab)', type: 'string', group: 'copy', fieldset: 'fsStores',
+      description: 'The headline on the store finder (/stores) when the stores tab is active.' }),
+
+    defineField({ name: 'serviceHeadline', title: 'Service page: headline', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The headline at the top of the Service and Support page (/service). *word* = blue accent.' }),
+    defineField({ name: 'serviceIntro', title: 'Service page: intro', type: 'text', rows: 2, group: 'copy', fieldset: 'fsService',
+      description: 'The line under the Service page headline.' }),
+    defineField({ name: 'serviceGuaranteeHeading', title: 'Service: guarantee heading', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The heading of the guarantee block on the Service page.' }),
+    defineField({ name: 'serviceGuaranteeBody', title: 'Service: guarantee body', type: 'text', rows: 3, group: 'copy', fieldset: 'fsService',
+      description: 'The guarantee explanation on the Service page. Keep it identical to the printed guarantee terms.' }),
+    defineField({ name: 'serviceReturnsHeading', title: 'Service: returns heading', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The heading above the return steps on the Service page.' }),
+    defineField({ name: 'serviceReturnSteps', title: 'Service: return steps', type: 'array', group: 'copy', fieldset: 'fsService',
+      description: 'The numbered how-to-return steps on the Service page, in order.',
+      of: [{ type: 'object', name: 'step',
+        fields: [
+          defineField({ name: 'title', title: 'Step title', type: 'string' }),
+          defineField({ name: 'body', title: 'Step text', type: 'text', rows: 2 }),
+        ], preview: { select: { title: 'title', subtitle: 'body' } } }] }),
+    defineField({ name: 'serviceDocsHeading', title: 'Service: documents heading', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The heading above the document downloads on the Service page.' }),
+    defineField({ name: 'serviceDocs', title: 'Service: document links', type: 'array', group: 'copy', fieldset: 'fsService',
+      description: 'The downloadable documents listed on the Service page (guarantee terms, return form and the like).',
+      of: [{ type: 'object', name: 'doc',
+        fields: [
+          defineField({ name: 'label', title: 'Label', type: 'string' }),
+          defineField({ name: 'href', title: 'Link (path or https URL)', type: 'string' }),
+        ], preview: { select: { title: 'label', subtitle: 'href' } } }] }),
+    defineField({ name: 'serviceDocsPending', title: 'Service: documents pending note', type: 'text', rows: 2, group: 'copy', fieldset: 'fsService',
+      description: 'Shown in the documents block while no documents are linked yet.' }),
+    defineField({ name: 'serviceContactHeading', title: 'Service: contact heading', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The heading of the contact block on the Service page.' }),
+    defineField({ name: 'serviceContactBody', title: 'Service: contact body', type: 'text', rows: 3, group: 'copy', fieldset: 'fsService',
+      description: 'The contact text on the Service page. Include the phone number and hours here.' }),
+    defineField({ name: 'serviceFaqEyebrow', title: 'Service: FAQ eyebrow', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The small line above the FAQ heading on the Service page.' }),
+    defineField({ name: 'serviceFaqHeading', title: 'Service: FAQ heading', type: 'string', group: 'copy', fieldset: 'fsService',
+      description: 'The FAQ heading on the Service page. *word* = blue accent.' }),
+    defineField({ name: 'serviceFaq', title: 'Service: FAQ', type: 'array', group: 'copy', fieldset: 'fsService',
+      description: 'The questions and answers in the FAQ on the Service page, in order. Each can carry an optional link.',
+      of: [{ type: 'object', name: 'qa',
+        fields: [
+          defineField({ name: 'question', title: 'Question', type: 'string' }),
+          defineField({ name: 'answer', title: 'Answer', type: 'text', rows: 3 }),
+          defineField({ name: 'linkText', title: 'Link text (optional)', type: 'string' }),
+          defineField({ name: 'linkUrl', title: 'Link URL (optional)', type: 'string' }),
+        ], preview: { select: { title: 'question' } } }] }),
+
+    defineField({ name: 'supportIndexHeadline', title: 'Support index: headline', type: 'string', group: 'copy', fieldset: 'fsSupportIndex',
+      description: 'The headline at the top of the support overview (/support). *word* = blue accent.' }),
+    defineField({ name: 'supportIndexIntro', title: 'Support index: intro', type: 'text', rows: 2, group: 'copy', fieldset: 'fsSupportIndex',
+      description: 'The line under the support index headline.' }),
+
+    defineField({ name: 'fagHeadline', title: 'Trades page: headline', type: 'string', group: 'copy', fieldset: 'fsTrades',
+      description: 'The headline at the top of the trades overview (/trades). *word* = blue accent.' }),
+    defineField({ name: 'fagIntro', title: 'Trades page: intro', type: 'text', rows: 3, group: 'copy', fieldset: 'fsTrades',
+      description: 'The intro under the trades page headline.' }),
+
+    defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy', fieldset: 'fsNotFound',
+      description: 'The headline on the "page not found" page.' }),
+    defineField({ name: 'notFoundText', title: '404 page: text', type: 'string', group: 'copy', fieldset: 'fsNotFound',
+      description: 'The friendly line under the 404 headline that sends visitors somewhere useful.' }),
+
+    /* ── SEO + AI engines ── */
     defineField({
       name: 'seoTitle',
       title: 'SEO: site title',
@@ -114,16 +308,9 @@ export const siteSettings = defineType({
       validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
     }),
     defineField({
-      name: 'ogImage',
-      title: 'SEO: social share image path',
-      description: 'The site-wide fallback image for shared links (Open Graph), ideally 1200x630. This one is a file path a developer places in the codebase (e.g. /brand/og.jpg); ask the developer to swap it. Individual landing pages and articles can upload their own share image, which overrides this.',
-      type: 'string',
-      group: 'seo',
-    }),
-    defineField({
       name: 'seoPreview',
       title: 'Preview (live)',
-      description: 'How the site-wide defaults look in a Google result and a shared link. Built from the fields above as you type; nothing to fill in here.',
+      description: 'How the site-wide defaults look in a Google result and a shared link. Built from the SEO fields as you type (the shared-link image is the share image path on the Technical (developer) tab, managed by the developer); nothing to fill in here.',
       type: 'string',
       readOnly: true,
       group: 'seo',
@@ -139,134 +326,18 @@ export const siteSettings = defineType({
       group: 'seo',
     }),
 
-    defineField({
-      name: 'gtmId',
-      title: 'Google Tag Manager container ID',
-      description: 'Format GTM-XXXXXXX. Loads GTM on every page; leave empty to disable. Manage tags, pixels, analytics AND third-party chat widgets inside GTM, no deploy needed.',
-      type: 'string',
-      group: 'tracking',
-      validation: (r) =>
-        r.custom((v) => (!v || /^GTM-[A-Z0-9]+$/i.test(v) ? true : 'Must look like GTM-XXXXXXX')),
-    }),
-    defineField({
-      name: 'cookiebotId',
-      title: 'Cookiebot consent banner ID (CBID)',
-      description:
-        'From manage.cookiebot.com → your domain group ID (a UUID like 12345678-1234-1234-1234-123456789012). Shows the cookie consent banner site-wide and auto-blocks tracking until consent. Required before real traffic in the EU. Leave empty to disable.',
-      type: 'string',
-      group: 'tracking',
-      validation: (r) =>
-        r.custom((v) =>
-          !v || /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)
-            ? true
-            : 'Must be a Cookiebot CBID (UUID format)'
-        ),
-    }),
-
-    defineField({
-      name: 'newsletterStatus',
-      title: 'Connection status',
-      type: 'string',
-      readOnly: true,
-      group: 'newsletter',
-      components: { input: NewsletterStatusField },
-      description: 'Checked against the hosting environment as you open this tab. Nothing to fill in here.',
-    }),
-    defineField({
-      name: 'newsletterEnabled',
-      title: 'Newsletter signup on the site',
-      description: 'Shows the signup form in the footer (and enables the landing-page signup block). Configure the provider below before switching on.',
-      type: 'boolean',
-      initialValue: false,
-      group: 'newsletter',
-    }),
-    defineField({
-      name: 'newsletterProvider',
-      title: 'Email platform',
-      description: 'Where signups are sent. Pick your platform, then enter its keys in the fields that appear below. Keys are encrypted in your browser before saving, so it is safe to enter them here.',
-      type: 'string',
-      group: 'newsletter',
-      options: {
-        list: [
-          { title: 'Mailchimp', value: 'mailchimp' },
-          { title: 'Klaviyo', value: 'klaviyo' },
-          { title: 'Adobe Marketo', value: 'marketo' },
-          { title: 'Other (webhook, e.g. Zapier/Make)', value: 'webhook' },
-        ],
-        layout: 'radio',
-      },
-    }),
-
-    /* ── Provider credentials. Encrypted in the browser before saving (see
-       EncryptedSecretField); the dataset only ever stores ciphertext. Each is
-       shown only when its platform is selected. ── */
-    defineField({
-      name: 'mailchimpApiKey',
-      title: 'Mailchimp API key',
-      description: 'From Mailchimp → Account → Extras → API keys. Looks like 0123abcd…-us21 (the -usNN part matters).',
-      type: 'string',
-      group: 'newsletter',
-      components: { input: EncryptedSecretField },
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'mailchimp',
-    }),
-    defineField({
-      name: 'klaviyoApiKey',
-      title: 'Klaviyo private API key',
-      description: 'From Klaviyo → Settings → API keys → Create Private API Key (needs List access). Starts with pk_.',
-      type: 'string',
-      group: 'newsletter',
-      components: { input: EncryptedSecretField },
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'klaviyo',
-    }),
-    defineField({
-      name: 'marketoBaseUrl',
-      title: 'Marketo REST endpoint',
-      description: 'Your Marketo REST base URL, e.g. https://123-ABC-456.mktorest.com (Marketo → Admin → Web Services → REST API, without the /rest suffix).',
-      type: 'url',
-      group: 'newsletter',
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
-    }),
-    defineField({
-      name: 'marketoClientId',
-      title: 'Marketo Client ID',
-      description: 'From the LaunchPoint custom service (Marketo → Admin → LaunchPoint → your service → View Details).',
-      type: 'string',
-      group: 'newsletter',
-      components: { input: EncryptedSecretField },
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
-    }),
-    defineField({
-      name: 'marketoClientSecret',
-      title: 'Marketo Client Secret',
-      description: 'The Client Secret from the same LaunchPoint custom service.',
-      type: 'string',
-      group: 'newsletter',
-      components: { input: EncryptedSecretField },
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'marketo',
-    }),
-    defineField({
-      name: 'newsletterWebhookUrl',
-      title: 'Webhook URL',
-      description: 'The catch-hook URL from Zapier / Make (or any endpoint). Each signup is POSTed as JSON { email, source, at }.',
-      type: 'string',
-      group: 'newsletter',
-      components: { input: EncryptedSecretField },
-      hidden: ({ parent }) => parent?.newsletterProvider !== 'webhook',
-    }),
-    defineField({
-      name: 'newsletterListId',
-      title: 'Audience / list ID',
-      description: 'Mailchimp: the Audience ID. Klaviyo: the List ID. Marketo: the static list ID (optional). Webhook: not needed.',
-      type: 'string',
-      group: 'newsletter',
-      hidden: ({ parent }) => parent?.newsletterProvider === 'webhook',
-    }),
+    /* ── Newsletter: the per-language WORDS of the signup form and its popup
+       rules. The operational setup (on/off switch, provider choice, encrypted
+       keys, list ID, connection status) moved to the MARKET document
+       (Settings, then Markets) 2026-07-11: it is per-market, not per-language,
+       and Belgium's two language documents share one market. ── */
     defineField({
       name: 'newsletterHeadline',
       title: 'Footer signup headline',
       type: 'string',
       group: 'newsletter',
       initialValue: 'Sharp offers, no spam.',
+      description: 'The headline of the signup form in the footer. NOTE: the provider, its keys and the on/off switch now live on the Market document (Settings, then Markets); this tab holds only the per-language words and popup rules.',
     }),
     defineField({
       name: 'newsletterText',
@@ -275,6 +346,7 @@ export const siteSettings = defineType({
       rows: 2,
       group: 'newsletter',
       initialValue: 'The monthly lineup and the best of STROXX, straight to your inbox.',
+      description: 'The line under the signup headline in the footer.',
     }),
     defineField({
       name: 'newsletterButtonLabel',
@@ -282,6 +354,7 @@ export const siteSettings = defineType({
       type: 'string',
       group: 'newsletter',
       initialValue: 'Sign up',
+      description: 'The label on the signup button, wherever the form appears.',
     }),
     defineField({
       name: 'newsletterBandEnabled',
@@ -334,24 +407,14 @@ export const siteSettings = defineType({
       group: 'newsletter',
       initialValue: 'Unsubscribe anytime. We only write when it is worth your time.',
     }),
-    defineField({
-      name: 'chatEnabled',
-      title: 'Show "Talk to a specialist" chat',
-      description:
-        'OFF hides the chat button on the whole site (the floating blue pill). Independent of the AI toggle below.',
-      type: 'boolean',
-      initialValue: true,
-      group: 'integrations',
-    }),
-    defineField({
-      name: 'aiChatEnabled',
-      title: 'AI specialist chat',
-      description:
-        'ON: the chat answers free-form questions with AI (grounded in the site facts; requires the AI key in the hosting environment). OFF: the built-in scripted answers only. The scripted product/store/guarantee answers and the human handoff always remain.',
-      type: 'boolean',
-      initialValue: false,
-      group: 'integrations',
-    }),
+
+    /* Tracking + consent (gtmId, cookiebotId) moved to the MARKET document
+       (Settings, then Markets) 2026-07-11: one container and one CBID per
+       market, never per language. See the per-market tracking row in
+       DEPENDENCIES.md and scripts/migrate-market-ops.ts. */
+
+    /* ── Technical (developer): fields the developer manages. Editors can
+       read them but nothing here is part of the everyday content work. ── */
     defineField({
       name: 'pimFeedUrl',
       title: 'PIM: product feed URL (planned, not yet active)',
@@ -370,63 +433,13 @@ export const siteSettings = defineType({
       readOnly: true,
       group: 'integrations',
     }),
-
-    /* ── Microcopy: every small user-facing text on the site ── */
-    defineField({ name: 'footerAbout', title: 'Footer: about paragraph', type: 'text', rows: 3, group: 'copy',
-      description: 'The paragraph under the logo in the footer. Partner names (Meesenburg, Foussier, Lecot) become links automatically.' }),
-    defineField({ name: 'chatFabLabel', title: 'Chat: floating button label', type: 'string', group: 'copy' }),
-    defineField({ name: 'chatPanelHeadline', title: 'Chat: panel headline', type: 'string', group: 'copy' }),
-    defineField({ name: 'chatPanelText', title: 'Chat: panel text', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'chatGreeting', title: 'Chat: greeting message', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'chatFallback', title: 'Chat: fallback answer', type: 'text', rows: 2, group: 'copy',
-      description: 'Shown when neither the built-in answers nor the AI can help. Should offer the human handoff ("type yes").' }),
-    defineField({ name: 'proClubHeadline', title: 'Pro Club: headline', type: 'string', group: 'copy' }),
-    defineField({ name: 'proClubText', title: 'Pro Club: text', type: 'text', rows: 2, group: 'copy',
-      description: 'The signup box on product pages. Submissions go to the Newsletter platform.' }),
-    defineField({ name: 'newsHeadline', title: 'News: index headline', type: 'string', group: 'copy' }),
-    defineField({ name: 'newsIntro', title: 'News: intro line', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'newsEmpty', title: 'News: empty-state text', type: 'string', group: 'copy' }),
-    defineField({ name: 'newsletterSuccess', title: 'Newsletter: success message', type: 'string', group: 'copy' }),
-    defineField({ name: 'produkterHeadline', title: 'Products page: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
-    defineField({ name: 'produkterIntro', title: 'Products page: intro', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'butikkerHeadlineStores', title: 'Stores page: headline (stores tab)', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceHeadline', title: 'Service page: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
-    defineField({ name: 'serviceIntro', title: 'Service page: intro', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'serviceGuaranteeHeading', title: 'Service: guarantee heading', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceGuaranteeBody', title: 'Service: guarantee body', type: 'text', rows: 3, group: 'copy' }),
-    defineField({ name: 'serviceReturnsHeading', title: 'Service: returns heading', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceReturnSteps', title: 'Service: return steps', type: 'array', group: 'copy',
-      of: [{ type: 'object', name: 'step',
-        fields: [
-          defineField({ name: 'title', title: 'Step title', type: 'string' }),
-          defineField({ name: 'body', title: 'Step text', type: 'text', rows: 2 }),
-        ], preview: { select: { title: 'title', subtitle: 'body' } } }] }),
-    defineField({ name: 'serviceDocsHeading', title: 'Service: documents heading', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceDocs', title: 'Service: document links', type: 'array', group: 'copy',
-      of: [{ type: 'object', name: 'doc',
-        fields: [
-          defineField({ name: 'label', title: 'Label', type: 'string' }),
-          defineField({ name: 'href', title: 'Link (path or https URL)', type: 'string' }),
-        ], preview: { select: { title: 'label', subtitle: 'href' } } }] }),
-    defineField({ name: 'serviceDocsPending', title: 'Service: documents pending note', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'serviceContactHeading', title: 'Service: contact heading', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceContactBody', title: 'Service: contact body', type: 'text', rows: 3, group: 'copy', description: 'Include the phone number and hours here.' }),
-    defineField({ name: 'serviceFaqEyebrow', title: 'Service: FAQ eyebrow', type: 'string', group: 'copy' }),
-    defineField({ name: 'serviceFaqHeading', title: 'Service: FAQ heading', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
-    defineField({ name: 'serviceFaq', title: 'Service: FAQ', type: 'array', group: 'copy',
-      of: [{ type: 'object', name: 'qa',
-        fields: [
-          defineField({ name: 'question', title: 'Question', type: 'string' }),
-          defineField({ name: 'answer', title: 'Answer', type: 'text', rows: 3 }),
-          defineField({ name: 'linkText', title: 'Link text (optional)', type: 'string' }),
-          defineField({ name: 'linkUrl', title: 'Link URL (optional)', type: 'string' }),
-        ], preview: { select: { title: 'question' } } }] }),
-    defineField({ name: 'supportIndexHeadline', title: 'Support index: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
-    defineField({ name: 'supportIndexIntro', title: 'Support index: intro', type: 'text', rows: 2, group: 'copy' }),
-    defineField({ name: 'fagHeadline', title: 'Trades page: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
-    defineField({ name: 'fagIntro', title: 'Trades page: intro', type: 'text', rows: 3, group: 'copy' }),
-    defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy' }),
-    defineField({ name: 'notFoundText', title: '404 page: text', type: 'string', group: 'copy' }),
+    defineField({
+      name: 'ogImage',
+      title: 'SEO: social share image path',
+      description: 'The site-wide fallback image for shared links (Open Graph), ideally 1200x630. This one is a file path a developer places in the codebase (e.g. /brand/og.jpg); ask the developer to swap it, which is why it sits on this Technical tab. The live preview on the SEO + AI engines tab shows it in the shared-link card. Individual landing pages and articles can upload their own share image, which overrides this.',
+      type: 'string',
+      group: 'integrations',
+    }),
   ],
   preview: {
     select: { language: 'language' },

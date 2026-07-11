@@ -2,11 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, X } from 'lucide-react';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 /** Newsletter signup UI: the form, the designed band above the footer, and
  *  the popup with behavior rules. Copy and rules come from Site settings
  *  (passed as props from the layout); submissions go to /api/newsletter,
- *  which speaks whichever email platform the market chose. */
+ *  which speaks whichever email platform the market chose on ITS Market doc.
+ *  The layout passes the current market code down and the form POSTs it
+ *  (validated server-side against the market registry, same pattern as the
+ *  specialist chat), so signups land in this market's list, never another's. */
 
 export type NewsletterCopy = {
   headline: string;
@@ -20,15 +24,23 @@ const DONE_KEY = 'sx-nl-done';
 
 export function NewsletterForm({
   copy,
+  market,
   center = false,
   onDone,
 }: {
   copy: NewsletterCopy;
+  market?: string;
   center?: boolean;
   onDone?: () => void;
 }) {
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle');
+  /* Market code for the POST: explicit prop first (the layout passes it to the
+     band and the popup, which mounts outside the provider), else the dealer
+     context, same source SpecialistChat uses for /api/chat. International has
+     no dealer, sends nothing, and the API falls back to the reference market. */
+  const { currentDealer } = useDealerChooser();
+  const marketCode = market ?? currentDealer?.code;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +50,7 @@ export function NewsletterForm({
       const r = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, company: '' }),
+        body: JSON.stringify({ email, company: '', market: marketCode }),
       });
       if (r.ok) {
         setState('done');
@@ -99,7 +111,7 @@ export function NewsletterForm({
 }
 
 /** The designed full-width signup band, rendered above the footer. */
-export function NewsletterBand({ copy }: { copy: NewsletterCopy }) {
+export function NewsletterBand({ copy, market }: { copy: NewsletterCopy; market?: string }) {
   return (
     <section aria-label="Newsletter" className="relative">
       <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 70% at 50% 100%, rgba(0,136,194,0.13), transparent 70%)' }} />
@@ -110,7 +122,7 @@ export function NewsletterBand({ copy }: { copy: NewsletterCopy }) {
           <p className="text-fog text-lg leading-relaxed max-w-md">{copy.text}</p>
         </div>
         <div className="lg:pl-8">
-          <NewsletterForm copy={copy} />
+          <NewsletterForm copy={copy} market={market} />
         </div>
       </div>
     </section>
@@ -122,11 +134,13 @@ export function NewsletterBand({ copy }: { copy: NewsletterCopy }) {
  *  already signed up, and never inside the Studio preview. */
 export function NewsletterPopup({
   copy,
+  market,
   delaySeconds,
   scrollPercent,
   frequencyDays,
 }: {
   copy: NewsletterCopy;
+  market?: string;
   delaySeconds: number;
   scrollPercent: number;
   frequencyDays: number;
@@ -213,7 +227,7 @@ export function NewsletterPopup({
           <div className="eyebrow mb-4">Newsletter</div>
           <h3 className="h-display text-white text-3xl leading-tight mb-3">{copy.headline}</h3>
           <p className="text-fog leading-relaxed mb-7">{copy.text}</p>
-          <NewsletterForm copy={copy} onDone={() => setTimeout(dismiss, 2500)} />
+          <NewsletterForm copy={copy} market={market} onDone={() => setTimeout(dismiss, 2500)} />
         </div>
       </div>
     </div>

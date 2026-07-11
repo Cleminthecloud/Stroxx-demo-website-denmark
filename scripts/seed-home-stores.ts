@@ -287,8 +287,9 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   llmsTxt: LLMS_FALLBACK,
   chatEnabled: true,
   aiChatEnabled: false,
-  newsletterEnabled: false,
-  newsletterProvider: 'mailchimp',
+  /* No newsletterEnabled / newsletterProvider here: the newsletter OPERATIONS
+     (on/off, provider, keys, list ID) live on the MARKET docs since
+     2026-07-11. Only the per-language form words + popup rules stay below. */
   newsletterHeadline: 'Sharp offers, no spam.',
   newsletterText: 'The monthly lineup and the sharpest prices, straight to your inbox.',
   newsletterButtonLabel: 'Sign up',
@@ -310,8 +311,19 @@ async function run() {
   }
   /* Retired fields (dealer identity/contact moved to the market docs) + DK
      values that must not sit on the dealer-neutral English base: actively
-     dropped so old data can't linger from earlier seeds or editor input. */
-  for (const k of ['retailerName', 'retailerLogo', 'retailerLogoHref', 'supportPhone', 'legalLine', 'supportHours']) {
+     dropped so old data can't linger from earlier seeds or editor input.
+     The second batch is the per-market OPERATIONS moved to the market docs
+     2026-07-11 (tracking + newsletter provider/keys). RUN THE MIGRATION FIRST:
+     scripts/migrate-market-ops.ts (npm run migrate:market-ops) copies these
+     values onto the market docs; only then may this seed clean them off the
+     siteSettings doc, otherwise the live GTM/Cookiebot/newsletter config is
+     lost with nothing having inherited it. */
+  for (const k of [
+    'retailerName', 'retailerLogo', 'retailerLogoHref', 'supportPhone', 'legalLine', 'supportHours',
+    'gtmId', 'cookiebotId', 'newsletterStatus', 'newsletterEnabled', 'newsletterProvider',
+    'mailchimpApiKey', 'klaviyoApiKey', 'marketoBaseUrl', 'marketoClientId', 'marketoClientSecret',
+    'newsletterWebhookUrl', 'newsletterListId',
+  ]) {
     delete settingsDoc[k];
   }
   const tx = client.transaction();

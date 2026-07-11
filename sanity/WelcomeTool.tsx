@@ -149,7 +149,7 @@ The Guide tab answers almost everything. Questions? Just reply to this message.`
         </div>
         <div style={{ border: '1px solid rgba(128,128,128,0.3)', borderRadius: 12, padding: 14 }}>
           <div style={S.roleName}>Administrator</div>
-          <div style={S.roleText}>Everything, including members and Site settings. Keep this circle small; tracking and integration settings live there.</div>
+          <div style={S.roleText}>Everything, including members and Site settings. Keep this circle small; the tracking and technical (developer) settings live there.</div>
         </div>
       </div>
 

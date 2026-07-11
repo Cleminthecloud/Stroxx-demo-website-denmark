@@ -1,11 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useFormValue } from 'sanity';
 
-/** Traffic light for the newsletter connection, shown at the top of the Site
- *  settings Newsletter tab. Asks /api/newsletter/status (server-side check
- *  against the hosting-environment key; no key material ever reaches the
- *  browser). The field stores nothing. */
+/** Traffic light for the newsletter connection, shown at the top of the
+ *  MARKET document's newsletter box. Asks /api/newsletter/status with this
+ *  market's URL code (server-side check against the market's CMS key or the
+ *  hosting-environment fallback; no key material ever reaches the browser).
+ *  The field stores nothing. */
 
 type S = {
   provider: string;
@@ -40,18 +42,21 @@ const DOT: Record<S['status'], string> = {
 export default function NewsletterStatusField() {
   const [s, setS] = useState<S | null>(null);
   const [busy, setBusy] = useState(false);
+  /* This market's URL code (the slug field on the same document), so the
+     status check runs against THIS market's provider config. */
+  const code = (useFormValue(['code']) as { current?: string } | undefined)?.current || '';
 
   const load = useCallback(async () => {
     setBusy(true);
     try {
-      const r = await fetch('/api/newsletter/status');
+      const r = await fetch(`/api/newsletter/status${code ? `?market=${encodeURIComponent(code)}` : ''}`);
       if (r.ok) setS(await r.json());
     } catch {
       /* leave previous state */
     } finally {
       setBusy(false);
     }
-  }, []);
+  }, [code]);
 
   useEffect(() => {
     load();

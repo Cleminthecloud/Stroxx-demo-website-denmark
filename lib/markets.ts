@@ -16,6 +16,22 @@ export type Market = {
   legalLine?: string;
   legalLinks?: MarketLegalLink[];
   order?: number;
+  /* Per-market OPERATIONS (moved from siteSettings 2026-07-11): tracking +
+     consent IDs and the newsletter provider config. Not seeded from code, so
+     the fallback registry below never carries them; editors enter them on the
+     Market doc in the Studio. The *ApiKey / *Client* / WebhookUrl fields hold
+     RSA ciphertext only (see lib/newsletter-secrets.ts). */
+  gtmId?: string;
+  cookiebotId?: string;
+  newsletterEnabled?: boolean;
+  newsletterProvider?: string;
+  newsletterListId?: string;
+  mailchimpApiKey?: string;
+  klaviyoApiKey?: string;
+  marketoBaseUrl?: string;
+  marketoClientId?: string;
+  marketoClientSecret?: string;
+  newsletterWebhookUrl?: string;
 };
 
 /** Fallback market registry (same seam philosophy as lib/stores.ts). The
@@ -33,3 +49,22 @@ export const markets: Market[] = [
 export const referenceMarket = (list: Market[] = markets): Market | undefined => list.find((m) => m.isReference) ?? list[0];
 export const activeMarkets = (list: Market[] = markets): Market[] => list.filter((m) => m.active);
 export const marketByCode = (code: string, list: Market[] = markets): Market | undefined => list.find((m) => m.code === code);
+
+/** Market codes are 2 to 5 lowercase letters, same rule as the market schema's
+ *  slug validation (dk, de, fr, be, int). */
+export const MARKET_CODE_RE = /^[a-z]{2,5}$/;
+
+/** Resolve which market's OPERATIONS (tracking + newsletter provider config)
+ *  a request belongs to, from a CLIENT-SENT market code (middleware skips
+ *  /api, so headers cannot tell us; same pattern as /api/chat). The code is
+ *  untrusted input: anything that is not a well-formed, registered code falls
+ *  back to the REFERENCE market, never to another dealer market. The reference
+ *  market normally carries no tracking or newsletter credentials, so a missing
+ *  or bogus code can never reach another market's keys. */
+export function resolveOpsMarket(code: unknown, list: Market[] = markets): Market | undefined {
+  if (typeof code === 'string' && MARKET_CODE_RE.test(code)) {
+    const m = marketByCode(code, list);
+    if (m) return m;
+  }
+  return referenceMarket(list);
+}

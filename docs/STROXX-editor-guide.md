@@ -143,6 +143,11 @@ Also worth knowing: the **Contact form** block (in the landing-page "Add item" m
 
 Buy is market-aware, and you do not set it per button. On a single-dealer market the Buy buttons link straight to that market's dealer: Denmark to Carl Ras, Germany to Meesenburg, France to Foussier, Belgium to Lecot. On the international site there is no single dealer, so every Buy opens a **Where to buy** chooser that lists all the dealers with their phone and website, and the homepage carries the same directory as a section. Dealer names and contact details live on the **Market** documents; they are looked after by the developer (a change is pushed to the CMS with a short seed step), so if a dealer detail is ever wrong, tell the developer rather than hunting for a field. The guarantee seal, the guarantee text and page copy stay yours to edit as normal.
 
+The Market document also carries your market's operations, and these two boxes ARE editable in the Studio (Settings, then Markets, open your market):
+
+- **Tracking + consent**: the market's Google Tag Manager container ID and its Cookiebot consent banner ID. One market, one set of IDs; Belgium's Dutch and French pages share them. The consent banner gates the tracking automatically. The international version normally leaves both empty.
+- **Newsletter (provider + keys)**: the signup on/off switch, the email platform (Mailchimp, Klaviyo, Adobe Marketo or a webhook), its keys (encrypted in your browser before saving) and the audience/list ID, with a connection status light at the top. The signup form's words stay per language in Site settings (section 10a).
+
 One writing rule that keeps the international site honest: **the English version of any page is also the international site**, so English button labels and copy never name one dealer ("Where to buy", not "Buy at Carl Ras"). Your own market's language version is exactly where the dealer name belongs.
 
 ## 7d. Languages: translating a page
@@ -157,39 +162,38 @@ The document **Monthly lineup** drives the Tool of the Month page and the homepa
 2. Work through its four boxes, top to bottom: **When it goes live** (month name as it should read on the page, four-digit year, and the optional go-live date), **Hero of the month** (the hero SKU plus its claims/cases/FAQ, the story), **The five winners** (the five SKUs, drag order is display order), and **News + films**.
 3. Publish. Homepage and /monthly update together, same lineup everywhere.
 
-## 9. Site settings (footer, hours, tracking)
+## 9. Site settings (footer, hours, microcopy)
 
-Content → **Site settings**. One document that feeds the whole site, organized in tabs (Contact + legal, Menu + footer, SEO + AI engines, Tracking + consent, Integrations):
+Content → **Site settings**. One document per language that feeds the whole site, organized in tabs. It opens on the everyday tab, Menu + footer; the others follow in order of how often you need them (Microcopy, SEO + AI engines, Newsletter, Technical (developer)):
 
-- **Dealer name, customer service phone, footer legal line and dealer logo come from the MARKET document** (Settings → Markets), not from here: edit the market and the footer, mobile menu, chat handoff and guarantee pop-up all update together. The international version deliberately has no dealer, so those spots simply hide there.
-- **Customer service hours**: the localized hours text under the phone in the footer. This is per-language display copy, which is why it lives here rather than on the market. Leave it empty on the international version. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
-- **News section enabled**: markets without a blog switch news off here; /news and every article return "page not found" and leave the sitemap. Remove News menu/footer links too.
+- **Dealer name, customer service phone, footer legal line and dealer logo come from the MARKET document** (Settings → Markets), not from here: edit the market and the footer, mobile menu, chat handoff and guarantee pop-up all update together. The international version deliberately has no dealer, so those spots simply hide there. **The market's tracking IDs (GTM, Cookiebot) and its newsletter setup (provider, keys, on/off) also live on the Market document** since these are per market, not per language; sections 10 and 10a explain where.
+- **Menu and footer links** (Menu + footer tab): the top navigation (first four show on desktop, all in the mobile menu) and the footer's Pages and Buy columns. Leave empty to use the built-in lists. The header logo override lives here too.
+- **Customer service hours** (Menu + footer tab): the localized hours text under the dealer's phone in the footer. This is per-language display copy, which is why it lives here rather than on the market. Leave it empty on the international version, the seed keeps the English base dealer-neutral by clearing it. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
+- **News section enabled** (Menu + footer tab): markets without a blog switch news off here; /news and every article return "page not found" and leave the sitemap. Remove News menu/footer links too.
 - **The guarantee's full terms are their own page**: the Legal page document with the slug "satisfaction-guarantee" renders at /satisfaction-guarantee, and every "Read the full terms" link on the site points there. Edit the text like any other page; each market gets its own translated version. (This replaced the old static PDF, whose address now forwards to the page.)
-- **Microcopy tab**: every small text on the site lives here: the footer's about paragraph (partner names turn into links automatically), the chat's button label, panel copy, greeting and fallback answer, the Pro Club box on product pages, the page headlines and intros for Products, Stores, Service and Trades (*word* = blue accent), the whole Service page (guarantee, returns, FAQ, documents and contact copy) and the Support index headline and intro, the news page headline and empty state, the newsletter success message, and even the 404 page. Change the words, publish, done.
-- **Google Tag Manager container ID**: see next section.
-- **PIM product feed URL and DAM image base URL**: where this market's product data and images come from. URLs only, API keys and secrets never go in the CMS, they live in the secured hosting environment.
-- **Menu and footer links**: the top navigation (first four show on desktop, all in the mobile menu) and the footer's Pages and Buy columns. Leave empty to use the built-in lists.
-- **SEO: site title, description and share image**: the defaults Google and social shares use when a page has no specific ones. Individual landing pages set their own in their SEO fields.
-- **AEO: llms.txt content**: the brand summary AI answer engines (ChatGPT, Perplexity, Google AI) read at /llms.txt. Keep the facts identical to the site, consistency is what makes engines quote you. This same text is also the brain of the site's own AI chat (see section 10b).
-- **Cookie consent banner (Cookiebot)**: paste your Cookiebot ID (CBID from manage.cookiebot.com) and the consent banner appears site-wide, auto-blocking tracking until visitors consent. Required before real traffic in the EU. Empty = off.
-- **Chat visibility**: "Show Talk to a specialist chat" hides or shows the floating chat button on the whole site. The separate "AI specialist chat" toggle controls whether it answers with AI (section 10b).
+- **Microcopy tab**: every small text on the site lives here, grouped into collapsible boxes by the page it appears on (Footer, Chat, Pro Club, News page, Newsletter form, Products page, Stores page, Service page, Support index, Trades page, 404 page). Open the box for the page you are editing: the footer's about paragraph (partner names turn into links automatically), the chat switches plus its button label, panel copy, greeting and fallback answer, the Pro Club box on product pages, the page headlines and intros for Products, Stores, Service and Trades (*word* = blue accent), the whole Service page (guarantee, returns, FAQ, documents and contact copy), the Support index headline and intro, the news page headline and empty state, the newsletter success message, and even the 404 page. Change the words, publish, done.
+- **Chat switches** (Microcopy tab, Chat box, next to the chat copy): "Show Talk to a specialist chat" hides or shows the floating chat button on the whole site. The separate "AI specialist chat" toggle controls whether it answers with AI (section 10b).
+- **SEO: site title and description** (SEO + AI engines tab): the defaults Google and social shares use when a page has no specific ones. Individual landing pages set their own in their SEO fields. The site-wide share image is a developer-managed file path on the Technical (developer) tab; the live preview here still shows it.
+- **AEO: llms.txt content** (SEO + AI engines tab): the brand summary AI answer engines (ChatGPT, Perplexity, Google AI) read at /llms.txt. Keep the facts identical to the site, consistency is what makes engines quote you. This same text is also the brain of the site's own AI chat (see section 10b).
+- **Newsletter tab**: the signup form's words for this language (headline, text, button label, consent line) plus the band and popup switches and the popup rules. The provider, its keys and the master on/off switch live on the Market document (section 10a).
+- **Technical (developer) tab**: the developer's shelf, not part of everyday editing. It holds the planned PIM product feed URL and DAM image base URL (where this market's product data and images will come from once those integrations ship; URLs only, API keys and secrets never go in the CMS, they live in the secured hosting environment) and the site-wide share image path. If something there looks wrong, tell the developer rather than editing it.
 
 ## 10. Analytics and tracking (GTM)
 
-The site loads Google Tag Manager when a container ID is set in Site settings. That means marketing can add and change tags without anyone touching the website:
+The site loads Google Tag Manager when a container ID is set on your market's **Market** document. Per market on purpose: each market has its own container, and Belgium's two languages share one. That means marketing can add and change tags without anyone touching the website:
 
 1. Create a container at tagmanager.google.com (or use the existing one). Copy the ID, it looks like `GTM-XXXXXXX`.
-2. Studio → Content → Site settings → paste it into **Google Tag Manager container ID** → Publish.
+2. Studio → Content → Settings → **Markets** → open your market → **Tracking + consent** box → paste it into **Google Tag Manager container ID** → Publish.
 3. From now on, everything happens inside GTM: GA4, Meta pixel, LinkedIn tag, conversion events. No deploys, no developer.
 4. Leave the field empty to switch tracking off entirely.
 
 What to measure first: clicks on the **Buy** button (the site's money event, market-aware: it links to the local dealer, or opens the "Where to buy" chooser on the international site, and the dealer links carry UTM tags), store-finder usage, and visits to the guarantee terms page.
 
-Before full launch, a cookie consent banner (CMP) with Google Consent Mode v2 goes in front of GTM. That is a planned build step.
+The cookie consent banner sits right next to it: paste your market's Cookiebot ID (CBID from manage.cookiebot.com) into **Cookiebot consent banner ID** in the same Tracking + consent box, and the banner appears on your market's pages, auto-blocking tracking until visitors consent (it gates GTM). Required before real traffic in the EU. Empty = off. The international version normally leaves both fields empty.
 
 ## 10a. Newsletter signups
 
-Site settings has a **Newsletter** tab. Each market chooses its own email platform there: Mailchimp, Klaviyo, Adobe Marketo, or "Other" (a webhook for anything else, e.g. via Zapier). Enter the audience/list ID, write the headline, text, button and consent line, and switch it on. The matching API key is set once by your administrator in the hosting environment, never in the CMS.
+The newsletter is split by ownership. **The setup is per market** and lives on the Market document (Settings → Markets → your market → **Newsletter (provider + keys)** box): choose the email platform (Mailchimp, Klaviyo, Adobe Marketo, or "Other", a webhook for anything else, e.g. via Zapier), enter its key (encrypted in your browser before saving, so it is safe to enter there), set the audience/list ID and switch the signup on. A status light at the top of the box tells you whether the connection works. Belgium sets this up once; both languages use it. **The words are per language** and stay in Site settings → Newsletter tab: headline, text, button label, consent line, plus the band and popup switches and the popup rules.
 
 Where signups appear:
 
@@ -197,7 +201,7 @@ Where signups appear:
 - **The popup**: optional, with behavior rules you control: show after N seconds or after scrolling N% (whichever comes first), at most once per N days, and never again for people who subscribed. Off by default, popups convert but annoy, use with taste.
 - **The landing-page block**: add a "Newsletter signup" section to any campaign page, with its own copy.
 
-All three send to the same platform. Switching provider later is changing one radio button (plus the admin swapping the key).
+All three send to the same platform, your market's. Switching provider later is changing one radio button on the Market document and entering the new platform's key in the fields that appear.
 
 ## 10b. The AI assistant, and how to train it
 
@@ -210,7 +214,7 @@ The "Talk to a specialist" chat is a hybrid. Practical questions (guarantee, nea
 
 Rules it always follows: it never invents prices, stock or specifications (it points to the shop instead), it stays on topic, and it offers the human handoff for anything sensitive. Test it after editing: open the chat and ask the question a customer would.
 
-Switches: "Show Talk to a specialist chat" (the button itself) and "AI specialist chat" (AI on/off; when off, the built-in answers still work). The AI also requires a one-time API key set up by your administrator in the hosting environment. Already have a chat product like Intercom or Zendesk? Its widget can be added through Google Tag Manager instead, no code needed; just switch the built-in chat off here.
+Switches: "Show Talk to a specialist chat" (the button itself) and "AI specialist chat" (AI on/off; when off, the built-in answers still work), both in Site settings → Microcopy → Chat, right next to the chat's copy. The AI also requires a one-time API key set up by your administrator in the hosting environment. Already have a chat product like Intercom or Zendesk? Its widget can be added through Google Tag Manager instead, no code needed; just switch the built-in chat off here.
 
 ## 10c. The Article AI (ideas, drafts and LinkedIn posts)
 
@@ -310,7 +314,7 @@ The whole invite flow, start to finish:
 2. Press **Invite members**, enter their work email, and choose the role:
    - **Editor** (pick this for everyone on the content team): creates, edits and publishes content.
    - **Viewer**: read-only, for stakeholders who want to look without touching.
-   - **Administrator**: everything, including members and Site settings (tracking and integrations live there), keep this circle small.
+   - **Administrator**: everything, including members and Site settings (the tracking and technical (developer) settings live there), keep this circle small.
 3. **Send them the welcome message**: back in the Welcome tab, press "Copy welcome message" and send it by mail or Teams. It tells them what to expect and links straight to the Welcome tab, so they onboard themselves in minutes.
 4. **They accept the Sanity email invite** and log in, with the same email address the invite was sent to (Google login works). First stop: the Welcome tab, then they're editing.
 

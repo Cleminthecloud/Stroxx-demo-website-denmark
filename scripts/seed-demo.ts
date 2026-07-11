@@ -14,7 +14,11 @@ const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 const k = (n: number) => `seed-${n}`;
 
 /* Dealer identity/contact lives on the MARKET docs (seed:markets), and this is
-   the dealer-neutral ENGLISH BASE settings doc — no retailer/phone/legal here. */
+   the dealer-neutral ENGLISH BASE settings doc: no retailer/phone/legal here.
+   BOOTSTRAP ONLY: written with createIfNotExists, never createOrReplace. The
+   full settings body is owned by seed:more (merge-preserving); replacing the
+   doc from here would WIPE every editor-entered value incl. the encrypted
+   newsletter keys. */
 const siteSettings = {
   _id: 'siteSettings',
   _type: 'siteSettings',
@@ -243,7 +247,7 @@ const monthlyLineup: Record<string, unknown> = {
 
 async function run() {
   const tx = client.transaction();
-  tx.createOrReplace(siteSettings as any);
+  tx.createIfNotExists(siteSettings as any);
   /* duplicate guard: seed-proevdet may own the try-it page under another
      _id — two docs with one slug would make getLandingPage/[0] nondeterministic */
   const slugOwner = (await client.fetch(

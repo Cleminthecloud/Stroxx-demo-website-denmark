@@ -24,7 +24,6 @@ export type SiteSettings = {
      hours text is per-locale siteSettings. See DEPENDENCIES.md dealer-contact row. */
   logo?: unknown; // Sanity image, optional header-logo override; render via assetUrl()
   supportHours?: string;
-  gtmId?: string;
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: string;
@@ -35,19 +34,12 @@ export type SiteSettings = {
   footerBuyLinks?: NavLink[];
   pimFeedUrl?: string;
   damBaseUrl?: string;
-  cookiebotId?: string;
   chatEnabled?: boolean;
   aiChatEnabled?: boolean;
-  newsletterEnabled?: boolean;
-  newsletterProvider?: string;
-  newsletterListId?: string;
-  /* provider credentials — encrypted ciphertext (see lib/newsletter-secrets) */
-  mailchimpApiKey?: string;
-  klaviyoApiKey?: string;
-  marketoBaseUrl?: string;
-  marketoClientId?: string;
-  marketoClientSecret?: string;
-  newsletterWebhookUrl?: string;
+  /* Per-market OPERATIONS (gtmId, cookiebotId, newsletterEnabled, the provider
+     choice, keys and list ID) live on the Market doc (lib/markets.ts +
+     getMarkets), moved 2026-07-11. Only the per-language newsletter WORDS and
+     popup rules stay here. See DEPENDENCIES.md. */
   newsletterHeadline?: string;
   newsletterText?: string;
   newsletterButtonLabel?: string;
@@ -101,7 +93,7 @@ export async function getMarkets(): Promise<Market[]> {
   try {
     const { data } = await sanityFetch({
       query:
-        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLine, legalLinks[]{ label, href }, order }',
+        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLine, legalLinks[]{ label, href }, order, gtmId, cookiebotId, newsletterEnabled, newsletterProvider, newsletterListId, mailchimpApiKey, klaviyoApiKey, marketoBaseUrl, marketoClientId, marketoClientSecret, newsletterWebhookUrl }',
     });
     return Array.isArray(data) && data.length ? (data as Market[]) : fallbackMarkets;
   } catch {

@@ -1,15 +1,19 @@
 'use client';
 import { useState } from 'react';
 import GlassButton from '@/components/GlassButton';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 /** Pro Club signup on product pages. Real submissions: posts to
  *  /api/newsletter, which forwards to whichever email platform the market
- *  chose in Site settings → Newsletter (Mailchimp/Klaviyo/Marketo/webhook).
- *  Requires the newsletter to be enabled there; otherwise the form reports
- *  it is not open yet instead of pretending. */
+ *  chose on its MARKET document (Mailchimp/Klaviyo/Marketo/webhook). The
+ *  market code rides along from the dealer context, same as SpecialistChat
+ *  posting to /api/chat, so signups land in THIS market's list. Requires the
+ *  newsletter to be enabled on the market; otherwise the form reports it is
+ *  not open yet instead of pretending. */
 export default function ProClubSignup({ headline, text }: { headline?: string; text?: string }) {
   const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle');
   const [email, setEmail] = useState('');
+  const { currentDealer } = useDealerChooser();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +23,7 @@ export default function ProClubSignup({ headline, text }: { headline?: string; t
       const r = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), company: '' }),
+        body: JSON.stringify({ email: email.trim(), company: '', market: currentDealer?.code }),
       });
       if (r.ok) {
         setState('done');

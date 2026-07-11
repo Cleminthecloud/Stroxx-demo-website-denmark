@@ -2,18 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
-import { getSiteSettings } from '@/lib/cms';
+import { getMarkets } from '@/lib/cms';
+import { resolveOpsMarket } from '@/lib/markets';
 import { resolveSecret } from '@/lib/newsletter-secrets';
 
-/** Connection status for the Site settings newsletter tab: is the chosen
- *  provider's API key present in the hosting environment, and does the
- *  provider answer? Never returns key material or provider error bodies,
- *  only a traffic-light status. Result cached per instance for 60s so the
- *  Studio can't hammer the providers. */
+/** Connection status for the MARKET document's newsletter box (Studio-facing,
+ *  rendered by sanity/NewsletterStatusField): is the chosen provider's key
+ *  present (CMS ciphertext or hosting environment), and does the provider
+ *  answer? The Studio sends ?market=<code> (the market doc's URL code);
+ *  validated against the registry, missing or bogus falls back to the
+ *  reference market, whose config is normally empty. Never returns key
+ *  material or provider error bodies, only a traffic-light status. Results
+ *  cached per market per instance for 60s so the Studio can't hammer the
+ *  providers. */
 
 export const maxDuration = 15;
 
 type Status = {
+  market: string;
   provider: string;
   enabled: boolean;
   listConfigured: boolean;
@@ -21,12 +27,13 @@ type Status = {
   checkedAt: string;
 };
 
-let cache: { at: number; value: Status } | null = null;
+const cache = new Map<string, { at: number; value: Status }>();
 
-async function check(): Promise<Status> {
-  const s = await getSiteSettings();
+async function check(marketCode: string | null): Promise<Status> {
+  const s = resolveOpsMarket(marketCode ?? undefined, await getMarkets());
   const provider = stegaClean(s?.newsletterProvider) || '';
   const base: Omit<Status, 'status'> = {
+    market: stegaClean(s?.code) || '',
     provider,
     enabled: s?.newsletterEnabled === true,
     listConfigured: Boolean(stegaClean(s?.newsletterListId)),
@@ -82,8 +89,11 @@ export async function GET(req: NextRequest) {
   if (!(await rateLimit(`nls:${clientIp(req.headers)}`, 10, 60000))) {
     return NextResponse.json({ error: 'rate-limited' }, { status: 429 });
   }
-  if (cache && Date.now() - cache.at < 60000) return NextResponse.json(cache.value);
-  const value = await check();
-  cache = { at: Date.now(), value };
+  const marketCode = req.nextUrl.searchParams.get('market');
+  const key = typeof marketCode === 'string' && /^[a-z]{2,5}$/.test(marketCode) ? marketCode : '';
+  const hit = cache.get(key);
+  if (hit && Date.now() - hit.at < 60000) return NextResponse.json(hit.value);
+  const value = await check(key || null);
+  cache.set(key, { at: Date.now(), value });
   return NextResponse.json(value);
 }

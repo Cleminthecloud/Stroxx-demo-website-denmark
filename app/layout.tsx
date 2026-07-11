@@ -119,23 +119,31 @@ const siteLd = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const draft = (await draftMode()).isEnabled;
-  /* GTM container from CMS siteSettings: tags/pixels/analytics change without
-     a deploy. Strict GTM-XXXX validation so a CMS string can never inject
-     arbitrary script. Production adds a CMP + Consent Mode v2 in front. */
   const settings = await getSiteSettings();
   const locale = await getLocale();
   const storeData = await getStores();
   const marketList = await getMarkets();
   const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
   const currentDealer = marketList.find((m) => m.code === locale.market && m.dealerName) ?? null;
-  const rawGtm = stegaClean(settings?.gtmId) || '';
+  /* The CURRENT market doc: per-market operations (GTM, Cookiebot, newsletter
+     on/off) read from it, so Belgium's two languages share one setup and no
+     locale ever inherits another market's IDs. Unknown code = the reference
+     market, which normally carries none of these. */
+  const currentMarket = marketList.find((m) => m.code === locale.market) ?? marketList.find((m) => m.isReference) ?? null;
+  /* GTM container from the current MARKET doc: tags/pixels/analytics change
+     without a deploy. Strict GTM-XXXX validation so a CMS string can never
+     inject arbitrary script. Cookiebot (below) gates GTM: consent first. */
+  const rawGtm = stegaClean(currentMarket?.gtmId) || '';
   const gtmId = /^GTM-[A-Z0-9]+$/i.test(rawGtm) ? rawGtm.toUpperCase() : null;
-  /* Cookiebot CMP from CMS: consent banner + auto-blocking of tracking until
-     consent (Consent Mode v2). Strict UUID validation, same reasoning as GTM. */
-  const rawCb = stegaClean(settings?.cookiebotId) || '';
+  /* Cookiebot CMP from the current MARKET doc: consent banner + auto-blocking
+     of tracking until consent (Consent Mode v2). Strict UUID validation, same
+     reasoning as GTM. */
+  const rawCb = stegaClean(currentMarket?.cookiebotId) || '';
   const cookiebotId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawCb) ? rawCb : null;
-  /* newsletter: band above the footer + optional rules-driven popup */
-  const nlOn = settings?.newsletterEnabled === true;
+  /* newsletter: the on/off switch is per-market (Market doc); the words and
+     popup rules are per-language (siteSettings). The forms POST the market
+     code so /api/newsletter uses THIS market's provider. */
+  const nlOn = currentMarket?.newsletterEnabled === true;
   const nlCopy = {
     headline: settings?.newsletterHeadline || 'Sharp offers, no spam.',
     text: settings?.newsletterText || 'The monthly lineup and the sharpest prices, straight to your inbox.',
@@ -196,7 +204,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             logoAlt={(settings?.logo as { alt?: string } | undefined)?.alt || undefined}
           />
           <div id="indhold">{children}</div>
-          {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} />}
+          {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} market={locale.market} />}
           <Footer />
           {/* editors can hide the chat entirely: Site settings → Integrations */}
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} copy={fabCopy} />}
@@ -211,6 +219,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {nlOn && settings?.newsletterPopupEnabled === true && (
           <NewsletterPopup
             copy={nlCopy}
+            market={locale.market}
             delaySeconds={settings?.newsletterPopupDelay ?? 8}
             scrollPercent={settings?.newsletterPopupScroll ?? 50}
             frequencyDays={settings?.newsletterPopupFrequencyDays ?? 14}

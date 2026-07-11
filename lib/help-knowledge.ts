@@ -28,15 +28,28 @@ The Content menu is grouped into labelled sections (not a flat A-Z list), in the
 order the site is built: Pages, Support & QR codes, Products, News, Social proof
 & media, Stores, then Settings and System at the bottom. Open a group to see the
 document types inside it. What's in each:
-- Site settings: global stuff, localized customer-service hours, top menu +
-  footer links, the header logo, SEO defaults, tracking (GTM + Cookiebot IDs),
-  newsletter setup, and microcopy. One document per language. NOTE: the dealer
-  name, customer service phone, footer legal line and dealer logo come from the
-  MARKET document (Settings group), not Site settings.
+- Site settings: global stuff, organized in tabs that open on Menu + footer
+  (the everyday one: header logo, menu and footer links, localized
+  customer-service hours), then Microcopy (every small text, grouped by the
+  page it appears on, including the chat switches and copy), SEO + AI engines,
+  Newsletter (ONLY the form's words and popup rules; the on/off switch,
+  provider and keys live on the Market document), and Technical (developer),
+  the last tab is the developer's, editors can leave it alone. One document
+  per language. NOTE: the dealer name, customer service phone, footer legal
+  line, dealer logo, tracking IDs and newsletter setup come from the MARKET
+  document (Settings group), not Site settings.
 - Market (Settings group): one per market (International, Denmark, Germany,
   France, Belgium): dealer name, the "Buy at" link, customer service phone,
-  the footer legal line and legal links. Maintained by the developer; the
-  footer, chat, mobile menu and guarantee pop-up all read from it.
+  the footer legal line and legal links, PLUS the market's operations in two
+  boxes: "Tracking + consent" (the Google Tag Manager container ID and the
+  Cookiebot consent banner ID) and "Newsletter (provider + keys)" (the signup
+  on/off switch, the email platform choice, its encrypted keys and the
+  audience/list ID, with a connection status light). One market document
+  covers all of that market's languages, so Belgium's Dutch and French pages
+  share one setup. The international market normally leaves tracking and
+  newsletter empty. Dealer identity is maintained by the developer; the
+  tracking and newsletter boxes are editable in the Studio. The footer, chat,
+  mobile menu and guarantee pop-up all read from this document.
 - Redirect (Support & QR codes group): old address to new address forwarding.
   The site creates these automatically when a page's slug changes on publish;
   editors rarely touch them by hand.
@@ -91,7 +104,7 @@ about 28px tall. Remove it to go back to the standard STROXX logo.
 
 ### Edit the guarantee sticker (the peeling seal)
 The peeling "satisfied or refunded" sticker is text you control. On the homepage
-it is the "Seal — line 1 / connector / line 2 / sub line" fields in the guarantee
+it is the "Seal: line 1 / connector / line 2 / sub line" fields in the guarantee
 section. You can also drop the sticker onto any landing page: add a section and
 pick "Guarantee seal (peeling sticker)", then edit its lines, tilt and peel depth
 right there. Each market edits its own, and the text auto-fits so it can never
@@ -119,10 +132,22 @@ the headline/excerpt). The share image falls back to the hero image if you do
 not set one. Related products show as a "Tools mentioned" row (first four).
 
 ### Newsletter
-Site settings, "Newsletter" group. Turn on the signup, pick the provider
-(Mailchimp / Klaviyo / Marketo / webhook), and enter its key, keys are
-encrypted in your browser before saving, so it is safe to enter them here. The
-status light at the top of the tab tells you if it is connected.
+Two places, split by ownership. THE SETUP lives on the Market document
+(Settings group, Markets, open your market): the "Newsletter (provider + keys)"
+box holds the on/off switch, the provider choice (Mailchimp / Klaviyo /
+Marketo / webhook), its keys (encrypted in your browser before saving, so it
+is safe to enter them there) and the audience/list ID; the status light at the
+top of the box tells you if it is connected. Belgium enters this once, both
+languages use it. THE WORDS live in Site settings, "Newsletter" tab, one per
+language: headline, text, button label, consent line, the band and popup
+switches and the popup rules.
+
+### Tracking (GTM and Cookiebot)
+On the Market document (Settings group, Markets), "Tracking + consent" box:
+the market's Google Tag Manager container ID (GTM-XXXXXXX) and its Cookiebot
+consent banner ID. Per market, not per language; the consent banner gates the
+tracking automatically. Leave both empty on the international market unless
+told otherwise.
 
 ### QR codes (packaging)
 Content, QR code. Each is a /qr/<code> link printed on packaging that you can
@@ -143,7 +168,8 @@ and French). ST-2 lock tutorial videos were never produced, so there are none.
 Each download has a Language field so the site knows the file's language and
 can show each market its own language later. The Service & Support page copy
 (/service: guarantee, returns, FAQ, documents, contact) is editable in Site
-settings, Microcopy, alongside the Support index headline and intro. The full
+settings, Microcopy tab, "Service page" box; the Support index headline and
+intro sit right below it in the "Support index" box. The full
 guarantee terms live on their own editable page: the "Legal page" document
 with the slug satisfaction-guarantee renders at /satisfaction-guarantee (it
 replaced the old static PDF), and each market can hold its own translation.

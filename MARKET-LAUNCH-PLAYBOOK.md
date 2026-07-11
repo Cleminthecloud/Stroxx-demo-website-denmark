@@ -15,7 +15,8 @@ The reference market is **International English** (`int`). Every new market star
 
 - Confirm the market's dealer partner and get their real details: HQ legal address, support phone, support hours, dealer shop URL, dealer logo (single-colour SVG for the masked mark).
 - Confirm the market's languages (Belgium is two: `nl` default + `fr` on `/fr`).
-- Get the market's own Cookiebot ID, GTM container ID, social profile URLs, and any analytics/tracking IDs. (If the schema fields for these do not exist yet, they are added as a one-time platform change, see Phase 3.)
+- Get the market's own Cookiebot ID, GTM container ID, social profile URLs, and any analytics/tracking IDs. (Cookiebot + GTM have dedicated fields on the Market doc since 2026-07-11; social profile fields are still a one-time platform change, see Phase 3.)
+- Decide the market's newsletter platform (Mailchimp / Klaviyo / Marketo / webhook) and get its key + audience/list ID; they are entered on the Market doc in Phase 3.
 
 ---
 
@@ -39,16 +40,17 @@ Set on the market's **Market** doc (`lib/markets.ts` seed + the `market` Sanity 
 
 ---
 
-## Phase 3, tracking, consent and social (per-market)
+## Phase 3, tracking, consent, newsletter and social (per-market)
 
-Legal and consent tooling differs by market and must never inherit another market's IDs.
+Legal and consent tooling differs by market and must never inherit another market's IDs. Since 2026-07-11 these are editor-fillable fields on the market's **Market** doc in the Studio (Settings, then Markets, open the market), no code change and no seed run:
 
-- **Cookiebot** — the market's own Cookiebot ID (consent gates GTM/GA).
-- **Google Tag Manager / GA** — the market's own GTM container / analytics ID.
-- **Social profiles** — the market's own profile URLs (footer + structured data).
-- **Tracking** — any market-specific pixels/IDs.
+- **Cookiebot**: the market's own Cookiebot ID, in the Market doc's "Tracking + consent" box (consent gates GTM/GA automatically).
+- **Google Tag Manager / GA**: the market's own GTM container ID, same box.
+- **Newsletter**: the market's platform choice, encrypted keys and audience/list ID, in the Market doc's "Newsletter (provider + keys)" box; flip its on/off switch when ready. The form's per-language words live on the market's Site settings language documents.
+- **Social profiles**: the market's own profile URLs (footer + structured data). Dedicated fields for these do NOT exist yet; adding them is a one-time platform change (add to the `market` schema + `lib/markets.ts` + the `getMarkets` projection, wire the footer socials + org structured data, document the coupling in DEPENDENCIES.md).
+- **Tracking**: any market-specific pixels/IDs go inside the market's GTM container, not the codebase.
 
-If the dedicated Sanity fields for these do not exist yet, adding them is a one-time platform change: add the fields to the `market` schema (and `lib/markets.ts` + the `getMarkets` projection), wire them where they render (consent script, GTM snippet, footer socials), then document the coupling in DEPENDENCIES.md. After that, every future market just fills them in, no code change. Note: a full CSP is deferred because GTM + Cookiebot inject scripts and need an allow-list pass, do that CSP pass when the first market goes live with real IDs.
+Note: a full CSP is deferred because GTM + Cookiebot inject scripts and need an allow-list pass, do that CSP pass when the first market goes live with real IDs. One-time cutover note (already done once, kept for the record): the ownership split shipped with `npm run migrate:market-ops`, which copies the English base Site settings values onto all market docs additively (setIfMissing) before `seed:more` cleans the old fields, see the per-market tracking row in DEPENDENCIES.md.
 
 ---
 
