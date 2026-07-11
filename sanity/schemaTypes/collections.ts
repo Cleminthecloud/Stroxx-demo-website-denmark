@@ -20,8 +20,10 @@ export const specialist = defineType({
   name: 'specialist',
   title: 'Specialist',
   type: 'document',
-  description: 'The trade specialists shown on the homepage cards and product pages.',
+  description:
+    'The trade specialists shown on the homepage cards and product pages. One set per language/market: each market shows its own people. To reuse one in another market, open it and add that language under Translations.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'name', title: 'Name', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'role', title: 'Role', type: 'string' }),
     defineField({ name: 'location', title: 'Location', type: 'string' }),
@@ -70,15 +72,23 @@ export const specialist = defineType({
     }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
   ],
-  preview: { select: { title: 'name', subtitle: 'role' } },
+  preview: {
+    select: { title: 'name', role: 'role', language: 'language' },
+    prepare: ({ title, role, language }: { title?: string; role?: string; language?: string }) => ({
+      title: title || 'Specialist',
+      subtitle: [role, langLabel(language)].filter(Boolean).join(' · '),
+    }),
+  },
 });
 
 export const testimonial = defineType({
   name: 'testimonial',
   title: 'Testimonial',
   type: 'document',
-  description: 'Customer quotes. Proof beats claims; keep them real and verifiable.',
+  description:
+    'Customer quotes. Proof beats claims; keep them real and verifiable. One set per language/market: each market shows its own voices. To reuse one in another market, open it and add that language under Translations.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'quote', title: 'Quote', type: 'text', rows: 4, validation: (r) => r.required() }),
     defineField({ name: 'name', title: 'Customer name', type: 'string', description: 'First name + initial is enough, e.g. Martin K.' }),
     defineField({ name: 'role', title: 'Trade + town', type: 'string', description: 'E.g. Carpenter, Aarhus.' }),
@@ -99,7 +109,13 @@ export const testimonial = defineType({
     }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
   ],
-  preview: { select: { title: 'name', subtitle: 'quote' } },
+  preview: {
+    select: { title: 'name', quote: 'quote', language: 'language' },
+    prepare: ({ title, quote, language }: { title?: string; quote?: string; language?: string }) => ({
+      title: title || 'Testimonial',
+      subtitle: [langLabel(language), quote].filter(Boolean).join(' · '),
+    }),
+  },
 });
 
 export const video = defineType({

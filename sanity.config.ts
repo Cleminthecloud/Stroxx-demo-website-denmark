@@ -123,7 +123,7 @@ export default defineConfig({
     structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
-      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment'],
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment', 'specialist', 'testimonial'],
       languageField: 'language',
     }),
   ],

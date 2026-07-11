@@ -50,7 +50,11 @@ document types inside it. What's in each:
 - Support page: manuals, downloads and product videos at /support/<slug>; the QR system points here.
 - QR code: the repointable /qr/<code> short links for packaging.
 - Store, Trade (fag page), Specialist, Testimonial, Film (YouTube), Legal page,
-  Product augment: supporting collections.
+  Product augment: supporting collections. Specialists and testimonials are per
+  language/market: each market shows its own, with the English base as the
+  fallback until a market has any. To reuse one in another market, open the
+  document and add that language via the globe translations menu, then
+  translate the text.
 - Feedback (test reports): bug reports submitted from the /test page land here
   (testers can attach up to four images).
 - Languages / markets: readers switch language with the globe switcher in the
