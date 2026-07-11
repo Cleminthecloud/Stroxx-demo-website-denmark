@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import GlassButton from '@/components/GlassButton';
 import Accent from '@/components/Accent';
 import { ArrowRight } from 'lucide-react';
-import { CR_BRAND, UTM } from '@/lib/data';
 
 type CampaignBandProps = {
   images?: string[];
@@ -47,6 +46,9 @@ export default function CampaignBand({
   secondaryAttr,
 }: CampaignBandProps) {
   const { currentDealer, open: openChooser } = useDealerChooser();
+  /* Null when there is no market dealer URL (international, or a dealer market
+     missing its Buy-at CTA link) → show the chooser, never another market's shop. */
+  const dealerUrl = dealerBuyUrl(currentDealer);
   // CMS uploads when present, the built-in campaign shots otherwise
   const slides = images && images.length
     ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
@@ -136,8 +138,8 @@ export default function CampaignBand({
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
-              {currentDealer ? (
-                <GlassButton href={dealerBuyUrl(currentDealer) || `${CR_BRAND}/?${UTM}`} external>
+              {currentDealer && dealerUrl ? (
+                <GlassButton href={dealerUrl} external>
                   <span>Buy at {currentDealer.dealerName}</span> <ArrowRight size={16} />
                 </GlassButton>
               ) : (

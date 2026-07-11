@@ -46,12 +46,17 @@ function sample(p: number): Omit<Stop, 'p'> {
 }
 
 export default function ProductExperience({
-  product, related, spec, buyUrl, categoryName, categorySlug, proClubHeadline, proClubText,}: {
+  product, related, spec, categoryName, categorySlug, proClubHeadline, proClubText,}: {
   product: Product; related: Product[]; spec: Specialist;
-  buyUrl: string; categoryName: string; categorySlug: string; proClubHeadline?: string; proClubText?: string;}) {
+  categoryName: string; categorySlug: string; proClubHeadline?: string; proClubText?: string;}) {
   const { currentDealer, open } = useDealerChooser();
-  const onBuyClick = !currentDealer ? (e: MouseEvent) => { e.preventDefault(); open(); } : undefined;
-  const buyHref = dealerBuyUrl(currentDealer, product.code) ?? buyUrl;
+  /* No dealer URL (international, or a dealer market missing its Buy-at CTA link
+     in the CMS) → the buy links open the dealer chooser. The href stays inert
+     ('#') so right-click / long-press / copy-link never leaks another market's
+     shop (the old fallback exposed the Carl Ras deep-link on international). */
+  const dealerHref = dealerBuyUrl(currentDealer, product.code);
+  const onBuyClick = !dealerHref ? (e: MouseEvent) => { e.preventDefault(); open(); } : undefined;
+  const buyHref = dealerHref ?? '#';
   const prodRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const tagRef = useRef<HTMLAnchorElement>(null);

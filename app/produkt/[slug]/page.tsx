@@ -102,7 +102,6 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
         proClubText={settings?.proClubText}
         related={related}
         spec={spec}
-        buyUrl={buyUrl}
         categoryName={cat?.name ?? 'STROXX'}
         categorySlug={cat?.slug ?? ''}
       />
