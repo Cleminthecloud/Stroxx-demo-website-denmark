@@ -51,7 +51,7 @@ export default function SeoPreviewField() {
       ? (ogImage ? (ogImage.startsWith('/') ? `${origin}${ogImage}` : ogImage) : undefined)
       : assetUrl(ogImage, 1200) || undefined;
   // Landing pages: no explicit share image → fall back to the hero (upload,
-  // then /public path), mirroring the live /kampagne route so the preview
+  // then /public path), mirroring the live /campaign route so the preview
   // shows exactly what would actually be shared.
   const hero = sections?.find((s) => s?._type === 'photoHero');
   const heroPath = typeof hero?.image === 'string' ? hero.image : undefined;
@@ -62,7 +62,7 @@ export default function SeoPreviewField() {
   // Prefix the path with the document language's market path (/dk, /be/nl, ...),
   // so a translated document previews its own market's live URL, not the root.
   const langPrefix = localeById(language)?.path ?? '';
-  const pagePath = slug ? (slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug}`) : '/';
+  const pagePath = slug ? (slug === 'try-it' ? '/try-it' : `/campaign/${slug}`) : '/';
   const path = langPrefix ? `${langPrefix}${pagePath === '/' ? '' : pagePath}` : pagePath;
   const url = `${SITE_URL}${path}`;
 

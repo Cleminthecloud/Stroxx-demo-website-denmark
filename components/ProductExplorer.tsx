@@ -24,10 +24,10 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
   const [sort, setSort] = useState<Sort>('pop');
 
   useEffect(() => {
-    // unconditional: navigating to plain /produkter must CLEAR a previous
+    // unconditional: navigating to plain /products must CLEAR a previous
     // ?cat= / ?q= (conditional set left stale filters behind)
     setActive(params.get('cat'));
-    // deep-linkable search: /produkter?q=... (also used by the WebSite
+    // deep-linkable search: /products?q=... (also used by the WebSite
     // SearchAction schema so answer engines can construct search URLs)
     setQ(params.get('q') ?? '');
   }, [params]);

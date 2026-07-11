@@ -200,7 +200,7 @@ export default async function Home() {
 
       {/* SPECIALISTS */}
       {hp.showSpecialists && (
-      <section id="specialister" className="relative">
+      <section id="specialists" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-32 md:py-40">
           <div data-sanity={hAttr('specialistsHeadline')} className="mb-16 max-w-3xl">
             <Eyebrow>The specialists</Eyebrow>
@@ -309,7 +309,7 @@ export default async function Home() {
           DB2-winners, same lineup as nyhedsbrev/SoMe/kampagner/salg. The hero
           links to its dedicated landing page; everything else buys directly. */}
       {hp.showMonth && (
-      <section id="maanedens" className="relative">
+      <section id="monthly" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-28 md:py-36">
           <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center mb-20">
             <CursorGlow size="42% 58%" intensity={0.14} className="-z-10" />
@@ -322,12 +322,12 @@ export default async function Home() {
                 {hp.monthText}
               </p>
               <div className="flex flex-wrap gap-3">
-                <GlassButton href="/maanedens">The full story <ArrowRight size={16} /></GlassButton>
+                <GlassButton href="/monthly">The full story <ArrowRight size={16} /></GlassButton>
                 <BuyCTA variant="ghost" />
               </div>
             </Reveal>
             <Reveal delay={120} from="far-right">
-              <Link href="/maanedens" className="group relative block aspect-[5/4]">
+              <Link href="/monthly" className="group relative block aspect-[5/4]">
                 <div className="pointer-events-none absolute inset-[8%]" style={{ background: 'radial-gradient(45% 42% at 50% 52%, rgba(0,136,194,0.26), transparent 70%)' }} />
                 <KnockoutImage
                   src={toolTexture(SKA.hero.imgId, '50383')}
@@ -344,7 +344,7 @@ export default async function Home() {
 
           <Reveal className="mb-8 flex items-end justify-between gap-6">
             <div className="text-fog/75 text-xs uppercase tracking-wider">This month's five DB2 winners</div>
-            <Link href="/maanedens" className="link-arrow hidden sm:inline-flex shrink-0 text-sm">
+            <Link href="/monthly" className="link-arrow hidden sm:inline-flex shrink-0 text-sm">
               The whole month <ArrowRight size={14} />
             </Link>
           </Reveal>
@@ -359,7 +359,7 @@ export default async function Home() {
 
       {/* CATEGORIES */}
       {hp.showCategories && (
-      <section id="kategorier" className="relative">
+      <section id="categories" className="relative">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-24">
           <div data-sanity={hAttr('categoriesHeadline')} className="max-w-3xl">
             <Eyebrow>The categories</Eyebrow>
@@ -389,7 +389,7 @@ export default async function Home() {
                   <ArrowRight size={16} strokeWidth={2} />
                 </a>
               ) : (
-                <Link href={`/produkter?cat=${f.cat.slug}`} className="link-arrow">
+                <Link href={`/products?cat=${f.cat.slug}`} className="link-arrow">
                   See all {f.cat.name.toLowerCase()}
                   <ArrowRight size={16} strokeWidth={2} />
                 </Link>

@@ -1,15 +1,16 @@
 import { PortableText } from 'next-sanity';
 import { getLegalPage } from '@/lib/cms';
 
-/** Shared renderer for the legal pages (privacy, cookies, terms). Content is
- *  a `legalPage` document per page; until legal delivers the text, a clear
- *  placeholder renders so the routes exist and are linkable. */
-export default async function LegalBody({ slug, fallbackTitle }: { slug: string; fallbackTitle: string }) {
+/** Shared renderer for the legal-style pages (privacy, cookies, terms and the
+ *  satisfaction guarantee). Content is a `legalPage` document per page; until
+ *  the final text lands, a clear placeholder renders so the routes exist and
+ *  are linkable. */
+export default async function LegalBody({ slug, fallbackTitle, eyebrow = 'Legal' }: { slug: string; fallbackTitle: string; eyebrow?: string }) {
   const doc = await getLegalPage(slug);
   return (
     <main className="bg-ink min-h-screen">
       <div className="mx-auto max-w-3xl px-6 md:px-10 pt-36 pb-28">
-        <div className="eyebrow mb-6">Legal</div>
+        <div className="eyebrow mb-6">{eyebrow}</div>
         <h1 className="h-display text-white text-[clamp(2.2rem,5vw,4rem)] leading-[0.95] mb-10">
           {doc?.title || fallbackTitle}
         </h1>

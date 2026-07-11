@@ -123,6 +123,7 @@ const tradeDocs = trades.map((t, i) => ({
 const videoDocs = videos.map((v, i) => ({
   _id: `video-${v.id}`,
   _type: 'video',
+  language: 'en', // English base tag, a re-run must never strip it
   youtubeId: v.id,
   title: v.title,
   by: v.by,
@@ -140,9 +141,9 @@ const legalBlock = (text: string) => [
   },
 ];
 const legalDocs = [
-  { slug: 'privatliv', title: 'Privacy policy' },
+  { slug: 'privacy', title: 'Privacy policy' },
   { slug: 'cookies', title: 'Cookie policy' },
-  { slug: 'handelsbetingelser', title: 'Terms of sale' },
+  { slug: 'terms', title: 'Terms of sale' },
 ].map((l) => ({
   _id: `legal-${l.slug}`,
   _type: 'legalPage',
@@ -152,6 +153,39 @@ const legalDocs = [
     'PLACEHOLDER: this text is awaiting sign-off from the legal team. Replace this paragraph with the approved policy before launch.'
   ),
 }));
+
+/* The guarantee terms page (/satisfaction-guarantee): unlike the three legal
+   placeholders above, this ships with the REAL English-base terms (from the
+   official guarantee document), dealer-neutral so every market can start
+   from it. Seeded with createIfNotExists so an editor-refined version is
+   never clobbered; scripts/migrate-english-slugs.ts creates the same doc
+   (same _id), so either script can run first. */
+let gKey = 0;
+const gBlock = (style: string, text: string) => ({
+  _type: 'block',
+  _key: `seed-g${++gKey}`,
+  style,
+  markDefs: [],
+  children: [{ _type: 'span', _key: `seed-g${gKey}a`, text, marks: [] }],
+});
+const guaranteeDoc = {
+  _id: 'legal-satisfaction-guarantee',
+  _type: 'legalPage',
+  language: 'en',
+  title: '30-day satisfaction guarantee',
+  slug: 'satisfaction-guarantee',
+  body: [
+    gBlock('normal', 'STROXX tools are built for professional use, and we stand behind them. If you are not satisfied with a STROXX product, you get your money back. Not satisfied is your own judgment: there is no requirement that the product is faulty or defective.'),
+    gBlock('h2', 'Who is covered'),
+    gBlock('normal', 'The guarantee applies to business customers with an account at their STROXX dealer. It runs for 30 days from the date of purchase, so you can put the product to work on real jobs before you decide.'),
+    gBlock('h2', 'What is covered'),
+    gBlock('normal', 'The guarantee covers all STROXX products with one exception: access control products are not covered. When buying multiple identical items, the guarantee applies to the first item purchased, so test the product before you stock up.'),
+    gBlock('h2', 'How to return'),
+    gBlock('normal', 'Hand the product back at your dealer\u2019s store together with the invoice or delivery note. If you bought online, contact the dealer\u2019s customer service instead. Your dealer\u2019s service phone number is in the footer of this site.'),
+    gBlock('h2', 'Faults and defects'),
+    gBlock('normal', 'Faults and defects are handled as a complaint under the dealer\u2019s terms of sale and delivery, separately from this guarantee.'),
+  ],
+};
 
 
 /* Site settings: populate every field with the value the site actually uses,
@@ -169,27 +203,27 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
      renders on the international site, so it must stay dealer-neutral.
      Localized supportHours is authored per market at translation time. */
   navLinks: [
-    lk('Tool of the Month', '/maanedens', 1),
-    lk('Products', '/produkter', 2),
-    lk('Stores', '/butikker', 3),
-    lk('Trades', '/fag', 5),
-    lk('Try It', '/proev-det', 6),
+    lk('Tool of the Month', '/monthly', 1),
+    lk('Products', '/products', 2),
+    lk('Stores', '/stores', 3),
+    lk('Trades', '/trades', 5),
+    lk('Try It', '/try-it', 6),
     lk('Service and Support', '/service', 7),
   ],
   footerPageLinks: [
-    lk('Tool of the Month', '/maanedens', 1),
-    lk('Products', '/produkter', 2),
-    lk('News', '/nyheder', 8),
-    lk('Trades', '/fag', 3),
-    lk('Stores', '/butikker', 4),
-    lk('Campaign: Try It', '/proev-det', 5),
+    lk('Tool of the Month', '/monthly', 1),
+    lk('Products', '/products', 2),
+    lk('News', '/news', 8),
+    lk('Trades', '/trades', 3),
+    lk('Stores', '/stores', 4),
+    lk('Campaign: Try It', '/try-it', 5),
     lk('Service and Support', '/service', 7),
   ],
   footerBuyLinks: [
     /* no dealer link here: the footer renders the market-aware FooterBuyLink
        itself (and filters raw carl-ras links out defensively) */
-    lk('Find a store', '/butikker', 2),
-    lk('Satisfaction guarantee (PDF)', '/STROXX-tilfredshedsgaranti.pdf', 3),
+    lk('Find a store', '/stores', 2),
+    lk('Satisfaction guarantee', '/satisfaction-guarantee', 3),
   ],
   footerAbout:
     'STROXX is available exclusively at Carl Ras in Denmark. The brand is developed together with strong partners in Germany, France and Belgium, and is also stocked through chains like Meesenburg, Foussier and Lecot.',
@@ -213,31 +247,31 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
     "No ten-step forms and no hold music. Here's the guarantee, the returns, the documents and the people, all in one place.",
   serviceGuaranteeHeading: '30-day satisfaction guarantee',
   serviceGuaranteeBody:
-    "Try STROXX on real work for 30 days. If you're not happy, you get your money back. No need for faults, your judgment is enough. Applies to all STROXX products except access control, for business customers with an account at Carl Ras.",
+    "Try STROXX on real work for 30 days. If you're not happy, you get your money back. No need for faults, your judgment is enough. Applies to all STROXX products except access control, for business customers with a dealer account.",
   serviceReturnsHeading: 'How to return',
   serviceReturnSteps: [
-    { _key: 'step1', _type: 'step', title: 'Find your invoice or delivery note', body: "The guarantee applies to business customers with an account at Carl Ras. Your proof of purchase is enough, the item doesn't need to be faulty." },
-    { _key: 'step2', _type: 'step', title: 'Go to your Carl Ras store', body: 'Hand the item in at one of the 26 stores. If you bought online, call customer service on 44 85 55 11 instead.' },
+    { _key: 'step1', _type: 'step', title: 'Find your invoice or delivery note', body: "The guarantee applies to business customers with a dealer account. Your proof of purchase is enough, the item doesn't need to be faulty." },
+    { _key: 'step2', _type: 'step', title: "Go to your dealer's store", body: "Hand the item in at your STROXX store. If you bought online, call the dealer's customer service instead." },
     { _key: 'step3', _type: 'step', title: 'Money back', body: 'No discussion and no need for faults. Your judgment is enough. For bulk purchases, the guarantee applies to the first item bought.' },
   ],
   serviceDocsHeading: 'Documents',
   serviceDocs: [
-    { _key: 'd1', _type: 'doc', label: 'Satisfaction guarantee, full terms (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
-    { _key: 'd2', _type: 'doc', label: 'Terms of sale and delivery (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
-    { _key: 'd3', _type: 'doc', label: 'Privacy policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/persondatapolitik/' },
-    { _key: 'd4', _type: 'doc', label: 'Cookie policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/cookiepolitik/' },
+    { _key: 'd1', _type: 'doc', label: 'Satisfaction guarantee, full terms', href: '/satisfaction-guarantee' },
+    { _key: 'd2', _type: 'doc', label: 'Terms of sale', href: '/terms' },
+    { _key: 'd3', _type: 'doc', label: 'Privacy policy', href: '/privacy' },
+    { _key: 'd4', _type: 'doc', label: 'Cookie policy', href: '/cookies' },
   ],
   serviceDocsPending: 'Product catalogues and safety data sheets for chemicals will appear here once the DAM integration is in place.',
   serviceContactHeading: 'Talk to a human',
-  serviceContactBody: 'Carl Ras customer service is ready on 44 85 55 11 (Mon-Thu 07-16, Fri 07-15). Or skip the queue and call a specialist directly at your nearest store.',
+  serviceContactBody: 'Your dealer\'s customer service is ready on the number in the footer. Or skip the queue and call a specialist directly at your nearest store.',
   serviceFaqEyebrow: 'Questions and answers',
   serviceFaqHeading: 'The practical stuff, *in brief.*',
   serviceFaq: [
-    { _key: 'q1', _type: 'qa', question: 'Who can use the satisfaction guarantee?', answer: "Business customers with an account at Carl Ras. If you don't have an account yet, you set one up at Carl Ras under \"Become a customer\", and then the 30 days apply to you too.", linkText: 'Become a customer at Carl Ras', linkUrl: 'https://www.carl-ras.dk/kundeservice/bliv-kunde/' },
-    { _key: 'q2', _type: 'qa', question: 'Does the item have to be unused when I return it?', answer: "No, that's the whole point. The guarantee is for 30 days on real work, not five minutes in the driveway. Bring the item to your Carl Ras store along with the invoice or delivery note. For bulk purchases, the guarantee applies to the first item bought." },
-    { _key: 'q3', _type: 'qa', question: 'What do I do if the item is defective?', answer: 'Faults and defects are not a guarantee matter but a complaint, and Carl Ras handles that under their terms of sale and delivery. Bring the item to the store or call customer service on 44 85 55 11.', linkText: 'Terms of sale and delivery', linkUrl: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
-    { _key: 'q4', _type: 'qa', question: 'How do delivery and shipping work?', answer: 'Every purchase is made at Carl Ras, in store or at carl-ras.dk, and delivery options and prices are shown at checkout. The full terms are in the Carl Ras terms of sale and delivery.' },
-    { _key: 'q5', _type: 'qa', question: 'Where do I find safety data sheets for chemical products?', answer: "They're on their way to this page. Until then, Carl Ras customer service provides them on 44 85 55 11 or in your local store." },
+    { _key: 'q1', _type: 'qa', question: 'Who can use the satisfaction guarantee?', answer: "Business customers with an account at your STROXX dealer. If you don't have an account yet, you set one up with the dealer, and then the 30 days apply to you too." },
+    { _key: 'q2', _type: 'qa', question: 'Does the item have to be unused when I return it?', answer: "No, that's the whole point. The guarantee is for 30 days on real work, not five minutes in the driveway. Bring the item to your dealer's store along with the invoice or delivery note. For bulk purchases, the guarantee applies to the first item bought." },
+    { _key: 'q3', _type: 'qa', question: 'What do I do if the item is defective?', answer: 'Faults and defects are not a guarantee matter but a complaint, and your dealer handles that under their terms of sale and delivery. Bring the item to the store or call their customer service.', linkText: 'Terms of sale', linkUrl: '/terms' },
+    { _key: 'q4', _type: 'qa', question: 'How do delivery and shipping work?', answer: "Every purchase is made at your STROXX dealer, in store or online, and delivery options are shown at checkout. The full terms are in the dealer's terms of sale and delivery." },
+    { _key: 'q5', _type: 'qa', question: 'Where do I find safety data sheets for chemical products?', answer: "They're on their way to this page. Until then, your dealer's customer service provides them, or ask in your local store." },
   ],
   supportIndexHeadline: 'Manuals & downloads.',
   supportIndexIntro: 'User instructions, software guides and product documentation, in your language. Scan the code on the box and you land here.',
@@ -289,6 +323,7 @@ async function run() {
   for (const d of tradeDocs) tx.createOrReplace(d as any);
   for (const d of videoDocs) tx.createOrReplace(d as any);
   for (const d of legalDocs) tx.createOrReplace(d as any);
+  tx.createIfNotExists(guaranteeDoc as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console
   console.log(`Seeded ${res.results.length} documents (siteSettings, homePage, ${storeDocs.length} stores, ${specialistDocs.length} specialists, ${testimonialDocs.length} testimonials, ${tradeDocs.length} trades, ${videoDocs.length} films, ${legalDocs.length} legal pages)`);

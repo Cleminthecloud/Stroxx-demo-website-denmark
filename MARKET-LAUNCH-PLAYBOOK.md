@@ -57,7 +57,7 @@ If the dedicated Sanity fields for these do not exist yet, adding them is a one-
 - Duplicate the International English master documents into the new locale (document-internationalization creates the per-language copies).
 - Hand off to the market's editors to translate and adapt: copy, sections, campaigns, imagery. They own this and can restructure freely.
 - Products and media come from PIM/DAM, not re-keyed, confirm the market's assortment pulls through.
-- Localise the surfaces still known to carry Denmark / Carl Ras defaults as each market launches (tracked in `STROXX-multimarket-audit.md`): footer *about* paragraph (`footerAbout`), `/service`, the guarantee terms + PDF, org structured data, the `/produkter` and `/fag` metadata descriptions, `lib/llms-fallback.ts`. (Product pages and Tool of the Month need no pass here: their metadata and the product JSON-LD offer already resolve this market's dealer automatically, and stay dealer-neutral internationally.)
+- Localise the surfaces still known to carry Denmark / Carl Ras defaults as each market launches (tracked in `STROXX-multimarket-audit.md`): footer *about* paragraph (`footerAbout`), `/service`, the guarantee terms + PDF, org structured data, the `/products` and `/trades` metadata descriptions, `lib/llms-fallback.ts`. (Product pages and Tool of the Month need no pass here: their metadata and the product JSON-LD offer already resolve this market's dealer automatically, and stay dealer-neutral internationally.)
 
 ---
 

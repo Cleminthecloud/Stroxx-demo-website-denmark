@@ -35,6 +35,15 @@ const nextConfig = {
      exfil, no clickjacking. Violations report to
      /api/csp-report → Vercel logs. X-Frame-Options SAMEORIGIN still allows
      the Studio's Presentation iframe while blocking third-party embedding. */
+  /* The guarantee terms moved from a static Danish PDF to the editable CMS
+     page /satisfaction-guarantee (2026-07-11). The PDF path has an extension,
+     so middleware never sees it (its matcher skips files) — the redirect must
+     live here. */
+  async redirects() {
+    return [
+      { source: '/STROXX-tilfredshedsgaranti.pdf', destination: '/satisfaction-guarantee', permanent: true },
+    ];
+  },
   async headers() {
     const csp = [
       "default-src 'self'",

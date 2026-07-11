@@ -23,9 +23,9 @@ export default function manifest(): MetadataRoute.Manifest {
       { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
-      { name: 'Find a store', url: '/butikker', description: 'Nearest STROXX dealer' },
-      { name: 'Products', url: '/produkter', description: 'The full range' },
-      { name: 'Try It', url: '/proev-det', description: 'Campaign and guarantee' },
+      { name: 'Find a store', url: '/stores', description: 'Nearest STROXX dealer' },
+      { name: 'Products', url: '/products', description: 'The full range' },
+      { name: 'Try It', url: '/try-it', description: 'Campaign and guarantee' },
     ],
   };
 }

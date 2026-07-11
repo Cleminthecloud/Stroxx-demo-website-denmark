@@ -31,9 +31,9 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.documentTypeListItem('homePage').title('Homepage').icon(HomeIcon),
               S.documentTypeListItem('landingPage').title('Campaign / landing pages'),
-              S.documentTypeListItem('trade').title('Trade pages (fag)'),
+              S.documentTypeListItem('trade').title('Trade pages'),
               S.documentTypeListItem('monthlyLineup').title('Monthly lineup'),
-              S.documentTypeListItem('legalPage').title('Legal pages'),
+              S.documentTypeListItem('legalPage').title('Legal & guarantee pages'),
             ]),
         ),
       S.listItem()

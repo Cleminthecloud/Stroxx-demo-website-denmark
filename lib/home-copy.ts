@@ -87,7 +87,7 @@ export const HOME_DEFAULTS: HomeCopy = {
     'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
   campaignPrimaryLabel: '', // empty = automatic: "Buy at <dealer>", or "Where to buy" internationally
   campaignSecondaryLabel: 'Read more',
-  campaignHref: '/proev-det',
+  campaignHref: '/try-it',
   showClaim: true,
   showMarquee: true,
   showRange: true,

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Trades: tools for carpenters, electricians, plumbers, painters and masons',
   description:
     'Find the STROXX tool for your trade: carpenter, electrician, plumbing, painter or mason. Professional quality without the brand markup, 30-day satisfaction guarantee, only at Carl Ras.',
-  alternates: { canonical: '/fag' },
+  alternates: { canonical: '/trades' },
   openGraph: {
     title: 'STROXX trades: tools for your trade',
     description: 'The workhorses for every trade, without the brand markup.',
@@ -19,11 +19,11 @@ export const metadata: Metadata = {
 };
 
 const ICONS: Record<string, LucideIcon> = {
-  toemrer: Hammer,
-  elektriker: Zap,
-  vvs: Wrench,
-  maler: PaintRoller,
-  murer: HardHat,
+  carpenter: Hammer,
+  electrician: Zap,
+  plumber: Wrench,
+  painter: PaintRoller,
+  bricklayer: HardHat,
 };
 
 /** Mini product card: image and name always visible (the basics work without
@@ -31,7 +31,7 @@ const ICONS: Record<string, LucideIcon> = {
 function MiniProduct({ p }: { p: Product }) {
   return (
     <Link
-      href={`/produkt/${p.slug}`}
+      href={`/product/${p.slug}`}
       className="group/p block rounded-lg border border-line bg-ink/60 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-stroxx-blue/50 hover:shadow-[0_0_22px_rgba(0,136,194,0.18)]"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -64,7 +64,7 @@ export default async function TradesIndexPage() {
       '@type': 'ListItem',
       position: i + 1,
       name: t.name,
-      url: `${BASE}/fag/${t.slug}`,
+      url: `${BASE}/trades/${t.slug}`,
     })),
   };
   const breadcrumbLd = {
@@ -102,7 +102,7 @@ export default async function TradesIndexPage() {
               <Reveal key={t.slug} delay={(i % 3) * 80}>
                 <div className="glass glass-card group flex h-full flex-col rounded-xl p-7 transition-transform duration-500 hover:-translate-y-1">
                   {/* trade header to the fag page */}
-                  <Link href={`/fag/${t.slug}`} className="block">
+                  <Link href={`/trades/${t.slug}`} className="block">
                     <span className="mb-4 grid h-12 w-12 place-items-center rounded-full border border-stroxx-blue/40 text-stroxx-blue transition-all duration-300 group-hover:border-stroxx-blue/70 group-hover:shadow-[0_0_22px_rgba(0,136,194,0.3)]">
                       <Icon size={21} strokeWidth={1.8} />
                     </span>
@@ -120,7 +120,7 @@ export default async function TradesIndexPage() {
                   </div>
 
                   <Link
-                    href={`/fag/${t.slug}`}
+                    href={`/trades/${t.slug}`}
                     className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-medium text-stroxx-blue"
                   >
                     Everything for {t.name.toLowerCase()}

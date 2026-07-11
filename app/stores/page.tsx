@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'Find your store',
   description:
     'Find your nearest STROXX stockist. 26 stores across Denmark with addresses, opening hours and a direct line to the store manager.',
-  alternates: { canonical: '/butikker' },
+  alternates: { canonical: '/stores' },
 };
 
 /** schema.org HardwareStore per stockist: name, address, geo and opening
@@ -54,7 +54,7 @@ function storeLd(s: Store) {
           ],
         }
       : {}),
-    url: `${BASE}/butikker`,
+    url: `${BASE}/stores`,
   };
 }
 

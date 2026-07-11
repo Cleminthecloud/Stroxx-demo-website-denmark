@@ -6,7 +6,7 @@ import { langLabel } from '../lib/langLabel';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
- *  with sample content is at /komponenter on the site.
+ *  with sample content is at /components on the site.
  *
  *  Products are referenced by SKU (item code) and joined against the product
  *  feed at render, the CMS never becomes a product database. */
@@ -36,7 +36,7 @@ export const landingPage = defineType({
       name: 'slug',
       title: 'URL slug',
       description:
-        'Becomes the address: slug "sommer" publishes at /kampagne/sommer. Use / to nest: "sommer/tilbud" publishes at /kampagne/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
+        'Becomes the address: slug "sommer" publishes at /campaign/sommer. Use / to nest: "sommer/tilbud" publishes at /campaign/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
       type: 'slug',
       group: 'content',
       options: {
@@ -111,7 +111,7 @@ export const landingPage = defineType({
               name: 'ctaHref',
               title: 'Primary button link',
               type: 'string',
-              description: 'Internal path (/produkter) or full URL. Empty = the retailer’s webshop.',
+              description: 'Internal path (/products) or full URL. Empty = the retailer’s webshop.',
             }),
             defineField({ name: 'secondaryLabel', title: 'Secondary link label', type: 'string' }),
             defineField({
@@ -273,7 +273,7 @@ export const landingPage = defineType({
               name: 'ctaHref',
               title: 'Button link',
               type: 'string',
-              description: 'Internal path (/produkter) or full URL. Defaults to the retailer’s webshop.',
+              description: 'Internal path (/products) or full URL. Defaults to the retailer’s webshop.',
             }),
             defineField({
               name: 'imageUpload',
@@ -843,7 +843,7 @@ export const landingPage = defineType({
     select: { title: 'title', slug: 'slug.current', language: 'language' },
     prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
       title: title || 'Landing page',
-      subtitle: `${slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug || '…'}`} · ${langLabel(language)}`,
+      subtitle: `${slug === 'try-it' ? '/try-it' : `/campaign/${slug || '…'}`} · ${langLabel(language)}`,
     }),
   },
 });

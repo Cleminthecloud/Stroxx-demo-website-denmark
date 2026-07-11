@@ -19,7 +19,7 @@ export default function CategoryList() {
       {categories.map((c, i) => (
         <Link
           key={c.slug}
-          href={`/produkter?cat=${c.slug}`}
+          href={`/products?cat=${c.slug}`}
           className="group relative z-10 flex items-center gap-4 py-4 border-b border-white/[0.06]"
         >
           <span className="text-fog/40 text-xs tabular-nums w-7 group-hover:text-stroxx-blue transition-colors">

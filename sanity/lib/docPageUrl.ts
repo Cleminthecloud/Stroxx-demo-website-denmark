@@ -18,13 +18,13 @@ export function primaryHref(type: string | undefined, doc: Doc): string | null {
   const s = slugOf(doc);
   switch (type) {
     case 'landingPage':
-      return s === 'proev-det' ? '/proev-det' : `/kampagne/${s}`;
+      return s === 'try-it' ? '/try-it' : `/campaign/${s}`;
     case 'post':
-      return `/nyheder/${s}`;
+      return `/news/${s}`;
     case 'supportPage':
       return `/support/${s}`;
     case 'trade':
-      return `/fag/${s}`;
+      return `/trades/${s}`;
     case 'legalPage':
       return `/${s}`;
     case 'homePage':
@@ -32,9 +32,9 @@ export function primaryHref(type: string | undefined, doc: Doc): string | null {
     case 'brandPage':
       return '/brand';
     case 'monthlyLineup':
-      return '/maanedens';
+      return '/monthly';
     case 'store':
-      return '/butikker';
+      return '/stores';
     case 'siteSettings':
       return '/';
     default:

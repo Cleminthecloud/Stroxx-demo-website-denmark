@@ -40,7 +40,7 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={toolTexture(p.imgId)} alt={p.name} loading="lazy" className="relative z-10 h-20 w-20 object-contain" />
                   </div>
-                  <Link href={`/produkt/${p.slug}`}
+                  <Link href={`/product/${p.slug}`}
                     className={`block text-[14px] font-medium leading-snug line-clamp-2 transition-colors ${i === 0 ? 'text-stroxx-blue' : 'text-white hover:text-stroxx-blue'}`}>
                     {p.name}
                   </Link>

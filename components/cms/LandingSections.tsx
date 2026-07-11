@@ -27,7 +27,7 @@ import type { Testimonial } from '@/lib/testimonials';
 import type { Video } from '@/lib/videos';
 
 /** Renders CMS landing-page sections with the exact art direction of the
- *  hand-built /proev-det page. Each `_type` maps to one section block; editors
+ *  hand-built /try-it page. Each `_type` maps to one section block; editors
  *  reorder and refill, the code owns layout, motion and brand. */
 
 /** alt text editors set on an uploaded image; empty for decorative images */
@@ -227,7 +227,7 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
             );
 
           case 'ctaBanner': {
-            const sHref = s.secondaryHref || '/butikker';
+            const sHref = s.secondaryHref || '/stores';
             return (
               <section key={s._key} className="relative">
                 <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,136,194,0.14), transparent 70%)' }} />
@@ -502,7 +502,7 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                   </div>
                   <Reveal delay={120}>
                     <div className="mt-10">
-                      <Link href="/produkter" className="link-arrow">
+                      <Link href="/products" className="link-arrow">
                         See all the products <ArrowRight size={16} strokeWidth={2} />
                       </Link>
                     </div>
@@ -614,7 +614,7 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                           <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
                         )}
                         {s.secondaryLabel && (
-                          <GlassButton href={s.secondaryHref || '/butikker'} external={/^https?:/i.test(s.secondaryHref || '')} variant="ghost">
+                          <GlassButton href={s.secondaryHref || '/stores'} external={/^https?:/i.test(s.secondaryHref || '')} variant="ghost">
                             {s.secondaryLabel}
                           </GlassButton>
                         )}

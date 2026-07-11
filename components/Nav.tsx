@@ -9,11 +9,11 @@ import { useDealerChooser } from '@/components/DealerChooser';
 import { brandImages } from '@/lib/data';
 
 const LINKS = [
-  { href: '/maanedens', label: 'Tool of the Month' },
-  { href: '/produkter', label: 'Products' },
-  { href: '/butikker', label: 'Stores' },
-  { href: '/fag', label: 'Trades' },
-  { href: '/proev-det', label: 'Try It' },
+  { href: '/monthly', label: 'Tool of the Month' },
+  { href: '/products', label: 'Products' },
+  { href: '/stores', label: 'Stores' },
+  { href: '/trades', label: 'Trades' },
+  { href: '/try-it', label: 'Try It' },
   { href: '/service', label: 'Service and Support' },
 ];
 

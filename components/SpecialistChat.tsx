@@ -26,17 +26,17 @@ const norm = (s: string) =>
  *  but still become links. Next's Link prefetches routes as they appear, so
  *  the recommended page is warm before the tap. */
 const PATH_LABELS: [RegExp, string][] = [
-  [/^\/produkter/, 'Products'],
-  [/^\/butikker/, 'Store finder'],
-  [/^\/proev-det/, 'The 30-day guarantee'],
-  [/^\/maanedens/, 'Tool of the Month'],
-  [/^\/nyheder/, 'News'],
+  [/^\/products/, 'Products'],
+  [/^\/stores/, 'Store finder'],
+  [/^\/try-it/, 'The 30-day guarantee'],
+  [/^\/monthly/, 'Tool of the Month'],
+  [/^\/news/, 'News'],
   [/^\/service/, 'Service and support'],
-  [/^\/fag/, 'Trades'],
+  [/^\/trades/, 'Trades'],
 ];
 
 function Linkified({ text }: { text: string }) {
-  /* internal paths (/produkter, /butikker?tab=..., /produkt/slug) become
+  /* internal paths (/products, /stores?tab=..., /product/slug) become
      styled Links; bare carl-ras.dk URLs become external links */
   const parts = text.split(/((?:https?:\/\/[^\s)]+)|(?:(?<=^|[\s(])\/[a-z0-9\-/]+(?:\?[a-z0-9=&\-]+)?))/gi);
   return (
@@ -103,8 +103,8 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null, fal
       from: 'bot',
       text: 'STROXX comes with a 30-day satisfaction guarantee for business customers with an account. Not happy? You get your money back. No need to prove a fault, your judgment is enough. It covers all STROXX products except access control, and on bulk orders the first item bought.',
       links: [
-        { label: 'About the guarantee', href: '/proev-det' },
-        { label: 'The guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf', external: true },
+        { label: 'About the guarantee', href: '/try-it' },
+        { label: 'The full terms', href: '/satisfaction-guarantee' },
       ],
     }];
   }
@@ -114,7 +114,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null, fal
         from: 'bot',
         text: `Your nearest store is ${nearest.store.name}, ${nearest.store.address}, ${nearest.store.zipCity}, about ${nearest.km < 10 ? nearest.km.toFixed(1) : Math.round(nearest.km)} km from you.${nearest.store.manager ? ` The store manager is ${nearest.store.manager.name}.` : ''}`,
         links: [
-          { label: 'See on the map', href: '/butikker' },
+          { label: 'See on the map', href: '/stores' },
           { label: 'Directions', href: nearest.store.maps, external: true },
         ],
       }];
@@ -122,7 +122,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null, fal
     return [{
       from: 'bot',
       text: 'STROXX is sold in 26 stores across Denmark. The store finder locates the nearest one and shows opening hours and a direct line to the store manager.',
-      links: [{ label: 'Find your store', href: '/butikker' }],
+      links: [{ label: 'Find your store', href: '/stores' }],
     }];
   }
 
@@ -141,7 +141,7 @@ function botReply(raw: string, nearest: { store: Store; km: number } | null, fal
     return [{
       from: 'bot',
       text: 'Short version: you pay for the tool, not for the logo. Same steel and the same tolerances as the A-brands. And if you cannot tell the difference, the guarantee has your back.',
-      links: [{ label: 'See why', href: '/proev-det' }],
+      links: [{ label: 'See why', href: '/try-it' }],
     }];
   }
   if (/^(hej|hejsa|goddag|hallo|hey|dav|hi|hello|yo)\b/.test(t)) {
@@ -264,7 +264,7 @@ export default function SpecialistChat({
               {m.products && m.products.length > 0 && (
                 <div className="mt-2.5 flex flex-col gap-2">
                   {m.products.map((p) => (
-                    <Link key={p.slug} href={`/produkt/${p.slug}`}
+                    <Link key={p.slug} href={`/product/${p.slug}`}
                       className="group flex items-center gap-3 rounded-xl bg-ink/60 border border-white/10 p-2.5 hover:border-stroxx-blue/50 hover:bg-ink/80 transition-colors">
                       <span className="relative grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-white/[0.04] border border-white/[0.06] overflow-hidden">
                         <span className="absolute inset-1 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.18), rgba(0,136,194,0) 70%)' }} />
@@ -319,7 +319,7 @@ export default function SpecialistChat({
                           <Phone size={12} /> Customer service {servicePhone}
                         </a>
                       ) : (
-                        <Link href="/butikker" className="glass-cta glass-cta--sm flex-1 justify-center text-white">
+                        <Link href="/stores" className="glass-cta glass-cta--sm flex-1 justify-center text-white">
                           Find a store <ArrowUpRight size={12} />
                         </Link>
                       )}

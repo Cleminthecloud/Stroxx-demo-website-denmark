@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ChangeEvent } from 'react';
-import { set, unset, useClient, type ArrayOfObjectsInputProps } from 'sanity';
+import { set, unset, useClient, useFormValue, type ArrayOfObjectsInputProps } from 'sanity';
 
 /** Two-way film picker for a reference-array field (e.g. the landing-page film
  *  section). Editors pick existing films from the Film (YouTube) collection by
@@ -96,6 +96,9 @@ const addBtn: CSSProperties = {
 
 export default function FilmPicker(props: ArrayOfObjectsInputProps) {
   const client = useClient({ apiVersion: API_VERSION });
+  /* films are per language/market: a film created from this picker belongs to
+     the host document's language (no language on the host = English base) */
+  const docLanguage = useFormValue(['language']);
   const value = useMemo<Ref[]>(() => (props.value as Ref[] | undefined) ?? [], [props.value]);
 
   const [films, setFilms] = useState<Film[]>([]);
@@ -172,7 +175,7 @@ export default function FilmPicker(props: ArrayOfObjectsInputProps) {
         } catch {
           /* offline / blocked: create with blanks, editor can rename */
         }
-        const created = await client.create({ _type: 'video', youtubeId: id, title, by, active: true });
+        const created = await client.create({ _type: 'video', youtubeId: id, title, by, active: true, language: typeof docLanguage === 'string' && docLanguage ? docLanguage : 'en' });
         docId = created._id;
       }
       await load();

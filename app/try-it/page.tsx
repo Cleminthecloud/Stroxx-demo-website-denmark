@@ -15,16 +15,17 @@ import { ArrowRight, ArrowDown } from 'lucide-react';
 import { products } from '@/lib/data';
 import { getTestimonials, getLandingPage } from '@/lib/cms';
 
-/* FAQ: grounded in the real guarantee terms (public/STROXX-tilfredshedsgaranti.pdf).
-   Rendered as an accordion AND as FAQPage JSON-LD so answer engines can quote it. */
+/* FAQ: grounded in the real guarantee terms (the editable CMS page at
+   /satisfaction-guarantee). Rendered as an accordion AND as FAQPage JSON-LD
+   so answer engines can quote it. */
 const FAQ_ITEMS = [
   {
     q: 'How does the STROXX satisfaction guarantee work?',
-    a: 'You try the tool on real work for 30 days. If you\'re not happy, you get your money back. No need for faults or defects, your judgment is enough. The guarantee applies to business customers with an account at Carl Ras.',
+    a: 'You try the tool on real work for 30 days. If you\'re not happy, you get your money back. No need for faults or defects, your judgment is enough. The guarantee applies to business customers with an account at their STROXX dealer.',
   },
   {
     q: 'What does the guarantee cover, and what does it not?',
-    a: 'It covers all STROXX products except access control. For bulk purchases, the guarantee applies to the first item bought. Returns are handled at your Carl Ras store with an invoice or delivery note, and for online orders via customer service on 44 85 55 11.',
+    a: 'It covers all STROXX products except access control. For bulk purchases, the guarantee applies to the first item bought. Returns are handled at your dealer\'s store with an invoice or delivery note, and for online orders via the dealer\'s customer service.',
   },
   {
     q: 'Where can I buy STROXX?',
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
   title: 'Afford more than just tools',
   description:
     'You pay for the logo, not the steel. STROXX is professional quality without the brand markup, backed by a 100% satisfaction guarantee. Try it for 30 days.',
-  alternates: { canonical: '/proev-det' },
+  alternates: { canonical: '/try-it' },
 };
 
 /* Landing structure follows the conversion narrative:
@@ -60,7 +61,7 @@ const STEPS = [
   {
     n: '01',
     t: 'Find your store',
-    d: '26 stores across the country, or buy online at Carl Ras. Get the tool in your hand first, if you like.',
+    d: 'Find your nearest STROXX store, or buy online at your dealer. Get the tool in your hand first, if you like.',
   },
   {
     n: '02',
@@ -81,12 +82,12 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default async function ProevDetPage() {
   const proof = PROOF_CODES.map((c) => products.find((p) => p.code === c)).filter(Boolean);
 
-  /* This campaign now lives in the CMS as a landingPage (slug "proev-det").
+  /* This campaign now lives in the CMS as a landingPage (slug "try-it").
      When that document exists, this historic URL permanently redirects to the
-     canonical /kampagne/proev-det. The hand-built page below only renders as a
+     canonical /campaign/try-it. The hand-built page below only renders as a
      safety fallback if that document is ever removed. */
-  const doc = await getLandingPage('proev-det');
-  if (doc?.sections?.length) permanentRedirect('/kampagne/proev-det');
+  const doc = await getLandingPage('try-it');
+  if (doc?.sections?.length) permanentRedirect('/campaign/try-it');
   const testimonials = await getTestimonials();
 
   /* Structured data: FAQ + the trial steps as HowTo, so answer engines can
@@ -259,7 +260,7 @@ export default async function ProevDetPage() {
           </div>
           <Reveal delay={120}>
             <div className="mt-10">
-              <Link href="/produkter" className="link-arrow">
+              <Link href="/products" className="link-arrow">
                 See all the products <ArrowRight size={16} strokeWidth={2} />
               </Link>
             </div>
@@ -359,7 +360,7 @@ export default async function ProevDetPage() {
             <div className="text-center">
               <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
                 <BuyCTA arrow />
-                <GlassButton href="/butikker" variant="ghost">Find your store</GlassButton>
+                <GlassButton href="/stores" variant="ghost">Find your store</GlassButton>
               </div>
               <GuaranteeModal />
             </div>

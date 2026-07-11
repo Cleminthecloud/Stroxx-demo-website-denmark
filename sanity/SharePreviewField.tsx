@@ -31,7 +31,7 @@ export default function SharePreviewField() {
   const img = assetUrl(ogImage, 1200) || assetUrl(heroImage, 1200);
   // Prefix with the document language's market path (/dk, /be/nl, ...) so a
   // translated article previews its own market's live URL, not the root one.
-  const url = `${SITE_URL}${localeById(language)?.path ?? ''}/nyheder/${slug}`;
+  const url = `${SITE_URL}${localeById(language)?.path ?? ''}/news/${slug}`;
 
   const pill = (on: boolean) =>
     ({

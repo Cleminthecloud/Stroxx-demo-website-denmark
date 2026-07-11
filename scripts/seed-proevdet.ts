@@ -1,9 +1,9 @@
 /**
- * Migrates the hand-built /proev-det campaign into a CMS landingPage so it
- * becomes fully editor-managed (and click-to-edit) at /kampagne/proev-det,
+ * Migrates the hand-built /try-it campaign into a CMS landingPage so it
+ * becomes fully editor-managed (and click-to-edit) at /campaign/try-it,
  * and points the homepage campaign band's "Read more" reference at it.
  *
- * Faithful reconstruction of app/proev-det/page.tsx using the landingPage
+ * Faithful reconstruction of app/try-it/page.tsx using the landingPage
  * section blocks (photoHero, statement, reframe, productProof, videoProof,
  * testimonialProof, photoBreak, guaranteeAsk, faqSection). Images reuse the
  * existing /public/Images/campaign shots via the section "image" (path) field.
@@ -18,14 +18,14 @@ import { getCliClient } from 'sanity/cli';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
-const LANDING_ID = 'landingPage-proev-det';
+const LANDING_ID = 'landingPage-try-it';
 
 const landing = {
   _id: LANDING_ID,
   _type: 'landingPage',
   language: 'en', // English base tag — a re-run must never strip it
   title: 'Try It: afford more than just tools',
-  slug: { current: 'proev-det' }, // historic slug preserved; now lives at /kampagne/proev-det
+  slug: { current: 'try-it' }, // historic slug preserved; now lives at /campaign/try-it
   seoTitle: 'Afford more than just tools',
   seoDescription:
     'You pay for the logo, not the steel. STROXX is professional quality without the brand markup, backed by a 100% satisfaction guarantee. Try it for 30 days.',
@@ -120,7 +120,7 @@ const landing = {
       ],
       ctaLabel: 'Where to buy',
       secondaryLabel: 'Find your store',
-      secondaryHref: '/butikker',
+      secondaryHref: '/stores',
     },
     {
       _type: 'faqSection',
@@ -139,17 +139,17 @@ const landing = {
 };
 
 async function run() {
-  // Never create a duplicate: if a proev-det landing page already exists (any
+  // Never create a duplicate: if a try-it landing page already exists (any
   // _id), wire the band to THAT one and leave its content untouched. Only seed
   // the reconstruction when no such page exists yet.
   const existingId: string | null = await client.fetch(
-    '*[_type == "landingPage" && slug.current == "proev-det"][0]._id'
+    '*[_type == "landingPage" && slug.current == "try-it"][0]._id'
   );
   let targetId = existingId;
   if (existingId) {
-    console.log(`Found existing proev-det landing page (${existingId}) — keeping its content.`);
+    console.log(`Found existing try-it landing page (${existingId}) — keeping its content.`);
   } else {
-    console.log('No proev-det landing page yet — writing the reconstruction…');
+    console.log('No try-it landing page yet — writing the reconstruction…');
     await client.createOrReplace(landing);
     targetId = LANDING_ID;
   }
@@ -166,7 +166,7 @@ async function run() {
     console.log('  no homePage document yet — set the "Read more → campaign page" reference in the Studio.');
   }
 
-  console.log('Done. /kampagne/proev-det is CMS-driven; /proev-det redirects to it.');
+  console.log('Done. /campaign/try-it is CMS-driven; /try-it redirects to it.');
 }
 
 run().catch((e) => {

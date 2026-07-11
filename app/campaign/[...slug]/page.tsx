@@ -7,9 +7,9 @@ import { getLandingPage } from '@/lib/cms';
 import LandingSections from '@/components/cms/LandingSections';
 
 /** Every landingPage document an editor creates in the Studio gets a URL here
- *  automatically: slug "sommer" → /kampagne/sommer, and slugs may nest with
- *  slashes: "sommer/tilbud" → /kampagne/sommer/tilbud. Moving a page is
- *  editing its slug. (/proev-det now redirects here to /kampagne/proev-det.) */
+ *  automatically: slug "sommer" → /campaign/sommer, and slugs may nest with
+ *  slashes: "sommer/tilbud" → /campaign/sommer/tilbud. Moving a page is
+ *  editing its slug. (/try-it now redirects here to /campaign/try-it.) */
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }): Promise<Metadata> {
   const path = (await params).slug.join('/');
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
     description: stegaClean(doc.seoDescription) || undefined,
-    alternates: { canonical: `/kampagne/${path}` },
+    alternates: { canonical: `/campaign/${path}` },
     /* per-page share image; empty = site-wide default from layout metadata */
     ...(og ? { openGraph: { images: [{ url: og, width: 1200, height: 630 }] } } : {}),
   };

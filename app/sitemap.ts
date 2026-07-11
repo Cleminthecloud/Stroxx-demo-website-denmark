@@ -3,8 +3,8 @@ import { products } from '@/lib/data';
 import { getLandingSlugs, getPosts, getSupportPages, getTrades, getSiteSettings } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
-/** Public pages only: hidden internals (/komponenter, /guide) and the
- *  /kategori redirects are deliberately left out.
+/** Public pages only: hidden internals (/components, /guide) and the
+ *  /category redirects are deliberately left out.
  *  CMS landing pages are included automatically. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -16,25 +16,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const trades = await getTrades();
   return [
     { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
-    { url: `${BASE}/produkter`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${BASE}/maanedens`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE}/butikker`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    /* /proev-det permanently redirects to its CMS landing page — list the
+    { url: `${BASE}/products`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/monthly`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/stores`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    /* /try-it permanently redirects to its CMS landing page — list the
        canonical target, never the redirect (getLandingSlugs excludes proev-det,
        so it is added here explicitly) */
-    { url: `${BASE}/kampagne/proev-det`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/campaign/try-it`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/service`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/fag`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/satisfaction-guarantee`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/trades`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     ...landingSlugs.map((s) => ({
-      url: `${BASE}/kampagne/${s}`,
+      url: `${BASE}/campaign/${s}`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     })),
     /* news index only when articles exist; articles ride along automatically */
-    ...(posts.length ? [{ url: `${BASE}/nyheder`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.7 }] : []),
+    ...(posts.length ? [{ url: `${BASE}/news`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.7 }] : []),
     ...posts.map((p) => ({
-      url: `${BASE}/nyheder/${p.slug?.current}`,
+      url: `${BASE}/news/${p.slug?.current}`,
       lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
@@ -49,20 +50,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),
-    ...['privatliv', 'cookies', 'handelsbetingelser'].map((s) => ({
+    ...['privacy', 'cookies', 'terms'].map((s) => ({
       url: `${BASE}/${s}`,
       lastModified: now,
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     })),
     ...trades.map((t) => ({
-      url: `${BASE}/fag/${t.slug}`,
+      url: `${BASE}/trades/${t.slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),
     ...products.map((p) => ({
-      url: `${BASE}/produkt/${p.slug}`,
+      url: `${BASE}/product/${p.slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,

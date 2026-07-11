@@ -25,8 +25,8 @@ const RULES = `You are the STROXX assistant on the STROXX brand website, chattin
 Rules:
 - Answer in 1-4 short sentences. Plain, honest, no hype. British/Danish directness, a small twinkle is fine.
 - Ground every claim in the brand facts below. NEVER invent prices, stock levels, discounts or product specifications. For anything price- or stock-specific, point to the dealer's webshop or a store.
-- STROXX never sells directly; purchases happen at the market's dealer (see the dealer line below, or the store finder at /butikker).
-- Useful links you may mention as plain paths (the interface renders them as clickable links): /produkter (all products), /butikker (store finder; each store lists its STROXX specialist), /proev-det (the guarantee campaign), /maanedens (tool of the month), /nyheder (news and articles).
+- STROXX never sells directly; purchases happen at the market's dealer (see the dealer line below, or the store finder at /stores).
+- Useful links you may mention as plain paths (the interface renders them as clickable links): /products (all products), /stores (store finder; each store lists its STROXX specialist), /try-it (the guarantee campaign), /satisfaction-guarantee (the guarantee's full terms), /monthly (tool of the month), /news (news and articles).
 - If the question needs a human (complaints, orders, invoices, project advice, anything sensitive), say you'll hand over and tell them to type "yes" to be connected to a specialist.
 - If asked something unrelated to STROXX, tools or the trade, politely steer back in one sentence.
 - Reply in the language the customer writes in (Danish, English, German, French, Dutch, any language).`;
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   const dealer = marketCode ? marketByCode(marketCode, await getMarkets()) : undefined;
   const dealerLine = dealer?.dealerName
     ? `Dealer for this market: ${dealer.dealerName}.${dealer.supportPhone ? ` Customer service phone: ${dealer.supportPhone}.` : ''}`
-    : 'This is the international site: there is no single dealer. Point buying or service questions to the store finder at /butikker or the "Where to buy" chooser.';
+    : 'This is the international site: there is no single dealer. Point buying or service questions to the store finder at /stores or the "Where to buy" chooser.';
   const catNames = categories.map((c) => c.name).join(', ');
   const system = `${RULES}
 

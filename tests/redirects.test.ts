@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { legacyTarget, buildRedirectMap } from '@/lib/redirects';
+import { legacyTarget, danishTarget, buildRedirectMap } from '@/lib/redirects';
 
 /* Locks the legacy Shopify URL map (printed packaging QR codes depend on it)
  * and the CMS redirect validation (a bad document must never become an open
@@ -9,9 +9,9 @@ describe('legacyTarget', () => {
   it('maps the exact legacy store paths', () => {
     expect(legacyTarget('/pages/about')).toBe('/');
     expect(legacyTarget('/pages/contact')).toBe('/');
-    expect(legacyTarget('/pages/categories')).toBe('/produkter');
-    expect(legacyTarget('/collections/all')).toBe('/produkter');
-    expect(legacyTarget('/cart')).toBe('/produkter');
+    expect(legacyTarget('/pages/categories')).toBe('/products');
+    expect(legacyTarget('/collections/all')).toBe('/products');
+    expect(legacyTarget('/cart')).toBe('/products');
     expect(legacyTarget('/account/login')).toBe('/');
   });
 
@@ -26,10 +26,14 @@ describe('legacyTarget', () => {
     expect(legacyTarget('/pages/')).toBeNull();
   });
 
-  it('product and collection trees land on /produkter', () => {
-    expect(legacyTarget('/products/some-old-product')).toBe('/produkter');
-    expect(legacyTarget('/products')).toBe('/produkter');
-    expect(legacyTarget('/collections/tools')).toBe('/produkter');
+  it('old Shopify product and collection trees land on /products', () => {
+    expect(legacyTarget('/products/some-old-product')).toBe('/products');
+    expect(legacyTarget('/collections/tools')).toBe('/products');
+    expect(legacyTarget('/collections')).toBe('/products');
+  });
+
+  it('bare /products is OUR products page — never a self-redirect loop', () => {
+    expect(legacyTarget('/products')).toBeNull();
   });
 
   it('account and auth trees land on the front page', () => {
@@ -46,9 +50,70 @@ describe('legacyTarget', () => {
 
   it('returns null for normal app paths, the root, and empty input', () => {
     expect(legacyTarget('/')).toBeNull();
-    expect(legacyTarget('/produkter')).toBeNull();
+    expect(legacyTarget('/products')).toBeNull();
     expect(legacyTarget('/support/mmexo')).toBeNull();
+    expect(legacyTarget('/satisfaction-guarantee')).toBeNull();
     expect(legacyTarget('')).toBeNull();
+  });
+});
+
+/* Locks the Danish→English slug sweep (2026-07-11): every pre-sweep Danish
+ * URL must land on its English successor, permanently. */
+describe('danishTarget', () => {
+  it('maps the static Danish routes', () => {
+    expect(danishTarget('/butikker')).toBe('/stores');
+    expect(danishTarget('/fag')).toBe('/trades');
+    expect(danishTarget('/maanedens')).toBe('/monthly');
+    expect(danishTarget('/nyheder')).toBe('/news');
+    expect(danishTarget('/produkter')).toBe('/products');
+    expect(danishTarget('/privatliv')).toBe('/privacy');
+    expect(danishTarget('/handelsbetingelser')).toBe('/terms');
+    expect(danishTarget('/komponenter')).toBe('/components');
+    expect(danishTarget('/proev-det')).toBe('/try-it');
+  });
+
+  it('carries dynamic product and news slugs over 1:1', () => {
+    expect(danishTarget('/produkt/some-product-30012321')).toBe('/product/some-product-30012321');
+    expect(danishTarget('/nyheder/which-laser-class-on-site')).toBe('/news/which-laser-class-on-site');
+  });
+
+  it('translates trade slugs', () => {
+    expect(danishTarget('/fag/toemrer')).toBe('/trades/carpenter');
+    expect(danishTarget('/fag/elektriker')).toBe('/trades/electrician');
+    expect(danishTarget('/fag/vvs')).toBe('/trades/plumber');
+    expect(danishTarget('/fag/maler')).toBe('/trades/painter');
+    expect(danishTarget('/fag/murer')).toBe('/trades/bricklayer');
+    expect(danishTarget('/fag/unknown-trade')).toBe('/trades');
+  });
+
+  it('translates category slugs and sends unknown ones to the finder', () => {
+    expect(danishTarget('/kategori/bor-borsaet')).toBe('/category/drill-bits');
+    expect(danishTarget('/kategori/tape')).toBe('/category/tape');
+    expect(danishTarget('/kategori/whatever')).toBe('/products');
+  });
+
+  it('maps the campaign tree including the renamed proev-det page', () => {
+    expect(danishTarget('/kampagne/proev-det')).toBe('/campaign/try-it');
+    expect(danishTarget('/kampagne/summer-deal')).toBe('/campaign/summer-deal');
+    expect(danishTarget('/kampagne')).toBe('/campaign');
+  });
+
+  it('maps the two product slugs that lost a Danish word', () => {
+    expect(danishTarget('/produkt/hole-saw-adapter-set-5-pcs-for-hulsave-14-30mm-32012586'))
+      .toBe('/product/hole-saw-adapter-set-5-pcs-for-hole-saws-14-30mm-32012586');
+  });
+
+  it('never fires on the new English routes', () => {
+    expect(danishTarget('/stores')).toBeNull();
+    expect(danishTarget('/trades/carpenter')).toBeNull();
+    expect(danishTarget('/products')).toBeNull();
+    expect(danishTarget('/satisfaction-guarantee')).toBeNull();
+    expect(danishTarget('/')).toBeNull();
+  });
+
+  it('legacyTarget delegates to the Danish map first', () => {
+    expect(legacyTarget('/butikker')).toBe('/stores');
+    expect(legacyTarget('/kampagne/proev-det')).toBe('/campaign/try-it');
   });
 });
 

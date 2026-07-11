@@ -15,13 +15,13 @@ export type Trade = {
 
 export const trades: Trade[] = [
   {
-    slug: 'toemrer',
+    slug: 'carpenter',
     name: 'Carpenter and joiner',
     title: 'For the ones who build in wood.',
     accent: 'in wood.',
     blurb:
       'Blades that hold their edge, drills that do not wander, and measurements that line up at both ends. The kit for woodworkers, with no badge premium.',
-    categories: ['rundsavklinger', 'bor-borsaet', 'bits-skruetraekkere', 'maalevaerktoej', 'knive', 'lasere'],
+    categories: ['circular-saw-blades', 'drill-bits', 'bits-screwdrivers', 'measuring-tools', 'knives', 'lasers'],
     faq: [
       {
         q: 'Which STROXX tools do carpenters reach for most?',
@@ -34,13 +34,13 @@ export const trades: Trade[] = [
     ],
   },
   {
-    slug: 'elektriker',
+    slug: 'electrician',
     name: 'Electrician',
     title: 'Power on the job. Not on the price.',
     accent: 'Not on the price.',
     blurb:
       'Hole saws for back boxes, bits that bite, cable reels that survive the site, and light that turns night work into day work.',
-    categories: ['hulsave', 'bits-skruetraekkere', 'kabeltromler', 'belysning', 'multicutterklinger', 'maalevaerktoej'],
+    categories: ['hole-saws', 'bits-screwdrivers', 'cable-reels', 'lighting', 'multi-cutter-blades', 'measuring-tools'],
     faq: [
       {
         q: 'Which STROXX tools matter most to electricians?',
@@ -53,13 +53,13 @@ export const trades: Trade[] = [
     ],
   },
   {
-    slug: 'vvs',
+    slug: 'plumber',
     name: 'Plumber',
     title: 'Tight work. Tight prices.',
     accent: 'Tight prices.',
     blurb:
       'Socket sets that grip, hole saws for pass-throughs, sealant that seals, and measuring tools you can trust in a wet basement.',
-    categories: ['topnoegler', 'hulsave', 'bor-borsaet', 'fugemasse', 'maalevaerktoej', 'knive'],
+    categories: ['socket-sets', 'hole-saws', 'drill-bits', 'sealant', 'measuring-tools', 'knives'],
     faq: [
       {
         q: 'What does STROXX have for plumbers?',
@@ -72,13 +72,13 @@ export const trades: Trade[] = [
     ],
   },
   {
-    slug: 'maler',
+    slug: 'painter',
     name: 'Painter',
     title: 'Clean lines. Clear conscience.',
     accent: 'Clear conscience.',
     blurb:
       'Rollers, brushes, tape and chemicals for a finish the customer can see themselves in. And knives for everything that needs a clean cut first.',
-    categories: ['malergrej', 'tape', 'kemi', 'fugemasse', 'knive'],
+    categories: ['painting-tools', 'tape', 'chemicals', 'sealant', 'knives'],
     faq: [
       {
         q: 'What does STROXX painting gear cover?',
@@ -91,13 +91,13 @@ export const trades: Trade[] = [
     ],
   },
   {
-    slug: 'murer',
+    slug: 'bricklayer',
     name: 'Bricklayer',
     title: 'Hard ground. Soft price.',
     accent: 'Soft price.',
     blurb:
       'Masonry and hammer drills that chew through concrete, lasers that set the line, and safety gear so you get home in one piece.',
-    categories: ['bor-borsaet', 'lasere', 'maalevaerktoej', 'sikkerhed', 'kemi'],
+    categories: ['drill-bits', 'lasers', 'measuring-tools', 'safety', 'chemicals'],
     faq: [
       {
         q: 'Which STROXX tools suit bricklaying and concrete work?',

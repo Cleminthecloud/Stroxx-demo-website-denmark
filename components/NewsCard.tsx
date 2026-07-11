@@ -20,7 +20,7 @@ export type NewsCardData = {
 };
 
 export default function NewsCard({ post }: { post: NewsCardData }) {
-  const href = `/nyheder/${post.slug}`;
+  const href = `/news/${post.slug}`;
   return (
     <div className="relative group h-full">
       <GlassCardGlow className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden transition-transform duration-500 group-hover:-translate-y-1">

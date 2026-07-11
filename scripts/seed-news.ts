@@ -141,7 +141,7 @@ async function run() {
   }
 
   /* the manifesto page: the Brand Plan's words as a CMS landing page at
-     /kampagne/manifesto — the About page every big tool brand has, fully
+     /campaign/manifesto — the About page every big tool brand has, fully
      editable like any other landing page */
   await client.createOrReplace({
     _id: 'landing-manifesto',
@@ -180,27 +180,27 @@ async function run() {
         headline: 'Made for professionals who care about *the results.*',
         sub: 'Nothing else. That is STROXX.',
         primaryLabel: 'See the tools',
-        primaryHref: '/produkter',
+        primaryHref: '/products',
         secondaryLabel: 'The 30-day guarantee',
-        secondaryHref: '/proev-det',
+        secondaryHref: '/try-it',
       },
     ],
   });
-  console.log('seeded landing-manifesto (/kampagne/manifesto)');
+  console.log('seeded landing-manifesto (/campaign/manifesto)');
 
   /* add News to the footer links in Site settings, once */
   const settings = await client.getDocument('siteSettings');
   const links = (settings?.footerPageLinks ?? []) as { href?: string }[];
-  if (settings && !links.some((l) => l.href === '/nyheder')) {
+  if (settings && !links.some((l) => l.href === '/news')) {
     await client
       .patch('siteSettings')
-      .append('footerPageLinks', [{ _type: 'navLink', _key: 'seed-news', label: 'News', href: '/nyheder' }])
+      .append('footerPageLinks', [{ _type: 'navLink', _key: 'seed-news', label: 'News', href: '/news' }])
       .commit();
     console.log('footer: News link added to Site settings');
   } else {
     console.log('footer: News link already present (or no settings doc)');
   }
-  console.log('done: 3 articles + footer link. /nyheder is live.');
+  console.log('done: 3 articles + footer link. /news is live.');
 }
 
 run().catch((e) => {

@@ -22,11 +22,11 @@ const siteSettings = {
 };
 
 const landingPage = {
-  _id: 'landing-proev-det',
+  _id: 'landing-try-it',
   _type: 'landingPage',
   language: 'en',
   title: 'Campaign: Try It',
-  slug: { _type: 'slug', current: 'proev-det' },
+  slug: { _type: 'slug', current: 'try-it' },
   seoTitle: 'Afford more than just tools',
   seoDescription:
     'You pay for the logo, not the steel. STROXX is professional quality without the brand markup, backed by a 100% satisfaction guarantee. Try it for 30 days.',
@@ -244,10 +244,10 @@ const monthlyLineup: Record<string, unknown> = {
 async function run() {
   const tx = client.transaction();
   tx.createOrReplace(siteSettings as any);
-  /* duplicate guard: seed-proevdet may own the proev-det page under another
+  /* duplicate guard: seed-proevdet may own the try-it page under another
      _id — two docs with one slug would make getLandingPage/[0] nondeterministic */
   const slugOwner = (await client.fetch(
-    `*[_type == "landingPage" && slug.current == "proev-det"][0]._id`
+    `*[_type == "landingPage" && slug.current == "try-it"][0]._id`
   )) as string | null;
   if (!slugOwner || slugOwner === landingPage._id) tx.createOrReplace(landingPage as any);
   tx.createOrReplace(monthlyLineup as any);

@@ -30,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
 
         {/* lit, floating product cut-out — white background knocked out */}
-        <Link href={`/produkt/${product.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
+        <Link href={`/product/${product.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
           <div className="absolute inset-6 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.16), rgba(0,136,194,0) 70%)' }} />
           {/* the /api/tool proxy knocks the white studio bg out SERVER-SIDE
               (sharp), so a plain lazy <img> is enough here — no client canvas
@@ -48,12 +48,12 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="relative z-10 flex flex-col flex-1 p-5">
           <div className="text-[11px] uppercase tracking-wider text-fog mb-1">STROXX</div>
           {/* min-h reserves two title lines so 1-line names don't shrink the card */}
-          <Link href={`/produkt/${product.slug}`} className="text-[15px] font-medium text-white leading-snug mb-4 line-clamp-2 min-h-[2.75em] hover:text-stroxx-blue transition-colors">
+          <Link href={`/product/${product.slug}`} className="text-[15px] font-medium text-white leading-snug mb-4 line-clamp-2 min-h-[2.75em] hover:text-stroxx-blue transition-colors">
             {product.name}
           </Link>
           <div className="flex gap-2 mt-auto">
             <BuyCTA code={product.code} label="Buy" size="sm" className="flex-1" />
-            <GlassButton href={`/produkt/${product.slug}`} variant="ghost" size="sm" className="flex-1">Explore</GlassButton>
+            <GlassButton href={`/product/${product.slug}`} variant="ghost" size="sm" className="flex-1">Explore</GlassButton>
           </div>
         </div>
       </GlassCardGlow>

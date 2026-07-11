@@ -82,7 +82,7 @@ The Guide tab answers almost everything. Questions? Just reply to this message.`
       n: '3',
       title: 'Know the building blocks',
       text: 'The brand guide and every landing-page block, rendered live with the exact names you will see in the "Add item" menu.',
-      href: '/komponenter',
+      href: '/components',
     },
   ];
 

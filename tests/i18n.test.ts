@@ -62,11 +62,11 @@ describe('localeFromPath', () => {
 
   it('resolves each locale sub-path at its root and on nested paths', () => {
     expect(localeFromPath('/dk').id).toBe('da-DK');
-    expect(localeFromPath('/dk/produkter').id).toBe('da-DK');
-    expect(localeFromPath('/de/produkter/skruer').id).toBe('de-DE');
+    expect(localeFromPath('/dk/products').id).toBe('da-DK');
+    expect(localeFromPath('/de/products/skruer').id).toBe('de-DE');
     expect(localeFromPath('/fr').id).toBe('fr-FR');
     expect(localeFromPath('/be/nl').id).toBe('nl-BE');
-    expect(localeFromPath('/be/nl/produkter').id).toBe('nl-BE');
+    expect(localeFromPath('/be/nl/products').id).toBe('nl-BE');
     expect(localeFromPath('/be/fr').id).toBe('fr-BE');
     expect(localeFromPath('/be/fr/service').id).toBe('fr-BE');
   });
@@ -74,7 +74,7 @@ describe('localeFromPath', () => {
   it('handles trailing slashes', () => {
     expect(localeFromPath('/dk/').id).toBe('da-DK');
     expect(localeFromPath('/be/nl/').id).toBe('nl-BE');
-    expect(localeFromPath('/dk/produkter/').id).toBe('da-DK');
+    expect(localeFromPath('/dk/products/').id).toBe('da-DK');
   });
 
   it('a bare Belgian market root /be falls back to the reference', () => {
@@ -82,7 +82,7 @@ describe('localeFromPath', () => {
   });
 
   it('unmatched and lookalike paths fall back to the reference', () => {
-    expect(localeFromPath('/produkter').id).toBe('en');
+    expect(localeFromPath('/products').id).toBe('en');
     expect(localeFromPath('/dkk').id).toBe('en');
     expect(localeFromPath('/denmark').id).toBe('en');
     expect(localeFromPath('').id).toBe('en');
@@ -95,8 +95,8 @@ describe('stripLocale', () => {
   const en = localeById('en')!;
 
   it('strips a locale prefix from nested paths', () => {
-    expect(stripLocale('/dk/produkter', dk)).toBe('/produkter');
-    expect(stripLocale('/be/nl/produkter/skruer', nlBE)).toBe('/produkter/skruer');
+    expect(stripLocale('/dk/products', dk)).toBe('/products');
+    expect(stripLocale('/be/nl/products/skruer', nlBE)).toBe('/products/skruer');
   });
 
   it('a bare locale root strips to /', () => {
@@ -105,7 +105,7 @@ describe('stripLocale', () => {
   });
 
   it('the reference locale has no prefix, path passes through', () => {
-    expect(stripLocale('/produkter', en)).toBe('/produkter');
+    expect(stripLocale('/products', en)).toBe('/products');
     expect(stripLocale('/', en)).toBe('/');
   });
 
@@ -118,13 +118,13 @@ describe('resolveLocale, domain first then path', () => {
   it('each single-language ccTLD wins regardless of path', () => {
     expect(resolveLocale('stroxx.dk', '/')).toMatchObject({ strip: '' });
     expect(resolveLocale('stroxx.dk', '/').locale.id).toBe('da-DK');
-    expect(resolveLocale('stroxx.dk', '/produkter').locale.id).toBe('da-DK');
+    expect(resolveLocale('stroxx.dk', '/products').locale.id).toBe('da-DK');
     expect(resolveLocale('stroxx.de', '/').locale.id).toBe('de-DE');
     expect(resolveLocale('stroxx.fr', '/service').locale.id).toBe('fr-FR');
   });
 
   it('the domain wins even when the path carries another locale prefix', () => {
-    const r = resolveLocale('stroxx.dk', '/de/produkter');
+    const r = resolveLocale('stroxx.dk', '/de/products');
     expect(r.locale.id).toBe('da-DK');
     expect(r.strip).toBe('');
   });
@@ -142,14 +142,14 @@ describe('resolveLocale, domain first then path', () => {
     const r = resolveLocale('stroxx.be', '/');
     expect(r.locale.id).toBe('nl-BE');
     expect(r.strip).toBe('');
-    expect(resolveLocale('stroxx.be', '/produkter').locale.id).toBe('nl-BE');
+    expect(resolveLocale('stroxx.be', '/products').locale.id).toBe('nl-BE');
   });
 
   it('the Belgian domain serves French under /fr', () => {
     const root = resolveLocale('stroxx.be', '/fr');
     expect(root.locale.id).toBe('fr-BE');
     expect(root.strip).toBe('/fr');
-    const nested = resolveLocale('stroxx.be', '/fr/produkter');
+    const nested = resolveLocale('stroxx.be', '/fr/products');
     expect(nested.locale.id).toBe('fr-BE');
     expect(nested.strip).toBe('/fr');
   });
@@ -160,8 +160,8 @@ describe('resolveLocale, domain first then path', () => {
 
   it('the .eu fallback domain resolves by sub-path', () => {
     expect(resolveLocale('stroxx.eu', '/').locale.id).toBe('en');
-    expect(resolveLocale('stroxx.eu', '/dk/produkter')).toMatchObject({ strip: '/dk' });
-    expect(resolveLocale('stroxx.eu', '/dk/produkter').locale.id).toBe('da-DK');
+    expect(resolveLocale('stroxx.eu', '/dk/products')).toMatchObject({ strip: '/dk' });
+    expect(resolveLocale('stroxx.eu', '/dk/products').locale.id).toBe('da-DK');
     expect(resolveLocale('stroxx.eu', '/be/fr').locale.id).toBe('fr-BE');
     expect(resolveLocale('stroxx.eu', '/be/nl').strip).toBe('/be/nl');
   });

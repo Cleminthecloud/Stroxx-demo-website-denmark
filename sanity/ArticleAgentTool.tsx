@@ -35,7 +35,7 @@ const MODES: { id: Mode; label: string; hint: string; placeholder: string; needs
     id: 'social',
     label: 'LinkedIn post',
     hint: 'Paste a finished article (or its title + excerpt + URL) and get two post variants with hooks and hashtags. Remember: the share image and OG title decide how the link card looks.',
-    placeholder: 'Article title, a few lines of it, and the URL (e.g. https://.../nyheder/my-article)',
+    placeholder: 'Article title, a few lines of it, and the URL (e.g. https://.../news/my-article)',
     needsInput: true,
   },
 ];

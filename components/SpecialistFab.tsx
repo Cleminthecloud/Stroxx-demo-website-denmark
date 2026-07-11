@@ -33,7 +33,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
   // product pages have a sticky mobile buy bar at the bottom; float above it
-  const onProduct = pathname?.startsWith('/produkt/');
+  const onProduct = pathname?.startsWith('/product/');
 
   // the closed panel is visually hidden but stays mounted (exit transition) —
   // `inert` keeps its buttons/links out of the tab order and screen readers
@@ -171,7 +171,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
               <span className="text-white font-medium">{servicePhone}</span>
             </a>
           )}
-          <Link href="/butikker" onClick={() => setOpen(false)} className="link-arrow text-[12px] whitespace-nowrap">
+          <Link href="/stores" onClick={() => setOpen(false)} className="link-arrow text-[12px] whitespace-nowrap">
             All stores <ArrowRight size={13} />
           </Link>
         </div>

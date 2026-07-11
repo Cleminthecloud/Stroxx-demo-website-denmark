@@ -1,10 +1,8 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Check, X, FileText, ArrowRight } from 'lucide-react';
+import { Check, X, ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 import { useDealerChooser } from '@/components/DealerChooser';
-
-const PDF = '/STROXX-tilfredshedsgaranti.pdf';
 
 const POINTS = [
   'Not satisfied? You get your money back.',
@@ -116,8 +114,8 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
-              <GlassButton href={PDF} external>
-                <FileText size={16} /> See the guarantee (PDF)
+              <GlassButton href="/satisfaction-guarantee">
+                Read the full terms <ArrowRight size={15} />
               </GlassButton>
             </div>
           </div>

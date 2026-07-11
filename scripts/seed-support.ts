@@ -248,7 +248,7 @@ async function run() {
     _type: 'supportPage',
     language: 'en',
     title: 'Safety equipment (PPE)',
-    slug: { current: 'sikkerhed' },
+    slug: { current: 'safety' },
     intro: 'CE declarations of conformity and user instructions for STROXX protective equipment.',
     seoTitle: 'Safety equipment CE declarations · STROXX',
     seoDescription: 'CE declarations of conformity for STROXX ear protection, gloves, safety glasses, safety shoes and FFP masks.',

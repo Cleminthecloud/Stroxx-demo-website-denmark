@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity';
 
-/** One document per physical store. Feeds the /butikker finder and the
+/** One document per physical store. Feeds the /stores finder and the
  *  "nearest store" logic in the specialist FAB. Mirrors the Store type in
  *  lib/stores.ts; the old Webflow snapshot remains the fallback if the CMS is
  *  empty. GDPR: manager photo + direct phone need the consent flag ON. */

@@ -1,7 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { langLabel } from '../lib/langLabel';
 
-/** Trade ("fag") landing pages: /fag lists them as cards, /fag/<slug> is the
+/** Trade landing pages: /trades lists them as cards, /trades/<slug> is the
  *  full page. Hardcoded fallbacks live in lib/trades.ts, so an empty
  *  collection never blanks the pages. Products are pulled automatically from
  *  the chosen categories (PIM does the rest); testimonials tagged with the
@@ -10,33 +10,33 @@ import { langLabel } from '../lib/langLabel';
 /** Keep in sync with the category slugs in lib/data.ts. Also used by the
  *  specialist quote-topic picker in collections.ts. */
 export const CATEGORY_OPTIONS = [
-  { title: 'Access control', value: 'adgangskontrol' },
-  { title: 'Workwear', value: 'arbejdstoej' },
-  { title: 'Batteries', value: 'batterier' },
-  { title: 'Lighting and accessories', value: 'belysning' },
-  { title: 'Bits and screwdrivers', value: 'bits-skruetraekkere' },
-  { title: 'Drills and drill sets', value: 'bor-borsaet' },
-  { title: 'Sealant and accessories', value: 'fugemasse' },
-  { title: 'Hole saws and accessories', value: 'hulsave' },
-  { title: 'Cable reels', value: 'kabeltromler' },
-  { title: 'Chemicals and paint tools', value: 'kemi' },
-  { title: 'Knives and blades', value: 'knive' },
-  { title: 'Lasers and accessories', value: 'lasere' },
-  { title: 'Painting gear and accessories', value: 'malergrej' },
-  { title: 'Multi-cutter blades', value: 'multicutterklinger' },
-  { title: 'Measuring tools', value: 'maalevaerktoej' },
-  { title: 'Circular saw blades', value: 'rundsavklinger' },
-  { title: 'Safety', value: 'sikkerhed' },
-  { title: 'Site hut supplies', value: 'skurvognsartikler' },
+  { title: 'Access control', value: 'access-control' },
+  { title: 'Workwear', value: 'workwear' },
+  { title: 'Batteries', value: 'batteries' },
+  { title: 'Lighting and accessories', value: 'lighting' },
+  { title: 'Bits and screwdrivers', value: 'bits-screwdrivers' },
+  { title: 'Drills and drill sets', value: 'drill-bits' },
+  { title: 'Sealant and accessories', value: 'sealant' },
+  { title: 'Hole saws and accessories', value: 'hole-saws' },
+  { title: 'Cable reels', value: 'cable-reels' },
+  { title: 'Chemicals and paint tools', value: 'chemicals' },
+  { title: 'Knives and blades', value: 'knives' },
+  { title: 'Lasers and accessories', value: 'lasers' },
+  { title: 'Painting gear and accessories', value: 'painting-tools' },
+  { title: 'Multi-cutter blades', value: 'multi-cutter-blades' },
+  { title: 'Measuring tools', value: 'measuring-tools' },
+  { title: 'Circular saw blades', value: 'circular-saw-blades' },
+  { title: 'Safety', value: 'safety' },
+  { title: 'Site hut supplies', value: 'site-hut-supplies' },
   { title: 'Tape', value: 'tape' },
-  { title: 'Socket sets, sockets and accessories', value: 'topnoegler' },
+  { title: 'Socket sets, sockets and accessories', value: 'socket-sets' },
 ];
 
 export const trade = defineType({
   name: 'trade',
-  title: 'Trade (fag page)',
+  title: 'Trade page',
   type: 'document',
-  description: 'A trade area: card on /fag plus its own page at /fag/<slug>.',
+  description: 'A trade area: card on /trades plus its own page at /trades/<slug>.',
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
@@ -48,7 +48,7 @@ export const trade = defineType({
     }),
     defineField({
       name: 'slug',
-      title: 'Slug (the address: /fag/<slug>)',
+      title: 'Slug (the address: /trades/<slug>)',
       type: 'slug',
       options: { source: 'name' },
       description:
@@ -84,7 +84,7 @@ export const trade = defineType({
       title: 'Blurb',
       type: 'text',
       rows: 3,
-      description: 'One or two sentences under the headline and on the /fag card. Name the job, sell the outcome, no hype.',
+      description: 'One or two sentences under the headline and on the /trades card. Name the job, sell the outcome, no hype.',
     }),
     defineField({
       name: 'categories',
@@ -116,7 +116,7 @@ export const trade = defineType({
       name: 'order',
       title: 'Sort order',
       type: 'number',
-      description: 'Lower numbers first on /fag. 10, 20, 30... leaves room to squeeze one in later.',
+      description: 'Lower numbers first on /trades. 10, 20, 30... leaves room to squeeze one in later.',
       initialValue: 50,
     }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
@@ -128,7 +128,7 @@ export const trade = defineType({
     select: { title: 'name', slug: 'slug.current', language: 'language' },
     prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
       title: title || 'Trade',
-      subtitle: `/fag/${slug || '…'} · ${langLabel(language)}`,
+      subtitle: `/trades/${slug || '…'} · ${langLabel(language)}`,
     }),
   },
 });

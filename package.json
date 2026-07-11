@@ -22,6 +22,7 @@
     "seed:markets": "sanity exec scripts/seed-markets.ts --with-user-token",
     "seed:i18n-base": "sanity exec scripts/seed-i18n-base.ts --with-user-token",
     "seed:proevdet": "sanity exec scripts/seed-proevdet.ts --with-user-token",
+    "migrate:english-slugs": "sanity exec scripts/migrate-english-slugs.ts --with-user-token",
     "seed:qr": "sanity exec scripts/seed-qr.ts --with-user-token",
     "backup": "mkdir -p backups && sanity dataset export demo backups/demo-backup.tar.gz --overwrite"
   },

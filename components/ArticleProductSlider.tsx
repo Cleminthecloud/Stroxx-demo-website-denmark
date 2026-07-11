@@ -20,7 +20,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
         {items.map((p) => (
           <div key={p.code} className="snap-start shrink-0 w-[240px] sm:w-[260px] group">
             <div className="relative h-full flex flex-col glass glass-card rounded-xl overflow-hidden">
-              <Link href={`/produkt/${p.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
+              <Link href={`/product/${p.slug}`} className="relative block aspect-[5/4] grid place-items-center overflow-hidden">
                 <div className="absolute inset-5 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,136,194,0.16), rgba(0,136,194,0) 70%)' }} />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -32,7 +32,7 @@ export default function ArticleProductSlider({ title, skus }: { title?: string; 
                 />
               </Link>
               <div className="relative z-10 flex flex-col flex-1 p-4">
-                <Link href={`/produkt/${p.slug}`}
+                <Link href={`/product/${p.slug}`}
                   className="text-[13px] font-medium text-white leading-snug line-clamp-2 min-h-[2.6em] mb-3 hover:text-stroxx-blue transition-colors">
                   {p.name}
                 </Link>

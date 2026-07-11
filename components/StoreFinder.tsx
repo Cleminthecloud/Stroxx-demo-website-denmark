@@ -55,9 +55,9 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
   const L = useRef<typeof import('leaflet') | null>(null);
   const cardEls = useRef<Record<string, HTMLDivElement | null>>({});
 
-  /* deep-linkable: /butikker?q=<postnr/by> (Marketo emails prefill the search
+  /* deep-linkable: /stores?q=<postnr/by> (Marketo emails prefill the search
      with the lead's postal code). useSearchParams needs the <Suspense> wrapper
-     in app/butikker/page.tsx. */
+     in app/stores/page.tsx. */
   const params = useSearchParams();
   useEffect(() => {
     const qq = params.get('q');

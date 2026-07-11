@@ -13,7 +13,7 @@ type CampaignBandProps = {
   text?: string;
   primaryLabel?: string;
   secondaryLabel?: string;
-  href?: string; // resolved "read more" target (campaign landing page or /proev-det)
+  href?: string; // resolved "read more" target (campaign landing page or /try-it)
   // click-to-edit targets (Presentation) — data-sanity strings from the homepage
   eyebrowAttr?: string;
   headlineAttr?: string;
@@ -40,7 +40,7 @@ export default function CampaignBand({
   text = 'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
   primaryLabel,
   secondaryLabel = 'Read more',
-  href = '/proev-det',
+  href = '/try-it',
   eyebrowAttr,
   headlineAttr,
   textAttr,

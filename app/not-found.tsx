@@ -22,8 +22,8 @@ export default async function NotFound() {
         <p className="text-fog text-lg md:text-xl leading-relaxed max-w-xl mb-10">{text}</p>
         <div className="flex flex-wrap items-center gap-3">
           <GlassButton href="/">Back to the front page <ArrowRight size={16} /></GlassButton>
-          <GlassButton href="/produkter" variant="ghost">See the products</GlassButton>
-          <Link href="/butikker" className="link-arrow text-sm ml-1">Find a store <ArrowRight size={15} strokeWidth={2} /></Link>
+          <GlassButton href="/products" variant="ghost">See the products</GlassButton>
+          <Link href="/stores" className="link-arrow text-sm ml-1">Find a store <ArrowRight size={15} strokeWidth={2} /></Link>
         </div>
       </div>
     </main>

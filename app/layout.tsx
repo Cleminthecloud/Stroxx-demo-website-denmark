@@ -79,8 +79,8 @@ const BASE = SITE_URL;
 
 /* Site-wide structured data: who STROXX is (Organization, with Carl Ras as
    the exclusive Danish retailer) and how to search the site (WebSite +
-   SearchAction → /produkter?q=). Product pages add Product + Breadcrumb LD,
-   /proev-det adds FAQ + HowTo. */
+   SearchAction → /products?q=). Product pages add Product + Breadcrumb LD,
+   /try-it adds FAQ + HowTo. */
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -112,7 +112,7 @@ const siteLd = {
   inLanguage: 'en',
   potentialAction: {
     '@type': 'SearchAction',
-    target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/produkter?q={search_term_string}` },
+    target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/products?q={search_term_string}` },
     'query-input': 'required name=search_term_string',
   },
 };

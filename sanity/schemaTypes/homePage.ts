@@ -147,7 +147,7 @@ export const homePage = defineType({
       name: 'campaignLink',
       title: 'Campaign band: “read more” → campaign page',
       description:
-        'The campaign landing page the band links to. SWAP THE CAMPAIGN by pointing this at a different page, or create a new Landing page (it publishes at /kampagne/…) and select it here. Empty = links to the Try-it page.',
+        'The campaign landing page the band links to. SWAP THE CAMPAIGN by pointing this at a different page, or create a new Landing page (it publishes at /campaign/…) and select it here. Empty = links to the Try-it page.',
       type: 'reference',
       to: [{ type: 'landingPage' }],
       group: 'month',

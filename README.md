@@ -14,19 +14,19 @@ The site is a full production build, not a prototype. It runs one codebase acros
 | Route | What it is |
 |---|---|
 | `/` | Home. A single scrolling page. The STROXX tool-bag is a **load-time intro** (`BagJourney`): it falls into the hero, settles, and the tools cascade in on load, then scrolls away with the hero. Below it: range, category storytelling, specialists, the month, guarantee, EU footprint, campaign band. |
-| `/produkter` | **Product finder**, filter by category, search, sort. A particle hero per category. Every "buy" deep-links to Carl Ras with the live UTM convention. |
-| `/produkt/[slug]` | **Product page**, the heavy page type. This is the one with the **scroll-driven experience**: a pinned product cut-out travels down the gutter as you scroll (`ProductExperience`), alongside selling points, a specialist quote, spec table, Pro Club signup and related products. |
-| `/butikker` | Full-screen store finder (Leaflet), opening hours, phone, and a Specialists tab. |
-| `/fag`, `/fag/[slug]` | Trade pages, tools grouped by craft. |
-| `/proev-det`, `/maanedens` | Campaign ("Try it") and month ("Tool of the Month") landing pages, built from CMS section blocks. |
-| `/nyheder`, `/nyheder/[slug]` | News and articles, with correct social share previews. |
+| `/products` | **Product finder**, filter by category, search, sort. A particle hero per category. Every "buy" deep-links to Carl Ras with the live UTM convention. |
+| `/product/[slug]` | **Product page**, the heavy page type. This is the one with the **scroll-driven experience**: a pinned product cut-out travels down the gutter as you scroll (`ProductExperience`), alongside selling points, a specialist quote, spec table, Pro Club signup and related products. |
+| `/stores` | Full-screen store finder (Leaflet), opening hours, phone, and a Specialists tab. |
+| `/trades`, `/trades/[slug]` | Trade pages, tools grouped by craft. |
+| `/try-it`, `/monthly` | Campaign ("Try it") and month ("Tool of the Month") landing pages, built from CMS section blocks. |
+| `/news`, `/news/[slug]` | News and articles, with correct social share previews. |
 | `/support`, `/support/[slug]`, `/qr/[code]` | Manuals and the packaging QR system. `/qr/<code>` is a repointable 302 that counts scans. |
 | `/studio` | The Sanity Studio, visual (click-to-edit) editing on top of the live site, plus the analytics dashboard. |
 | `/test` | The tester landing page and bug-report form (noindex, no login). Reports land as `feedback` docs in the Studio. |
-| `/guide`, `/komponenter` | The content-team editor guide, and an internal gallery of every CMS section block. |
+| `/guide`, `/components` | The content-team editor guide, and an internal gallery of every CMS section block. |
 | `/api/tool/[id]` | Image proxy. Pulls a real product photo from the Carl-Ras CDN, **knocks out the white background** with `sharp`, serves it CORS-safe. |
 
-Legal pages (`/privatliv`, `/cookies`, `/handelsbetingelser`, `/service`) and a PWA manifest ship too.
+Legal pages (`/privacy`, `/cookies`, `/terms`, `/service`) and a PWA manifest ship too.
 
 ### Stack
 Next.js 16 (App Router, TS, React 19) · Tailwind · GSAP + Lenis smooth-scroll · Leaflet · Sanity CMS

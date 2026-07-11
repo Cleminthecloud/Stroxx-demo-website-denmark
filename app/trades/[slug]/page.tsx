@@ -26,18 +26,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title,
     description,
-    alternates: { canonical: `/fag/${t.slug}` },
+    alternates: { canonical: `/trades/${t.slug}` },
     openGraph: { title: `STROXX for ${t.name.toLowerCase()}`, description },
   };
 }
 
-/** Full-bleed b/w hero image per trade, dropped in public/Images/fag/{slug}.jpg
+/** Full-bleed b/w hero image per trade, dropped in public/Images/trades/{slug}.jpg
  *  (+ optional {slug}-sm.jpg for mobile). Pages render a clean gradient hero
  *  until the file exists, so placeholders cost nothing. */
 function heroSources(slug: string) {
   const dir = path.join(process.cwd(), 'public', 'Images', 'fag');
-  const main = existsSync(path.join(dir, `${slug}.jpg`)) ? `/Images/fag/${slug}.jpg` : null;
-  const sm = existsSync(path.join(dir, `${slug}-sm.jpg`)) ? `/Images/fag/${slug}-sm.jpg` : null;
+  const main = existsSync(path.join(dir, `${slug}.jpg`)) ? `/Images/trades/${slug}.jpg` : null;
+  const sm = existsSync(path.join(dir, `${slug}-sm.jpg`)) ? `/Images/trades/${slug}-sm.jpg` : null;
   return { main, sm };
 }
 
@@ -59,7 +59,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Trades', item: `${BASE}/fag` },
+      { '@type': 'ListItem', position: 2, name: 'Trades', item: `${BASE}/trades` },
       { '@type': 'ListItem', position: 3, name: trade.name },
     ],
   };
@@ -71,7 +71,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
       '@type': 'ListItem',
       position: i + 1,
       name: p.name,
-      url: `${BASE}/produkt/${p.slug}`,
+      url: `${BASE}/product/${p.slug}`,
     })),
   };
   const faqLd = {
@@ -135,7 +135,7 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
               {cats.map((c) => (
                 <Link
                   key={c!.slug}
-                  href={`/produkter?cat=${c!.slug}`}
+                  href={`/products?cat=${c!.slug}`}
                   className="rounded-full border border-line bg-ink/50 px-4 py-2 text-sm text-fog backdrop-blur-sm transition-colors hover:border-stroxx-blue/60 hover:text-white"
                 >
                   {c!.name}
@@ -167,9 +167,9 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
         {/* next step */}
         <Reveal delay={120}>
           <div className="mt-16 flex flex-wrap items-center gap-3">
-            <GlassButton href="/produkter">See the full range <ArrowRight size={15} /></GlassButton>
-            <GlassButton href="/butikker" variant="ghost">Ask a specialist</GlassButton>
-            <Link href="/proev-det" className="link-arrow text-sm ml-1">
+            <GlassButton href="/products">See the full range <ArrowRight size={15} /></GlassButton>
+            <GlassButton href="/stores" variant="ghost">Ask a specialist</GlassButton>
+            <Link href="/try-it" className="link-arrow text-sm ml-1">
               30-day satisfaction guarantee <ArrowRight size={15} strokeWidth={2} />
             </Link>
           </div>

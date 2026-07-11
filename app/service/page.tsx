@@ -12,20 +12,21 @@ import { ArrowRight, FileText, Phone, RotateCcw, ShieldCheck } from 'lucide-reac
 export const metadata: Metadata = {
   title: 'Service and Support',
   description:
-    'Everything practical in one place: the STROXX 30-day satisfaction guarantee, returns, documents and direct contact with Carl Ras customer service and the specialists.',
+    'Everything practical in one place: the STROXX 30-day satisfaction guarantee, returns, documents and direct contact with your dealer\'s customer service and the specialists.',
 };
 
 /* Service & support hub: the boring-but-vital page competitors have and value
-   brands forget. Everything is grounded in the real guarantee terms
-   (public/STROXX-tilfredshedsgaranti.pdf). Datasheets for kemi arrive with the
-   DAM integration. */
+   brands forget. Everything is grounded in the real guarantee terms — the
+   editable CMS page at /satisfaction-guarantee. Datasheets for chemicals
+   arrive with the DAM integration. */
 
-/* Handel sker altid hos Carl Ras → de juridiske dokumenter bor dér. */
+/* ENGLISH BASE = dealer-neutral: our own legal/guarantee pages, never one
+   market's dealer documents (per-market siteSettings overrides these). */
 const DOCS = [
-  { label: 'Satisfaction guarantee, full terms (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
-  { label: 'Terms of sale and delivery (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/' },
-  { label: 'Privacy policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/persondatapolitik/' },
-  { label: 'Cookie policy (Carl Ras)', href: 'https://www.carl-ras.dk/kundeservice/cookiepolitik/' },
+  { label: 'Satisfaction guarantee, full terms', href: '/satisfaction-guarantee' },
+  { label: 'Terms of sale', href: '/terms' },
+  { label: 'Privacy policy', href: '/privacy' },
+  { label: 'Cookie policy', href: '/cookies' },
 ];
 
 /* FAQ: same answers rendered as accordion AND as FAQPage JSON-LD. Plain-text
@@ -33,34 +34,34 @@ const DOCS = [
 const SERVICE_FAQ = [
   {
     q: 'Who can use the satisfaction guarantee?',
-    a: 'Business customers with an account at Carl Ras. If you don\'t have an account yet, you set one up at Carl Ras under "Become a customer", and then the 30 days apply to you too.',
+    a: 'Business customers with an account at your STROXX dealer. If you don\'t have an account yet, you set one up with the dealer, and then the 30 days apply to you too.',
   },
   {
     q: 'Does the item have to be unused when I return it?',
-    a: 'No, that\'s the whole point. The guarantee is for 30 days on real work, not five minutes in the driveway. Bring the item to your Carl Ras store along with the invoice or delivery note. For bulk purchases, the guarantee applies to the first item bought.',
+    a: 'No, that\'s the whole point. The guarantee is for 30 days on real work, not five minutes in the driveway. Bring the item to your dealer\'s store along with the invoice or delivery note. For bulk purchases, the guarantee applies to the first item bought.',
   },
   {
     q: 'What do I do if the item is defective?',
-    a: 'Faults and defects are not a guarantee matter but a complaint, and Carl Ras handles that under their terms of sale and delivery. Bring the item to the store or call customer service on 44 85 55 11.',
+    a: 'Faults and defects are not a guarantee matter but a complaint, and your dealer handles that under their terms of sale and delivery. Bring the item to the store or call their customer service.',
   },
   {
     q: 'How do delivery and shipping work?',
-    a: 'Every purchase is made at Carl Ras, in store or at carl-ras.dk, and delivery options and prices are shown at checkout. The full terms are in the Carl Ras terms of sale and delivery.',
+    a: 'Every purchase is made at your STROXX dealer, in store or online, and delivery options are shown at checkout. The full terms are in the dealer\'s terms of sale and delivery.',
   },
   {
     q: 'Where do I find safety data sheets for chemical products?',
-    a: 'They\'re on their way to this page. Until then, Carl Ras customer service provides them on 44 85 55 11 or in your local store.',
+    a: 'They\'re on their way to this page. Until then, your dealer\'s customer service provides them, or ask in your local store.',
   },
 ];
 
 const RETURN_STEPS = [
   {
     t: 'Find your invoice or delivery note',
-    d: 'The guarantee applies to business customers with an account at Carl Ras. Your proof of purchase is enough, the item doesn\'t need to be faulty.',
+    d: 'The guarantee applies to business customers with a dealer account. Your proof of purchase is enough, the item doesn\'t need to be faulty.',
   },
   {
-    t: 'Go to your Carl Ras store',
-    d: 'Hand the item in at one of the 26 stores. If you bought online, call customer service on 44 85 55 11 instead.',
+    t: 'Go to your dealer\'s store',
+    d: 'Hand the item in at your STROXX store. If you bought online, call the dealer\'s customer service instead.',
   },
   {
     t: 'Money back',
@@ -74,7 +75,7 @@ export default async function ServicePage() {
   const guaranteeHeading = cms?.serviceGuaranteeHeading || '30-day satisfaction guarantee';
   const guaranteeBody =
     cms?.serviceGuaranteeBody ||
-    "Try STROXX on real work for 30 days. If you're not happy, you get your money back. No need for faults, your judgment is enough. Applies to all STROXX products except access control, for business customers with an account at Carl Ras.";
+    "Try STROXX on real work for 30 days. If you're not happy, you get your money back. No need for faults, your judgment is enough. Applies to all STROXX products except access control, for business customers with a dealer account.";
   const returnsHeading = cms?.serviceReturnsHeading || 'How to return';
   const returnSteps = cms?.serviceReturnSteps?.length
     ? cms.serviceReturnSteps.map((s) => ({ t: s.title ?? '', d: s.body ?? '' }))
@@ -129,7 +130,7 @@ export default async function ServicePage() {
               </div>
               <p className="text-fog leading-relaxed mb-4">{guaranteeBody}</p>
               <div className="flex flex-wrap items-center gap-3 mt-6">
-                <GlassButton href="/proev-det">How it works <ArrowRight size={15} /></GlassButton>
+                <GlassButton href="/try-it">How it works <ArrowRight size={15} /></GlassButton>
                 <GuaranteeModal />
               </div>
             </div>
@@ -198,15 +199,13 @@ export default async function ServicePage() {
                 <p className="text-fog leading-relaxed mb-5">{cms.serviceContactBody}</p>
               ) : (
                 <p className="text-fog leading-relaxed mb-5">
-                  Carl Ras customer service is ready on{' '}
-                  <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>{' '}
-                  (Mon-Thu 07-16, Fri 07-15). Or skip the queue and call a specialist
-                  directly at your nearest store.
+                  Your dealer&rsquo;s customer service is ready on the number in the footer.
+                  Or skip the queue and call a specialist directly at your nearest store.
                 </p>
               )}
               <div className="flex flex-wrap items-center gap-3">
-                <GlassButton href="/butikker">Find your specialist <ArrowRight size={15} /></GlassButton>
-                <GlassButton href="/butikker" variant="ghost">All stores</GlassButton>
+                <GlassButton href="/stores">Find your specialist <ArrowRight size={15} /></GlassButton>
+                <GlassButton href="/stores" variant="ghost">All stores</GlassButton>
               </div>
             </div>
           </Reveal>
@@ -227,23 +226,7 @@ export default async function ServicePage() {
               items={faqSrc.map((f) => ({
                 q: f.q,
                 a:
-                  f.q === 'Who can use the satisfaction guarantee?' ? (
-                    <>
-                      Business customers with an account at Carl Ras. If you don&rsquo;t have an account yet, you set one up at{' '}
-                      <a href="https://www.carl-ras.dk/kundeservice/bliv-kunde/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
-                        Carl Ras under &ldquo;Become a customer&rdquo;
-                      </a>
-                      , and then the 30 days apply to you too.
-                    </>
-                  ) : f.q === 'What do I do if the item is defective?' ? (
-                    <>
-                      Faults and defects are not a guarantee matter but a complaint, and Carl Ras handles that under their{' '}
-                      <a href="https://www.carl-ras.dk/kundeservice/salgs-og-leveringsbetingelser/" target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">
-                        terms of sale and delivery
-                      </a>
-                      . Bring the item to the store or call customer service on <a href="tel:+4544855511" className="text-stroxx-blue hover:underline">44 85 55 11</a>.
-                    </>
-                  ) : f.linkText && f.linkUrl ? (
+                  f.linkText && f.linkUrl ? (
                     <>
                       {f.a}{' '}
                       <a href={stegaClean(f.linkUrl)} target="_blank" rel="noopener noreferrer" className="text-stroxx-blue hover:underline">

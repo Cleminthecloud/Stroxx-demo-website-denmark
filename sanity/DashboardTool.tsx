@@ -220,7 +220,9 @@ export default function DashboardTool() {
   const outbound = useMemo(() => mergeCounts(days, 'outbound'), [days]);
   const shares = useMemo(() => mergeCounts(days, 'shares'), [days]);
   const qr = useMemo(() => mergeCounts(days, 'qr'), [days]);
-  const articles = useMemo(() => paths.filter(([k]) => k.startsWith('nyheder')), [paths]);
+  /* article path keys: 'news_*' after the English-slug sweep (2026-07-11);
+     'nyheder_*' keys linger in older daily analytics docs — count both. */
+  const articles = useMemo(() => paths.filter(([k]) => k.startsWith('news') || k.startsWith('nyheder')), [paths]);
   const social = sources.filter(([k]) => ['linkedin', 'meta', 'x', 'whatsapp'].includes(k)).reduce((a, [, v]) => a + v, 0);
   const outTotal = outbound.reduce((a, [, v]) => a + v, 0);
   const qrTotal = qr.reduce((a, [, v]) => a + v, 0);

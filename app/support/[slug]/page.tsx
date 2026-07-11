@@ -118,7 +118,7 @@ export default async function SupportPage({ params }: { params: Promise<{ slug: 
 
         <p className="text-fog/70 text-sm max-w-xl leading-relaxed mt-12">
           Missing a document or a language? Ask the specialists via the chat, or find your local dealer under{' '}
-          <Link href="/butikker" className="text-stroxx-blue">stores</Link>.
+          <Link href="/stores" className="text-stroxx-blue">stores</Link>.
         </p>
       </div>
     </main>

@@ -14,7 +14,7 @@ export const redirect = defineType({
       name: 'from',
       title: 'From path',
       type: 'string',
-      description: 'The old path on this site, starting with /, e.g. /kampagne/sommer',
+      description: 'The old path on this site, starting with /, e.g. /campaign/sommer',
       validation: (r) =>
         r.required().custom((v) =>
           typeof v === 'string' && /^\/[^\s?#]*$/.test(v)
@@ -26,7 +26,7 @@ export const redirect = defineType({
       name: 'to',
       title: 'To (path or full URL)',
       type: 'string',
-      description: 'Where visitors should land: a path like /kampagne/efteraar or a full https:// URL.',
+      description: 'Where visitors should land: a path like /campaign/efteraar or a full https:// URL.',
       validation: (r) =>
         r.required().custom((v) =>
           typeof v === 'string' && (/^\/(?![/\\])[^\s]*$/.test(v) || /^https:\/\/[^\s]+$/.test(v))

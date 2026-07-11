@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Tool of the Month: ${SKA.hero.name}`,
     description: `${SKA.month}'s STROXX: the ${SKA.hero.name}, plus the month's five DB2 winners and new arrivals. Quality and value, not just price. 30-day satisfaction guarantee at ${dealer?.dealerName || 'your STROXX dealer'}.`,
-    alternates: { canonical: '/maanedens' },
+    alternates: { canonical: '/monthly' },
     openGraph: {
       title: `STROXX of the Month · ${SKA.month}: ${SKA.hero.name}`,
       description: 'One headline story every month. Quality and value, documented.',
@@ -96,7 +96,7 @@ export default async function MaanedensPage() {
             </div>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
-            <ParticleImage src={particleSrc('lasere', hero.imgId)} className="h-full w-full" />
+            <ParticleImage src={particleSrc('lasers', hero.imgId)} className="h-full w-full" />
           </Reveal>
         </div>
       </section>
@@ -201,7 +201,7 @@ export default async function MaanedensPage() {
                 Five winners. Two new arrivals.
               </h2>
             </div>
-            <Link href="/produkter" className="link-arrow hidden sm:inline-flex shrink-0">
+            <Link href="/products" className="link-arrow hidden sm:inline-flex shrink-0">
               See the full range <ArrowRight size={15} />
             </Link>
           </Reveal>
@@ -215,7 +215,7 @@ export default async function MaanedensPage() {
           <div className="grid gap-5 md:grid-cols-2">
             {SKA.nyheder.map((n, i) => (
               <Reveal key={n.product.slug} delay={i * 90}>
-                <Link href={`/produkt/${n.product.slug}`}
+                <Link href={`/product/${n.product.slug}`}
                   className="glass-panel glass-panel--frost glass-panel--glow rounded-2xl p-7 flex gap-6 items-center group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={toolTexture(n.product.imgId)} alt={n.product.name} loading="lazy" decoding="async"

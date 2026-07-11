@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     // layout.tsx's title template appends " | STROXX"
     title: p.name,
     description: desc,
-    alternates: { canonical: `/produkt/${p.slug}` },
+    alternates: { canonical: `/product/${p.slug}` },
     openGraph: { title: `${p.name} | STROXX`, description: desc, images: [og], type: 'website' },
   };
 }
@@ -100,8 +100,8 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/produkter` },
-      ...(cat ? [{ '@type': 'ListItem', position: 3, name: cat.name, item: `${SITE_URL}/produkter?cat=${cat.slug}` }] : []),
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
+      ...(cat ? [{ '@type': 'ListItem', position: 3, name: cat.name, item: `${SITE_URL}/products?cat=${cat.slug}` }] : []),
       { '@type': 'ListItem', position: cat ? 4 : 3, name: product.name },
     ],
   };

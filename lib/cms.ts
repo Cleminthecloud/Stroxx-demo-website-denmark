@@ -165,6 +165,10 @@ export async function getLandingPage(slug: string): Promise<LandingDoc | null> {
       `*[_type == "landingPage" && slug.current == $slug && ${pred}][0]{ ..., sections[]{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } } } }`;
     let { data } = await sanityFetch({ query: q(LANG_IS), params: { slug, lang } });
     if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { slug } }));
+    /* transitional alias (2026-07-11 English-slug sweep): until
+       `npm run migrate:english-slugs` has renamed the CMS doc, the campaign
+       still carries its historic Danish slug. Remove once migrated. */
+    if (!data && slug === 'try-it') return getLandingPage('proev-det');
     return (data as LandingDoc) ?? null;
   } catch {
     return null;
@@ -320,7 +324,7 @@ export async function getHomePage(): Promise<HomeCopy> {
         by: stegaClean(f.by) ?? f.by ?? '',
       }));
     const campaignSlug = typeof d.campaignSlug === 'string' ? stegaClean(d.campaignSlug).trim() : '';
-    merged.campaignHref = campaignSlug ? `/kampagne/${campaignSlug}` : '/proev-det';
+    merged.campaignHref = campaignSlug ? `/campaign/${campaignSlug}` : '/try-it';
     return merged as HomeCopy;
   } catch {
     return HOME_DEFAULTS;
@@ -517,11 +521,17 @@ export function testimonialsFor(list: Testimonial[], tradeSlug: string): Testimo
   return list.filter((t) => t.trades.includes(tradeSlug));
 }
 
+/** Films are per language/market like specialists and testimonials: partner
+ *  films (by Lecot, Meesenburg, ...) belong to their market, with the English
+ *  base as the fallback set. Explicitly PICKED films (homePage/monthlyLineup/
+ *  landingPage references) are untouched by this: a reference is an editor's
+ *  deliberate choice and follows the host document's language. */
 export async function getVideos(): Promise<Video[]> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "video" && active != false] | order(featured desc, _createdAt asc)',
-    });
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "video" && active != false && ${pred}] | order(featured desc, _createdAt asc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
     const docs = (data ?? []) as Record<string, any>[];
     if (!docs.length) return fallbackVideos;
     const mapped = docs
@@ -564,7 +574,9 @@ export async function getLandingSlugs(): Promise<string[]> {
     const { data } = await sanityFetch({
       query: `*[_type == "landingPage" && defined(slug.current) && ${LANG_IS_EN}].slug.current`,
     });
-    return ((data ?? []) as string[]).map((s) => stegaClean(s) ?? s).filter((s) => s && s !== 'proev-det');
+    /* 'proev-det' is the same page's pre-migration slug — excluded so the
+       sitemap never lists a redirecting path (see getLandingPage alias) */
+    return ((data ?? []) as string[]).map((s) => stegaClean(s) ?? s).filter((s) => s && s !== 'try-it' && s !== 'proev-det');
   } catch {
     return [];
   }

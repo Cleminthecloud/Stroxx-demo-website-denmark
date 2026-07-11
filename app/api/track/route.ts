@@ -40,7 +40,7 @@ const SHARE_CHANNELS = ['native', 'linkedin', 'facebook', 'x', 'whatsapp', 'emai
 /* only real routes get counted: bounds the per-day document size no matter
    what a flooder posts (everything else lands in the 'other' bucket) */
 const KNOWN_PATH =
-  /^\/($|produkter|produkt\/[a-z0-9-]+|butikker|maanedens|proev-det|service|fag(\/[a-z0-9-]+)?|nyheder(\/[a-z0-9-]+)?|kampagne\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privatliv|cookies|handelsbetingelser|brand)$/;
+  /^\/($|products|product\/[a-z0-9-]+|stores|monthly|try-it|satisfaction-guarantee|service|trades(\/[a-z0-9-]+)?|news(\/[a-z0-9-]+)?|campaign\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privacy|cookies|terms|brand)$/;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });

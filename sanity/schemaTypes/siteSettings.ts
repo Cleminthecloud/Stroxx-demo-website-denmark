@@ -22,7 +22,7 @@ const linkArray = (name: string, title: string, description: string, group: stri
             name: 'href',
             title: 'Link',
             type: 'string',
-            description: 'Internal path (/produkter) or full URL (https://...).',
+            description: 'Internal path (/products) or full URL (https://...).',
             validation: (r) => r.required(),
           }),
         ],
@@ -91,7 +91,7 @@ export const siteSettings = defineType({
       initialValue: true,
       group: 'nav',
       description:
-        'Toggle off for markets that do not blog: /nyheder and every article return "page not found" and leave the sitemap. Remember to remove News menu and footer links too.',
+        'Toggle off for markets that do not blog: /news and every article return "page not found" and leave the sitemap. Remember to remove News menu and footer links too.',
     }),
     linkArray('footerPageLinks', 'Footer: "Pages" column links', 'Leave empty for the built-in list.', 'nav'),
     linkArray('footerBuyLinks', 'Footer: "Buy" column links', 'Leave empty for the built-in list.', 'nav'),

@@ -9,12 +9,12 @@ import DealerMark from '@/components/DealerMark';
 import { DEALER_LOGOS } from '@/lib/dealer-logos';
 
 const PAGES_FALLBACK = [
-  { label: 'Tool of the Month', href: '/maanedens' },
-  { label: 'Products', href: '/produkter' },
-  { label: 'Trades', href: '/fag' },
-  { label: 'Stores', href: '/butikker' },
-  { label: 'News', href: '/nyheder' },
-  { label: 'Campaign: Try It', href: '/proev-det' },
+  { label: 'Tool of the Month', href: '/monthly' },
+  { label: 'Products', href: '/products' },
+  { label: 'Trades', href: '/trades' },
+  { label: 'Stores', href: '/stores' },
+  { label: 'News', href: '/news' },
+  { label: 'Campaign: Try It', href: '/try-it' },
   { label: 'Service and Support', href: '/service' },
 ];
 
@@ -67,8 +67,8 @@ export default async function Footer() {
     market && market !== 'int' ? DEALER_LOGOS.filter((p) => p.code === market) : DEALER_LOGOS;
   const pageLinks = cleanLinks(s?.footerPageLinks) ?? PAGES_FALLBACK;
   const buyLinks = cleanLinks(s?.footerBuyLinks) ?? [
-    { label: 'Find a store', href: '/butikker' },
-    { label: 'Satisfaction guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
+    { label: 'Find a store', href: '/stores' },
+    { label: 'Satisfaction guarantee', href: '/satisfaction-guarantee' },
   ];
   /* Dealer contact: the phone is the MARKET's dealer service line (same source
      as the dealer chooser); the hours are localized per-locale text from
@@ -148,9 +148,9 @@ export default async function Footer() {
                   .map((l) => <FooterLink key={l.href} label={l.label!} href={l.href!} />)
               : (
                 <>
-                  <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
+                  <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
                   <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
-                  <Link href="/handelsbetingelser" className="hover:text-white transition-colors">Terms</Link>
+                  <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
                 </>
               )}
           </span>

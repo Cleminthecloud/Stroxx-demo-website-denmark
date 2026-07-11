@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
     description: stegaClean(doc.seoDescription) || stegaClean(doc.excerpt) || undefined,
-    alternates: { canonical: `/nyheder/${(await params).slug}` },
+    alternates: { canonical: `/news/${(await params).slug}` },
     ...(og ? { openGraph: { images: [{ url: og, width: 1200, height: 630 }] } } : {}),
   };
 }
@@ -109,7 +109,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     ...(doc.publishedAt ? { datePublished: stegaClean(doc.publishedAt) } : {}),
     ...(hero ? { image: [hero] } : {}),
     publisher: { '@type': 'Organization', name: 'STROXX', url: SITE_URL },
-    mainEntityOfPage: `${SITE_URL}/nyheder/${slug}`,
+    mainEntityOfPage: `${SITE_URL}/news/${slug}`,
   };
 
   return (
@@ -119,7 +119,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       {/* ── editorial header: wide stage, huge headline, lede, meta ── */}
       <header className="mx-auto max-w-[1200px] px-6 md:px-10 pt-36">
-        <Link href="/nyheder" className="link-arrow mb-10">
+        <Link href="/news" className="link-arrow mb-10">
           <ArrowLeft size={14} /> All news
         </Link>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
@@ -165,7 +165,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <PortableText value={doc.body} components={components} />
           </div>
         ) : null}
-        <ShareRow url={`${SITE_URL}/nyheder/${slug}`} title={stegaClean(doc.title) || undefined} />
+        <ShareRow url={`${SITE_URL}/news/${slug}`} title={stegaClean(doc.title) || undefined} />
       </article>
 
       {/* products mentioned in the article (editor-tagged SKUs) */}

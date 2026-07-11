@@ -5,11 +5,11 @@ import { CATEGORY_OPTIONS } from './trade';
 
 /** Keep in sync with the trade documents' slugs (lib/trades.ts fallbacks). */
 const TRADE_OPTIONS = [
-  { title: 'Carpenter (toemrer)', value: 'toemrer' },
-  { title: 'Electrician (elektriker)', value: 'elektriker' },
-  { title: 'Plumber (vvs)', value: 'vvs' },
-  { title: 'Mason (murer)', value: 'murer' },
-  { title: 'Painter (maler)', value: 'maler' },
+  { title: 'Carpenter (toemrer)', value: 'carpenter' },
+  { title: 'Electrician (elektriker)', value: 'electrician' },
+  { title: 'Plumber (vvs)', value: 'plumber' },
+  { title: 'Mason (murer)', value: 'bricklayer' },
+  { title: 'Painter (maler)', value: 'painter' },
 ];
 
 /** The people, voices, films and legal texts of the site, each a small
@@ -103,7 +103,7 @@ export const testimonial = defineType({
       name: 'trades',
       title: 'Relevant trades',
       type: 'array',
-      description: 'Tick the trades this quote suits; the quote then appears on those trade pages under /fag.',
+      description: 'Tick the trades this quote suits; the quote then appears on those trade pages under /trades.',
       of: [defineArrayMember({ type: 'string' })],
       options: { list: TRADE_OPTIONS },
     }),
@@ -122,8 +122,10 @@ export const video = defineType({
   name: 'video',
   title: 'Film (YouTube)',
   type: 'document',
-  description: 'The partner films in the video sections. The first featured film is the big player.',
+  description:
+    'The partner films in the video sections. The first featured film is the big player. One set per language/market: each market shows its own films. To reuse one in another market, open it and add that language under Translations.',
   fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({
       name: 'youtubeId',
       title: 'YouTube video ID',
@@ -136,14 +138,20 @@ export const video = defineType({
     defineField({ name: 'featured', title: 'Featured (the big player)', type: 'boolean', initialValue: false }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
   ],
-  preview: { select: { title: 'title', subtitle: 'by' } },
+  preview: {
+    select: { title: 'title', by: 'by', language: 'language' },
+    prepare: ({ title, by, language }: { title?: string; by?: string; language?: string }) => ({
+      title: title || 'Film',
+      subtitle: [by, langLabel(language)].filter(Boolean).join(' · '),
+    }),
+  },
 });
 
 export const legalPage = defineType({
   name: 'legalPage',
   title: 'Legal page',
   type: 'document',
-  description: 'Privacy, cookies and terms. Plain formatted text, one document per page.',
+  description: 'Privacy, cookies, terms and the satisfaction guarantee. Plain formatted text, one document per page.',
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
     defineField({ name: 'title', title: 'Page title', type: 'string', validation: (r) => r.required() }),
@@ -153,9 +161,10 @@ export const legalPage = defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Privacy policy (/privatliv)', value: 'privatliv' },
+          { title: 'Privacy policy (/privacy)', value: 'privacy' },
           { title: 'Cookie policy (/cookies)', value: 'cookies' },
-          { title: 'Terms of sale (/handelsbetingelser)', value: 'handelsbetingelser' },
+          { title: 'Terms of sale (/terms)', value: 'terms' },
+          { title: 'Satisfaction guarantee (/satisfaction-guarantee)', value: 'satisfaction-guarantee' },
         ],
         layout: 'radio',
       },

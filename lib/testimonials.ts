@@ -23,7 +23,7 @@ export const testimonials: Testimonial[] = [
     role: 'Carpenter, Aarhus',
     rating: 5,
     productCode: '34011573', // Rundsavklinge Ø160 Z42W Træ
-    trades: ['toemrer'],
+    trades: ['carpenter'],
   },
   {
     quote: 'I used the knife every day for a month before I bothered to believe in it. Now the whole crew has them.',
@@ -31,7 +31,7 @@ export const testimonials: Testimonial[] = [
     role: 'Fitter, Odense',
     rating: 5,
     productCode: '34009021', // Kniv Black 25 mm med autolås
-    trades: ['toemrer', 'elektriker', 'vvs'],
+    trades: ['carpenter', 'electrician', 'plumber'],
   },
   {
     quote: 'A line laser at that price sounded too good to be true. It stays razor sharp, even in daylight.',
@@ -39,7 +39,7 @@ export const testimonials: Testimonial[] = [
     role: 'Bricklayer, Vejle',
     rating: 5,
     productCode: '35011932', // Streglaser 3D Green
-    trades: ['murer', 'toemrer'],
+    trades: ['bricklayer', 'carpenter'],
   },
   {
     quote: 'The hole saw set handled 40 back boxes without blinking. I have paid double for the same thing before.',
@@ -47,21 +47,21 @@ export const testimonials: Testimonial[] = [
     role: 'Electrician, København',
     rating: 5,
     productCode: '32012588', // Hulsavsæt Elektriker
-    trades: ['elektriker'],
+    trades: ['electrician'],
   },
   {
     quote: 'The guarantee gave me the nerve to try it. I never needed it. That says it all.',
     name: 'Jonas M.',
     role: 'Plumber, Aalborg',
     rating: 5,
-    trades: ['vvs', 'maler', 'murer'],
+    trades: ['plumber', 'painter', 'bricklayer'],
   },
   {
     quote: 'The tape sticks clean and releases clean. No glue left on the trim. Simple, but that is what counts.',
     name: 'Camilla R.',
     role: 'Painter, Roskilde',
     rating: 5,
-    trades: ['maler'],
+    trades: ['painter'],
   },
 ];
 

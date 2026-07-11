@@ -7,13 +7,13 @@ import NewsExplorer from '@/components/NewsExplorer';
 import type { NewsCardData } from '@/components/NewsCard';
 
 /** News index: every published `post`, newest first, in the site's glass
- *  design system with tag-chip filtering (the /produkter pattern). Tags come
+ *  design system with tag-chip filtering (the /products pattern). Tags come
  *  straight from the articles, so editors create filters just by tagging. */
 
 export const metadata: Metadata = {
   title: 'News',
   description: 'News and stories from STROXX: new tools, campaigns and life on site.',
-  alternates: { canonical: '/nyheder' },
+  alternates: { canonical: '/news' },
 };
 
 function fmtDate(iso?: string) {

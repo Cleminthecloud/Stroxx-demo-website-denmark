@@ -39,8 +39,8 @@ export default defineConfig({
               locations: [
                 {
                   title: doc?.title || 'Landing page',
-                  // proev-det keeps its historic route; new pages live under /kampagne/
-                  href: doc?.slug === 'proev-det' ? '/proev-det' : `/kampagne/${doc?.slug || ''}`,
+                  // try-it keeps its short route; new pages live under /campaign/
+                  href: doc?.slug === 'try-it' ? '/try-it' : `/campaign/${doc?.slug || ''}`,
                 },
               ],
             }),
@@ -49,8 +49,8 @@ export default defineConfig({
             select: { title: 'title', slug: 'slug.current' },
             resolve: (doc) => ({
               locations: [
-                { title: doc?.title || 'Article', href: `/nyheder/${doc?.slug || ''}` },
-                { title: 'News index', href: '/nyheder' },
+                { title: doc?.title || 'Article', href: `/news/${doc?.slug || ''}` },
+                { title: 'News index', href: '/news' },
               ],
             }),
           }),
@@ -58,8 +58,8 @@ export default defineConfig({
             select: { month: 'month' },
             resolve: (doc) => ({
               locations: [
-                { title: `Månedens STROXX (${doc?.month || ''})`, href: '/maanedens' },
-                { title: 'Homepage section', href: '/#maanedens' },
+                { title: `Månedens STROXX (${doc?.month || ''})`, href: '/monthly' },
+                { title: 'Homepage section', href: '/#monthly' },
               ],
             }),
           }),
@@ -74,32 +74,32 @@ export default defineConfig({
           store: defineLocations({
             select: { name: 'name' },
             resolve: (doc) => ({
-              locations: [{ title: doc?.name || 'Store', href: '/butikker' }],
+              locations: [{ title: doc?.name || 'Store', href: '/stores' }],
             }),
           }),
           specialist: defineLocations({
             select: { name: 'name' },
             resolve: (doc) => ({
-              locations: [{ title: `${doc?.name || 'Specialist'} (homepage cards)`, href: '/#specialister' }],
+              locations: [{ title: `${doc?.name || 'Specialist'} (homepage cards)`, href: '/#specialists' }],
             }),
           }),
           trade: defineLocations({
             select: { name: 'name', slug: 'slug.current' },
             resolve: (doc) => ({
               locations: [
-                { title: `${doc?.name || 'Trade'} (trade page)`, href: `/fag/${doc?.slug || ''}` },
-                { title: 'Trades index', href: '/fag' },
+                { title: `${doc?.name || 'Trade'} (trade page)`, href: `/trades/${doc?.slug || ''}` },
+                { title: 'Trades index', href: '/trades' },
               ],
             }),
           }),
           testimonial: defineLocations({
             select: {},
-            resolve: () => ({ locations: [{ title: 'Campaign: Try It (testimonials)', href: '/proev-det' }] }),
+            resolve: () => ({ locations: [{ title: 'Campaign: Try It (testimonials)', href: '/try-it' }] }),
           }),
           video: defineLocations({
             select: { title: 'title' },
             resolve: (doc) => ({
-              locations: [{ title: `${doc?.title || 'Film'} (Try It, film section)`, href: '/proev-det' }],
+              locations: [{ title: `${doc?.title || 'Film'} (Try It, film section)`, href: '/try-it' }],
             }),
           }),
           legalPage: defineLocations({
@@ -123,7 +123,7 @@ export default defineConfig({
     structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
-      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment', 'specialist', 'testimonial'],
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment', 'specialist', 'testimonial', 'video'],
       languageField: 'language',
     }),
   ],

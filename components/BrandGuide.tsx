@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
 
-/** The living brand guide at the top of /komponenter: every color, type
+/** The living brand guide at the top of /components: every color, type
  *  style and interface element of the STROXX design system, rendered by the
  *  real code (so it can never drift from the site). The block library below
  *  it completes the picture. */

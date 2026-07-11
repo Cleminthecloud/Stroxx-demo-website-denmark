@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Reveal from '@/components/Reveal';
 import NewsCard, { type NewsCardData } from '@/components/NewsCard';
 
-/** News index explorer, the /produkter pattern applied to articles: a sticky
+/** News index explorer, the /products pattern applied to articles: a sticky
  *  row of tag chips (built from whatever tags editors put on their articles,
  *  nothing to configure) filtering a grid of glass cards. */
 
@@ -29,7 +29,7 @@ export default function NewsExplorer({ posts }: { posts: NewsCardData[] }) {
     <>
       {tags.length > 0 && (
         <div className="sticky top-14 z-30 -mx-6 md:-mx-10 px-6 md:px-10 pt-4 pb-3 bg-ink/95 backdrop-blur-md border-b border-line mb-10">
-          {/* phones: chips scroll edge-to-edge like on /produkter; lg+: wrap */}
+          {/* phones: chips scroll edge-to-edge like on /products; lg+: wrap */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-6 px-6 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <button onClick={() => setActive(null)} className={chip(!active)}>All</button>
             {tags.map((t) => (

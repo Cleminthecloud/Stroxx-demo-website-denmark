@@ -3,14 +3,14 @@ import SharePreviewField from '../SharePreviewField';
 import SkuListInput from '../SkuListInput';
 import { langLabel } from '../lib/langLabel';
 
-/** News/blog articles at /nyheder. Formatted text with images; the index
+/** News/blog articles at /news. Formatted text with images; the index
  *  and article pages are code-owned, editors own the words. */
 
 export const post = defineType({
   name: 'post',
   title: 'News article',
   type: 'document',
-  description: 'News and stories at /nyheder. Newest first on the index.',
+  description: 'News and stories at /news. Newest first on the index.',
   groups: [
     { name: 'article', title: 'Article', default: true },
     { name: 'products', title: 'Products + tags' },
@@ -25,7 +25,7 @@ export const post = defineType({
       type: 'slug',
       group: 'article',
       options: { source: 'title', maxLength: 80 },
-      description: 'The address: /nyheder/this-part. Generate from the headline.',
+      description: 'The address: /news/this-part. Generate from the headline.',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -105,7 +105,7 @@ export const post = defineType({
       group: 'products',
       of: [defineArrayMember({ type: 'string' })],
       options: { layout: 'tags' },
-      description: 'Type a tag and press Enter. These become the filter chips on /nyheder. Use the brand handles where they fit: Quality proof (premium credibility stories), Professional favorites (what pros actually rebuy), New solutions (new products and methods), plus trades and topics: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
+      description: 'Type a tag and press Enter. These become the filter chips on /news. Use the brand handles where they fit: Quality proof (premium credibility stories), Professional favorites (what pros actually rebuy), New solutions (new products and methods), plus trades and topics: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
     }),
     defineField({
       name: 'relatedSkus',
