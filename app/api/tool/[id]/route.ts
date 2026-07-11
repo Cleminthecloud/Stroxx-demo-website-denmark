@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { rateLimit, clientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const revalidate = 86400;
@@ -187,6 +188,14 @@ async function grab(id: string, f: string): Promise<{ buf: Buffer; ct: string } 
 }
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  /* Abuse guard: uncached ids cost an upstream fetch + sharp processing, and the
+     id space is unbounded. Generous limit — a cold product-grid page loads a few
+     dozen images, real users stay far under it; edge/browser caches absorb the
+     rest. No same-origin check ON PURPOSE: OG scrapers (Slack, FB) fetch the
+     og:image through this proxy without our Referer. */
+  if (!(await rateLimit(`tool:${clientIp(req.headers)}`, 300, 60000))) {
+    return new Response(new Uint8Array(BLANK), { status: 429, headers: { ...CORS, 'Cache-Control': 'no-store', 'Content-Type': 'image/png' } });
+  }
   const id = (await params).id.replace(/[^0-9]/g, '');
   if (!id) return new Response(new Uint8Array(BLANK), { headers: { ...CORS, 'Cache-Control': CACHE_BLANK, 'Content-Type': 'image/png' } });
 

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, getMarkets } from '@/lib/cms';
+import { marketByCode } from '@/lib/markets';
 import { LLMS_FALLBACK } from '@/lib/llms-fallback';
 import { categories } from '@/lib/data';
 
@@ -23,8 +24,8 @@ const RULES = `You are the STROXX assistant on the STROXX brand website, chattin
 
 Rules:
 - Answer in 1-4 short sentences. Plain, honest, no hype. British/Danish directness, a small twinkle is fine.
-- Ground every claim in the brand facts below. NEVER invent prices, stock levels, discounts or product specifications. For anything price- or stock-specific, point to the Carl Ras webshop or a store.
-- STROXX never sells directly; purchases happen at Carl Ras (stores or carl-ras.dk).
+- Ground every claim in the brand facts below. NEVER invent prices, stock levels, discounts or product specifications. For anything price- or stock-specific, point to the dealer's webshop or a store.
+- STROXX never sells directly; purchases happen at the market's dealer (see the dealer line below, or the store finder at /butikker).
 - Useful links you may mention as plain paths (the interface renders them as clickable links): /produkter (all products), /butikker (store finder; each store lists its STROXX specialist), /proev-det (the guarantee campaign), /maanedens (tool of the month), /nyheder (news and articles).
 - If the question needs a human (complaints, orders, invoices, project advice, anything sensitive), say you'll hand over and tell them to type "yes" to be connected to a specialist.
 - If asked something unrelated to STROXX, tools or the trade, politely steer back in one sentence.
@@ -43,12 +44,17 @@ export async function POST(req: NextRequest) {
   if (settings?.aiChatEnabled !== true) return NextResponse.json({ fallback: true }, { status: 503 });
 
   let messages: ChatMsg[] = [];
+  let marketCode = '';
   try {
     const body = await req.json();
     messages = (Array.isArray(body?.messages) ? body.messages : [])
       .filter((m: ChatMsg) => (m?.role === 'user' || m?.role === 'assistant') && typeof m?.content === 'string')
       .slice(-10)
       .map((m: ChatMsg) => ({ role: m.role, content: m.content.slice(0, 2000) }));
+    /* The client sends its market code (middleware skips /api, so headers can't
+       tell us). Only used to pick which PUBLIC dealer phone/name to quote, and
+       validated against the market registry below — safe as client input. */
+    if (typeof body?.market === 'string' && /^[a-z]{2,3}$/.test(body.market)) marketCode = body.market;
   } catch {
     return NextResponse.json({ fallback: true }, { status: 400 });
   }
@@ -57,11 +63,17 @@ export async function POST(req: NextRequest) {
   }
 
   const brandFacts = stegaClean(settings?.llmsTxt)?.trim() || LLMS_FALLBACK;
-  const phone = stegaClean(settings?.supportPhone) || '+45 44 85 55 11';
+  /* Dealer identity from the MARKET registry (never hardcoded): the validated
+     client market code picks the dealer; unknown/international → no single
+     dealer, the assistant points to the store finder instead. */
+  const dealer = marketCode ? marketByCode(marketCode, await getMarkets()) : undefined;
+  const dealerLine = dealer?.dealerName
+    ? `Dealer for this market: ${dealer.dealerName}.${dealer.supportPhone ? ` Customer service phone: ${dealer.supportPhone}.` : ''}`
+    : 'This is the international site: there is no single dealer. Point buying or service questions to the store finder at /butikker or the "Where to buy" chooser.';
   const catNames = categories.map((c) => c.name).join(', ');
   const system = `${RULES}
 
-Customer service phone: ${phone}.
+${dealerLine}
 Product categories in the range: ${catNames}.
 
 BRAND FACTS (source of truth):

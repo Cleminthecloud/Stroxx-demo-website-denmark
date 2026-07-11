@@ -195,7 +195,6 @@ export default function ProductExperience({
           <span className="text-fog">Item number</span><span className="text-white font-medium">{product.code}</span>
         </div>
       </div>
-      <p className="text-fog/60 text-xs mt-3">Specs sync from Carl Ras / Digizuite PIM in the final solution.</p>
     </Reveal>
   );
 

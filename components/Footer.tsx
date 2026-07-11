@@ -70,8 +70,12 @@ export default async function Footer() {
     { label: 'Find a store', href: '/butikker' },
     { label: 'Satisfaction guarantee (PDF)', href: '/STROXX-tilfredshedsgaranti.pdf' },
   ];
-  const phone = s?.supportPhone || '+45 44 85 55 11';
-  const hours = s?.supportHours || 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00';
+  /* Dealer contact: the phone is the MARKET's dealer service line (same source
+     as the dealer chooser); the hours are localized per-locale text from
+     siteSettings. International has neither → both rows simply hide. NEVER
+     hardcode one market's number here (see DEPENDENCIES.md dealer-contact row). */
+  const phone = currentMarket?.supportPhone || '';
+  const hours = s?.supportHours || '';
   /* Footer legal line is the market's local HQ address (Market.legalLine): Carl Ras
      for DK, Meesenburg for DE, Foussier for FR, Lecot for BE; a neutral STROXX line
      internationally. NEVER hardcode one market's address here. See DEPENDENCIES.md. */
@@ -91,12 +95,16 @@ export default async function Footer() {
                 }
               />
             </p>
-            <a href={`tel:${phone.replace(/\s+/g, '')}`} className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
-              <Phone size={18} strokeWidth={2} /> {phone}
-            </a>
-            <div className="mt-5 text-fog text-sm leading-relaxed whitespace-pre-line">
-              {hours}
-            </div>
+            {phone && (
+              <a href={`tel:${phone.replace(/\s+/g, '')}`} className="mt-7 inline-flex items-center gap-2.5 text-stroxx-blue text-xl font-medium hover:text-white transition-colors">
+                <Phone size={18} strokeWidth={2} /> {phone}
+              </a>
+            )}
+            {hours && (
+              <div className="mt-5 text-fog text-sm leading-relaxed whitespace-pre-line">
+                {hours}
+              </div>
+            )}
           </div>
 
           <div className="text-sm">
@@ -133,9 +141,18 @@ export default async function Footer() {
           </span>
           <span>{legal}</span>
           <span className="flex gap-4">
-            <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
-            <Link href="/handelsbetingelser" className="hover:text-white transition-colors">Terms</Link>
+            {/* per-market legal links from the Market doc; defaults when unset */}
+            {(currentMarket?.legalLinks ?? []).filter((l) => l.label && l.href).length
+              ? currentMarket!.legalLinks!
+                  .filter((l) => l.label && l.href)
+                  .map((l) => <FooterLink key={l.href} label={l.label!} href={l.href!} />)
+              : (
+                <>
+                  <Link href="/privatliv" className="hover:text-white transition-colors">Privacy</Link>
+                  <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
+                  <Link href="/handelsbetingelser" className="hover:text-white transition-colors">Terms</Link>
+                </>
+              )}
           </span>
         </div>
       </div>

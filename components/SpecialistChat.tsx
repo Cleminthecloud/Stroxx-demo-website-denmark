@@ -5,6 +5,7 @@ import { Send, Phone, ArrowUpRight } from 'lucide-react';
 import { products, toolTexture, Product } from '@/lib/data';
 import KnockoutImage from '@/components/KnockoutImage';
 import { Store } from '@/lib/stores';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 /** The specialist chat: scripted answers from the site's real data (guarantee
  *  terms, store list, live product catalogue) with free-form questions handled
@@ -173,6 +174,11 @@ export default function SpecialistChat({
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
+  /* Current MARKET dealer (context, market doc): the handoff fallback quotes the
+     dealer's service line, and /api/chat gets the market code so the AI quotes
+     the right number too. International → no phone, the store finder carries it. */
+  const { currentDealer } = useDealerChooser();
+  const servicePhone = currentDealer?.supportPhone || '';
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: 'smooth' });
@@ -214,7 +220,7 @@ export default function SpecialistChat({
         const r = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: payload }),
+          body: JSON.stringify({ messages: payload, market: currentDealer?.code }),
           signal: AbortSignal.timeout(22000),
         });
         if (r.ok) {
@@ -308,9 +314,15 @@ export default function SpecialistChat({
                     </>
                   ) : (
                     <div className="flex gap-1.5">
-                      <a href="tel:+4544855511" className="glass-cta glass-cta--sm flex-1 justify-center text-white">
-                        <Phone size={12} /> Customer service 44 85 55 11
-                      </a>
+                      {servicePhone ? (
+                        <a href={`tel:${servicePhone.replace(/\s+/g, '')}`} className="glass-cta glass-cta--sm flex-1 justify-center text-white">
+                          <Phone size={12} /> Customer service {servicePhone}
+                        </a>
+                      ) : (
+                        <Link href="/butikker" className="glass-cta glass-cta--sm flex-1 justify-center text-white">
+                          Find a store <ArrowUpRight size={12} />
+                        </Link>
+                      )}
                     </div>
                   )}
                   <div className="mt-2 text-[10px] text-fog leading-snug">

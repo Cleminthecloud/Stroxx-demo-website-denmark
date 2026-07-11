@@ -21,7 +21,7 @@ The reference market is **International English** (`int`). Every new market star
 
 ## Phase 1, turn the market on in code (small, one-time)
 
-- **`lib/i18n.ts`** — the locale/market is already listed; set it active and confirm its `domain` / `path` / `domainPath`.
+- **`lib/i18n.ts`** — the locale/market is already listed; confirm its `domain` / `path` / `domainPath`. (There is no per-locale on/off switch in code: all listed locales route. The Market doc's "Live" flag is informational until gating is built — a market-launch build item.)
 - Verify the coupling chain fires (all driven from the registry): `middleware.ts` resolution, both `LocaleSwitcher` variants, `supportedLanguages` in the `documentInternationalization` config (`sanity.config.ts`), and the seed scripts. This is the "A locale / market" row in DEPENDENCIES.md, follow it.
 - No component code should need editing. If it does, that string was hardcoded and belongs on the Market doc instead, fix that first.
 
@@ -72,7 +72,7 @@ If the dedicated Sanity fields for these do not exist yet, adding them is a one-
 
 - Point the market's domain (or `/fr` sub-path for Belgium) and add it to the Vercel project domains + `docs/STROXX-domains-guide.md`.
 - Add hreflang at cutover (blocked until real domains exist).
-- Confirm `lib/site.ts` `SITE_URL` and the email templates' absolute URLs are correct for launch.
+- Confirm `lib/site.ts` `SITE_URL` is correct for launch (it feeds every canonical/OG/sitemap/robots/schema URL).
 - Run the QA gate below, then flip live.
 
 ---

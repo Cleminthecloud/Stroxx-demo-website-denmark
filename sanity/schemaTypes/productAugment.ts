@@ -23,7 +23,7 @@ export const productAugment = defineType({
     defineField({
       name: 'marketingCopy',
       title: 'Marketing copy override',
-      description: 'Replaces the feed description on the product page when set.',
+      description: 'ROADMAP: will replace the feed description on the product page when the PIM integration lands. Not rendered yet.',
       type: 'text',
       rows: 4,
     }),

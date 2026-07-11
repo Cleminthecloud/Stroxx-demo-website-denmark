@@ -24,11 +24,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // which OG scrapers don't send — the proxy is same-origin and always works.
   const og = `${SITE_URL}${toolTexture(p.imgId, '50383')}`;
   return {
-    // layout.tsx's title template appends " — STROXX"
+    // layout.tsx's title template appends " | STROXX"
     title: p.name,
     description: desc,
     alternates: { canonical: `/produkt/${p.slug}` },
-    openGraph: { title: `${p.name} — STROXX`, description: desc, images: [og], type: 'website' },
+    openGraph: { title: `${p.name} | STROXX`, description: desc, images: [og], type: 'website' },
   };
 }
 

@@ -71,10 +71,14 @@ export default function ContactForm({
           {state === 'busy' ? 'Sending…' : buttonLabel || 'Send'} <ArrowRight size={15} />
         </button>
         {state === 'error' && (
-          <p className="text-red-400 text-xs">That did not go through. Try again, or call {phone || '+45 44 85 55 11'}.</p>
+          <p className="text-red-400 text-xs">
+            That did not go through. Try again{phone ? `, or call ${phone}` : ', or find your store at the store finder'}.
+          </p>
         )}
         {state === 'offline' && (
-          <p className="text-fog text-xs">The form is not connected yet. Call us on {phone || '+45 44 85 55 11'} instead.</p>
+          <p className="text-fog text-xs">
+            The form is not connected yet. {phone ? `Call us on ${phone} instead.` : 'Find your store in the store finder instead.'}
+          </p>
         )}
       </div>
     </form>

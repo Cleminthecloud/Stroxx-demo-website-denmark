@@ -23,7 +23,8 @@ const LANDING_ID = 'landingPage-proev-det';
 const landing = {
   _id: LANDING_ID,
   _type: 'landingPage',
-  title: 'Try It — afford more than just tools',
+  language: 'en', // English base tag — a re-run must never strip it
+  title: 'Try It: afford more than just tools',
   slug: { current: 'proev-det' }, // historic slug preserved; now lives at /kampagne/proev-det
   seoTitle: 'Afford more than just tools',
   seoDescription:

@@ -17,8 +17,16 @@ export const metadata: Metadata = {
  *  hours straight from the same store data the finder renders, so Google
  *  understands every store as a physical place that sells STROXX. Zip/city
  *  arrives as one string ("2730 Herlev"); split defensively. */
+/* per-country phone prefix: store/manager phones are stored nationally-formatted */
+const CALLING_CODE: Record<string, string> = { dk: '+45', de: '+49', fr: '+33', be: '+32' };
+function telIntl(phone: string, country: string): string {
+  const bare = phone.replace(/[\s.]/g, '');
+  return bare.startsWith('+') ? bare : `${CALLING_CODE[country] ?? ''}${bare}`;
+}
+
 function storeLd(s: Store) {
   const [postalCode, ...cityParts] = s.zipCity.split(' ');
+  const phone = s.manager?.phone || s.phone;
   return {
     '@type': 'HardwareStore',
     name: s.name,
@@ -28,10 +36,11 @@ function storeLd(s: Store) {
       streetAddress: s.address,
       postalCode,
       addressLocality: cityParts.join(' ') || s.zipCity,
-      addressCountry: 'DK',
+      /* the store's own country — the finder carries all four markets' networks */
+      addressCountry: (s.country || 'dk').toUpperCase(),
     },
     geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
-    ...(s.manager?.phone ? { telephone: `+45${s.manager.phone.replace(/\s/g, '')}` } : {}),
+    ...(phone ? { telephone: telIntl(phone, s.country || 'dk') } : {}),
     ...(s.monThu && s.fri
       ? {
           openingHoursSpecification: [
@@ -57,7 +66,7 @@ export default async function ButikkerPage() {
   const storesLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'STROXX stockists in Denmark',
+    name: 'STROXX stockists',
     itemListElement: storeData.map((st, i) => ({ '@type': 'ListItem', position: i + 1, item: storeLd(st) })),
   };
   return (

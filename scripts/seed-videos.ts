@@ -94,6 +94,7 @@ async function run() {
   const mmexo = {
     _id: 'support-mmexo',
     _type: 'supportPage',
+    language: 'en',
     title: 'MMEXO exoskeleton',
     slug: { current: 'mmexo' },
     intro: 'Instruction clips and product films for the STROXX MMEXO exoskeleton, in your language.',

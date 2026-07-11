@@ -8,12 +8,17 @@ import ParticleImage from '@/components/ParticleImage';
 import CursorGlow from '@/components/CursorGlow';
 import GlassButton from '@/components/GlassButton';
 import { ArrowRight } from 'lucide-react';
-import { products, categories, categoryBySlug, categoryBuyUrl, particleSrc } from '@/lib/data';
+import { products, categories, categoryBySlug, particleSrc } from '@/lib/data';
+import { dealerCategoryUrl } from '@/lib/buy';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 type Sort = 'pop' | 'new';
 
 export default function ProductExplorer({ headline, intro }: { headline?: string; intro?: string } = {}) {
   const params = useSearchParams();
+  /* market-first category CTA: the current dealer's shop, never a hand-written
+     Carl Ras link; international (no dealer) hides the external CTA */
+  const { currentDealer } = useDealerChooser();
   const [active, setActive] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [sort, setSort] = useState<Sort>('pop');
@@ -67,11 +72,13 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
               {activeCat.name}
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">{activeCat.blurb}</p>
-            <div className="mt-7">
-              <GlassButton href={categoryBuyUrl(activeCat.path)} external>
-                See all {activeCat.name.toLowerCase()} at Carl Ras <ArrowRight size={16} />
-              </GlassButton>
-            </div>
+            {currentDealer && dealerCategoryUrl(currentDealer, activeCat.path) && (
+              <div className="mt-7">
+                <GlassButton href={dealerCategoryUrl(currentDealer, activeCat.path)!} external>
+                  See all {activeCat.name.toLowerCase()} at {currentDealer.dealerName} <ArrowRight size={16} />
+                </GlassButton>
+              </div>
+            )}
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
             <ParticleImage key={activeCat.slug} src={particleSrc(activeCat.slug, catHero.imgId)} className="h-full w-full" />
@@ -85,7 +92,7 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
               <Accent text={headline || 'Find your STROXX tool'} />
             </h1>
             <p className="mt-5 text-fog text-lg max-w-md">
-              {intro || 'Filter the range and jump straight to the buy at Carl Ras. A selection of the 1,400+ item numbers. The purchase always happens on the partner platform.'}
+              {intro || 'Filter the range and jump straight to the buy at your dealer. A selection of the 1,400+ item numbers. The purchase always happens on the dealer platform.'}
             </p>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">

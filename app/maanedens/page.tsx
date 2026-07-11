@@ -12,7 +12,8 @@ import Faq from '@/components/Faq';
 import { ArrowRight, Phone, Mail } from 'lucide-react';
 import { toolTexture, particleSrc } from '@/lib/data';
 import BuyCTA from '@/components/BuyCTA';
-import { getSka, getSpecialists, getVideos, pickSpecialist } from '@/lib/cms';
+import { getSka, getSpecialists, getVideos, pickSpecialist, getMarkets } from '@/lib/cms';
+import { getLocale } from '@/lib/locale';
 import { cardCols, productColsWide } from '@/lib/grid';
 import { SITE_URL } from '@/lib/site';
 
@@ -39,6 +40,10 @@ export default async function MaanedensPage() {
   const SKA = await getSka();
   const hero = SKA.hero;
   const spec = pickSpecialist(await getSpecialists(), hero);
+  /* market-first guarantee chip: name the current market's dealer, never a
+     hardcoded one; international stays generic */
+  const locale = await getLocale();
+  const dealer = (await getMarkets()).find((m) => m.code === locale.market && m.dealerName) ?? null;
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -82,7 +87,7 @@ export default async function MaanedensPage() {
               <GlassButton href="#historien" variant="ghost">Why it wins</GlassButton>
             </div>
             <div className="mt-6 flex items-center gap-2 text-sm text-fog">
-              <span className="h-2 w-2 rounded-full bg-green-500" /> 30-day satisfaction guarantee · purchase made at Carl Ras
+              <span className="h-2 w-2 rounded-full bg-green-500" /> 30-day satisfaction guarantee · purchase made at {dealer?.dealerName || 'your STROXX dealer'}
             </div>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">

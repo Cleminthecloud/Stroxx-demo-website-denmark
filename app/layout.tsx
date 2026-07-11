@@ -190,7 +190,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <a href="#indhold" className="skip-link">Skip to content</a>
         <DealerChooserProvider currentDealer={currentDealer} dealers={dealers}>
         <SmoothScroll>
-          <Nav links={cleanLinks(settings?.navLinks) ?? undefined} logoSrc={assetUrl(settings?.logo, 240) ?? undefined} />
+          <Nav
+            links={cleanLinks(settings?.navLinks) ?? undefined}
+            logoSrc={assetUrl(settings?.logo, 240) ?? undefined}
+            logoAlt={(settings?.logo as { alt?: string } | undefined)?.alt || undefined}
+          />
           <div id="indhold">{children}</div>
           {nlOn && settings?.newsletterBandEnabled !== false && <NewsletterBand copy={nlCopy} />}
           <Footer />

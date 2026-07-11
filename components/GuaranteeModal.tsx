@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, X, FileText, ArrowRight } from 'lucide-react';
 import GlassButton from '@/components/GlassButton';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 const PDF = '/STROXX-tilfredshedsgaranti.pdf';
 
@@ -12,6 +13,10 @@ const POINTS = [
 ];
 
 export default function GuaranteeModal({ trigger = 'How the guarantee works' }: { trigger?: string }) {
+  /* Returns go through the current MARKET's dealer (market doc via context):
+     name + service phone render only on a dealer market, never hardcoded. */
+  const { currentDealer } = useDealerChooser();
+  const servicePhone = currentDealer?.supportPhone || '';
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false); // drives the enter/exit transition
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -102,7 +107,12 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
             <p className="text-fog/80 text-sm leading-relaxed mb-7">
               <span className="text-white/80">Returns:</span> hand the product back to your dealer
               (or contact customer service for online purchases) with your invoice or delivery note.
-              Carl Ras customer service: <a href="tel:+4544855511" className="text-stroxx-blue hover:text-white transition-colors">44 85 55 11</a>.
+              {servicePhone && (
+                <>
+                  {' '}{currentDealer?.dealerName || 'Dealer'} customer service:{' '}
+                  <a href={`tel:${servicePhone.replace(/\s+/g, '')}`} className="text-stroxx-blue hover:text-white transition-colors">{servicePhone}</a>.
+                </>
+              )}
             </p>
 
             <div className="flex flex-wrap items-center gap-3">

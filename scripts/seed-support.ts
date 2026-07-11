@@ -138,6 +138,7 @@ async function run() {
   const st2 = {
     _id: 'support-smart-locks-st2',
     _type: 'supportPage',
+    language: 'en',
     title: 'ST-2 Smart Lock',
     slug: { current: 'smart-locks-st2' }, // EXACT legacy slug: packaging QR codes point here
     intro: 'User instructions, software guides and the product flyer for the ST-2 Smart Lock, in your language.',
@@ -176,6 +177,7 @@ async function run() {
   const xlock = {
     _id: 'support-xlock-software-guide',
     _type: 'supportPage',
+    language: 'en',
     title: 'XLOCK software guide',
     slug: { current: 'xlock-software-guide' }, // EXACT legacy slug: packaging QR codes point here
     intro: 'Download the XLOCK software guide to set up your Smart Lock, in six languages.',
@@ -199,6 +201,7 @@ async function run() {
   const cylinders = {
     _id: 'support-digital-cylinders',
     _type: 'supportPage',
+    language: 'en',
     title: 'Digital cylinders & padlocks',
     slug: { current: 'digital-cylinders' },
     intro: 'User instructions for the STROXX electronic cylinder range, padlock and wireless keypad.',
@@ -222,6 +225,7 @@ async function run() {
   const workLight = {
     _id: 'support-work-light',
     _type: 'supportPage',
+    language: 'en',
     title: 'Work light 4x 14.000L',
     slug: { current: 'work-light' },
     intro: 'App manual for the STROXX 4x 14.000 lumen work light, in five languages.',
@@ -242,6 +246,7 @@ async function run() {
   const safety = {
     _id: 'support-sikkerhed',
     _type: 'supportPage',
+    language: 'en',
     title: 'Safety equipment (PPE)',
     slug: { current: 'sikkerhed' },
     intro: 'CE declarations of conformity and user instructions for STROXX protective equipment.',
@@ -271,6 +276,7 @@ async function run() {
   const keybox = {
     _id: 'support-key-storage-box',
     _type: 'supportPage',
+    language: 'en',
     title: 'Key storage box',
     slug: { current: 'key-storage-box' },
     intro: 'Manuals for the STROXX key storage box, including the app-connected version.',
@@ -288,6 +294,7 @@ async function run() {
   const tools = {
     _id: 'support-vaerktoej',
     _type: 'supportPage',
+    language: 'en',
     title: 'Tools & accessories',
     slug: { current: 'vaerktoej' },
     intro: 'Manuals and datasheets for STROXX lights, straps and accessories.',

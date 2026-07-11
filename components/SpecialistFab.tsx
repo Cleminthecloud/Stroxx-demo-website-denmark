@@ -5,12 +5,13 @@ import { usePathname } from 'next/navigation';
 import { Phone, Mail, X, LocateFixed, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react';
 import { stores as fallbackStores, distanceKm, hoursLabel, type Store } from '@/lib/stores';
 import SpecialistChat from '@/components/SpecialistChat';
+import { useDealerChooser } from '@/components/DealerChooser';
 
 /** Phone-first "talk to a specialist" FAB. Pros ring, they rarely chat, and we
  *  have every butikschef's direct number from the CMS. Geolocation offers the
- *  nearest one; fallback is Carl Ras kundeservice. */
-
-const SERVICE_TEL = '+4544855511';
+ *  nearest one; fallback is the current MARKET dealer's customer service line
+ *  (market doc via the dealer-chooser context) — international has no single
+ *  dealer, so that row hides and the store finder link carries the weight. */
 
 export type FabCopy = {
   fabLabel?: string;
@@ -22,6 +23,8 @@ export type FabCopy = {
 
 export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]; copy?: FabCopy }) {
   const stores = storeData && storeData.length ? storeData : fallbackStores;
+  const { currentDealer } = useDealerChooser();
+  const servicePhone = currentDealer?.supportPhone || '';
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<'home' | 'chat'>('home');
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
@@ -161,11 +164,13 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
           </p>
         )}
 
-        <div className="flex items-center justify-between gap-3 pt-4 border-t border-white/[0.08]">
-          <a href={`tel:${SERVICE_TEL}`} className="text-[12px] text-fog hover:text-white transition-colors leading-snug">
-            Carl Ras customer service<br />
-            <span className="text-white font-medium">44 85 55 11</span>
-          </a>
+        <div className={`flex items-center gap-3 pt-4 border-t border-white/[0.08] ${servicePhone ? 'justify-between' : 'justify-end'}`}>
+          {servicePhone && (
+            <a href={`tel:${servicePhone.replace(/\s+/g, '')}`} className="text-[12px] text-fog hover:text-white transition-colors leading-snug">
+              {currentDealer?.dealerName ? `${currentDealer.dealerName} customer service` : 'Customer service'}<br />
+              <span className="text-white font-medium">{servicePhone}</span>
+            </a>
+          )}
           <Link href="/butikker" onClick={() => setOpen(false)} className="link-arrow text-[12px] whitespace-nowrap">
             All stores <ArrowRight size={13} />
           </Link>

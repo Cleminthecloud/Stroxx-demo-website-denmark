@@ -78,7 +78,7 @@ export default function Messaging() {
             <ul className="space-y-3">
               {TONE.map((t) => (
                 <li key={t} className="flex gap-3 text-fog text-sm leading-relaxed">
-                  <span aria-hidden className="text-stroxx-blue">—</span> {t}
+                  <span aria-hidden className="text-stroxx-blue">·</span> {t}
                 </li>
               ))}
             </ul>

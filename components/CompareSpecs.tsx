@@ -17,7 +17,7 @@ export default function CompareSpecs({ product, others }: { product: Product; ot
   const labels: string[] = [];
   for (const p of columns)
     for (const s of p.specs) if (!labels.includes(s.label)) labels.push(s.label);
-  const value = (p: Product, label: string) => p.specs.find((s) => s.label === label)?.value ?? '–';
+  const value = (p: Product, label: string) => p.specs.find((s) => s.label === label)?.value ?? '-';
 
   return (
     <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-20">

@@ -12,10 +12,10 @@ Danish strings scattered in the code are **fallbacks** (the "empty field shows
 the default copy" system), not the live source. So these surfaces are already
 per-market — launching a market means authoring that market's `siteSettings`
 document, not changing code:
-- Footer: phone, hours, legal line, about text (`s.supportPhone` / `s.supportHours` / `s.legalLine` / `s.footerAbout`).
+- Footer: hours + about text (`s.supportHours` / `s.footerAbout`); the dealer PHONE, legal line and legal links come from the current MARKET doc (2026-07-11 dealer-contact model — the old siteSettings phone/legalLine/retailer fields are removed).
 - Service page: legal documents, FAQ, returns steps, all copy (`s.serviceDocs` / `s.serviceFaq` / `s.serviceReturnSteps` / headings).
 - `/llms.txt` for AI engines (`s.llmsTxt`).
-- Chat assistant support number (`s.supportPhone`).
+- Chat assistant dealer name + phone (the chat client sends its market code; the route reads the MARKET doc).
 - Homepage, landing pages, support pages, news: all `language == <locale>` documents.
 
 ## Done in code
@@ -36,14 +36,14 @@ document, not changing code:
    the German / French / Belgian settings (contact, hours, legal line, legal
    documents, service copy, llms.txt, about text) and every surface above
    localises with no code change. This is editor / launch work.
-2. (DONE, awaiting seed) **European store data** — captured. `lib/stores.ts` now
+2. (DONE, seeded 2026-07-11: all 222 stores live in the CMS) **European store data** — captured. `lib/stores.ts` now
    carries the real dealer networks: Meesenburg (DE, 28 locations), Foussier
    (FR, 84 stores), Lecot (BE, 84 stores), each with real address + coordinates
    (FR/BE read from the dealers' own store-locator data; DE geocoded via Google
    Maps). 222 stores total (26 DK + 196 EU). Dealer stores abroad have no named
    manager, so the model gained an optional `manager` plus a store-level
    `phone`/`email` contact line, and `StoreBrand` gained Meesenburg/Foussier/Lecot.
-   Goes live once Clem runs `npm run seed:more`.
+   Seeded via `npm run seed:more` on 2026-07-11.
 3. (content) **Guarantee terms PDF** (`/STROXX-tilfredshedsgaranti.pdf`): a static
    Danish file. The guarantee seal + guarantee copy are already per-market in the
    CMS; a per-market terms PDF is content.

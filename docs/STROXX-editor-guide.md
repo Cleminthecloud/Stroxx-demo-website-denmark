@@ -109,7 +109,7 @@ Product blocks (Product proof, and the monthly lineup) reference products by the
 
 Tip: fastest way to a new page is duplicating an existing one: three-dot menu on "Campaign: Try It" → Duplicate, then change slug and copy.
 
-**Nesting and moving pages**: use / in the slug to nest, slug `sommer/tilbud` publishes at /kampagne/sommer/tilbud. Moving a page is simply editing its slug. The old address stops working, so if it was already shared or linked, ask your administrator for a redirect.
+**Nesting and moving pages**: use / in the slug to nest, slug `sommer/tilbud` publishes at /kampagne/sommer/tilbud. Moving a page is simply editing its slug, and when you publish, the site automatically creates a permanent redirect from the old address to the new one, so shared links keep working. (Support pages are the exception to casual renaming: their addresses are printed on packaging QR codes, so leave those slugs alone.)
 
 ## 7. The store finder (map)
 
@@ -143,6 +143,12 @@ Also worth knowing: the **Contact form** block (in the landing-page "Add item" m
 
 Buy is market-aware, and you do not set it per button. On a single-dealer market the Buy buttons link straight to that market's dealer: Denmark to Carl Ras, Germany to Meesenburg, France to Foussier, Belgium to Lecot. On the international site there is no single dealer, so every Buy opens a **Where to buy** chooser that lists all the dealers with their phone and website, and the homepage carries the same directory as a section. Dealer names and contact details live on the **Market** documents; they are looked after by the developer (a change is pushed to the CMS with a short seed step), so if a dealer detail is ever wrong, tell the developer rather than hunting for a field. The guarantee seal, the guarantee text and page copy stay yours to edit as normal.
 
+One writing rule that keeps the international site honest: **the English version of any page is also the international site**, so English button labels and copy never name one dealer ("Where to buy", not "Buy at Carl Ras"). Your own market's language version is exactly where the dealer name belongs.
+
+## 7d. Languages: translating a page
+
+The site publishes in English (the international reference) plus each market's language, and every page lives once per language. To create a language version of a page: open the page, use the **translations menu** (the globe icon in the document's top bar) and pick the language; the Studio creates a linked copy you translate and publish. Translate the content, keep the structure: blocks, images and product pickers carry over. Two habits make this painless. Translate from the English version (it is the reference the site falls back to while a translation does not exist yet), and never touch the small read-only "language" field on documents — it is how the site knows which market sees what. Support-page addresses are printed on packaging, so their slugs stay identical across languages.
+
 ## 8. Månedens STROXX (the monthly lineup)
 
 The document **Monthly lineup** drives the Tool of the Month page and the homepage section. Changing the month is one edit:
@@ -151,14 +157,13 @@ The document **Monthly lineup** drives the Tool of the Month page and the homepa
 2. Set month + year, the hero SKU, the hero claims/cases/FAQ (the story), the five winner SKUs, and up to three news items with a one-line pitch.
 3. Publish. Homepage and /maanedens update together, same lineup everywhere.
 
-## 9. Site settings (footer, phone, legal, tracking)
+## 9. Site settings (footer, hours, tracking)
 
 Content → **Site settings**. One document that feeds the whole site, organized in tabs (Contact + legal, Menu + footer, SEO + AI engines, Tracking + consent, Integrations):
 
-- **Customer service phone + hours**: footer, nav, chat and guarantee modal all update together. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
+- **Dealer name, customer service phone, footer legal line and dealer logo come from the MARKET document** (Settings → Markets), not from here: edit the market and the footer, mobile menu, chat handoff and guarantee pop-up all update together. The international version deliberately has no dealer, so those spots simply hide there.
+- **Customer service hours**: the localized hours text under the phone in the footer. This is per-language display copy, which is why it lives here rather than on the market. Leave it empty on the international version. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
 - **News section enabled**: markets without a blog switch news off here; /nyheder and every article return "page not found" and leave the sitemap. Remove News menu/footer links too.
-- **Legal line**: the company line at the very bottom.
-- **Retail partner logo**: upload your company logo (a light/white version with transparent background looks best) and it appears in the footer next to the legal line. Leave empty and the footer simply shows the text.
 - **Microcopy tab**: every small text on the site lives here: the footer's about paragraph (partner names turn into links automatically), the chat's button label, panel copy, greeting and fallback answer, the Pro Club box on product pages, the page headlines and intros for Products, Stores, Service and Trades (*word* = blue accent), the whole Service page (guarantee, returns, FAQ, documents and contact copy) and the Support index headline and intro, the news page headline and empty state, the newsletter success message, and even the 404 page. Change the words, publish, done.
 - **Google Tag Manager container ID**: see next section.
 - **PIM product feed URL and DAM image base URL**: where this market's product data and images come from. URLs only, API keys and secrets never go in the CMS, they live in the secured hosting environment.
@@ -200,7 +205,7 @@ The "Talk to a specialist" chat is a hybrid. Practical questions (guarantee, nea
 **Training it is editing text, not machine learning.** The AI reads, live, from:
 
 1. **The "AEO: llms.txt content" field in Site settings**, its main brain. Write everything it should know here in plain language: what STROXX is, the guarantee terms, who sells STROXX in each market (Carl Ras in Denmark, Meesenburg in Germany, Foussier in France, Lecot in Belgium), what makes the price possible, tone of voice. If the AI gives a wrong or missing answer, add or correct the fact here and it knows it immediately.
-2. **Site settings facts** like the customer service phone, and the product category list.
+2. **The market's dealer facts** (dealer name and customer service phone come from the Market document) and the product category list.
 
 Rules it always follows: it never invents prices, stock or specifications (it points to the shop instead), it stays on topic, and it offers the human handoff for anything sensitive. Test it after editing: open the chat and ask the question a customer would.
 
@@ -270,7 +275,7 @@ Today the packaging design and the PDFs are produced externally (Kreativ Zone / 
 
 ## 10f. The test page and feedback (finding bugs together)
 
-The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. Testers can attach a screenshot (PNG/JPG/WebP, up to 3 MB) and paste links straight into the text. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
+The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. Testers can attach up to four images (PNG/JPG/WebP, large photos are downscaled automatically in the browser) and paste links straight into the text. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
 
 **Where the reports go.** Every submission lands in Content → **Feedback (test reports)**, newest first, with the tester's device and browser attached automatically (so "it looked odd on my phone" arrives with the phone included). Reviewing is a two-minute routine:
 

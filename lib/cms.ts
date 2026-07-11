@@ -19,13 +19,11 @@ import { getLocale } from '@/lib/locale';
 
 export type NavLink = { label?: string; href?: string };
 export type SiteSettings = {
-  retailerName?: string;
-  retailerLogo?: unknown; // Sanity image; render via assetUrl()
-  retailerLogoHref?: string;
+  /* Dealer identity + contact (name, phone, legal line, buy link) live on the
+     Market doc (lib/markets.ts + getMarkets) — NOT here. Only the localized
+     hours text is per-locale siteSettings. See DEPENDENCIES.md dealer-contact row. */
   logo?: unknown; // Sanity image, optional header-logo override; render via assetUrl()
-  supportPhone?: string;
   supportHours?: string;
-  legalLine?: string;
   gtmId?: string;
   seoTitle?: string;
   seoDescription?: string;
@@ -75,7 +73,6 @@ export type SiteSettings = {
   produkterHeadline?: string;
   produkterIntro?: string;
   butikkerHeadlineStores?: string;
-  butikkerHeadlineSpecialists?: string;
   serviceHeadline?: string;
   serviceIntro?: string;
   serviceGuaranteeHeading?: string;
@@ -126,11 +123,20 @@ async function langId(): Promise<string> {
   return (await getLocale()).id;
 }
 
+/* Language predicates for GROQ. TOLERANT ON PURPOSE: a doc with NO language
+ * field counts as the English base. Seeds createOrReplace docs (which can drop
+ * the i18n plugin's language tag until seed:i18n-base re-runs) — strict
+ * `language == "en"` made such docs silently invisible. Every translatable
+ * fetcher uses these two, so untagged docs keep rendering as the base while
+ * real translations win on their own locale. */
+const LANG_IS = '(language == $lang || (!defined(language) && $lang == "en"))';
+const LANG_IS_EN = '(language == "en" || !defined(language))';
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     const lang = await langId();
-    let { data } = await sanityFetch({ query: '*[_type == "siteSettings" && language == $lang][0]', params: { lang } });
-    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: '*[_type == "siteSettings" && language == "en"][0]' }));
+    let { data } = await sanityFetch({ query: `*[_type == "siteSettings" && ${LANG_IS}][0]`, params: { lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: `*[_type == "siteSettings" && ${LANG_IS_EN}][0]` }));
     return (data as SiteSettings) ?? null;
   } catch {
     return null;
@@ -152,13 +158,13 @@ export type LandingDoc = {
 
 export async function getLandingPage(slug: string): Promise<LandingDoc | null> {
   try {
-    const { data } = await sanityFetch({
-      // Dereference the film-section's picked films so the renderer gets their
-      // youtubeId/title/by (empty = section falls back to all active films).
-      query:
-        '*[_type == "landingPage" && slug.current == $slug][0]{ ..., sections[]{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } } } }',
-      params: { slug },
-    });
+    const lang = await langId();
+    // Dereference the film-section's picked films so the renderer gets their
+    // youtubeId/title/by (empty = section falls back to all active films).
+    const q = (pred: string) =>
+      `*[_type == "landingPage" && slug.current == $slug && ${pred}][0]{ ..., sections[]{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } } } }`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { slug, lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { slug } }));
     return (data as LandingDoc) ?? null;
   } catch {
     return null;
@@ -186,9 +192,10 @@ export type PostDoc = {
  *  renders a friendly empty state, never an error. */
 export async function getPosts(): Promise<PostDoc[]> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "post" && defined(slug.current)] | order(publishedAt desc)',
-    });
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "post" && defined(slug.current) && ${pred}] | order(publishedAt desc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
     return Array.isArray(data) ? (data as PostDoc[]) : [];
   } catch {
     return [];
@@ -197,10 +204,15 @@ export async function getPosts(): Promise<PostDoc[]> {
 
 export async function getPost(slug: string): Promise<PostDoc | null> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "post" && slug.current == $slug][0]',
-      params: { slug },
+    const lang = await langId();
+    let { data } = await sanityFetch({
+      query: `*[_type == "post" && slug.current == $slug && ${LANG_IS}][0]`,
+      params: { slug, lang },
     });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({
+      query: `*[_type == "post" && slug.current == $slug && ${LANG_IS_EN}][0]`,
+      params: { slug },
+    }));
     return (data as PostDoc) ?? null;
   } catch {
     return null;
@@ -345,7 +357,9 @@ export async function getStores(): Promise<Store[]> {
           maps: d.mapsUrl ?? '',
           phone: stegaClean(d.storePhone) || undefined,
           email: stegaClean(d.storeEmail) || undefined,
-          manager: d.managerName
+          /* consent gate: the schema promises personal data only publishes
+             with consent — enforced here (explicit false hides the person) */
+          manager: d.managerName && d.managerConsent !== false
             ? {
                 name: d.managerName,
                 email: d.managerEmail ?? '',
@@ -353,7 +367,7 @@ export async function getStores(): Promise<Store[]> {
                 photo: assetUrl(d.managerPhotoUpload, 300) ?? d.managerPhoto ?? '',
               }
             : undefined,
-          specialist: d.specialist?.name
+          specialist: d.specialist?.name && d.specialist?.consent !== false
             ? {
                 name: d.specialist.name,
                 role: stegaClean(d.specialist.role) || undefined,
@@ -399,9 +413,10 @@ export async function getStores(): Promise<Store[]> {
  *  slug and categories are cleaned for matching. */
 export async function getTrades(): Promise<Trade[]> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "trade" && active != false] | order(order asc, name asc)',
-    });
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "trade" && active != false && ${pred}] | order(order asc, name asc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
     const docs = (data ?? []) as Record<string, any>[];
     if (!docs.length) return fallbackTrades;
     const mapped = docs
@@ -437,7 +452,8 @@ export async function getSpecialists(): Promise<Specialist[]> {
     const docs = (data ?? []) as Record<string, any>[];
     if (!docs.length) return fallbackSpecialists;
     const mapped = docs
-      .filter((d) => d.name)
+      /* consent gate, same promise as store managers */
+      .filter((d) => d.name && d.consentGiven !== false)
       .map((d): Specialist => ({
         name: d.name,
         role: d.role ?? '',
@@ -516,10 +532,15 @@ export type LegalDoc = { title?: string; body?: any };
 
 export async function getLegalPage(slug: string): Promise<LegalDoc | null> {
   try {
-    const { data } = await sanityFetch({
-      query: '*[_type == "legalPage" && slug == $slug][0]',
-      params: { slug },
+    const lang = await langId();
+    let { data } = await sanityFetch({
+      query: `*[_type == "legalPage" && slug == $slug && ${LANG_IS}][0]`,
+      params: { slug, lang },
     });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({
+      query: `*[_type == "legalPage" && slug == $slug && ${LANG_IS_EN}][0]`,
+      params: { slug },
+    }));
     return (data as LegalDoc) ?? null;
   } catch {
     return null;
@@ -529,8 +550,10 @@ export async function getLegalPage(slug: string): Promise<LegalDoc | null> {
 /** Landing-page slugs for the sitemap (plain client fetch, no draft context). */
 export async function getLandingSlugs(): Promise<string[]> {
   try {
+    /* English-base slugs only: one URL per page in the sitemap. Translated
+       slugs join via hreflang/per-locale sitemaps at the domain cutover. */
     const { data } = await sanityFetch({
-      query: '*[_type == "landingPage" && defined(slug.current)].slug.current',
+      query: `*[_type == "landingPage" && defined(slug.current) && ${LANG_IS_EN}].slug.current`,
     });
     return ((data ?? []) as string[]).map((s) => stegaClean(s) ?? s).filter((s) => s && s !== 'proev-det');
   } catch {
@@ -547,11 +570,11 @@ export async function getSka(): Promise<SkaData> {
     // The live lineup is the most recent one whose "Active from" date has
     // passed, so editors can stage next month ahead of time. Lineups with no
     // date stay eligible and fall back to newest-created (backwards compatible).
-    const { data } = await sanityFetch({
-      query:
-        '*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today)] | order(activeFrom desc, _createdAt desc)[0]{ ..., "films": films[]->{ _id, youtubeId, title, by } }',
-      params: { today: new Date().toISOString().slice(0, 10) },
-    });
+    const lang = await langId();
+    const q = (pred: string) =>
+      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]{ ..., "films": films[]->{ _id, youtubeId, title, by } }`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { today: new Date().toISOString().slice(0, 10), lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { today: new Date().toISOString().slice(0, 10) } }));
     if (!data) return SKA;
     const d = data as Record<string, any>;
     const find = (code?: string) => products.find((p) => p.code === stegaClean(code));

@@ -325,7 +325,7 @@ export const landingPage = defineType({
           name: 'productProof',
           title: 'Product cards (by SKU)',
           type: 'object',
-          description: 'A grid of live product cards. Enter item numbers (SKU); name, photo and price data come from the product feed.',
+          description: 'A grid of live product cards. Enter item numbers (SKU); name and photo come from the product feed. The brand site shows no prices.',
           initialValue: {
             eyebrow: 'The proof',
             headline: 'The tools *do the talking.*',

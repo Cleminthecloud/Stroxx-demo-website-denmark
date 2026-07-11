@@ -126,6 +126,7 @@ async function run() {
     await client.createOrReplace({
       _id: p._id,
       _type: 'post',
+  language: 'en',
       title: p.title,
       slug: { _type: 'slug', current: p.slug },
       publishedAt: p.publishedAt,
@@ -145,6 +146,7 @@ async function run() {
   await client.createOrReplace({
     _id: 'landing-manifesto',
     _type: 'landingPage',
+  language: 'en',
     title: 'The STROXX manifesto',
     slug: { _type: 'slug', current: 'manifesto' },
     seoTitle: 'The STROXX manifesto',
@@ -160,7 +162,7 @@ async function run() {
         ],
       },
       {
-        _type: 'pullQuote', _key: 'm2',
+        _type: 'quote', _key: 'm2',
         text: 'Professional quality should not be defined by how expensive it is, but by how well it works.',
       },
       {

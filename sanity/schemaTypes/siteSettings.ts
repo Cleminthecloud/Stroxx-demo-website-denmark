@@ -48,42 +48,18 @@ export const siteSettings = defineType({
   ],
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    defineField({ name: 'retailerName', title: 'Retail partner', type: 'string', initialValue: 'Carl Ras', group: 'contact' }),
-    defineField({
-      name: 'retailerLogo',
-      title: 'Retail partner logo',
-      description: 'Shown in the footer next to the credentials. A light/white version works best on the dark background; PNG or SVG with transparency.',
-      type: 'image',
-      options: { hotspot: true },
-      group: 'contact',
-    }),
-    defineField({
-      name: 'retailerLogoHref',
-      title: 'Logo link',
-      type: 'string',
-      description: 'Where a click on the footer logo goes, e.g. https://www.carl-ras.dk. Empty = not clickable.',
-      group: 'contact',
-    }),
-    defineField({
-      name: 'supportPhone',
-      title: 'Customer service phone',
-      description: 'Shown in the footer, nav, chat and guarantee modal.',
-      type: 'string',
-      group: 'contact',
-    }),
+    /* Dealer identity + contact live on the MARKET document (Settings → Markets):
+       dealer name, Buy-at CTA link, customer service phone, footer legal line.
+       The old retailerName / retailerLogo / retailerLogoHref / supportPhone /
+       legalLine fields here were dead or duplicated that source — removed
+       2026-07-11 (see the dealer-contact row in DEPENDENCIES.md). Only the
+       localized HOURS text stays here: it is per-language display copy. */
     defineField({
       name: 'supportHours',
       title: 'Customer service hours',
-      description: 'Press Enter for a new line, e.g. Mon-Thu on one line, Friday on the next.',
+      description: 'Localized hours text shown in the footer under the dealer’s phone (the phone itself comes from the Market document). Press Enter for a new line. Leave empty on the international version.',
       type: 'text',
       rows: 2,
-      group: 'contact',
-    }),
-    defineField({
-      name: 'legalLine',
-      title: 'Legal line (footer)',
-      description: 'Legal entity line for the footer, e.g. company name + CVR.',
-      type: 'string',
       group: 'contact',
     }),
 
@@ -411,7 +387,6 @@ export const siteSettings = defineType({
     defineField({ name: 'produkterHeadline', title: 'Products page: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
     defineField({ name: 'produkterIntro', title: 'Products page: intro', type: 'text', rows: 2, group: 'copy' }),
     defineField({ name: 'butikkerHeadlineStores', title: 'Stores page: headline (stores tab)', type: 'string', group: 'copy' }),
-    defineField({ name: 'butikkerHeadlineSpecialists', title: 'Stores page: headline (specialists tab)', type: 'string', group: 'copy' }),
     defineField({ name: 'serviceHeadline', title: 'Service page: headline', type: 'string', group: 'copy', description: '*word* = blue accent.' }),
     defineField({ name: 'serviceIntro', title: 'Service page: intro', type: 'text', rows: 2, group: 'copy' }),
     defineField({ name: 'serviceGuaranteeHeading', title: 'Service: guarantee heading', type: 'string', group: 'copy' }),

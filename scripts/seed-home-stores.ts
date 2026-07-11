@@ -19,12 +19,16 @@ import { LLMS_FALLBACK } from '../lib/llms-fallback';
 
 const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
-const homePage = {
+const homePage: Record<string, unknown> = {
   _id: 'homePage',
   _type: 'homePage',
+  language: 'en', // English base tag — a re-run must never strip it
   ...HOME_DEFAULTS,
   stats: HOME_DEFAULTS.stats.map((s, i) => ({ _type: 'stat', _key: `seed-${i}`, ...s })),
 };
+/* campaignHref is COMPUTED by getHomePage from the campaignLink reference —
+   not a schema field, so never seed it */
+delete homePage.campaignHref;
 
 
 const storeDocs = stores.map((s) => ({
@@ -155,10 +159,13 @@ const lk = (label: string, href: string, i: number) => ({ _type: 'navLink', _key
 const SETTINGS_DEFAULTS: Record<string, unknown> = {
   _id: 'siteSettings',
   _type: 'siteSettings',
-  retailerName: 'Carl Ras',
-  supportPhone: '+45 44 85 55 11',
-  supportHours: 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00',
-  legalLine: '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14',
+  /* i18n: this IS the English base doc — seed the tag so a re-run can never
+     strip it (locale-aware queries would go blank without it) */
+  language: 'en',
+  /* No dealer identity/contact here: dealerName, phone and legal line live on
+     the MARKET documents (seed:markets). This doc is the ENGLISH BASE and it
+     renders on the international site, so it must stay dealer-neutral.
+     Localized supportHours is authored per market at translation time. */
   navLinks: [
     lk('Tool of the Month', '/maanedens', 1),
     lk('Products', '/produkter', 2),
@@ -177,7 +184,8 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
     lk('Service and Support', '/service', 7),
   ],
   footerBuyLinks: [
-    lk('Buy STROXX', 'https://www.carl-ras.dk/maerker/stroxx/?utm_source=cr-byg&utm_medium=brandsite_link&utm_campaign=stroxx', 1),
+    /* no dealer link here: the footer renders the market-aware FooterBuyLink
+       itself (and filters raw carl-ras links out defensively) */
     lk('Find a store', '/butikker', 2),
     lk('Satisfaction guarantee (PDF)', '/STROXX-tilfredshedsgaranti.pdf', 3),
   ],
@@ -196,7 +204,7 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   newsletterSuccess: 'Check your inbox to confirm. Welcome aboard.',
   produkterHeadline: 'Find your STROXX tool',
   produkterIntro:
-    'Filter the range and jump straight to the buy at Carl Ras. A selection of the 1,400+ item numbers. The purchase always happens on the partner platform.',
+    'Filter the range and jump straight to the buy at your dealer. A selection of the 1,400+ item numbers. The purchase always happens on the dealer platform.',
   butikkerHeadlineStores: 'Get the tool in your hand before you buy it.',
   serviceHeadline: 'Help is as straightforward *as the tools.*',
   serviceIntro:
@@ -263,6 +271,12 @@ async function run() {
   for (const [k, v] of Object.entries(existing ?? {})) {
     const empty = v === undefined || v === null || v === '' || (Array.isArray(v) && v.length === 0);
     if (!empty) settingsDoc[k] = v;
+  }
+  /* Retired fields (dealer identity/contact moved to the market docs) + DK
+     values that must not sit on the dealer-neutral English base: actively
+     dropped so old data can't linger from earlier seeds or editor input. */
+  for (const k of ['retailerName', 'retailerLogo', 'retailerLogoHref', 'supportPhone', 'legalLine', 'supportHours']) {
+    delete settingsDoc[k];
   }
   const tx = client.transaction();
   tx.createOrReplace(settingsDoc as any);

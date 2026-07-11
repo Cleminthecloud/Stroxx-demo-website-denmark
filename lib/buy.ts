@@ -1,4 +1,4 @@
-import { productBuyUrl, CR_BRAND, UTM } from '@/lib/data';
+import { productBuyUrl, categoryBuyUrl, CR_BRAND, UTM } from '@/lib/data';
 import type { Market } from '@/lib/markets';
 
 /** Resolve the buy URL for the CURRENT market's single dealer. Returns null when
@@ -12,5 +12,16 @@ import type { Market } from '@/lib/markets';
 export function dealerBuyUrl(dealer: Market | null | undefined, code?: string): string | null {
   if (!dealer) return null;
   if (dealer.code === 'dk') return code ? productBuyUrl(code) : `${CR_BRAND}/?${UTM}`;
+  return dealer.dealerCtaUrl || null;
+}
+
+/** Category equivalent of dealerBuyUrl: "see the whole category at the dealer".
+ *  Only Carl Ras has category deep-links today; other dealers land on their
+ *  storefront. null = no dealer (international) or no CTA link → callers hide
+ *  the link or fall back to the internal category page. Same contract: never
+ *  another market's shop. */
+export function dealerCategoryUrl(dealer: Market | null | undefined, path?: string): string | null {
+  if (!dealer) return null;
+  if (dealer.code === 'dk') return path ? categoryBuyUrl(path) : `${CR_BRAND}/?${UTM}`;
   return dealer.dealerCtaUrl || null;
 }

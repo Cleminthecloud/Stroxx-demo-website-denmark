@@ -28,9 +28,18 @@ The Content menu is grouped into labelled sections (not a flat A-Z list), in the
 order the site is built: Pages, Support & QR codes, Products, News, Social proof
 & media, Stores, then Settings and System at the bottom. Open a group to see the
 document types inside it. What's in each:
-- Site settings: global stuff, contact + legal, top menu + footer links, the
-  header logo, SEO defaults, tracking (GTM + Cookiebot IDs), newsletter setup,
-  and microcopy. One document per market.
+- Site settings: global stuff, localized customer-service hours, top menu +
+  footer links, the header logo, SEO defaults, tracking (GTM + Cookiebot IDs),
+  newsletter setup, and microcopy. One document per language. NOTE: the dealer
+  name, customer service phone, footer legal line and dealer logo come from the
+  MARKET document (Settings group), not Site settings.
+- Market (Settings group): one per market (International, Denmark, Germany,
+  France, Belgium): dealer name, the "Buy at" link, customer service phone,
+  the footer legal line and legal links. Maintained by the developer; the
+  footer, chat, mobile menu and guarantee pop-up all read from it.
+- Redirect (Support & QR codes group): old address to new address forwarding.
+  The site creates these automatically when a page's slug changes on publish;
+  editors rarely touch them by hand.
 - Homepage: the home page's words + section on/off switches (each section has a
   "Shown on the site" toggle). Layout and animation are code-owned.
 - Landing page: campaign pages, built from a menu of section blocks. A page with
@@ -42,7 +51,8 @@ document types inside it. What's in each:
 - QR code: the repointable /qr/<code> short links for packaging.
 - Store, Trade (fag page), Specialist, Testimonial, Film (YouTube), Legal page,
   Product augment: supporting collections.
-- Feedback (test reports): bug reports submitted from the /test page land here.
+- Feedback (test reports): bug reports submitted from the /test page land here
+  (testers can attach up to four images).
 - Languages / markets: readers switch language with the globe switcher in the
   top bar (a dropdown on desktop, a row of language pills inside the menu on
   mobile). The list of languages is set in code, not the Studio.

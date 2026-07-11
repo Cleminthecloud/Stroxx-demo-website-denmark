@@ -13,18 +13,18 @@ const client = getCliClient().withConfig({ apiVersion: '2026-07-01' });
 
 const k = (n: number) => `seed-${n}`;
 
+/* Dealer identity/contact lives on the MARKET docs (seed:markets), and this is
+   the dealer-neutral ENGLISH BASE settings doc — no retailer/phone/legal here. */
 const siteSettings = {
   _id: 'siteSettings',
   _type: 'siteSettings',
-  retailerName: 'Carl Ras',
-  supportPhone: '+45 44 85 55 11',
-  supportHours: 'Monday to Thursday: 07:00 to 16:00\nFriday: 07:00 to 15:00',
-  legalLine: '© Carl Ras A/S | Mileparken 31 | 2730 Herlev | CVR: DK 70 58 71 14',
+  language: 'en', // English base tag — see seed-home-stores note
 };
 
 const landingPage = {
   _id: 'landing-proev-det',
   _type: 'landingPage',
+  language: 'en',
   title: 'Campaign: Try It',
   slug: { _type: 'slug', current: 'proev-det' },
   seoTitle: 'Afford more than just tools',
@@ -176,9 +176,10 @@ const landingPage = {
   ],
 };
 
-const monthlyLineup = {
+const monthlyLineup: Record<string, unknown> = {
   _id: 'monthly-2026-06',
   _type: 'monthlyLineup',
+  language: 'en',
   month: 'June',
   year: '2026',
   heroSku: '35011932',
@@ -243,7 +244,12 @@ const monthlyLineup = {
 async function run() {
   const tx = client.transaction();
   tx.createOrReplace(siteSettings as any);
-  tx.createOrReplace(landingPage as any);
+  /* duplicate guard: seed-proevdet may own the proev-det page under another
+     _id — two docs with one slug would make getLandingPage/[0] nondeterministic */
+  const slugOwner = (await client.fetch(
+    `*[_type == "landingPage" && slug.current == "proev-det"][0]._id`
+  )) as string | null;
+  if (!slugOwner || slugOwner === landingPage._id) tx.createOrReplace(landingPage as any);
   tx.createOrReplace(monthlyLineup as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console

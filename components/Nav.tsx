@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, Phone } from 'lucide-react';
 import BuyCTA from '@/components/BuyCTA';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import { useDealerChooser } from '@/components/DealerChooser';
 import { brandImages } from '@/lib/data';
 
 const LINKS = [
@@ -16,10 +17,14 @@ const LINKS = [
   { href: '/service', label: 'Service and Support' },
 ];
 
-export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string; label: string }[]; logoSrc?: string }) {
+export default function Nav({ links = LINKS, logoSrc, logoAlt }: { links?: { href: string; label: string }[]; logoSrc?: string; logoAlt?: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  /* Dealer service phone from the current MARKET (context, market doc) — the
+     international site has no single dealer, so the row hides there. */
+  const { currentDealer } = useDealerChooser();
+  const servicePhone = currentDealer?.supportPhone || '';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -93,9 +98,11 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
             }}
           >
             <LocaleSwitcher variant="inline" />
-            <a href="tel:+4544855511" className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
-              <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Customer service 44 85 55 11
-            </a>
+            {servicePhone && (
+              <a href={`tel:${servicePhone.replace(/\s+/g, '')}`} className="flex items-center gap-2.5 text-fog text-sm" tabIndex={open ? 0 : -1}>
+                <Phone size={15} strokeWidth={2} className="text-stroxx-blue" /> Customer service {servicePhone}
+              </a>
+            )}
             <BuyCTA arrow className="w-full justify-center" />
           </div>
         </div>
@@ -118,7 +125,7 @@ export default function Nav({ links = LINKS, logoSrc }: { links?: { href: string
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logoSrc || brandImages.logoWhite}
-              alt="STROXX"
+              alt={logoAlt || 'STROXX'}
               className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
             />
           </Link>

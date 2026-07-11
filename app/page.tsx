@@ -22,10 +22,10 @@ import { ArrowRight, Phone, Mail } from 'lucide-react';
 import {
   featuredCategories,
   particleSrc,
-  categoryBuyUrl,
   toolTexture,
   brandImages,
 } from '@/lib/data';
+import { dealerCategoryUrl } from '@/lib/buy';
 import { getSka, getHomePage, getSpecialists, getVideos, getMarkets } from '@/lib/cms';
 import { getLocale } from '@/lib/locale';
 import { cardCols, statColsSm } from '@/lib/grid';
@@ -72,6 +72,9 @@ export default async function Home() {
   const locale = await getLocale();
   const isReferenceMarket = locale.market === 'int';
   const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
+  /* current market's dealer for the category "see all at <dealer>" links —
+     market-first (lib/buy.ts contract), never a hand-written Carl Ras link */
+  const currentDealer = marketList.find((m) => m.code === locale.market && m.dealerName) ?? null;
   // Homepage featured-film section: editor-picked films, else all active films.
   const pickedFilms = (hp.films as { id: string; title: string; by: string }[] | undefined) ?? [];
   const filmVids = hp.showFilm ? (pickedFilms.length ? pickedFilms : await getVideos()) : [];
@@ -380,10 +383,17 @@ export default async function Home() {
               <div className="grid sm:grid-cols-2 gap-6 mb-10">
                 {f.items.slice(0, 2).map((p) => (<ProductCard key={p.slug} product={p} />))}
               </div>
-              <a href={categoryBuyUrl(f.cat.path)} target="_blank" rel="noopener noreferrer" className="link-arrow">
-                See all {f.cat.name.toLowerCase()} at Carl Ras
-                <ArrowRight size={16} strokeWidth={2} />
-              </a>
+              {currentDealer && dealerCategoryUrl(currentDealer, f.cat.path) ? (
+                <a href={dealerCategoryUrl(currentDealer, f.cat.path)!} target="_blank" rel="noopener noreferrer" className="link-arrow">
+                  See all {f.cat.name.toLowerCase()} at {currentDealer.dealerName}
+                  <ArrowRight size={16} strokeWidth={2} />
+                </a>
+              ) : (
+                <Link href={`/produkter?cat=${f.cat.slug}`} className="link-arrow">
+                  See all {f.cat.name.toLowerCase()}
+                  <ArrowRight size={16} strokeWidth={2} />
+                </Link>
+              )}
             </Reveal>
           </div>
         ))}

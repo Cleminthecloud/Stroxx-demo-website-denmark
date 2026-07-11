@@ -51,7 +51,7 @@ The payoff: deploy once, and Vercel serves all markets from that single build. T
 
 Because the code already runs every market, standing up a new market is a content and settings operation, not an engineering project:
 
-1. Turn the market on in the locale registry (already listed; flip `active`).
+1. Confirm the market's entry in the locale registry (`lib/i18n.ts` — all listed locales route; there is no per-locale on/off flag in code, the Market doc's "Live" flag is informational until gating is built).
 2. Create/seed its **Market** document (dealer, support, legal line, legal links).
 3. Duplicate the International English master content into the new locale, then let the market translate and adapt it.
 4. Set the market's tracking/social config (Cookiebot, GTM, socials) when those fields exist.

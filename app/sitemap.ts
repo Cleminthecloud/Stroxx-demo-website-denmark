@@ -19,7 +19,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/produkter`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/maanedens`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE}/butikker`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE}/proev-det`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    /* /proev-det permanently redirects to its CMS landing page — list the
+       canonical target, never the redirect (getLandingSlugs excludes proev-det,
+       so it is added here explicitly) */
+    { url: `${BASE}/kampagne/proev-det`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/service`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE}/fag`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     ...landingSlugs.map((s) => ({
