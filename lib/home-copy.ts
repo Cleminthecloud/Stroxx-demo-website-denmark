@@ -78,12 +78,14 @@ export const HOME_DEFAULTS: HomeCopy = {
   monthText:
     'Every month, one tool gets the full story: why it wins, where it earns its keep, and what the trade says. The rest of the month takes care of itself.',
   categoriesHeadline: "All you'll *need.* Category \n by category.",
-  ctaLabel: 'Buy STROXX at Carl Ras',
+  // English base = the international site: buy labels stay dealer-neutral here.
+  // A market's own locale doc may name its dealer ("Køb hos Carl Ras").
+  ctaLabel: 'Where to buy',
   campaignEyebrow: 'Campaign',
   campaignHeadline: 'Now you can afford\nmore than just tools',
   campaignText:
     'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
-  campaignPrimaryLabel: 'Buy at Carl Ras',
+  campaignPrimaryLabel: '', // empty = automatic: "Buy at <dealer>", or "Where to buy" internationally
   campaignSecondaryLabel: 'Read more',
   campaignHref: '/proev-det',
   showClaim: true,

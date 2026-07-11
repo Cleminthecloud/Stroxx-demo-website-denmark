@@ -140,7 +140,7 @@ export const homePage = defineType({
     defineField({ ...s('campaignEyebrow', 'Campaign band: eyebrow label'), group: 'month', fieldset: 'fsCampaign' }),
     defineField({ ...t('campaignHeadline', 'Campaign band: headline'), group: 'month', fieldset: 'fsCampaign' }),
     defineField({ ...t('campaignText', 'Campaign band: text', 4), group: 'month', fieldset: 'fsCampaign' }),
-    defineField({ ...s('campaignPrimaryLabel', 'Campaign band: primary button label'), description: 'Links to the retailer’s webshop.', group: 'month', fieldset: 'fsCampaign' }),
+    defineField({ ...s('campaignPrimaryLabel', 'Campaign band: primary button label'), description: 'Optional override. Empty = automatic: “Buy at <dealer>” on a dealer market, “Where to buy” internationally. Keep the English base dealer-neutral, it renders on the international site.', group: 'month', fieldset: 'fsCampaign' }),
     defineField({ ...s('campaignSecondaryLabel', 'Campaign band: “read more” button label'), group: 'month', fieldset: 'fsCampaign' }),
     defineField({
       name: 'campaignLink',
@@ -172,7 +172,7 @@ export const homePage = defineType({
       title: 'Final CTA shown',
       description: 'The closing full-screen call to action. Toggle off to hide it (markets differ).',
     }),
-    defineField({ ...s('ctaLabel', 'Final CTA button label'), group: 'month', fieldset: 'fsCategories' }),
+    defineField({ ...s('ctaLabel', 'Final CTA button label'), description: 'Keep dealer-neutral on the English base (it renders on the international site, where the button leads to Where to buy); a market’s own page may name its dealer.', group: 'month', fieldset: 'fsCategories' }),
   ],
   preview: { prepare: () => ({ title: 'Homepage' }) },
 });

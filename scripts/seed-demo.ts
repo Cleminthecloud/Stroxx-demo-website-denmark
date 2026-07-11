@@ -37,7 +37,7 @@ const landingPage = {
       eyebrow: 'Campaign · Try It',
       headline: 'Pro-grade tools.\nWithout the *brand* tax.',
       sub: "Professional tools without the logo markup. And yes, it sounds too good to be true. That's why you get *30 days* to prove us wrong.",
-      ctaLabel: 'Buy at Carl Ras',
+      ctaLabel: 'Where to buy',
       secondaryLabel: 'Why so affordable?',
       image: '/Images/campaign/rings.jpg',
     },
@@ -132,7 +132,7 @@ const landingPage = {
           body: "If you're not satisfied, you get your money back. No need for faults, your judgment is enough.",
         },
       ],
-      ctaLabel: 'Buy at Carl Ras',
+      ctaLabel: 'Where to buy',
       secondaryLabel: 'Find your store',
     },
     {

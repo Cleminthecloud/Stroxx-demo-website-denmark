@@ -38,11 +38,13 @@ export default function CampaignBand({
   eyebrow = 'Campaign',
   headline = 'Now you can afford\nmore than just tools',
   text = 'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
+  primaryLabel,
   secondaryLabel = 'Read more',
   href = '/proev-det',
   eyebrowAttr,
   headlineAttr,
   textAttr,
+  primaryAttr,
   secondaryAttr,
 }: CampaignBandProps) {
   const { currentDealer, open: openChooser } = useDealerChooser();
@@ -138,12 +140,14 @@ export default function CampaignBand({
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
+              {/* label: CMS override per locale doc, else automatic. The English
+                  base doc stays dealer-neutral (it renders internationally). */}
               {currentDealer && dealerUrl ? (
                 <GlassButton href={dealerUrl} external>
-                  <span>Buy at {currentDealer.dealerName}</span> <ArrowRight size={16} />
+                  <span data-sanity={primaryAttr}>{primaryLabel || `Buy at ${currentDealer.dealerName}`}</span> <ArrowRight size={16} />
                 </GlassButton>
               ) : (
-                <GlassButton onClick={openChooser}><span>Where to buy</span> <ArrowRight size={16} /></GlassButton>
+                <GlassButton onClick={openChooser}><span data-sanity={primaryAttr}>{primaryLabel || 'Where to buy'}</span> <ArrowRight size={16} /></GlassButton>
               )}
               <GlassButton href={href} variant="ghost">
                 <span data-sanity={secondaryAttr}>{secondaryLabel}</span>

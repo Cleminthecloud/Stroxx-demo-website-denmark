@@ -134,13 +134,13 @@ const DEMOS: Demo[] = [
   },
   {
     studioName: 'Call-to-action banner (blue glow + buttons)',
-    description: 'Centered conversion moment with primary and secondary buttons. Links default to the Carl Ras shop and the store finder.',
+    description: 'Centered conversion moment with primary and secondary buttons. Links resolve to the current market’s dealer (or the dealer chooser) and the store finder.',
     section: {
       _type: 'ctaBanner', _key: 'd11',
       eyebrow: 'Component · CTA',
       headline: 'Ready to *try* it?',
       sub: 'One line that removes the last doubt.',
-      primaryLabel: 'Buy at Carl Ras', secondaryLabel: 'Find your store',
+      primaryLabel: 'Where to buy', secondaryLabel: 'Find your store',
     },
   },
   {
@@ -156,7 +156,7 @@ const DEMOS: Demo[] = [
         { title: 'Step two', body: 'Keep each step to one action.' },
         { title: 'Step three', body: 'End with the payoff.' },
       ],
-      ctaLabel: 'Buy at Carl Ras', secondaryLabel: 'Find your store',
+      ctaLabel: 'Where to buy', secondaryLabel: 'Find your store',
     },
   },
   {
