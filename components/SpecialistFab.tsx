@@ -81,7 +81,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
       <div
         ref={panelRef}
         role="dialog" aria-label="Talk to a specialist" aria-hidden={!open}
-        className={`fixed z-[89] left-0 right-0 bottom-0 w-full rounded-t-2xl border border-white/10 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] transition-all duration-300 sm:left-auto sm:right-5 sm:w-[calc(100vw-2.5rem)] sm:max-w-sm sm:rounded-2xl sm:pb-6 ${
+        className={`fixed z-[89] left-0 right-0 bottom-0 w-full rounded-t-2xl border border-white/10 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] transition-[opacity,transform] duration-300 ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none sm:left-auto sm:right-5 sm:w-[calc(100vw-2.5rem)] sm:max-w-sm sm:rounded-2xl sm:pb-6 ${
           onProduct ? 'sm:bottom-[10.5rem]' : 'sm:bottom-[5.5rem]'
         } lg:bottom-24 ${view === 'chat' ? 'flex flex-col h-[min(78svh,580px)] sm:h-[min(72svh,580px)]' : ''} ${
           open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-6 sm:translate-y-3 pointer-events-none'
@@ -154,7 +154,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
         ) : (
           <button onClick={locate} disabled={locating}
             className="glass-cta glass-cta--sm w-full justify-center text-white mb-4 disabled:opacity-60">
-            <LocateFixed size={13} className={locating ? 'animate-spin' : ''} />
+            <LocateFixed size={13} className={locating ? 'motion-safe:animate-spin' : ''} />
             {locating ? 'Finding your nearest store…' : 'Find my nearest specialist'}
           </button>
         )}
@@ -184,7 +184,7 @@ export default function SpecialistFab({ storeData, copy }: { storeData?: Store[]
         onClick={() => setOpen((o) => !o)}
         aria-label="Talk to a specialist"
         aria-expanded={open}
-        className={`fixed z-[89] right-5 ${onProduct ? 'bottom-[calc(6rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] cursor-pointer`}
+        className={`fixed z-[89] right-5 ${onProduct ? 'bottom-[calc(6rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'} lg:bottom-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 text-white pl-4 pr-4 md:pl-5 md:pr-6 h-14 transition-all duration-300 hover:scale-[1.04] active:scale-[0.98] cursor-pointer`}
         style={{
           background: 'linear-gradient(180deg, rgba(0,136,194,0.92), rgba(0,98,154,0.92))',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 14px 40px rgba(0,0,0,0.5), 0 0 30px rgba(0,136,194,0.35)',

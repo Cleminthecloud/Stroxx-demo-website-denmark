@@ -40,7 +40,7 @@ export default function ProClubSignup({ headline, text }: { headline?: string; t
         {text || 'Early access and specialist tips, straight to your inbox. A couple of emails a month, tops. No spam.'}
       </p>
       {state === 'done' ? (
-        <div className="text-white bg-steel border border-line rounded-sm px-4 py-3 text-sm">
+        <div className="state-in text-white bg-steel border border-line rounded-sm px-4 py-3 text-sm">
           You&apos;re in. Check your inbox to confirm. 👊
         </div>
       ) : (
@@ -60,7 +60,7 @@ export default function ProClubSignup({ headline, text }: { headline?: string; t
         </form>
       )}
       {state === 'error' && (
-        <p className="text-red-400 text-[11px] mt-3">
+        <p className="state-in text-red-400 text-[11px] mt-3">
           Signups are not open yet, or something slipped. Try again later.
         </p>
       )}

@@ -240,7 +240,7 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
   };
 
   const chip = (on: boolean) =>
-    `shrink-0 px-3.5 py-1.5 rounded-full text-[12px] tracking-wide transition-all cursor-pointer border ${
+    `press shrink-0 px-3.5 py-1.5 rounded-full text-[12px] tracking-wide cursor-pointer border ${
       on
         ? 'bg-stroxx-blue text-white border-stroxx-blue shadow-[0_0_18px_rgba(0,136,194,0.35)]'
         : 'bg-white/[0.04] text-fog border-white/10 hover:text-white hover:border-white/25'
@@ -305,7 +305,7 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
             <button onClick={() => setSikring(!sikring)} className={chip(sikring)}>Security</button>
             <button onClick={locate} disabled={locating}
               className={`${chip(!!pos)} inline-flex items-center gap-1.5 disabled:opacity-60`}>
-              <LocateFixed size={12} className={locating ? 'animate-spin' : ''} />
+              <LocateFixed size={12} className={locating ? 'motion-safe:animate-spin' : ''} />
               {pos ? 'Nearest first' : locating ? 'Finding you…' : 'Near me'}
             </button>
           </div>

@@ -73,7 +73,7 @@ export default function EncryptedSecretField(props: StringInputProps) {
       setDraft('');
       setEditing(false);
     } catch {
-      setErr('Could not encrypt — check the key format with the developer.');
+      setErr('Could not encrypt, check the key format with the developer.');
     } finally {
       setBusy(false);
     }
@@ -108,7 +108,7 @@ export default function EncryptedSecretField(props: StringInputProps) {
           autoComplete="off"
           style={input}
           value={draft}
-          placeholder="Paste the secret — encrypted before saving"
+          placeholder="Paste the secret, it is encrypted before saving"
           onChange={(e: ChangeEvent<HTMLInputElement>) => setDraft(e.currentTarget.value)}
           onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Enter') {
@@ -127,7 +127,7 @@ export default function EncryptedSecretField(props: StringInputProps) {
       <div style={{ marginTop: 6, fontSize: 12, opacity: 0.7 }}>
         {err
           ? err
-          : 'Encrypted in your browser with the site’s public key. Only the ciphertext is saved — it can’t be read back here.'}
+          : 'Encrypted in your browser with the site’s public key. Only the ciphertext is saved; it cannot be read back here.'}
       </div>
     </div>
   );

@@ -45,8 +45,8 @@ export default function ContactForm({
 
   if (state === 'done') {
     return (
-      <div className="flex items-center gap-2.5 text-white">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stroxx-blue/20 border border-stroxx-blue/50">
+      <div className="state-in flex items-center gap-2.5 text-white">
+        <span className="check-pop flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stroxx-blue/20 border border-stroxx-blue/50">
           <Check size={15} className="text-stroxx-blue" />
         </span>
         {successMessage || 'Thanks, we will get back to you within one working day.'}
@@ -71,12 +71,12 @@ export default function ContactForm({
           {state === 'busy' ? 'Sending…' : buttonLabel || 'Send'} <ArrowRight size={15} />
         </button>
         {state === 'error' && (
-          <p className="text-red-400 text-xs">
+          <p className="state-in text-red-400 text-xs">
             That did not go through. Try again{phone ? `, or call ${phone}` : ', or find your store at the store finder'}.
           </p>
         )}
         {state === 'offline' && (
-          <p className="text-fog text-xs">
+          <p className="state-in text-fog text-xs">
             The form is not connected yet. {phone ? `Call us on ${phone} instead.` : 'Find your store in the store finder instead.'}
           </p>
         )}

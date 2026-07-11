@@ -6,7 +6,7 @@ import { primaryHref } from './lib/docPageUrl';
 /** Auto-redirect on slug change. Wraps the default Publish action: when an
  *  editor renames a page's slug and publishes, we create a 301 redirect from
  *  the OLD public path to the NEW one, so printed QR codes, newsletter links
- *  and Google keep working — no admin, no deploy. Guards against redirect
+ *  and Google keep working, no admin, no deploy. Guards against redirect
  *  loops (renaming back) and repoints existing chains. Redirect creation runs
  *  in the background and never blocks or fails the publish.
  *

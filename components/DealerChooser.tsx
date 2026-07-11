@@ -43,16 +43,26 @@ export default function DealerChooserProvider({
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [show, setShow] = useState(false); // drives the enter/exit transition
   const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
+  // fade + settle out, then unmount (same pattern as GuaranteeModal)
+  const close = useCallback(() => {
+    setShow(false);
+    window.setTimeout(() => setIsOpen(false), 250);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
+    const raf = requestAnimationFrame(() => setShow(true));
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
   }, [isOpen, close]);
 
   return (
@@ -60,14 +70,16 @@ export default function DealerChooserProvider({
       {children}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center sm:p-6"
+          className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center sm:p-6 transition-opacity duration-300 motion-reduce:transition-none"
+          style={{ opacity: show ? 1 : 0 }}
           role="dialog"
           aria-modal="true"
           aria-label="Where to buy"
           onClick={close}
         >
           <div
-            className="relative my-8 w-full max-w-3xl rounded-3xl border border-white/10 bg-[#0d0f12]/95 p-6 shadow-2xl sm:p-10"
+            className="relative my-8 w-full max-w-3xl rounded-3xl border border-white/10 bg-[#0d0f12]/95 p-6 shadow-2xl sm:p-10 transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)] will-change-transform motion-reduce:transition-none"
+            style={{ transform: show ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.97)' }}
             onClick={(e) => e.stopPropagation()}
           >
             <button

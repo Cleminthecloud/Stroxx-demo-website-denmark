@@ -29,9 +29,9 @@ export const redirect = defineType({
       description: 'Where visitors should land: a path like /kampagne/efteraar or a full https:// URL.',
       validation: (r) =>
         r.required().custom((v) =>
-          typeof v === 'string' && (/^\/[^\s]*$/.test(v) || /^https:\/\/[^\s]+$/.test(v))
+          typeof v === 'string' && (/^\/(?![/\\])[^\s]*$/.test(v) || /^https:\/\/[^\s]+$/.test(v))
             ? true
-            : 'Must start with / or https://'
+            : 'Must be a path with a single leading / (not // or /\\) or a full https:// URL'
         ),
     }),
     defineField({

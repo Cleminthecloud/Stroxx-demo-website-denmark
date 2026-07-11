@@ -57,7 +57,7 @@ If the dedicated Sanity fields for these do not exist yet, adding them is a one-
 - Duplicate the International English master documents into the new locale (document-internationalization creates the per-language copies).
 - Hand off to the market's editors to translate and adapt: copy, sections, campaigns, imagery. They own this and can restructure freely.
 - Products and media come from PIM/DAM, not re-keyed, confirm the market's assortment pulls through.
-- Localise the surfaces still known to carry Denmark / Carl Ras defaults as each market launches (tracked in `STROXX-multimarket-audit.md`): footer *about* paragraph (`footerAbout`), `/service`, the guarantee terms + PDF, org structured data, `lib/llms-fallback.ts`.
+- Localise the surfaces still known to carry Denmark / Carl Ras defaults as each market launches (tracked in `STROXX-multimarket-audit.md`): footer *about* paragraph (`footerAbout`), `/service`, the guarantee terms + PDF, org structured data, the `/produkter` and `/fag` metadata descriptions, `lib/llms-fallback.ts`. (Product pages and Tool of the Month need no pass here: their metadata and the product JSON-LD offer already resolve this market's dealer automatically, and stay dealer-neutral internationally.)
 
 ---
 
@@ -82,6 +82,7 @@ If the dedicated Sanity fields for these do not exist yet, adding them is a one-
 - Footer shows THIS market's dealer logo and THIS market's HQ legal line (not Carl Ras unless it is Denmark).
 - Language switcher offers the right languages and links to the right host/path.
 - "Where to buy" / dealer CTA points at this dealer's shop.
+- A product page's meta description names THIS market's dealer, and its JSON-LD offer links this dealer's shop with this dealer as seller (on international: no dealer name, no offer block).
 - Support phone / hours are the market's own.
 - Store finder shows this market's country and zooms correctly.
 - Cookiebot loads the market's consent banner; GTM/GA fire only after consent.

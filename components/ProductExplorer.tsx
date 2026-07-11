@@ -110,7 +110,7 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-6 px-6 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible">
             <button
               onClick={() => setActive(null)}
-              className={`shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+              className={`press shrink-0 text-sm px-3.5 py-1.5 rounded-full border ${
                 !active ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
               }`}
             >
@@ -120,7 +120,7 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
               <button
                 key={c.slug}
                 onClick={() => setActive(c.slug)}
-                className={`shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
+                className={`press shrink-0 text-sm px-3.5 py-1.5 rounded-full border whitespace-nowrap ${
                   active === c.slug ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                 }`}
               >
@@ -141,7 +141,7 @@ export default function ProductExplorer({ headline, intro }: { headline?: string
                 <button
                   key={k}
                   onClick={() => setSort(k)}
-                  className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full border transition-colors ${
+                  className={`press shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full border ${
                     sort === k ? 'border-white text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
                   }`}
                 >

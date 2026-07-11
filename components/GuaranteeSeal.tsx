@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 /** The STROXX guarantee seal: a peeling-sticker badge whose lines are supplied
@@ -32,6 +32,15 @@ export default function GuaranteeSeal({
   line1, connector, line2, subLine1, subLine2, tilt = -8, peelDepth = 0.22, className = '',
 }: GuaranteeSealProps) {
   const root = useRef<HTMLDivElement>(null);
+  // Safari (iOS AND macOS) rasterises large drop-shadow filter layers as
+  // opaque white when GPU memory runs out (same guard as BagFill/BagJourney):
+  // swap the flap's filter for a small box-shadow there (.gseal-holder--flat).
+  const [flatShadow, setFlatShadow] = useState(false);
+  useEffect(() => {
+    if (/safari/i.test(navigator.userAgent) && !/chrome|chromium|crios|edg|android/i.test(navigator.userAgent)) {
+      setFlatShadow(true);
+    }
+  }, []);
   const l1 = line1 || FALLBACK.line1;
   const cc = connector || FALLBACK.connector;
   const l2 = line2 || FALLBACK.line2;
@@ -109,7 +118,7 @@ export default function GuaranteeSeal({
             <div className="gseal-sub">{s2}</div>
           </div>
 
-          <div className="gseal-holder">
+          <div className={flatShadow ? 'gseal-holder gseal-holder--flat' : 'gseal-holder'}>
             <div className="gseal-sticky gseal-back">
               <div className="gseal-wrap"><div className="gseal-circle gseal-back-face"><div className="gseal-grain" /></div></div>
             </div>

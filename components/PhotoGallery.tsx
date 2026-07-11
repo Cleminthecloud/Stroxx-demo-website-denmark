@@ -56,7 +56,7 @@ export default function PhotoGallery({ images }: { images: Img[] }) {
 
       {cur && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center px-4"
+          className="backdrop-in fixed inset-0 z-[200] flex items-center justify-center px-4"
           style={{ background: 'rgba(6,7,9,0.94)', backdropFilter: 'blur(2px)' }}
           onClick={close}
           role="dialog"
@@ -71,9 +71,10 @@ export default function PhotoGallery({ images }: { images: Img[] }) {
               <ChevronLeft size={20} />
             </button>
           )}
-          <div className="flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+          <div className="overlay-in flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+            {/* keyed by src: prev/next remounts the img, .img-fade crosses it in softly */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={cur.src} alt={cur.label} className="max-w-[92vw] max-h-[78vh] object-contain rounded-lg" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.6)' }} />
+            <img key={cur.src} src={cur.src} alt={cur.label} className="img-fade max-w-[92vw] max-h-[78vh] object-contain rounded-lg" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.6)' }} />
             <div className="flex items-center gap-4 text-sm">
               <span className="text-white">{cur.label}</span>
               {images.length > 1 && <span className="text-fog/50">{(open ?? 0) + 1} / {images.length}</span>}

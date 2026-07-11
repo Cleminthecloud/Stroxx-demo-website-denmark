@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { langLabel } from '../lib/langLabel';
 
 /** Trade ("fag") landing pages: /fag lists them as cards, /fag/<slug> is the
  *  full page. Hardcoded fallbacks live in lib/trades.ts, so an empty
@@ -6,8 +7,9 @@ import { defineArrayMember, defineField, defineType } from 'sanity';
  *  the chosen categories (PIM does the rest); testimonials tagged with the
  *  trade slug appear on the page by themselves. */
 
-/** Keep in sync with the category slugs in lib/data.ts. */
-const CATEGORY_OPTIONS = [
+/** Keep in sync with the category slugs in lib/data.ts. Also used by the
+ *  specialist quote-topic picker in collections.ts. */
+export const CATEGORY_OPTIONS = [
   { title: 'Access control', value: 'adgangskontrol' },
   { title: 'Workwear', value: 'arbejdstoej' },
   { title: 'Batteries', value: 'batterier' },
@@ -57,7 +59,7 @@ export const trade = defineType({
       name: 'title',
       title: 'Page headline',
       type: 'string',
-      description: 'The big h1 on the trade page, e.g. "Power on the job. Not on the price."',
+      description: 'The big h1 on the trade page, e.g. "Power on the job. Every day."',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -65,7 +67,17 @@ export const trade = defineType({
       title: 'Blue part of the headline',
       type: 'string',
       description:
-        'The exact ending of the headline rendered in STROXX blue. Must match the headline text exactly, e.g. "Not on the price."',
+        'The exact ending of the headline rendered in STROXX blue. Must match the headline text exactly, e.g. "Every day."',
+      validation: (r) =>
+        r
+          .custom((accent, context) => {
+            const headline = (context.document as { title?: string } | undefined)?.title;
+            if (!accent || !headline) return true;
+            return headline.trimEnd().endsWith(String(accent).trim())
+              ? true
+              : 'The headline does not end with this text, so the blue accent will not show. Copy the exact ending of the headline.';
+          })
+          .warning(),
     }),
     defineField({
       name: 'blurb',
@@ -112,5 +124,11 @@ export const trade = defineType({
   orderings: [
     { title: 'Sort order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'name', subtitle: 'title' } },
+  preview: {
+    select: { title: 'name', slug: 'slug.current', language: 'language' },
+    prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
+      title: title || 'Trade',
+      subtitle: `/fag/${slug || '…'} · ${langLabel(language)}`,
+    }),
+  },
 });

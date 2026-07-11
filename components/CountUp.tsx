@@ -26,6 +26,11 @@ export default function CountUp({
       entries.forEach((e) => {
         if (e.isIntersecting && !done.current) {
           done.current = true;
+          // reduced motion: land on the final number instantly, no count
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setN(value);
+            return;
+          }
           const start = performance.now();
           const tick = (t: number) => {
             const p = Math.min(1, (t - start) / duration);

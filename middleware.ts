@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveLocale } from '@/lib/i18n';
+import { buildRedirectMap, legacyTarget, type Rule } from '@/lib/redirects';
 
 /** CMS-managed redirects (the `redirect` document type in the Studio).
  *  Editors rename a campaign page, add a redirect, and old QR codes /
@@ -10,32 +11,9 @@ import { resolveLocale } from '@/lib/i18n';
  *  a Map lookup. Any failure (fetch, parse, config) falls through to
  *  NextResponse.next(): broken redirects can never break the site. */
 
-type Rule = { to: string; permanent: boolean };
-
-/** Legacy stroxx.eu Shopify-store URLs (pre-takeover). The packaging QR
- *  codes in circulation point at /pages/... on the old store; after the
- *  domain cutover those requests hit THIS app, so the map below keeps every
- *  printed code and seven years of links alive. CMS redirects (below) are
- *  checked first so editors can override any single path without a deploy. */
-const LEGACY_EXACT = new Map<string, string>([
-  ['/pages/about', '/'],
-  ['/pages/contact', '/'],
-  ['/pages/categories', '/produkter'],
-  ['/collections/all', '/produkter'],
-  ['/cart', '/produkter'],
-  ['/account/login', '/'],
-]);
-
-function legacyTarget(path: string): string | null {
-  const exact = LEGACY_EXACT.get(path);
-  if (exact) return exact;
-  // support pages keep their exact old slugs: /pages/smart-locks-st2 → /support/smart-locks-st2
-  const page = path.match(/^\/pages\/([a-z0-9-]+)$/);
-  if (page) return `/support/${page[1]}`;
-  if (/^\/(products|collections)(\/|$)/.test(path)) return '/produkter';
-  if (/^\/(account|customer_authentication|challenge)(\/|$)/.test(path)) return '/';
-  return null;
-}
+/* The legacy-URL map (legacyTarget) and the CMS redirect validation
+ * (buildRedirectMap) live in lib/redirects.ts: pure, unit-tested, extracted
+ * verbatim from this file. */
 
 const TTL_MS = 60_000;
 let cache: { at: number; map: Map<string, Rule> } | null = null;
@@ -52,14 +30,7 @@ async function getRules(): Promise<Map<string, Rule>> {
   );
   if (!res.ok) return cache?.map ?? new Map();
   const json = (await res.json()) as { result?: { from?: string; to?: string; permanent?: boolean }[] };
-  const map = new Map<string, Rule>();
-  for (const r of json.result ?? []) {
-    // same validation as the schema; a bad document must not become an open redirect
-    if (!r.from || !r.to) continue;
-    if (!/^\/[^\s?#]*$/.test(r.from)) continue;
-    if (!/^\/[^\s]*$/.test(r.to) && !/^https:\/\/[^\s]+$/.test(r.to)) continue;
-    map.set(r.from.replace(/\/+$/, '') || '/', { to: r.to, permanent: r.permanent !== false });
-  }
+  const map = buildRedirectMap(json.result ?? []);
   cache = { at: Date.now(), map };
   return map;
 }

@@ -3,6 +3,7 @@ import SkuInput from '../SkuInput';
 import SkuListInput from '../SkuListInput';
 import FilmPicker from '../FilmPicker';
 import { skuLabel } from '../lib/skuOptions';
+import { langLabel } from '../lib/langLabel';
 
 /** Månedens STROXX, the SKA monthly engine (docs/STROXX KOMMERCIEL MOTOR.pdf):
  *  1 hero, 5 DB2 winners, 1-3 news items. Products are referenced by SKU and
@@ -13,14 +14,35 @@ export const monthlyLineup = defineType({
   name: 'monthlyLineup',
   title: 'Monthly lineup (Månedens STROXX)',
   type: 'document',
+  fieldsets: [
+    { name: 'timing', title: 'When it goes live', options: { collapsible: true, collapsed: false } },
+    { name: 'hero', title: 'Hero of the month', options: { collapsible: true, collapsed: false } },
+    { name: 'winners', title: 'The five winners (Månedens fem)', options: { collapsible: true, collapsed: false } },
+    { name: 'extras', title: 'News + films', options: { collapsible: true, collapsed: false } },
+  ],
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    defineField({ name: 'month', title: 'Month', type: 'string', validation: (r) => r.required() }),
-    defineField({ name: 'year', title: 'Year', type: 'string', validation: (r) => r.required() }),
+    defineField({
+      name: 'month',
+      title: 'Month',
+      type: 'string',
+      fieldset: 'timing',
+      description: 'The month name exactly as it should read on the page, in this language, e.g. Juli.',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'year',
+      title: 'Year',
+      type: 'string',
+      fieldset: 'timing',
+      description: 'Four digits, e.g. 2026.',
+      validation: (r) => r.required().regex(/^20\d\d$/, { name: 'year' }).error('Four digits, e.g. 2026'),
+    }),
     defineField({
       name: 'activeFrom',
       title: 'Active from',
       type: 'date',
+      fieldset: 'timing',
       description:
         'The date this lineup goes live. The site always shows the most recent lineup whose date has passed, so you can build next month ahead of time and it takes over on the day. Empty = falls back to whichever lineup was created last.',
       options: { dateFormat: 'YYYY-MM-DD' },
@@ -29,6 +51,7 @@ export const monthlyLineup = defineType({
       name: 'heroSku',
       title: 'Hero product',
       type: 'string',
+      fieldset: 'hero',
       components: { input: SkuInput },
       description: 'The month’s main story. Search by product name or item number.',
       validation: (r) => r.required(),
@@ -37,6 +60,7 @@ export const monthlyLineup = defineType({
       name: 'heroClaims',
       title: 'Hero claims',
       type: 'array',
+      fieldset: 'hero',
       description: 'The row balances itself at any count; 3 claims is the classic.',
       validation: (r) => r.max(6),
       of: [
@@ -55,6 +79,7 @@ export const monthlyLineup = defineType({
       name: 'heroCases',
       title: 'Hero use cases',
       type: 'array',
+      fieldset: 'hero',
       of: [
         defineArrayMember({
           type: 'object',
@@ -71,6 +96,7 @@ export const monthlyLineup = defineType({
       name: 'heroFaq',
       title: 'Hero FAQ',
       type: 'array',
+      fieldset: 'hero',
       of: [
         defineArrayMember({
           type: 'object',
@@ -86,8 +112,9 @@ export const monthlyLineup = defineType({
     defineField({
       name: 'cashCowSkus',
       title: 'The five winners',
-      description: 'Månedens fem, volume products at sharp prices. Search and add; drag order is the display order.',
+      description: 'Månedens fem, the five volume winners of the month. Search and add; drag order is the display order.',
       type: 'array',
+      fieldset: 'winners',
       of: [defineArrayMember({ type: 'string' })],
       components: { input: SkuListInput },
       validation: (r) => r.max(5),
@@ -96,6 +123,7 @@ export const monthlyLineup = defineType({
       name: 'news',
       title: 'News items',
       type: 'array',
+      fieldset: 'extras',
       of: [
         defineArrayMember({
           type: 'object',
@@ -120,6 +148,7 @@ export const monthlyLineup = defineType({
       name: 'films',
       title: 'Films',
       type: 'array',
+      fieldset: 'extras',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'video' }] })],
       components: { input: FilmPicker },
       description:
@@ -127,7 +156,10 @@ export const monthlyLineup = defineType({
     }),
   ],
   preview: {
-    select: { month: 'month', year: 'year' },
-    prepare: (s) => ({ title: `Månedens STROXX · ${s.month || ''} ${s.year || ''}` }),
+    select: { month: 'month', year: 'year', language: 'language' },
+    prepare: (s: { month?: string; year?: string; language?: string }) => ({
+      title: `Månedens STROXX · ${s.month || ''} ${s.year || ''}`,
+      subtitle: langLabel(s.language),
+    }),
   },
 });

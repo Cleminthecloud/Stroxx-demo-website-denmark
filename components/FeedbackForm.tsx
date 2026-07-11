@@ -124,7 +124,7 @@ export default function FeedbackForm() {
 
   if (state === 'done') {
     return (
-      <div className="glass-panel rounded-2xl p-8">
+      <div className="glass-panel state-in rounded-2xl p-8">
         <div className="text-white text-xl font-medium mb-2">Got it. Thank you.</div>
         <p className="text-fog leading-relaxed">
           Your report is in the review queue. Found something else? Reload the page and send another,
@@ -143,7 +143,7 @@ export default function FeedbackForm() {
             type="button"
             onClick={() => setKind(k.v)}
             aria-pressed={kind === k.v}
-            className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+            className={`press rounded-full border px-4 py-2 text-sm ${
               kind === k.v
                 ? 'border-stroxx-blue/70 bg-stroxx-blue/15 text-white'
                 : 'border-line bg-ink/50 text-fog hover:border-stroxx-blue/50 hover:text-white'
@@ -211,9 +211,9 @@ export default function FeedbackForm() {
         >
           {state === 'busy' ? 'Sending…' : 'Send report'} <ArrowRight size={15} />
         </button>
-        {state === 'error' && <span className="text-sm text-fog">That did not go through. Try again in a minute.</span>}
+        {state === 'error' && <span className="state-in text-sm text-fog">That did not go through. Try again in a minute.</span>}
         {state === 'offline' && (
-          <span className="text-sm text-fog">
+          <span className="state-in text-sm text-fog">
             The form is offline right now, mail your note to{' '}
             <a href="mailto:cleminthecloud@gmail.com?subject=STROXX%20feedback" className="text-stroxx-blue underline underline-offset-2">
               cleminthecloud@gmail.com

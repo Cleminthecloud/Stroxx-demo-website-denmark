@@ -2,6 +2,7 @@
 
 import { useFormValue } from 'sanity';
 import { SITE_URL } from '../lib/site';
+import { localeById } from '../lib/i18n';
 import { assetUrl } from './lib/image';
 import { ShareCard, DOMAIN } from './ShareCard';
 
@@ -37,6 +38,7 @@ export default function SeoPreviewField() {
     | undefined; // landing pages: fall back to the hero image
   const docTitle = useFormValue(['title']) as string | undefined; // landing pages
   const slug = (useFormValue(['slug']) as { current?: string } | undefined)?.current;
+  const language = useFormValue(['language']) as string | undefined;
 
   const title = seoTitle || docTitle || 'The SEO title goes here';
   const desc = seoDescription || 'The description Google shows under the title. Fill the field above and watch it land here.';
@@ -57,7 +59,11 @@ export default function SeoPreviewField() {
     explicit ||
     assetUrl(hero?.imageUpload, 1200) ||
     (heroPath && heroPath.startsWith('/') ? `${origin}${heroPath}` : undefined);
-  const path = slug ? (slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug}`) : '/';
+  // Prefix the path with the document language's market path (/dk, /be/nl, ...),
+  // so a translated document previews its own market's live URL, not the root.
+  const langPrefix = localeById(language)?.path ?? '';
+  const pagePath = slug ? (slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug}`) : '/';
+  const path = langPrefix ? `${langPrefix}${pagePath === '/' ? '' : pagePath}` : pagePath;
   const url = `${SITE_URL}${path}`;
 
   return (

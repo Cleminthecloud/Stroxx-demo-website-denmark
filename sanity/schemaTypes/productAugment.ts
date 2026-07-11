@@ -1,10 +1,11 @@
 import { defineField, defineType } from 'sanity';
 import SkuInput from '../SkuInput';
+import { langLabel } from '../lib/langLabel';
 
 /** Marketing layer ON TOP of the product feed, keyed by SKU. The PIM stays
  *  the source of truth for name/specs (production plan section 3); this
  *  document only augments editorial marketing: copy overrides, featured flags.
- *  NO PRICES — the brand site never shows or uses prices; pricing is the
+ *  NO PRICES: the brand site never shows or uses prices; pricing is the
  *  dealer's job. Joined at render by lib/cms.ts once the PIM pipeline lands. */
 export const productAugment = defineType({
   name: 'productAugment',
@@ -29,5 +30,11 @@ export const productAugment = defineType({
     }),
     defineField({ name: 'featured', title: 'Featured product', type: 'boolean', initialValue: false }),
   ],
-  preview: { select: { title: 'sku', subtitle: 'marketingCopy' } },
+  preview: {
+    select: { title: 'sku', copy: 'marketingCopy', language: 'language' },
+    prepare: ({ title, copy, language }: { title?: string; copy?: string; language?: string }) => ({
+      title: title || 'Product augment',
+      subtitle: `${langLabel(language)}${copy ? ` · ${copy.slice(0, 60)}` : ''}`,
+    }),
+  },
 });

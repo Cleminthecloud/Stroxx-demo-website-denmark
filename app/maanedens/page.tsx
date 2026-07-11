@@ -24,9 +24,14 @@ import { SITE_URL } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   const SKA = await getSka();
+  /* market-first dealer copy, same resolution as the page body: name the
+     current market's dealer, never a hardcoded one; international stays
+     dealer-neutral (BUY CONTRACT) */
+  const locale = await getLocale();
+  const dealer = (await getMarkets()).find((m) => m.code === locale.market && m.dealerName) ?? null;
   return {
     title: `Tool of the Month: ${SKA.hero.name}`,
-    description: `${SKA.month}'s STROXX: the ${SKA.hero.name}, plus the month's five DB2 winners and new arrivals. Quality and value, not just price. 30-day satisfaction guarantee at Carl Ras.`,
+    description: `${SKA.month}'s STROXX: the ${SKA.hero.name}, plus the month's five DB2 winners and new arrivals. Quality and value, not just price. 30-day satisfaction guarantee at ${dealer?.dealerName || 'your STROXX dealer'}.`,
     alternates: { canonical: '/maanedens' },
     openGraph: {
       title: `STROXX of the Month · ${SKA.month}: ${SKA.hero.name}`,

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useFormValue } from 'sanity';
 import { SITE_URL } from '../lib/site';
+import { localeById } from '../lib/i18n';
 import { assetUrl } from './lib/image';
 import { ShareCard, PLATFORMS, type Platform } from './ShareCard';
 
@@ -23,11 +24,14 @@ export default function SharePreviewField() {
   const ogImage = useFormValue(['ogImage']);
   const heroImage = useFormValue(['heroImage']);
   const slug = (useFormValue(['slug']) as { current?: string } | undefined)?.current || '';
+  const language = useFormValue(['language']) as string | undefined;
   const title = seoTitle || headline || '';
   const desc = seoDescription || excerpt || '';
 
   const img = assetUrl(ogImage, 1200) || assetUrl(heroImage, 1200);
-  const url = `${SITE_URL}/nyheder/${slug}`;
+  // Prefix with the document language's market path (/dk, /be/nl, ...) so a
+  // translated article previews its own market's live URL, not the root one.
+  const url = `${SITE_URL}${localeById(language)?.path ?? ''}/nyheder/${slug}`;
 
   const pill = (on: boolean) =>
     ({

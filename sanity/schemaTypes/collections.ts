@@ -1,5 +1,16 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SkuInput from '../SkuInput';
+import { langLabel } from '../lib/langLabel';
+import { CATEGORY_OPTIONS } from './trade';
+
+/** Keep in sync with the trade documents' slugs (lib/trades.ts fallbacks). */
+const TRADE_OPTIONS = [
+  { title: 'Carpenter (toemrer)', value: 'toemrer' },
+  { title: 'Electrician (elektriker)', value: 'elektriker' },
+  { title: 'Plumber (vvs)', value: 'vvs' },
+  { title: 'Mason (murer)', value: 'murer' },
+  { title: 'Painter (maler)', value: 'maler' },
+];
 
 /** The people, voices, films and legal texts of the site, each a small
  *  collection editors own. All have hardcoded fallbacks in code, so an empty
@@ -32,16 +43,30 @@ export const specialist = defineType({
     defineField({ name: 'quote', title: 'Quote', type: 'text', rows: 3 }),
     defineField({
       name: 'quoteTopic',
-      title: 'Quote topic (category slug)',
+      title: 'Quote topic (product category)',
       type: 'string',
+      options: { list: CATEGORY_OPTIONS },
       description:
-        'IMPORTANT: if the quote names a product or category, put that category slug here (e.g. lasere) so it only shows on matching products. Leave empty for brand-generic quotes that are safe anywhere.',
+        'IMPORTANT: if the quote names a product or category, pick that category here so the quote only shows on matching product pages. Leave empty for brand-generic quotes that are safe anywhere.',
     }),
     defineField({
       name: 'consentGiven',
       title: 'Consent given (photo + direct contact on the web)',
       type: 'boolean',
       initialValue: false,
+      description: 'Must be ON before the photo and direct contact details appear on the site; while it is off, the site quietly hides them.',
+      validation: (r) =>
+        r
+          .custom((consent, context) => {
+            const doc = context.document as
+              | { photoUpload?: unknown; photoUrl?: string; phone?: string; email?: string }
+              | undefined;
+            const hasDetails = Boolean(doc?.photoUpload || doc?.photoUrl || doc?.phone || doc?.email);
+            return !consent && hasDetails
+              ? 'A photo or direct contact detail is filled in but consent is off, so the site will hide this person.'
+              : true;
+          })
+          .warning(),
     }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
   ],
@@ -68,8 +93,9 @@ export const testimonial = defineType({
       name: 'trades',
       title: 'Relevant trades',
       type: 'array',
-      description: 'Trade slugs this quote suits (toemrer, elektriker, vvs, murer, maler). Controls which trade pages show it.',
+      description: 'Tick the trades this quote suits; the quote then appears on those trade pages under /fag.',
       of: [defineArrayMember({ type: 'string' })],
+      options: { list: TRADE_OPTIONS },
     }),
     defineField({ name: 'active', title: 'Active (shown on the site)', type: 'boolean', initialValue: true }),
   ],
@@ -126,5 +152,11 @@ export const legalPage = defineType({
       of: [defineArrayMember({ type: 'block' })],
     }),
   ],
-  preview: { select: { title: 'title', subtitle: 'slug' } },
+  preview: {
+    select: { title: 'title', slug: 'slug', language: 'language' },
+    prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
+      title: title || 'Legal page',
+      subtitle: `/${slug || '…'} · ${langLabel(language)}`,
+    }),
+  },
 });

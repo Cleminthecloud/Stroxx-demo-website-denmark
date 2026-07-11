@@ -2,6 +2,7 @@ import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
 import SkuListInput from '../SkuListInput';
 import FilmPicker from '../FilmPicker';
+import { langLabel } from '../lib/langLabel';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
@@ -24,15 +25,20 @@ export const landingPage = defineType({
   name: 'landingPage',
   title: 'Landing page',
   type: 'document',
+  groups: [
+    { name: 'content', title: 'Content', default: true },
+    { name: 'seo', title: 'SEO + sharing' },
+  ],
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    defineField({ name: 'title', title: 'Internal title', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'title', title: 'Internal title', type: 'string', group: 'content', validation: (r) => r.required() }),
     defineField({
       name: 'slug',
       title: 'URL slug',
       description:
         'Becomes the address: slug "sommer" publishes at /kampagne/sommer. Use / to nest: "sommer/tilbud" publishes at /kampagne/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
       type: 'slug',
+      group: 'content',
       options: {
         source: 'title',
         slugify: (input: string) =>
@@ -45,14 +51,30 @@ export const landingPage = defineType({
             : 'Lowercase letters, numbers and dashes; use / to nest under a parent'
         ),
     }),
-    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string', description: 'The title Google and share cards show. Under 60 characters. Empty = the page title.' }),
-    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3, description: 'The snippet under the title in Google. Under 155 characters.' }),
+    defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      type: 'string',
+      group: 'seo',
+      description: 'The title Google and share cards show. Under 60 characters. Empty = the page title.',
+      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      type: 'text',
+      rows: 3,
+      group: 'seo',
+      description: 'The snippet under the title in Google. Under 155 characters.',
+      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
+    }),
     defineField({
       name: 'ogImage',
       title: 'Share image (social)',
       description: 'Shown when this page is shared on LinkedIn/Facebook etc. 1200x630 works best. Empty = the site-wide share image from Site settings.',
       type: 'image',
       options: { hotspot: true },
+      group: 'seo',
     }),
     defineField({
       name: 'seoPreview',
@@ -61,11 +83,13 @@ export const landingPage = defineType({
       type: 'string',
       readOnly: true,
       components: { input: SeoPreviewField },
+      group: 'seo',
     }),
     defineField({
       name: 'sections',
       title: 'Sections',
       type: 'array',
+      group: 'content',
       of: [
         defineArrayMember({
           name: 'photoHero',
@@ -292,7 +316,7 @@ export const landingPage = defineType({
             headline: 'Three reasons *pros switch.*',
             items: [
               { _type: 'feature', title: 'Pro quality', body: 'The same feel and finish as the big brands. The badge premium is the only thing missing.' },
-              { _type: 'feature', title: 'A fair price', body: 'Specifications set by tradespeople, no logo tax, no middlemen.' },
+              { _type: 'feature', title: 'Built for the trade', body: 'Specifications set by tradespeople: the grip, the fit and the endurance the job actually demands.' },
               { _type: 'feature', title: '30-day guarantee', body: 'Work it hard for a month. Not convinced? Money back at the dealer.' },
             ],
           },
@@ -815,5 +839,11 @@ export const landingPage = defineType({
       ],
     }),
   ],
-  preview: { select: { title: 'title', subtitle: 'slug.current' } },
+  preview: {
+    select: { title: 'title', slug: 'slug.current', language: 'language' },
+    prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
+      title: title || 'Landing page',
+      subtitle: `${slug === 'proev-det' ? '/proev-det' : `/kampagne/${slug || '…'}`} · ${langLabel(language)}`,
+    }),
+  },
 });

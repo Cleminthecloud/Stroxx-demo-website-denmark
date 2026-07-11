@@ -41,9 +41,9 @@ export const qrCode = defineType({
       description: 'Where a scan lands: a path like /support/smart-locks-st2 or a full https:// URL. Change it any time; printed codes follow along.',
       validation: (r) =>
         r.required().custom((v) =>
-          typeof v === 'string' && (/^\/[^\s]*$/.test(v) || /^https:\/\/[^\s]+$/.test(v))
+          typeof v === 'string' && (/^\/(?![/\\])[^\s]*$/.test(v) || /^https:\/\/[^\s]+$/.test(v))
             ? true
-            : 'Must start with / or https://'
+            : 'Must be a path with a single leading / (not // or /\\) or a full https:// URL'
         ),
     }),
     defineField({
