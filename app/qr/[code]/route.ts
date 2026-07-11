@@ -47,15 +47,20 @@ function countScan(code: string) {
   const day = new Date().toISOString().slice(0, 10);
   const id = `dayStats.${day}`;
   const client = createClient({ projectId, dataset, apiVersion: '2026-07-01', token, useCdn: false });
+  const key = `qr.${code.replace(/-/g, '_')}`;
   after(async () => {
     try {
       await client
         .transaction()
         .createIfNotExists({ _id: id, _type: 'dayStats', day, total: 0 })
-        .patch(id, (p) => p.setIfMissing({ qr: {} }).inc({ [`qr.${code.replace(/-/g, '_')}`]: 1 }))
+        /* inc() fails on a missing key, so seed this code's counter with 0
+           in the same patch (setIfMissing applies before inc) */
+        .patch(id, (p) => p.setIfMissing({ qr: {}, [key]: 0 }).inc({ [key]: 1 }))
         .commit({ visibility: 'async', returnDocuments: false });
-    } catch {
-      /* counting must never break a scan */
+    } catch (err) {
+      /* counting must never break a scan, but failures must reach the logs */
+      const e = err as { statusCode?: number; message?: string };
+      console.error('[qr] scan count write failed:', e?.statusCode ?? '', e?.message ?? err);
     }
   });
 }
