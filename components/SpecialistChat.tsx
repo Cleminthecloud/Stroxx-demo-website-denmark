@@ -254,7 +254,7 @@ export default function SpecialistChat({
       {/* messages */}
       <div ref={scroller} data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto sf-scroll pr-1 space-y-3">
         {msgs.map((m, i) => (
-          <div key={i} className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
+          <div key={i} className={`msg-in flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-[13px] leading-relaxed ${
               m.from === 'user'
                 ? 'bg-stroxx-blue text-white rounded-br-sm'
@@ -334,12 +334,12 @@ export default function SpecialistChat({
           </div>
         ))}
         {typing && (
-          <div className="flex justify-start">
+          <div className="msg-in flex justify-start">
             <div className="rounded-2xl rounded-bl-sm bg-white/[0.06] border border-white/10 px-4 py-3">
               <span className="inline-flex gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-fog animate-bounce [animation-delay:0ms]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-fog animate-bounce [animation-delay:140ms]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-fog animate-bounce [animation-delay:280ms]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-fog typing-dot [animation-delay:0ms]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-fog typing-dot [animation-delay:200ms]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-fog typing-dot [animation-delay:400ms]" />
               </span>
             </div>
           </div>
@@ -350,7 +350,7 @@ export default function SpecialistChat({
       <div data-lenis-prevent className="flex gap-1.5 overflow-x-auto sf-scroll py-3 shrink-0">
         {DEFAULT_CHIPS.map((c) => (
           <button key={c} onClick={() => send(c)}
-            className="shrink-0 px-3 py-1.5 rounded-full text-[11px] bg-white/[0.05] border border-white/10 text-fog hover:text-white hover:border-white/25 transition-colors cursor-pointer">
+            className="press shrink-0 px-3 py-1.5 rounded-full text-[11px] bg-white/[0.05] border border-white/10 text-fog hover:text-white hover:border-white/25 cursor-pointer">
             {c}
           </button>
         ))}
@@ -369,7 +369,7 @@ export default function SpecialistChat({
           className="flex-1 rounded-full bg-white/[0.05] border border-white/10 px-4 py-2.5 text-base sm:text-[13px] text-white placeholder:text-fog/70 outline-none focus:border-stroxx-blue/60 transition-colors"
         />
         <button type="submit" aria-label="Send"
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stroxx-blue text-white border border-white/20 hover:scale-105 transition-transform cursor-pointer disabled:opacity-50"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stroxx-blue text-white border border-white/20 hover:scale-105 active:scale-[.97] transition-transform duration-[250ms] ease-[cubic-bezier(.2,.7,.2,1)] cursor-pointer disabled:opacity-50"
           disabled={!input.trim() || typing}>
           <Send size={15} />
         </button>

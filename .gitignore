@@ -33,3 +33,5 @@ backups/
 # MMEXO video masters from Meena (~600MB), hosted in Sanity via npm run seed:videos,
 # never committed. Kept locally to re-run the seed.
 /Meena videos/
+
+/_to_delete/

@@ -31,8 +31,10 @@ async function getCodes(): Promise<Map<string, { target: string; active: boolean
   const map = new Map<string, { target: string; active: boolean }>();
   for (const r of json.result ?? []) {
     if (!r.code || !CODE_RE.test(r.code) || !r.target) continue;
-    // same target validation as the schema: internal path or https only
-    if (!/^\/[^\s]*$/.test(r.target) && !/^https:\/\/[^\s]+$/.test(r.target)) continue;
+    // stricter than the schema: internal path or https only. Internal targets
+    // need a single leading '/' NOT followed by '/' or '\', because
+    // '//evil.com' and '/\evil.com' resolve to an external origin in new URL().
+    if (!/^\/(?![/\\])[^\s]*$/.test(r.target) && !/^https:\/\/[^\s]+$/.test(r.target)) continue;
     map.set(r.code, { target: r.target, active: r.active !== false });
   }
   cache = { at: Date.now(), map };

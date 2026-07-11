@@ -21,7 +21,7 @@ export default function NewsExplorer({ posts }: { posts: NewsCardData[] }) {
   const shown = active ? posts.filter((p) => p.tags?.includes(active)) : posts;
 
   const chip = (on: boolean) =>
-    `shrink-0 text-sm px-3.5 py-1.5 rounded-full border transition-colors whitespace-nowrap cursor-pointer ${
+    `press shrink-0 text-sm px-3.5 py-1.5 rounded-full border whitespace-nowrap cursor-pointer ${
       on ? 'bg-stroxx-blue border-stroxx-blue text-white' : 'border-line text-fog hover:text-white hover:border-white/25'
     }`;
 

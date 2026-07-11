@@ -11,6 +11,8 @@
     "start": "next start",
     "lint": "eslint --ext .ts,.tsx app components lib sanity scripts",
     "check": "tsc --noEmit && npm run lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "seed": "sanity exec scripts/seed-demo.ts --with-user-token",
     "seed:more": "sanity exec scripts/seed-home-stores.ts --with-user-token",
     "seed:news": "sanity exec scripts/seed-news.ts --with-user-token",
@@ -51,6 +53,7 @@
     "eslint-config-next": "^14.2.5",
     "postcss": "8.4.40",
     "tailwindcss": "3.4.7",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
   }
 }

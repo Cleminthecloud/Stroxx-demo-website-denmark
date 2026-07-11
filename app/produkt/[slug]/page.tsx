@@ -5,10 +5,11 @@ import {
   products,
   productBySlug,
   categoryBySlug,
-  productBuyUrl,
   toolTexture,
 } from '@/lib/data';
-import { getSpecialists, getTestimonials, pickSpecialist, getSiteSettings } from '@/lib/cms';
+import { getSpecialists, getTestimonials, pickSpecialist, getSiteSettings, getMarkets } from '@/lib/cms';
+import { getLocale } from '@/lib/locale';
+import { dealerBuyUrl } from '@/lib/buy';
 import { SITE_URL } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -19,7 +20,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const p = productBySlug((await params).slug);
   if (!p) return { title: 'STROXX' };
   const cat = categoryBySlug(p.category);
-  const desc = `${p.name} from STROXX${cat ? ` · ${cat.name}` : ''}. Pro quality, only at Carl Ras. 100% satisfaction guarantee.`;
+  /* Dealer copy is market-first: name the current market's dealer only, stay
+     dealer-neutral on the international base (BUY CONTRACT). */
+  const locale = await getLocale();
+  const dealer = (await getMarkets()).find((m) => m.code === locale.market && m.dealerName) ?? null;
+  const desc = `${p.name} from STROXX${cat ? ` · ${cat.name}` : ''}. Pro quality${dealer ? `, only at ${dealer.dealerName}` : ''}. 100% satisfaction guarantee.`;
   // OG image via our own proxy: the Carl Ras CDN fetch needs a Referer header,
   // which OG scrapers don't send — the proxy is same-origin and always works.
   const og = `${SITE_URL}${toolTexture(p.imgId, '50383')}`;
@@ -37,7 +42,13 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
   if (!product) notFound();
 
   const cat = categoryBySlug(product.category);
-  const buyUrl = productBuyUrl(product.code);
+  /* Market-aware offer for the JSON-LD below: same buy primitive as the visible
+     BuyCTA (lib/buy.ts). null dealer/url (international, or a dealer market
+     without a CTA link) means NO offer is emitted; the structured data must
+     never route a non-DK audience to another market's shop (BUY CONTRACT). */
+  const locale = await getLocale();
+  const currentDealer = (await getMarkets()).find((m) => m.code === locale.market && m.dealerName) ?? null;
+  const buyUrl = dealerBuyUrl(currentDealer, product.code);
   const related = products
     .filter((p) => p.slug !== product.slug && p.tags.some((t) => product.tags.includes(t)))
     .slice(0, 4);
@@ -56,12 +67,16 @@ export default async function FocusProduct({ params }: { params: Promise<{ slug:
     brand: { '@type': 'Brand', name: 'STROXX' },
     category: cat?.name,
     ...(product.specs.length ? { additionalProperty: product.specs.map((s) => ({ '@type': 'PropertyValue', name: s.label, value: s.value })) } : {}),
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      url: buyUrl,
-      seller: { '@type': 'Organization', name: 'Carl Ras' },
-    },
+    ...(buyUrl && currentDealer?.dealerName
+      ? {
+          offers: {
+            '@type': 'Offer',
+            availability: 'https://schema.org/InStock',
+            url: buyUrl,
+            seller: { '@type': 'Organization', name: currentDealer.dealerName },
+          },
+        }
+      : {}),
     ...(() => {
       if (!revs.length) return {};
       return {

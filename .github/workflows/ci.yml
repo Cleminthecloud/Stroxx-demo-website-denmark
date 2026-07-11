@@ -1,4 +1,4 @@
-# CI gate: typecheck + lint + production build on every push and PR.
+# CI gate: typecheck + lint + unit tests + production build on every push and PR.
 # A broken branch can never merge quietly again.
 #
 # Secrets used (Settings → Secrets and variables → Actions):
@@ -26,4 +26,5 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm test
       - run: npm run build

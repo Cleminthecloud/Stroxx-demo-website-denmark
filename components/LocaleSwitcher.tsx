@@ -53,7 +53,7 @@ export default function LocaleSwitcher({ variant = 'dropdown' }: { variant?: 'dr
               key={l.id}
               href={hrefFor(l)}
               aria-current={l.id === current.id ? 'true' : undefined}
-              className={`rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
+              className={`press rounded-full border px-3.5 py-1.5 text-sm ${
                 l.id === current.id
                   ? 'border-white/20 bg-white/[0.10] text-white'
                   : 'border-white/[0.10] text-white/70 hover:text-white hover:border-white/20'
@@ -83,7 +83,7 @@ export default function LocaleSwitcher({ variant = 'dropdown' }: { variant?: 'dr
       </button>
       {open && (
         <div
-          className="glass-panel absolute right-0 top-full mt-3 min-w-[210px] rounded-xl p-1.5 z-[110]"
+          className="glass-panel menu-in absolute right-0 top-full mt-3 min-w-[210px] rounded-xl p-1.5 z-[110]"
           role="menu"
           /* near-opaque fill so the rows stay legible (WCAG AA) over the hero;
              keeps glass-panel's blur, border and shadow for the look */

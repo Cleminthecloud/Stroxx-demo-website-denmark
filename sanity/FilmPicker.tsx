@@ -160,7 +160,7 @@ export default function FilmPicker(props: ArrayOfObjectsInputProps) {
       let docId = existing?._id;
       if (!docId) {
         // Pull the real title + channel from YouTube (via our server route, so
-        // no "untitled" film) — blanks are fine if the lookup fails.
+        // no "untitled" film); blanks are fine if the lookup fails.
         let title = '';
         let by = '';
         try {

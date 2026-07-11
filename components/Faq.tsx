@@ -25,7 +25,7 @@ export default function Faq({ items }: { items: FaqItem[] }) {
                 {item.q}
               </span>
               <span
-                className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 ${
+                className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 ease-[cubic-bezier(.2,.7,.2,1)] motion-reduce:transition-none ${
                   isOpen
                     ? 'rotate-45 border-stroxx-blue/60 text-stroxx-blue shadow-[0_0_18px_rgba(0,136,194,0.35)]'
                     : 'border-line text-fog group-hover:border-stroxx-blue/60 group-hover:text-stroxx-blueGlow group-hover:shadow-[0_0_18px_rgba(0,136,194,0.3)]'
@@ -35,7 +35,7 @@ export default function Faq({ items }: { items: FaqItem[] }) {
               </span>
             </button>
             <div
-              className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+              className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(.2,.7,.2,1)] motion-reduce:transition-none ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
             >
               <div className="overflow-hidden">
                 <div className="pb-6 pr-14 text-[15px] leading-relaxed text-fog">{item.a}</div>

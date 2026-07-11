@@ -1,6 +1,6 @@
 /** Primary public URL path for a document, shared by the "See page" and
  *  "Open in Edit site" document actions (sanity/SeePageAction). This mirrors
- *  the PRIMARY location in sanity.config.ts Presentation resolve.locations —
+ *  the PRIMARY location in sanity.config.ts Presentation resolve.locations:
  *  keep the slug patterns here in sync with that map (see DEPENDENCIES.md,
  *  "Studio document actions"). Returns null for documents with no standalone
  *  page (specialists, testimonials, films, augments, QR codes, redirects,

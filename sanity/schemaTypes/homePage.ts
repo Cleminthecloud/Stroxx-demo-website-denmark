@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import FilmPicker from '../FilmPicker';
+import { langLabel, langPath } from '../lib/langLabel';
 
 const accentNote = 'Wrap a word in *asterisks* for the blue accent. Line breaks are respected.';
 const t = (name: string, title: string, rows = 2) =>
@@ -101,9 +102,9 @@ export const homePage = defineType({
           type: 'object',
           name: 'stat',
           fields: [
-            defineField({ name: 'value', title: 'Number', type: 'number' }),
-            defineField({ name: 'suffix', title: 'Suffix', type: 'string' }),
-            defineField({ name: 'label', title: 'Label', type: 'string' }),
+            defineField({ name: 'value', title: 'Number', type: 'number', description: 'The big number itself; it counts up when scrolled into view.' }),
+            defineField({ name: 'suffix', title: 'Suffix', type: 'string', description: 'E.g. + or %.' }),
+            defineField({ name: 'label', title: 'Label', type: 'string', description: 'What the number counts, e.g. Item numbers.' }),
           ],
           preview: { select: { title: 'label' } },
         }),
@@ -130,11 +131,11 @@ export const homePage = defineType({
     show('showGuarantee', 'fsGuarantee', 'proof'),
     defineField({ ...t('guaranteeHeadline', 'Guarantee headline'), group: 'proof', fieldset: 'fsGuarantee' }),
     defineField({ ...t('guaranteeText', 'Guarantee text', 4), group: 'proof', fieldset: 'fsGuarantee' }),
-    defineField({ name: 'sealLine1', title: 'Seal — line 1 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'The peeling guarantee sticker. Top word, e.g. SATISFIED (uppercase reads best).' }),
-    defineField({ name: 'sealConnector', title: 'Seal — connector (small)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'Small word between the two big lines, e.g. "or".' }),
-    defineField({ name: 'sealLine2', title: 'Seal — line 2 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'e.g. REFUNDED.' }),
-    defineField({ name: 'sealSub1', title: 'Seal — sub line 1', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
-    defineField({ name: 'sealSub2', title: 'Seal — sub line 2', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
+    defineField({ name: 'sealLine1', title: 'Seal: line 1 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'The peeling guarantee sticker. Top word, e.g. SATISFIED (uppercase reads best).' }),
+    defineField({ name: 'sealConnector', title: 'Seal: connector (small)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'Small word between the two big lines, e.g. "or".' }),
+    defineField({ name: 'sealLine2', title: 'Seal: line 2 (big)', type: 'string', group: 'proof', fieldset: 'fsGuarantee', description: 'e.g. REFUNDED.' }),
+    defineField({ name: 'sealSub1', title: 'Seal: sub line 1', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
+    defineField({ name: 'sealSub2', title: 'Seal: sub line 2', type: 'string', group: 'proof', fieldset: 'fsGuarantee' }),
 
     show('showCampaign', 'fsCampaign', 'month'),
     defineField({ ...s('campaignEyebrow', 'Campaign band: eyebrow label'), group: 'month', fieldset: 'fsCampaign' }),
@@ -146,7 +147,7 @@ export const homePage = defineType({
       name: 'campaignLink',
       title: 'Campaign band: “read more” → campaign page',
       description:
-        'The campaign landing page the band links to. SWAP THE CAMPAIGN by pointing this at a different page — or create a new Landing page (it publishes at /kampagne/…) and select it here. Empty = links to the Try-it page.',
+        'The campaign landing page the band links to. SWAP THE CAMPAIGN by pointing this at a different page, or create a new Landing page (it publishes at /kampagne/…) and select it here. Empty = links to the Try-it page.',
       type: 'reference',
       to: [{ type: 'landingPage' }],
       group: 'month',
@@ -174,5 +175,11 @@ export const homePage = defineType({
     }),
     defineField({ ...s('ctaLabel', 'Final CTA button label'), description: 'Keep dealer-neutral on the English base (it renders on the international site, where the button leads to Where to buy); a market’s own page may name its dealer.', group: 'month', fieldset: 'fsCategories' }),
   ],
-  preview: { prepare: () => ({ title: 'Homepage' }) },
+  preview: {
+    select: { language: 'language' },
+    prepare: ({ language }: { language?: string }) => ({
+      title: `Homepage (${langLabel(language)})`,
+      subtitle: langPath(language) || '/',
+    }),
+  },
 });

@@ -46,6 +46,7 @@ license); no prices appear on brand pages.
 npm install
 npm run dev          # http://localhost:3000
 npm run check        # tsc --noEmit + eslint (the push gate)
+npm test             # unit tests (vitest): buy contract, i18n, redirects, rate limiting
 npm run build && npm run start
 ```
 
@@ -62,7 +63,7 @@ and a GitHub Action.
 
 ## Deploy
 
-Hosted on Vercel (GitHub connected). Every push builds; `npm run build` runs types + lint as the gate.
+Hosted on Vercel (GitHub connected). Every push builds; CI (GitHub Actions) runs typecheck + lint + the unit-test suite + a production build as the gate.
 Set the Sanity env vars in Vercel before deploy. `sharp` runs on the Node runtime out of the box.
 Security headers and a CSP ship in `next.config.mjs`; rate limiting uses Upstash Redis.
 

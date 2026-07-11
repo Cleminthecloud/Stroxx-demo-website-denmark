@@ -60,6 +60,47 @@ One CTA primitive (`components/GlassButton.tsx`, styled by `.glass-cta` in `glob
 
 **Order.** Primary first (left), secondary after. On the product page the primary "Køb" always precedes the ghost "Tekniske specs".
 
+## Keyboard focus
+
+One designed ring for every interactive element, defined once in `globals.css`: `:is(a, button, input, select, textarea, summary, [role='button'], [tabindex]):focus-visible` gets a 2px `rgba(0,136,194,.9)` outline with a 2px offset. It shows for keyboard focus only (`:focus-visible`), so mouse clicks stay clean, and the outline follows border-radius, so pills and chips get a pill-shaped ring. The selector's specificity (0,1,1) deliberately beats Tailwind's `outline-none` on the form fields; never add a bare `outline-none` without a visible replacement. The glass tiers add a soft blue box-shadow bloom on focus (`.glass-cta:focus-visible`, `.glass-btn:focus-visible`); those rules restate the FULL base shadow lists, so changing a glass tier's shadows means updating its focus variant in the same pass.
+
+## Press
+
+Press compression is uniform: interactive elements compress to `scale(.97)` on `:active`, on the hover/press ease.
+
+- `.glass-cta` already had it; `.glass-btn:active` now matches.
+- `.press` is the shared control-chip utility (finder/sort/filter chips, carousel arrows, chat quick-reply chips, the inline locale pills): a 0.25s `cubic-bezier(.2,.7,.2,1)` transition over color, background, border, opacity, box-shadow and transform, plus `:active { transform: scale(.97) }`. It restates the color properties on purpose so it can sit next to Tailwind's `transition-colors` without losing them.
+- Exceptions by size: the specialist FAB uses `active:scale-[0.98]` (bigger element, smaller compression); the chat send button uses `active:scale-[.97]` on the hover/press ease.
+
+## Small entrances (CSS primitives)
+
+UI that mounts (menus, form states, chat) enters via plain CSS classes in `globals.css`, all on the entrance ease `cubic-bezier(.16,1,.3,1)`, enter-only (JS owns any exit):
+
+- `.menu-in`: dropdown pop, opacity + `translateY(-6px)` + `scale(.98)` over .28s, transform-origin top right. The desktop locale switcher.
+- `.state-in`: form success/error text rises softly (.45s). ContactForm, Newsletter, ProClubSignup, FeedbackForm.
+- `.check-pop`: the confirmation check badge, the one earned pop of delight (`scale .6 → 1.08 → 1`, .5s, .08s delay). Pairs with `.state-in` on form success states.
+- `.msg-in`: chat bubbles and the typing row (.4s rise), SpecialistChat.
+
+## Overlays and modals
+
+- Overlay fades: `.backdrop-in` (backdrop, .35s), `.overlay-in` (content rise, .35s), `.img-fade` (.3s; key the `<img>` by src so prev/next remounts it and the new image crosses in). The PhotoGallery lightbox uses all three; the newsletter popup backdrop uses `.backdrop-in`.
+- The modal pattern (GuaranteeModal is the reference; DealerChooser matches it): mount, then a rAF-flipped `show` state drives a 300ms opacity fade on the backdrop and a 300ms `translateY(14px) scale(.97)` settle on the panel, on the entrance ease; close reverses it and unmounts after the transition (300ms close timeout on GuaranteeModal, 250ms delayed unmount on DealerChooser). The newsletter popup routes every close path through a 220ms fade-out `dismiss()`. All of these carry `motion-reduce:transition-none`.
+- The SpecialistFab panel transitions `[opacity,transform]` on the entrance ease. FAQ rows and their plus/cross icon run on the hover/press ease, also with `motion-reduce:transition-none`.
+
+## Always-on loops
+
+- `.typing-dot`: the chat typing indicator, a calm 1.2s opacity pulse, never a bounce. Written in animation LONGHAND on purpose: SpecialistChat staggers the three dots with Tailwind `[animation-delay:*]` utilities, and an `animation:` shorthand would reset the delay.
+- `.scrollhint-dot` / `.scrollhint-chevron`: the hero scroll hint (mouse glyph). CSS keyframes instead of SMIL so reduced-motion can actually stop it (translateY stands in for the old `cy` animation); `ScrollHint.tsx` stays a server component.
+- Locate spinners (SpecialistFab, StoreFinder) are `motion-safe:animate-spin`.
+
+## Reduced motion, the one block
+
+Everything collapses under `prefers-reduced-motion: reduce`, and the block that does it sits LAST in `globals.css` so it wins the cascade. Two rules: keep it last, and register every NEW animation class in it. It silences the entrance and loop primitives above plus the older always-on loops (`.sf-pin--active::after`, `.blue-drift`), holds `.typing-dot` at a steady opacity, and kills the mobile menu's staggered rise via `#mobile-menu ... !important` (that stagger lives in inline styles, unreachable from CSS without `!important`, which makes the Nav's `#mobile-menu` id load-bearing). On the JS side, `CountUp` lands on the final number instantly under reduced motion, and the modal/panel transitions carry `motion-reduce:transition-none`.
+
+## Safari and the seal
+
+All Safari (iOS + macOS) can rasterise large `blur()`/`drop-shadow()` filter layers as opaque white. `GuaranteeSeal.tsx` therefore toggles `.gseal-holder--flat` under the house Safari UA guard (same family as BagFill/BagJourney): `filter: none` plus a small box-shadow on the flap's back face, so the peel keeps its depth without the filter layer.
+
 ## Owners
 
 `components/Reveal.tsx` · `ScrollText.tsx` · `BagJourney.tsx` / `BagFill.tsx` · `ProductExperience.tsx` · `ParticleImage.tsx` · `CursorGlow.tsx` · `GlassButton.tsx` · tokens in `app/globals.css`.

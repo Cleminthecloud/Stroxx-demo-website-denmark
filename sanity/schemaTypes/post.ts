@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import SharePreviewField from '../SharePreviewField';
 import SkuListInput from '../SkuListInput';
+import { langLabel } from '../lib/langLabel';
 
 /** News/blog articles at /nyheder. Formatted text with images; the index
  *  and article pages are code-owned, editors own the words. */
@@ -10,13 +11,19 @@ export const post = defineType({
   title: 'News article',
   type: 'document',
   description: 'News and stories at /nyheder. Newest first on the index.',
+  groups: [
+    { name: 'article', title: 'Article', default: true },
+    { name: 'products', title: 'Products + tags' },
+    { name: 'seo', title: 'SEO + sharing' },
+  ],
   fields: [
     defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    defineField({ name: 'title', title: 'Headline', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'title', title: 'Headline', type: 'string', group: 'article', validation: (r) => r.required() }),
     defineField({
       name: 'slug',
       title: 'URL slug',
       type: 'slug',
+      group: 'article',
       options: { source: 'title', maxLength: 80 },
       description: 'The address: /nyheder/this-part. Generate from the headline.',
       validation: (r) => r.required(),
@@ -25,6 +32,7 @@ export const post = defineType({
       name: 'publishedAt',
       title: 'Publish date',
       type: 'datetime',
+      group: 'article',
       initialValue: () => new Date().toISOString(),
       description: 'Controls the order on the index (newest first) and the date shown on the article.',
     }),
@@ -32,6 +40,7 @@ export const post = defineType({
       name: 'heroImage',
       title: 'Hero image',
       type: 'image',
+      group: 'article',
       options: { hotspot: true },
       fields: [
         defineField({
@@ -47,12 +56,14 @@ export const post = defineType({
       title: 'Excerpt',
       type: 'text',
       rows: 3,
+      group: 'article',
       description: 'One or two sentences for the index cards and search results.',
     }),
     defineField({
       name: 'body',
       title: 'Article',
       type: 'array',
+      group: 'article',
       of: [
         defineArrayMember({ type: 'block' }),
         defineArrayMember({
@@ -91,6 +102,7 @@ export const post = defineType({
       name: 'tags',
       title: 'Tags (filters on the news page)',
       type: 'array',
+      group: 'products',
       of: [defineArrayMember({ type: 'string' })],
       options: { layout: 'tags' },
       description: 'Type a tag and press Enter. These become the filter chips on /nyheder. Use the brand handles where they fit: Quality proof (premium credibility stories), Professional favorites (what pros actually rebuy), New solutions (new products and methods), plus trades and topics: Carpentry, Electrical, Plumbing, Painting, Masonry, Tips, Specialist advice, Safety, Regulations, Tools. Reuse existing tags rather than inventing near-duplicates.',
@@ -99,16 +111,33 @@ export const post = defineType({
       name: 'relatedSkus',
       title: 'Related products',
       type: 'array',
+      group: 'products',
       of: [defineArrayMember({ type: 'string' })],
       components: { input: SkuListInput },
       description: 'Products mentioned in the article. THE RULE: the first 4 show as a card row under the article ("Tools mentioned"), so order them most-relevant first (use the ↑ ↓ buttons). Unknown item numbers are skipped silently.',
     }),
-    defineField({ name: 'seoTitle', title: 'SEO title', type: 'string', description: 'The title Google and share cards show. Under 60 characters. Empty = the headline.' }),
-    defineField({ name: 'seoDescription', title: 'SEO description', type: 'text', rows: 3, description: 'The snippet under the title in Google. Under 155 characters. Empty = the excerpt.' }),
+    defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      type: 'string',
+      group: 'seo',
+      description: 'The title Google and share cards show. Under 60 characters. Empty = the headline.',
+      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      type: 'text',
+      rows: 3,
+      group: 'seo',
+      description: 'The snippet under the title in Google. Under 155 characters. Empty = the excerpt.',
+      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
+    }),
     defineField({
       name: 'ogImage',
       title: 'Share image (social)',
       type: 'image',
+      group: 'seo',
       options: { hotspot: true },
       description: 'For LinkedIn/Facebook shares, 1200x630. Empty = the hero image, then the site-wide one.',
     }),
@@ -116,6 +145,7 @@ export const post = defineType({
       name: 'sharePreview',
       title: 'Share preview (live)',
       type: 'string',
+      group: 'seo',
       readOnly: true,
       components: { input: SharePreviewField },
       description: 'How this article looks when the link is shared, built from the fields above as you type. Nothing to fill in here.',
@@ -124,5 +154,12 @@ export const post = defineType({
   orderings: [
     { title: 'Newest first', name: 'dateDesc', by: [{ field: 'publishedAt', direction: 'desc' }] },
   ],
-  preview: { select: { title: 'title', subtitle: 'publishedAt', media: 'heroImage' } },
+  preview: {
+    select: { title: 'title', publishedAt: 'publishedAt', language: 'language', media: 'heroImage' },
+    prepare: ({ title, publishedAt, language, media }) => ({
+      title: (title as string) || 'News article',
+      subtitle: `${publishedAt ? new Date(publishedAt as string).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'No date'} · ${langLabel(language as string | undefined)}`,
+      media,
+    }),
+  },
 });

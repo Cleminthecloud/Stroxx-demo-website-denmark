@@ -2,6 +2,7 @@ import { defineArrayMember, defineField, defineType } from 'sanity';
 import SeoPreviewField from '../SeoPreviewField';
 import NewsletterStatusField from '../NewsletterStatusField';
 import EncryptedSecretField from '../EncryptedSecretField';
+import { langLabel, langPath } from '../lib/langLabel';
 
 const linkArray = (name: string, title: string, description: string, group: string) =>
   defineField({
@@ -51,7 +52,7 @@ export const siteSettings = defineType({
     /* Dealer identity + contact live on the MARKET document (Settings → Markets):
        dealer name, Buy-at CTA link, customer service phone, footer legal line.
        The old retailerName / retailerLogo / retailerLogoHref / supportPhone /
-       legalLine fields here were dead or duplicated that source — removed
+       legalLine fields here were dead or duplicated that source, removed
        2026-07-11 (see the dealer-contact row in DEPENDENCIES.md). Only the
        localized HOURS text stays here: it is per-language display copy. */
     defineField({
@@ -101,6 +102,7 @@ export const siteSettings = defineType({
       description: 'The default browser-tab/Google title. Subpages append their own name to it.',
       type: 'string',
       group: 'seo',
+      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
     }),
     defineField({
       name: 'seoDescription',
@@ -109,11 +111,12 @@ export const siteSettings = defineType({
       type: 'text',
       rows: 3,
       group: 'seo',
+      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
     }),
     defineField({
       name: 'ogImage',
       title: 'SEO: social share image path',
-      description: 'Image shown when links are shared (Open Graph). Path under /public, ideally 1200x630, e.g. /brand/og.jpg.',
+      description: 'The site-wide fallback image for shared links (Open Graph), ideally 1200x630. This one is a file path a developer places in the codebase (e.g. /brand/og.jpg); ask the developer to swap it. Individual landing pages and articles can upload their own share image, which overrides this.',
       type: 'string',
       group: 'seo',
     }),
@@ -271,7 +274,7 @@ export const siteSettings = defineType({
       type: 'text',
       rows: 2,
       group: 'newsletter',
-      initialValue: 'The monthly lineup and the sharpest prices, straight to your inbox.',
+      initialValue: 'The monthly lineup and the best of STROXX, straight to your inbox.',
     }),
     defineField({
       name: 'newsletterButtonLabel',
@@ -351,18 +354,18 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'pimFeedUrl',
-      title: 'PIM: product feed URL — planned, not yet active',
+      title: 'PIM: product feed URL (planned, not yet active)',
       description:
-        'ROADMAP FIELD — not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
+        'ROADMAP FIELD, not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
       type: 'url',
       readOnly: true,
       group: 'integrations',
     }),
     defineField({
       name: 'damBaseUrl',
-      title: 'DAM: image base URL — planned, not yet active',
+      title: 'DAM: image base URL (planned, not yet active)',
       description:
-        'ROADMAP FIELD — not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
+        'ROADMAP FIELD, not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
       type: 'url',
       readOnly: true,
       group: 'integrations',
@@ -425,5 +428,11 @@ export const siteSettings = defineType({
     defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy' }),
     defineField({ name: 'notFoundText', title: '404 page: text', type: 'string', group: 'copy' }),
   ],
-  preview: { prepare: () => ({ title: 'Site settings' }) },
+  preview: {
+    select: { language: 'language' },
+    prepare: ({ language }: { language?: string }) => ({
+      title: `Site settings (${langLabel(language)})`,
+      subtitle: langPath(language) || '/',
+    }),
+  },
 });

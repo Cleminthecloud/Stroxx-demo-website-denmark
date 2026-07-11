@@ -58,6 +58,15 @@ export async function rateLimit(key: string, limit: number, windowMs: number): P
   return memoryLimit(key, limit, windowMs);
 }
 
+/** Client IP for rate-limit keys. Assumes deployment behind Vercel's proxy:
+ *  `x-real-ip` is set by the platform from the connecting socket and cannot be
+ *  spoofed by the client. Fallback is the RIGHTMOST `x-forwarded-for` entry,
+ *  the value appended by the trusted proxy itself. Never trust the leftmost
+ *  entry: it is client-supplied, so an attacker sending a random XFF header
+ *  per request would land in a fresh rate-limit bucket every time. */
 export function clientIp(headers: Headers): string {
-  return headers.get('x-forwarded-for')?.split(',')[0]?.trim() || headers.get('x-real-ip') || 'unknown';
+  const real = headers.get('x-real-ip')?.trim();
+  if (real) return real;
+  const xff = headers.get('x-forwarded-for')?.split(',').map((s) => s.trim()).filter(Boolean) ?? [];
+  return xff[xff.length - 1] || 'unknown';
 }

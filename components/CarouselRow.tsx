@@ -38,7 +38,7 @@ export default function CarouselRow({ title, children }: { title?: string; child
   };
 
   const btn =
-    'grid h-9 w-9 place-items-center rounded-full bg-white/[0.06] border border-white/15 text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-fog cursor-pointer disabled:cursor-default';
+    'press grid h-9 w-9 place-items-center rounded-full bg-white/[0.06] border border-white/15 text-fog hover:text-white hover:border-stroxx-blue/60 disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-fog cursor-pointer disabled:cursor-default';
 
   return (
     <div>

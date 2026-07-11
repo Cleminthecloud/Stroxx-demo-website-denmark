@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Check, X } from 'lucide-react';
 
 /** Newsletter signup UI: the form, the designed band above the footer, and
@@ -54,8 +54,8 @@ export function NewsletterForm({
 
   if (state === 'done') {
     return (
-      <div className={`flex items-center gap-2.5 text-white ${center ? 'justify-center' : ''}`}>
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-stroxx-blue/20 border border-stroxx-blue/50">
+      <div className={`state-in flex items-center gap-2.5 text-white ${center ? 'justify-center' : ''}`}>
+        <span className="check-pop flex h-8 w-8 items-center justify-center rounded-full bg-stroxx-blue/20 border border-stroxx-blue/50">
           <Check size={15} className="text-stroxx-blue" />
         </span>
         {copy.success || 'Check your inbox to confirm. Welcome aboard.'}
@@ -86,7 +86,10 @@ export function NewsletterForm({
           {state === 'busy' ? 'Sending…' : copy.buttonLabel} <ArrowRight size={15} />
         </button>
       </div>
-      <p className={`mt-3 text-xs ${state === 'error' ? 'text-red-400' : 'text-fog/70'} ${center ? 'text-center' : ''}`}>
+      <p
+        key={state === 'error' ? 'error' : 'hint'}
+        className={`mt-3 text-xs ${state === 'error' ? 'state-in text-red-400' : 'text-fog/70'} ${center ? 'text-center' : ''}`}
+      >
         {state === 'error'
           ? 'That did not go through. Check the address and try again.'
           : copy.disclaimer}
@@ -129,8 +132,18 @@ export function NewsletterPopup({
   frequencyDays: number;
 }) {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false); // drives the fade-out before unmount
   const shown = useRef(false);
   const SEEN_KEY = 'sx-nl-pop';
+
+  // gentle exit: fade the overlay ~220ms, then unmount
+  const dismiss = useCallback(() => {
+    setClosing(true);
+    window.setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 220);
+  }, []);
 
   useEffect(() => {
     try {
@@ -165,24 +178,32 @@ export function NewsletterPopup({
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && dismiss();
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [open, dismiss]);
 
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[115] flex items-end justify-center p-0 sm:items-center sm:p-5" role="dialog" aria-modal="true" aria-label="Newsletter signup">
-      <button aria-label="Close" className="absolute inset-0 bg-ink/70 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className="sheet-in relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 bg-[#0E1013] p-8 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:p-8 md:p-10 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+      <button
+        aria-label="Close"
+        className={`backdrop-in absolute inset-0 bg-ink/70 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none ${closing ? 'opacity-0' : ''}`}
+        onClick={dismiss}
+      />
+      <div
+        className={`sheet-in relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 bg-[#0E1013] p-8 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:p-8 md:p-10 shadow-[0_40px_120px_rgba(0,0,0,0.6)] transition-[opacity,transform] duration-200 ease-[cubic-bezier(.2,.7,.2,1)] motion-reduce:transition-none ${
+          closing ? 'opacity-0 translate-y-3' : ''
+        }`}
+      >
         <div className="pointer-events-none absolute inset-0 rounded-[inherit]" style={{ background: 'radial-gradient(80% 60% at 50% 0%, rgba(0,136,194,0.14), transparent 70%)' }} />
         <div aria-hidden className="sheet-handle" />
         <button
-          onClick={() => setOpen(false)}
+          onClick={dismiss}
           aria-label="Close"
           className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-line text-fog hover:text-white hover:border-stroxx-blue/60 transition-colors"
         >
@@ -192,7 +213,7 @@ export function NewsletterPopup({
           <div className="eyebrow mb-4">Newsletter</div>
           <h3 className="h-display text-white text-3xl leading-tight mb-3">{copy.headline}</h3>
           <p className="text-fog leading-relaxed mb-7">{copy.text}</p>
-          <NewsletterForm copy={copy} onDone={() => setTimeout(() => setOpen(false), 2500)} />
+          <NewsletterForm copy={copy} onDone={() => setTimeout(dismiss, 2500)} />
         </div>
       </div>
     </div>

@@ -41,7 +41,7 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
     }
   }, [open]);
 
-  const close = () => { setShow(false); setTimeout(() => setOpen(false), 220); };
+  const close = () => { setShow(false); setTimeout(() => setOpen(false), 300); };
 
   return (
     <>
@@ -57,13 +57,13 @@ export default function GuaranteeModal({ trigger = 'How the guarantee works' }: 
           {/* backdrop */}
           <div
             onClick={close}
-            className="absolute inset-0 bg-ink/85 backdrop-blur-lg transition-opacity duration-300"
+            className="absolute inset-0 bg-ink/85 backdrop-blur-lg transition-opacity duration-300 motion-reduce:transition-none"
             style={{ opacity: show ? 1 : 0 }}
           />
 
           {/* panel — near-opaque so the page never bleeds through the text */}
           <div
-            className="relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 p-7 pb-[calc(1.75rem+env(safe-area-inset-bottom))] sm:p-9 transition-all duration-300 will-change-transform"
+            className="relative w-full max-w-none sm:max-w-lg rounded-t-2xl rounded-b-none sm:rounded-2xl border border-white/10 p-7 pb-[calc(1.75rem+env(safe-area-inset-bottom))] sm:p-9 transition-[opacity,transform] duration-300 ease-[cubic-bezier(.16,1,.3,1)] will-change-transform motion-reduce:transition-none"
             style={{
               opacity: show ? 1 : 0,
               transform: show ? 'translateY(0) scale(1)' : 'translateY(14px) scale(0.97)',

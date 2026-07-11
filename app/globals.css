@@ -452,3 +452,109 @@ a, button, [role='button'], input, select, textarea, label { touch-action: manip
 .gseal-big .gseal-conn{ font-weight:600; font-size:21px; }
 .gseal-gap{ height:14px; }
 .gseal-sub{ font-weight:400; font-size:15.5px; opacity:.94; }
+/* Safari (iOS + macOS) rasterises large drop-shadow filter layers as opaque
+   white; GuaranteeSeal.tsx toggles this flat variant there, replacing the
+   filter with a small box-shadow under the lifted flap. */
+.gseal-holder--flat{ filter:none; }
+.gseal-holder--flat .gseal-back-face{ box-shadow:-7px 11px 18px rgba(0,0,0,.55); }
+
+/* ════════════════════════════════════════════════════════════════════
+   Motion + keyboard polish primitives. All on the brand eases
+   (cubic-bezier(.16,1,.3,1) entrances, cubic-bezier(.2,.7,.2,1) press),
+   all collapsed in the reduced-motion block at the end.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Keyboard focus: one designed ring for every interactive element; it only
+   shows for keyboard focus (:focus-visible), so mouse clicks stay clean. The
+   outline follows border-radius, so pills and chips get a pill-shaped ring.
+   Specificity (0,1,1) also beats Tailwind's `outline-none` on form fields. */
+:is(a, button, input, select, textarea, summary, [role='button'], [tabindex]):focus-visible {
+  outline: 2px solid rgba(0, 136, 194, 0.9);
+  outline-offset: 2px;
+}
+/* the glass tiers add a soft blue bloom so the ring reads as light on glass
+   (full box-shadow lists restated: the base shadows must survive the focus) */
+.glass-cta:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    inset 0 -1px 0 rgba(0,0,0,0.22),
+    0 10px 26px rgba(0,0,0,0.38),
+    0 6px 20px rgba(0,136,194,0.28),
+    0 0 0 5px rgba(0,136,194,0.25);
+}
+.glass-btn:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 -10px 22px rgba(0,0,0,0.22),
+    0 10px 28px rgba(0,0,0,0.34),
+    0 0 0 5px rgba(0,136,194,0.25);
+}
+
+/* Press compression: the utility glass pill compresses like .glass-cta
+   does; .press is the shared control-chip variant (finder/sort/filter chips,
+   carousel arrows, chat chips). Its transition restates colors so it can sit
+   next to Tailwind's transition-colors without losing them. */
+.glass-btn:active { transform: translateY(0) scale(.97); }
+.press {
+  transition:
+    color .25s cubic-bezier(.2,.7,.2,1),
+    background-color .25s cubic-bezier(.2,.7,.2,1),
+    border-color .25s cubic-bezier(.2,.7,.2,1),
+    opacity .25s cubic-bezier(.2,.7,.2,1),
+    box-shadow .25s cubic-bezier(.2,.7,.2,1),
+    transform .25s cubic-bezier(.2,.7,.2,1);
+}
+.press:active { transform: scale(.97); }
+
+/* Small entrances (enter-only; JS overlays own their exits) */
+@keyframes menu-pop { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+.menu-in { animation: menu-pop .28s cubic-bezier(.16,1,.3,1) both; transform-origin: top right; }
+
+@keyframes state-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.state-in { animation: state-rise .45s cubic-bezier(.16,1,.3,1) both; }   /* form success / error text */
+.msg-in   { animation: state-rise .4s  cubic-bezier(.16,1,.3,1) both; }   /* chat bubbles */
+
+/* the one earned pop of delight: the confirmation check badge */
+@keyframes check-pop { from { opacity: 0; transform: scale(.6); } 60% { opacity: 1; transform: scale(1.08); } to { opacity: 1; transform: scale(1); } }
+.check-pop { animation: check-pop .5s cubic-bezier(.16,1,.3,1) .08s both; }
+
+/* Overlay fades (lightbox, popup backdrops) + image cross-fade */
+@keyframes overlay-fade { from { opacity: 0; } to { opacity: 1; } }
+.backdrop-in { animation: overlay-fade .35s ease both; }
+.img-fade    { animation: overlay-fade .3s ease both; }
+@keyframes overlay-rise { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.overlay-in { animation: overlay-rise .35s cubic-bezier(.16,1,.3,1) both; }
+
+/* Chat typing indicator: calm opacity pulse, never a bounce. Longhand so
+   Tailwind's [animation-delay:*] utilities keep the per-dot stagger. */
+@keyframes typing-pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+.typing-dot {
+  animation-name: typing-pulse;
+  animation-duration: 1.2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Scroll hint (hero mouse glyph): CSS keyframes instead of SMIL so
+   reduced-motion can actually stop it. translateY stands in for cy. */
+@keyframes scrollhint-dot { 0%, 100% { transform: translateY(-1px); opacity: 1; } 50% { transform: translateY(9px); opacity: .15; } }
+.scrollhint-dot { animation: scrollhint-dot 1.8s cubic-bezier(.4,0,.2,1) infinite; }
+@keyframes scrollhint-chevron { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+.scrollhint-chevron { animation: scrollhint-chevron 1.8s ease-in-out infinite; }
+
+/* Everything above (plus the older always-on loops) collapses. Last in the
+   file so these win the cascade over the rules they silence. */
+@media (prefers-reduced-motion: reduce) {
+  .sf-pin--active::after,
+  .blue-drift,
+  .menu-in, .state-in, .msg-in, .check-pop,
+  .backdrop-in, .img-fade, .overlay-in,
+  .typing-dot,
+  .scrollhint-dot, .scrollhint-chevron { animation: none; }
+  .typing-dot { opacity: .6; }
+  /* the mobile menu's staggered rise lives in inline styles; !important is
+     the only way to collapse it from CSS */
+  #mobile-menu,
+  #mobile-menu a,
+  #mobile-menu nav + div { transition: none !important; transform: none !important; }
+}

@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import { langLabel } from '../lib/langLabel';
 
 /** Support & downloads pages: manuals, software guides, brochures. Each page
  *  groups downloads by product/language; editors upload the PDFs straight
@@ -131,18 +132,23 @@ export const supportPage = defineType({
       name: 'seoTitle',
       title: 'SEO title (optional)',
       type: 'string',
-      description: 'Browser tab + Google result title. Empty = the page title.',
+      description: 'Browser tab + Google result title. Under 60 characters. Empty = the page title.',
+      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
     }),
     defineField({
       name: 'seoDescription',
       title: 'SEO description (optional)',
       type: 'text',
       rows: 2,
-      description: 'The grey line under the title in Google. One honest sentence about the page.',
+      description: 'The grey line under the title in Google. One honest sentence about the page, under 155 characters.',
+      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
     }),
   ],
   preview: {
-    select: { title: 'title', slug: 'slug.current' },
-    prepare: ({ title, slug }) => ({ title: title || 'Support page', subtitle: `/support/${slug || '…'}` }),
+    select: { title: 'title', slug: 'slug.current', language: 'language' },
+    prepare: ({ title, slug, language }: { title?: string; slug?: string; language?: string }) => ({
+      title: title || 'Support page',
+      subtitle: `/support/${slug || '…'} · ${langLabel(language)}`,
+    }),
   },
 });
