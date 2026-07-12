@@ -24,11 +24,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const doc = await getPost((await params).slug);
   if (!doc) return { title: 'STROXX' };
   const og = assetUrl(doc.ogImage, 1200) || assetUrl(doc.heroImage, 1200);
+  const title = stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX';
+  const description = stegaClean(doc.seoDescription) || stegaClean(doc.excerpt) || undefined;
   return {
-    title: stegaClean(doc.seoTitle) || stegaClean(doc.title) || 'STROXX',
-    description: stegaClean(doc.seoDescription) || stegaClean(doc.excerpt) || undefined,
+    title,
+    description,
     alternates: { canonical: `/news/${(await params).slug}` },
-    ...(og ? { openGraph: { images: [{ url: og, width: 1200, height: 630 }] } } : {}),
+    /* Full OG block so LinkedIn/Facebook/X build a complete link card
+       (title + description + image) instead of falling back to the page
+       title tag. Preview fetchers are blocked while IS_DEMO noindex is on;
+       cards appear automatically on the real domain. */
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      ...(og ? { images: [{ url: og, width: 1200, height: 630 }] } : {}),
+    },
   };
 }
 

@@ -230,6 +230,16 @@ export default function BrandPage() {
               </div>
             </div>
           </Reveal>
+          <Reveal delay={140}>
+            <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
+              <LogoMotion src="/brand/motion/stroxx-logo-metallic.svg" alt="STROXX metallic logo, a light passing over a steel outline" />
+              <div className="text-white text-sm font-medium mt-4">Metallic mark (loop)</div>
+              <div className="text-fog text-xs mb-4">Brushed steel outline with a light passing over the mark. For dark intros, award moments and partner reels.</div>
+              <div className="mt-auto flex flex-wrap gap-2">
+                <FmtLink f={['SVG', '/brand/motion/stroxx-logo-metallic.svg']} />
+              </div>
+            </div>
+          </Reveal>
         </div>
 
         <Reveal>
