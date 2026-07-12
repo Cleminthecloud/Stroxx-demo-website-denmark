@@ -20,7 +20,7 @@ const MODES: { id: Mode; label: string; hint: string; placeholder: string; needs
   {
     id: 'draft',
     label: 'Draft an article',
-    hint: 'Paste an idea (or one of the recommendations) and get a full draft: article, excerpt, SEO title + description, share-image idea and a ready LinkedIn post.',
+    hint: 'Paste an idea (or one of the recommendations) and get a full draft: article, excerpt, SEO title + description, share-image idea, related products from the real range and a ready LinkedIn post. Products it does not know are verified on the dealer sites with live search, never guessed.',
     placeholder: 'The idea or brief, e.g. "Which laser class is allowed on a public construction site? Angle: ..."',
     needsInput: true,
   },

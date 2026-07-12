@@ -59,6 +59,9 @@ document types inside it. What's in each:
   slug "sommer" publishes at /campaign/sommer. See every block previewed at
   /components.
 - Monthly lineup (Manedens STROXX): the tool of the month.
+- Trades overview (Pages group): the /trades page's own headline, intro and
+  SEO. The trade cards on it come from the Trade page documents automatically
+  (each trade has a Sort order and an Active switch).
 - News article: blog posts at /news.
 - Support page: manuals, downloads and product videos at /support/<slug>; the QR system points here.
 - QR code: the repointable /qr/<code> short links for packaging.
@@ -191,6 +194,9 @@ shows which you are viewing. Presentation ("Edit site") previews drafts live.
 
 ### AI helpers
 "Article AI" (top tab) drafts and polishes news articles and social posts.
+It knows the full product range (names + item numbers), suggests related
+products for the article, and verifies unfamiliar products on the dealer
+sites with live web search before writing about them.
 "Dashboard" shows visits and QR scans. "Brand" and "Guide" tabs are the brand
 hub and this editor guide.
 
