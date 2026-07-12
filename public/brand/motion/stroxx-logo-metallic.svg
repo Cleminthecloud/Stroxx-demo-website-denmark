@@ -12,10 +12,10 @@
       <path d="M0,0v28.31h100.34V0H0ZM98.88,26.85H1.46V1.46h97.42v25.4Z"/>
     </g>
     <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#d9dde2"/>
-      <stop offset="0.45" stop-color="#8a9096"/>
-      <stop offset="0.55" stop-color="#5f656b"/>
-      <stop offset="1" stop-color="#c4c9cf"/>
+      <stop offset="0" stop-color="#eef1f4"/>
+      <stop offset="0.45" stop-color="#9aa0a6"/>
+      <stop offset="0.58" stop-color="#686e74"/>
+      <stop offset="1" stop-color="#cdd2d8"/>
     </linearGradient>
     <linearGradient id="shineBand" gradientUnits="userSpaceOnUse" x1="-40" y1="120" x2="150" y2="0">
       <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
@@ -34,12 +34,8 @@
     </linearGradient>
   </defs>
   <rect width="360" height="120" fill="#0B0C0E"/>
-  <!-- 1: knockout body so overlaps read as solid metal -->
-  <use href="#mark" fill="#0B0C0E"/>
-  <!-- 2: dark steel contour -->
-  <use href="#mark" fill="none" stroke="#26282b" stroke-width="1.05" stroke-linejoin="round"/>
-  <!-- 3: static brushed-metal body on the contour -->
-  <use href="#mark" fill="none" stroke="url(#steel)" stroke-width="0.72" stroke-linejoin="round" opacity="0.55"/>
-  <!-- 4: the traveling shine -->
-  <use href="#mark" fill="none" stroke="url(#shineBand)" stroke-width="0.8" stroke-linejoin="round"/>
+  <!-- solid brushed-steel letterforms -->
+  <use href="#mark" fill="url(#steel)"/>
+  <!-- the light passing over the fill -->
+  <use href="#mark" fill="url(#shineBand)"/>
 </svg>

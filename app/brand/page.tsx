@@ -4,6 +4,7 @@ import { Download } from 'lucide-react';
 import BrandGuide from '@/components/BrandGuide';
 import LogoCraft from '@/components/LogoCraft';
 import LogoMotion from '@/components/LogoMotion';
+import MetallicMark from '@/components/MetallicMark';
 import Messaging from '@/components/Messaging';
 import PhotoGallery from '@/components/PhotoGallery';
 import Reveal from '@/components/Reveal';
@@ -232,9 +233,18 @@ export default function BrandPage() {
           </Reveal>
           <Reveal delay={140}>
             <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
-              <LogoMotion src="/brand/motion/stroxx-logo-metallic.svg" alt="STROXX metallic logo, a light passing over a steel outline" />
-              <div className="text-white text-sm font-medium mt-4">Metallic mark (loop)</div>
-              <div className="text-fog text-xs mb-4">Brushed steel outline with a light passing over the mark. For dark intros, award moments and partner reels.</div>
+              <div
+                className="rounded-xl overflow-hidden mb-3"
+                style={{
+                  background: '#0B0C0E',
+                  border: '1px solid rgba(0,136,194,0.16)',
+                  boxShadow: 'inset 0 0 60px rgba(0,136,194,0.07), 0 0 40px rgba(0,136,194,0.10)',
+                }}
+              >
+                <MetallicMark />
+              </div>
+              <div className="text-white text-sm font-medium mt-4">Metallic mark</div>
+              <div className="text-fog text-xs mb-4">Solid brushed steel. Here the light follows your cursor; the downloadable file carries the ambient pass for reels and intros.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-metallic.svg']} />
               </div>
