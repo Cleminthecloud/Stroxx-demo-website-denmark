@@ -20,14 +20,19 @@ const PAGES_FALLBACK = [
 
 /* the about paragraph is CMS text; partner names become links automatically
    so editors keep plain text and the links never break */
+/* Dealer names in the about paragraph become links to the dealer sites. All
+   four link equally (the old map predates the neutral network sentence and
+   left Carl Ras out because it was bolded prose back then). These are brand
+   mentions, not buy CTAs: the buy contract (lib/buy.ts) is untouched. */
 const PARTNER_URLS: Record<string, string> = {
+  'Carl Ras': 'https://www.carl-ras.dk',
   Meesenburg: 'https://www.meesenburg.com',
   Foussier: 'https://www.foussier.fr',
   Lecot: 'https://lecot.be',
 };
 
 function linkify(text: string, keyBase: string) {
-  return text.split(/(Meesenburg|Foussier|Lecot)/g).map((p, i) =>
+  return text.split(/(Carl Ras|Meesenburg|Foussier|Lecot)/g).map((p, i) =>
     PARTNER_URLS[p] ? (
       <a key={`${keyBase}-${i}`} href={PARTNER_URLS[p]} target="_blank" rel="noopener noreferrer"
         className="underline decoration-fog/40 underline-offset-2 hover:text-white">{p}</a>
