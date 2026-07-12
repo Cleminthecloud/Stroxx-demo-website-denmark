@@ -67,7 +67,9 @@ export default function GuaranteeSeal({
     };
     const fitSeal = () => {
       if (!stage || !seal) return;
-      seal.style.transform = `rotate(${tilt ?? 0}deg) scale(${(stage.clientWidth / 470).toFixed(4)})`;
+      /* translate keeps the absolute 450px box centered in the stage (see
+         globals.css .gseal): no layout overflow on phones, ever */
+      seal.style.transform = `translate(-50%, -50%) rotate(${tilt ?? 0}deg) scale(${(stage.clientWidth / 470).toFixed(4)})`;
     };
     fitText();
     fitSeal();

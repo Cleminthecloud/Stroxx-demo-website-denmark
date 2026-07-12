@@ -403,10 +403,51 @@ export async function getStores(): Promise<Store[]> {
 
 /* ── Trades (fag pages) ─────────────────────────────────────────────────── */
 
-/** CMS trades with fallback to the hardcoded lib/trades list. title and
- *  accent are stegaCleaned because the page renders the blue part via
- *  title.split(accent), which invisible draft-mode chars would break;
- *  slug and categories are cleaned for matching. */
+/** The /trades overview page copy (headline, intro, SEO): its own document
+ *  per language since 2026-07-12 (before that the copy lived on Site
+ *  settings as fagHeadline/fagIntro, kept here as a read fallback so nothing
+ *  regresses around the migration). Nulls fall through to code defaults in
+ *  app/trades/page.tsx. */
+export type TradesIndexCopy = {
+  headline?: string;
+  intro?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+};
+
+export async function getTradesIndex(): Promise<TradesIndexCopy> {
+  try {
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "tradesIndex" && ${pred}][0]{headline, intro, seoTitle, seoDescription}`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
+    const d = data as Record<string, any> | null;
+    if (d?.headline || d?.intro || d?.seoTitle || d?.seoDescription) {
+      return {
+        headline: stegaClean(d.headline) || undefined,
+        intro: d.intro || undefined,
+        seoTitle: stegaClean(d.seoTitle) || undefined,
+        seoDescription: stegaClean(d.seoDescription) || undefined,
+      };
+    }
+    /* migration fallback: the old Site settings fields */
+    const s = await getSiteSettings();
+    return { headline: s?.fagHeadline, intro: s?.fagIntro };
+  } catch {
+    return {};
+  }
+}
+
+/** CMS trades with fallback to the hardcoded lib/trades list. The headline
+ *  uses the house `*blue*` Accent syntax in ONE field. Tolerance for docs
+ *  from before the 2026-07-12 single-field change: a legacy `accent` value
+ *  is folded into the title as asterisks at read time, so nothing regresses
+ *  while old documents are still around. */
+function foldAccent(title: string, accent: string): string {
+  if (!accent || title.includes('*') || !title.includes(accent)) return title;
+  return title.replace(accent, `*${accent}*`);
+}
+
 export async function getTrades(): Promise<Trade[]> {
   try {
     const lang = await langId();
@@ -422,8 +463,7 @@ export async function getTrades(): Promise<Trade[]> {
         return {
           slug,
           name: d.name,
-          title: stegaClean(d.title) || '',
-          accent: stegaClean(d.accent) || '',
+          title: foldAccent(stegaClean(d.title) || '', stegaClean(d.accent) || ''),
           blurb: d.blurb ?? '',
           categories: ((d.categories ?? []) as string[]).map((c) => stegaClean(c) ?? c),
           faq: ((d.faq ?? []) as Record<string, any>[])

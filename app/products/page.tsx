@@ -7,7 +7,7 @@ import { getSiteSettings } from '@/lib/cms';
 export const metadata = {
   title: 'Products',
   description:
-    'Find your STROXX tool: filter 358 products by category, name or item number, and jump straight to the buy at Carl Ras. Pro quality without the brand markup.',
+    'Find your STROXX tool: filter 358 products by category, name or item number, and jump straight to the buy at your STROXX dealer. Pro quality without the brand markup.',
 };
 
 export default async function ProdukterPage() {

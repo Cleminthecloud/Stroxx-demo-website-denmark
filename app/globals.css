@@ -430,7 +430,11 @@ a, button, [role='button'], input, select, textarea, label { touch-action: manip
    ============================================================ */
 .gseal-stage{ width:min(470px,86vw); aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; margin:0 auto;
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
-.gseal{ position:relative; width:450px; height:450px; transform-origin:center center; }
+/* the fixed 450px design box is ABSOLUTE and self-centered so its untransformed
+   size never overflows the layout on small screens (the overflow used to shove
+   the page sideways on phones); JS scales it to the stage. */
+.gseal-stage{ position:relative; }
+.gseal{ position:absolute; left:50%; top:50%; width:450px; height:450px; transform:translate(-50%,-50%); transform-origin:center center; }
 /* (removed the full-circle ambient ::after shadow: on dark backgrounds it muddied into a grey disc behind the sticker. The peel realism comes from .gseal-holder's drop-shadow, which follows the lifted flap on any bg.) */
 .gseal-sticky{ position:absolute; top:0; left:0; width:450px; height:450px; transform:rotate(52deg); }
 .gseal-wrap{ position:absolute; width:450px; height:450px; left:0; top:0; overflow:hidden; will-change:height,top; }

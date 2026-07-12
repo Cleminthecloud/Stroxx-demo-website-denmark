@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { existsSync } from 'fs';
 import path from 'path';
 import Reveal from '@/components/Reveal';
+import Accent from '@/components/Accent';
 import ProductCard from '@/components/ProductCard';
 import GlassButton from '@/components/GlassButton';
 import Faq from '@/components/Faq';
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const t = (await getTrades()).find((x) => x.slug === slug);
   if (!t) return { title: 'STROXX' };
   const title = `Tools for ${t.name.toLowerCase()} without the brand markup`;
-  const description = `${t.blurb} 30-day satisfaction guarantee, only at Carl Ras in Denmark.`;
+  const description = `${t.blurb} 30-day satisfaction guarantee at your STROXX dealer.`;
   return {
     title,
     description,
@@ -117,16 +118,8 @@ export default async function TradePage({ params }: { params: Promise<{ slug: st
           <Reveal>
             <div className="eyebrow mb-4">Trade · {trade.name}</div>
             <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-              {/* accent must be a real substring of the title, else render plain
-                  (an editor's empty/mistyped accent must never shred the h1) */}
-              {trade.accent && trade.title.includes(trade.accent) ? (
-                <>
-                  {trade.title.split(trade.accent)[0]}
-                  <span className="text-stroxx-blue">{trade.accent}</span>
-                </>
-              ) : (
-                trade.title
-              )}
+              {/* one field, the house syntax: *words* render in STROXX blue */}
+              <Accent text={trade.title} />
             </h1>
             <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">{trade.blurb}</p>
           </Reveal>

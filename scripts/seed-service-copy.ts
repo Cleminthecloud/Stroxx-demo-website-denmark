@@ -37,7 +37,7 @@ const FIELDS: Record<string, unknown> = {
   ],
   serviceDocsPending: 'Product catalogues and safety data sheets for chemicals will appear here once the DAM integration is in place.',
   serviceContactHeading: 'Talk to a human',
-  serviceContactBody: 'Your dealer\'s customer service is ready on the number in the footer. Or skip the queue and call a specialist directly at your nearest store.',
+  serviceContactBody: "Your STROXX dealer's customer service is ready to help, and every store has a specialist you can call directly. Find yours on the map.",
   serviceFaqEyebrow: 'Questions and answers',
   serviceFaqHeading: 'The practical stuff, *in brief.*',
   serviceFaq: [

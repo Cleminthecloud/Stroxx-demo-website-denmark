@@ -3,7 +3,7 @@ import LegalBody from '@/components/LegalBody';
 
 export const metadata: Metadata = {
   title: 'Privacy policy',
-  description: 'How STROXX and Carl Ras handle personal data on this site.',
+  description: 'How STROXX handles personal data on this site.',
   alternates: { canonical: '/privacy' },
 };
 

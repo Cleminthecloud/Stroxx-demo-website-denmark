@@ -112,7 +112,6 @@ const tradeDocs = trades.map((t, i) => ({
   name: t.name,
   slug: { _type: 'slug', current: t.slug },
   title: t.title,
-  accent: t.accent,
   blurb: t.blurb,
   categories: t.categories,
   faq: t.faq.map((f, j) => ({ _type: 'object', _key: `seed-${j}`, q: f.q, a: f.a })),
@@ -226,7 +225,7 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
     lk('Satisfaction guarantee', '/satisfaction-guarantee', 3),
   ],
   footerAbout:
-    'STROXX is available exclusively at Carl Ras in Denmark. The brand is developed together with strong partners in Germany, France and Belgium, and is also stocked through chains like Meesenburg, Foussier and Lecot.',
+    'STROXX is a European brand for professional tradespeople, developed together with trade experts and sold through one exclusive dealer per market: Carl Ras in Denmark, Meesenburg in Germany, Foussier in France and Lecot in Belgium.',
   chatFabLabel: 'Talk to a specialist',
   chatPanelHeadline: 'Talk to a specialist.',
   chatPanelText: 'Our store managers are tradespeople themselves. Call direct, no phone queue, no switchboard.',
@@ -263,7 +262,7 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   ],
   serviceDocsPending: 'Product catalogues and safety data sheets for chemicals will appear here once the DAM integration is in place.',
   serviceContactHeading: 'Talk to a human',
-  serviceContactBody: 'Your dealer\'s customer service is ready on the number in the footer. Or skip the queue and call a specialist directly at your nearest store.',
+  serviceContactBody: "Your STROXX dealer's customer service is ready to help, and every store has a specialist you can call directly. Find yours on the map.",
   serviceFaqEyebrow: 'Questions and answers',
   serviceFaqHeading: 'The practical stuff, *in brief.*',
   serviceFaq: [
@@ -275,9 +274,6 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   ],
   supportIndexHeadline: 'Manuals & downloads.',
   supportIndexIntro: 'User instructions, software guides and product documentation, in your language. Scan the code on the box and you land here.',
-  fagHeadline: 'Your trade. *Your tools.*',
-  fagIntro:
-    "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee.",
   notFoundHeadline: 'This page took\nthe *day off.*',
   notFoundText: "The address doesn't exist (anymore). The tools do, though, and they're this way.",
   seoTitle: 'STROXX | Premium tools, beastly low prices',
@@ -328,6 +324,16 @@ async function run() {
   }
   const tx = client.transaction();
   tx.createOrReplace(settingsDoc as any);
+  /* the /trades overview page doc: createIfNotExists so an editor-refined
+     version is never overwritten by a seed re-run */
+  tx.createIfNotExists({
+    _id: 'tradesIndex-en',
+    _type: 'tradesIndex',
+    language: 'en',
+    headline: 'Your trade. *Your tools.*',
+    intro:
+      "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee.",
+  } as any);
   tx.createOrReplace(homePage as any);
   for (const d of storeDocs) tx.createOrReplace(d as any);
   for (const d of specialistDocs) tx.createOrReplace(d as any);

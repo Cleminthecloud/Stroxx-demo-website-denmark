@@ -91,7 +91,7 @@ export default async function Footer() {
               <AboutText
                 text={
                   s?.footerAbout ||
-                  'STROXX is available exclusively at Carl Ras in Denmark. The brand is developed together with strong partners in Germany, France and Belgium, and is also stocked through chains like Meesenburg, Foussier and Lecot.'
+                  'STROXX is a European brand for professional tradespeople, developed together with trade experts and sold through one exclusive dealer per market: Carl Ras in Denmark, Meesenburg in Germany, Foussier in France and Lecot in Belgium.'
                 }
               />
             </p>

@@ -5,6 +5,7 @@ import type { Map as LeafletMap, LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Search, LocateFixed, MapPin, Clock, Phone, Mail, ArrowUpRight, X } from 'lucide-react';
 import { stores as fallbackStores, distanceKm, hoursLabel, Store } from '@/lib/stores';
+import Accent from '@/components/Accent';
 
 /** Full-screen, app-like store finder: the map fills the viewport and the
  *  search/list floats over it as a dark glass panel (left card on desktop,
@@ -274,7 +275,7 @@ export default function StoreFinder({ storeData, headlineStores }: { storeData?:
         <div className="px-5 lg:px-6 lg:pt-6 pb-3 shrink-0">
           <div className="hidden lg:block eyebrow mb-2">Stores · {multiCountry ? 'Europe' : COUNTRY_LABEL[countries[0]] ?? 'Denmark'}</div>
           <h1 className="hidden lg:block h-display text-white text-[1.9rem] leading-tight mb-5">
-            {headlineStores || 'Get the tool in your hand before you buy it.'}
+            <Accent text={headlineStores || 'Get the tool in your hand before you buy it.'} />
           </h1>
 
           {/* search */}

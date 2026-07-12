@@ -3,7 +3,7 @@ import LegalBody from '@/components/LegalBody';
 
 export const metadata: Metadata = {
   title: 'Terms of sale',
-  description: 'The terms that apply to purchases of STROXX products at Carl Ras.',
+  description: 'Purchases of STROXX products happen at your STROXX dealer, and the dealer\u2019s terms of sale and delivery apply.',
   alternates: { canonical: '/terms' },
 };
 

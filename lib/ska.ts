@@ -59,7 +59,7 @@ export const SKA = {
     },
     {
       q: 'What if it does not hold up to what I expect?',
-      a: 'Then the satisfaction guarantee kicks in: try it on real jobs for 30 days, and if you are not happy, you get your money back at Carl Ras. No fault required, your judgement is enough.',
+      a: 'Then the satisfaction guarantee kicks in: try it on real jobs for 30 days, and if you are not happy, you get your money back at your STROXX dealer. No fault required, your judgement is enough.',
     },
   ],
 

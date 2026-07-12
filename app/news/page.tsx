@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getPosts, getSiteSettings } from '@/lib/cms';
 import { assetUrl } from '@/sanity/lib/image';
 import { stegaClean } from '@sanity/client/stega';
+import Accent from '@/components/Accent';
 import NewsExplorer from '@/components/NewsExplorer';
 import type { NewsCardData } from '@/components/NewsCard';
 
@@ -49,7 +50,7 @@ export default async function NewsIndex() {
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-28">
         <div className="eyebrow mb-6">News</div>
         <h1 className="h-display text-white text-[clamp(2.6rem,6vw,5rem)] leading-[0.92] mb-6">
-          {settings?.newsHeadline || "What's happening."}
+          <Accent text={settings?.newsHeadline || "What's happening."} />
         </h1>
         <p className="text-fog text-lg max-w-xl leading-relaxed mb-12">
           {settings?.newsIntro || 'Tips, specialist know-how and news from the trades. Filter by what you work with.'}

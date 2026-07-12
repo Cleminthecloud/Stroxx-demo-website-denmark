@@ -45,7 +45,7 @@ export const HOME_DEFAULTS: HomeCopy = {
   heroHeadline: 'A *great* headline\nwill be here',
   claim: 'Here we have another great headline *for the reader.*',
   claimSub:
-    "Serious tools, seriously fair. Only at Carl Ras BYG. And remember: always 100% satisfaction guarantee, so there's not much to think twice about.",
+    "Serious tools, seriously fair. Only at your STROXX dealer. And remember: always the 30-day satisfaction guarantee, so there's not much to think twice about.",
   marqueeText: 'A great headline will be here',
   rangeHeadline: 'You got what \n it takes \n ...so do *we*',
   rangeCol1Label: 'The selection',
@@ -57,7 +57,7 @@ export const HOME_DEFAULTS: HomeCopy = {
   scaleHeadline: 'More than \n *1,400* product numbers.',
   scaleCol1Label: 'Every day',
   scaleCol1Text:
-    "Whether you need a Viking arm or clean hands, we've got what you're after. In the webshop at carl-ras.dk and in 26 stores across the country.",
+    "Whether you need a Viking arm or clean hands, we've got what you're after. In your dealer's webshop and in more than 227 stores across Europe.",
   scaleCol2Label: 'The best',
   scaleCol2Text:
     "Some products are an easy call when you just don't want to overpay. Others are for those who compare specs, performance and value, and want the best.",

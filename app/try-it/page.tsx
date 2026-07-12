@@ -29,7 +29,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Where can I buy STROXX?',
-    a: 'In Denmark, STROXX is available exclusively at Carl Ras, in 26 stores across the country and online at carl-ras.dk. Across the rest of Europe, the brand is sold through chains like Meesenburg in Germany, Foussier in France and Lecot in Belgium.',
+    a: 'STROXX is sold through one exclusive dealer per market: Carl Ras in Denmark, Meesenburg in Germany, Foussier in France and Lecot in Belgium, in store and online. Pick your market in the menu and the site points you to your dealer.',
   },
   {
     q: 'How can STROXX be so affordable?',

@@ -1,4 +1,4 @@
-import { getSiteSettings, getTrades } from '@/lib/cms';
+import { getTradesIndex, getTrades } from '@/lib/cms';
 import Accent from '@/components/Accent';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -7,16 +7,21 @@ import { ArrowRight, Hammer, Zap, Wrench, PaintRoller, HardHat, type LucideIcon 
 import { products, toolTexture, type Product } from '@/lib/data';
 import { SITE_URL as BASE } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: 'Trades: tools for carpenters, electricians, plumbers, painters and masons',
-  description:
-    'Find the STROXX tool for your trade: carpenter, electrician, plumbing, painter or mason. Professional quality without the brand markup, 30-day satisfaction guarantee, only at Carl Ras.',
-  alternates: { canonical: '/trades' },
-  openGraph: {
-    title: 'STROXX trades: tools for your trade',
-    description: 'The workhorses for every trade, without the brand markup.',
-  },
-};
+/** SEO from the Trades overview document (Pages → Trades overview), with the
+ *  previous hardcoded values as the empty-field defaults. */
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getTradesIndex();
+  const title = copy.seoTitle || 'Trades: tools for carpenters, electricians, plumbers, painters and masons';
+  const description =
+    copy.seoDescription ||
+    'Find the STROXX tool for your trade: carpenter, electrician, plumbing, painter or mason. Professional quality without the brand markup, 30-day satisfaction guarantee.';
+  return {
+    title,
+    description,
+    alternates: { canonical: '/trades' },
+    openGraph: { title, description },
+  };
+}
 
 const ICONS: Record<string, LucideIcon> = {
   carpenter: Hammer,
@@ -55,7 +60,7 @@ function MiniProduct({ p }: { p: Product }) {
 }
 
 export default async function TradesIndexPage() {
-  const [cms, trades] = await Promise.all([getSiteSettings(), getTrades()]);
+  const [copy, trades] = await Promise.all([getTradesIndex(), getTrades()]);
   const itemListLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -84,10 +89,10 @@ export default async function TradesIndexPage() {
         <Reveal>
           <div className="eyebrow mb-4">Trades</div>
           <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
-            <Accent text={cms?.fagHeadline || 'Your trade. *Your tools.*'} />
+            <Accent text={copy.headline || 'Your trade. *Your tools.*'} />
           </h1>
           <p className="mt-6 text-fog text-lg leading-relaxed max-w-xl">
-            {cms?.fagIntro || "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee."}
+            {copy.intro || "Skip the catalog and start with what you do. We've pulled together the workhorses for every trade, without the brand markup and backed by a 30-day satisfaction guarantee."}
           </p>
         </Reveal>
 
