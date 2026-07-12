@@ -15,6 +15,7 @@ import DealerChooserProvider from '@/components/DealerChooser';
 import Footer from '@/components/Footer';
 import SpecialistFab from '@/components/SpecialistFab';
 import ExitPreview from '@/components/ExitPreview';
+import SiteOnly from '@/components/SiteOnly';
 import { NewsletterBand, NewsletterPopup } from '@/components/Newsletter';
 import { SITE_URL, IS_DEMO } from '@/lib/site';
 
@@ -210,12 +211,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {settings?.chatEnabled !== false && <SpecialistFab storeData={storeData} copy={fabCopy} />}
         </SmoothScroll>
         </DealerChooserProvider>
-        {/* first-party anonymous stats (no cookies): feeds the Studio Dashboard */}
-        <Analytics />
-        {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
-        <SanityLive />
-        {draft && <VisualEditing />}
-        {draft && <ExitPreview />}
+        {/* Site only, never under /studio: the live listener refreshing the
+           host page behind the embedded Studio made the Studio blink and drop
+           open modals while editors typed; and Studio visits are not page
+           views. Presentation previews run on site routes in an iframe, so
+           they keep all of this. */}
+        <SiteOnly>
+          {/* first-party anonymous stats (no cookies): feeds the Studio Dashboard */}
+          <Analytics />
+          {/* Sanity: live content updates + click-to-edit overlays in draft mode */}
+          <SanityLive />
+          {draft && <VisualEditing />}
+          {draft && <ExitPreview />}
+        </SiteOnly>
         {nlOn && settings?.newsletterPopupEnabled === true && (
           <NewsletterPopup
             copy={nlCopy}
