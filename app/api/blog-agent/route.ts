@@ -4,6 +4,7 @@ import { sameOrigin } from '@/lib/same-origin';
 import { stegaClean } from '@sanity/client/stega';
 import { getSiteSettings } from '@/lib/cms';
 import { categories } from '@/lib/data';
+import { getCatalog } from '@/lib/catalog';
 import { LLMS_FALLBACK } from '@/lib/llms-fallback';
 
 /** The article AI behind the Studio's "Article AI" tab. Four modes:
@@ -11,10 +12,13 @@ import { LLMS_FALLBACK } from '@/lib/llms-fallback';
  *    draft   a full article draft from a chosen idea/brief
  *    polish  improve an editor's own draft, keeping their voice
  *    social  LinkedIn post + hashtags for a finished article
- *  Grounded in the same brand facts as /llms.txt, so recommendations stay
- *  on-brand. Uses the ANTHROPIC_API_KEY already in the hosting env; the
- *  ideas mode adds Anthropic's server-side web search (capped) so "trending"
- *  means today, not training data. Rate-limited: this endpoint costs money. */
+ *  Grounded in the same brand facts as /llms.txt PLUS the real product range
+ *  (name + item number for every SKU in the catalog), so the assistant knows
+ *  what STROXX actually sells and never denies a real product. Uses the
+ *  ANTHROPIC_API_KEY already in the hosting env; ideas AND draft modes add
+ *  Anthropic's server-side web search (capped) so "trending" means today and
+ *  a product named in a brief can be verified on the dealer's site before a
+ *  word is written. Rate-limited: this endpoint costs money. */
 
 export const maxDuration = 60;
 
@@ -29,14 +33,19 @@ const MARKETS: Record<string, string> = {
 const MODES = ['ideas', 'draft', 'polish', 'social'] as const;
 type Mode = (typeof MODES)[number];
 
-function systemFor(mode: Mode, market: string, brandFacts: string, catNames: string) {
+function systemFor(mode: Mode, market: string, brandFacts: string, catNames: string, productRange: string) {
   const base = `You are the article assistant for STROXX, a professional tool brand for tradespeople (carpenters, electricians, plumbers, masons, painters). You help the brand team run the news/blog section on the STROXX website and turn articles into LinkedIn reach.
 
 Market focus: ${MARKETS[market] || MARKETS.dk}.
 Product categories: ${catNames}.
 
 BRAND FACTS (source of truth, never contradict):
-${brandFacts}
+${brandFacts}${mode === 'ideas' ? '' : `
+
+PRODUCT RANGE ON THIS SITE (name and item number of every product the website lists today):
+${productRange}
+
+About the range: this list is the website's curated selection, NOT the full STROXX assortment. The dealers (carl-ras.dk, meesenburg.de, foussier.fr, lecot.be) stock more STROXX products than this site shows. So: if the editor names a STROXX product that is not on this list, NEVER claim it does not exist. Verify it on the dealer's site instead (web search when available), write from what you verify, tell the editor your source, and add one note that the product has no product page on this site yet so the article cannot deep-link it. Use exact item numbers from this list when referencing products the site does carry: the editor pastes them into the article's product slider and related-products fields.`}
 
 House rules:
 - Audience is professional tradespeople and the buyers around them, never hobbyists.
@@ -62,7 +71,11 @@ Mix across the three handles (Quality proof, Professional favorites, New solutio
   if (mode === 'draft')
     return `${base}
 
-Task: write a complete article draft from the editor's brief. Format:
+Task: write a complete article draft from the editor's brief.
+
+Before writing: check every product the brief names against the PRODUCT RANGE list. In range: use its exact name and item number. Not in range: verify it with web search across ALL the dealer sites (carl-ras.dk, meesenburg.de, foussier.fr, lecot.be), not only this market's, since dealers stock different parts of the assortment; only state what the search confirms. Facts you could not verify stay out of the draft; list them for the editor instead.
+
+Format:
 
 ## Suggested headline
 (question-shaped if natural)
@@ -79,8 +92,14 @@ Title under 60 characters; description under 155.
 ## Share image idea
 One sentence describing the photo that would make the LinkedIn card get clicked (this becomes the article's share image; remind them the OG image does half the work on LinkedIn).
 
+## Related products
+3 to 6 items from the PRODUCT RANGE that genuinely fit this article, one per line as "Name (item 12345678)", most relevant first. The editor pastes the item numbers into the article's Related products field (the first 4 show as a card row under the article) or into a product slider inside the text. Only items from the list; if nothing in the range fits, say so instead of stretching.
+
 ## LinkedIn post
-3-5 short lines in the market's language, hook first, one question to invite comments, link goes in the post. 3 hashtags max.`;
+3-5 short lines in the market's language, hook first, one question to invite comments, link goes in the post. 3 hashtags max.
+
+## Notes for the editor
+Only if needed: sources you verified by search, claims that still need checking, and whether any product mentioned is missing from this site's range.`;
 
   if (mode === 'polish')
     return `${base}
@@ -134,7 +153,11 @@ export async function POST(req: NextRequest) {
   const settings = await getSiteSettings();
   const brandFacts = stegaClean(settings?.llmsTxt)?.trim() || LLMS_FALLBACK;
   const catNames = categories.map((c) => c.name).join(', ');
-  const system = systemFor(mode, market, brandFacts, catNames);
+  /* the real range, compact: "Name (item 12345678)" per product. Skipped for
+     ideas mode (topic hunting needs categories, not 358 SKU lines). */
+  const productRange =
+    mode === 'ideas' ? '' : getCatalog().map((p) => `${p.name} (item ${p.sku})`).join('\n');
+  const system = systemFor(mode, market, brandFacts, catNames, productRange);
   const user =
     mode === 'ideas'
       ? `Today is ${new Date().toISOString().slice(0, 10)}. ${input.trim() || 'Give me this week’s article recommendations.'}`
@@ -155,10 +178,13 @@ export async function POST(req: NextRequest) {
     });
 
   try {
-    /* ideas mode tries live web search first; if the account/tool rejects it,
-       fall back to a plain call (seasonal + evergreen still works well) */
-    let r = await call(mode === 'ideas');
-    if (!r.ok && mode === 'ideas') r = await call(false);
+    /* ideas and draft try live web search first (ideas: what is trending;
+       draft: verify named products on the dealer's site). If the account or
+       tool rejects it, fall back to a plain call: ideas still works from
+       seasonal + evergreen, drafts still ground on the range list. */
+    const wantsSearch = mode === 'ideas' || mode === 'draft';
+    let r = await call(wantsSearch);
+    if (!r.ok && wantsSearch) r = await call(false);
     if (!r.ok) return NextResponse.json({ error: 'upstream' }, { status: 502 });
     const data = await r.json();
     const text = (data?.content ?? [])
