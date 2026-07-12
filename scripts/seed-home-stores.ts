@@ -340,7 +340,10 @@ async function run() {
   for (const d of testimonialDocs) tx.createOrReplace(d as any);
   for (const d of tradeDocs) tx.createOrReplace(d as any);
   for (const d of videoDocs) tx.createOrReplace(d as any);
-  for (const d of legalDocs) tx.createOrReplace(d as any);
+  /* createIfNotExists since 2026-07-12: /terms carries REAL routing content
+     in the dataset (purchases happen at the dealer, links to all four dealers'
+     terms), and a seed re-run must never reset a legal page to placeholder. */
+  for (const d of legalDocs) tx.createIfNotExists(d as any);
   tx.createIfNotExists(guaranteeDoc as any);
   const res = await tx.commit();
   // eslint-disable-next-line no-console

@@ -176,6 +176,11 @@ intro sit right below it in the "Support index" box. The full
 guarantee terms live on their own editable page: the "Legal page" document
 with the slug satisfaction-guarantee renders at /satisfaction-guarantee (it
 replaced the old static PDF), and each market can hold its own translation.
+RULE for the Documents list: the English base links only the site's own pages
+(/satisfaction-guarantee, /terms, /privacy, /cookies), never one dealer's
+documents; a market's own language version may link its dealer's terms of
+sale and policies. Terms of sale belong to the dealer because the dealer is
+the seller; the site's /terms page explains that.
 
 ### SEO and share images
 Every page type has SEO title/description fields with a live preview underneath
