@@ -70,9 +70,12 @@ export default function BrandGuide() {
       <div className="glass-panel rounded-xl p-8 md:p-10 mb-16 space-y-10">
         <div>
           <div className="text-fog/60 text-xs uppercase tracking-wider mb-3">Display headline · h-display, white, tight leading</div>
+          {/* Typography demo only: it exists to show the one-blue-word rule.
+              Kept off the retired "beastly low prices" line so the brand guide
+              does not teach a slogan the positioning has moved away from. */}
           <div className="h-display text-white text-[clamp(2rem,5vw,4rem)] leading-[0.95]">
-            Premium tools,<br />
-            <span className="text-stroxx-blue">beastly</span> low prices.
+            Built for the trade,<br />
+            <span className="text-stroxx-blue">judged</span> by the trade.
           </div>
           <p className="text-fog text-sm mt-4 max-w-xl">
             One *asterisked* word per headline renders STROXX blue. Line breaks are deliberate (Enter in the CMS). Headlines are statements: short, bold, no trailing filler.

@@ -23,10 +23,14 @@ export async function generateMetadata(): Promise<Metadata> {
   /* Site-wide SEO defaults come from Site settings in the CMS; the values
      below are the fallbacks when a field is empty. */
   const s = await getSiteSettings();
-  const title = stegaClean(s?.seoTitle) || 'STROXX | Premium tools, beastly low prices';
+  const title =
+    stegaClean(s?.seoTitle) || 'STROXX | The smart, reliable alternative in professional tools';
+  /* Positioning: never lead on costing less. STROXX sits at price index 80 to 90
+     against category leaders, so the search snippet sells the specification and
+     the guarantee. See docs/STROXX-positioning-change-plan.md. */
   const description =
     stegaClean(s?.seoDescription) ||
-    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.';
+    'Professional tools, specified with the trades across Europe and backed by a 30-day satisfaction guarantee. Put them to work, then decide.';
   const og = stegaClean(s?.ogImage) || '/brand/og.jpg';
   return {
     // Demo domain; swap lib/site.ts when the production domain lands. Makes all
@@ -88,7 +92,12 @@ const orgLd = {
   name: 'STROXX',
   url: BASE,
   logo: `${BASE}/icons/icon-512.png`,
-  slogan: 'Premium tools, beastly low prices',
+  /* Retired 2026-08-13: "Premium tools, beastly low prices". STROXX sits at
+     price index 80 to 90 against category leaders, and the Brand Plan's own
+     survey finding is that value-for-money on its own reads cheap and erodes
+     trust (see app/brand/page.tsx). This line is the Brand Plan's ambition
+     statement. */
+  slogan: 'The smart, reliable alternative in professional tools',
   description:
     'STROXX is professional tools without the brand markup, developed by trade experts in Denmark, Germany, France and Belgium. Sold in Denmark exclusively by Carl Ras, with a 30-day satisfaction guarantee.',
   sameAs: ['https://www.carl-ras.dk/maerker/stroxx'],

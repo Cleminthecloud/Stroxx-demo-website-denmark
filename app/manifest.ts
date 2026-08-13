@@ -5,7 +5,7 @@ import type { MetadataRoute } from 'next';
  *  choice: offline support is a production decision, installability is free. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'STROXX | Premium tools, beastly low prices',
+    name: 'STROXX | The smart, reliable alternative in professional tools',
     short_name: 'STROXX',
     description:
       'Professional tools without the brand markup. Find products and your nearest store.',

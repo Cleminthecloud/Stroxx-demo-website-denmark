@@ -276,9 +276,9 @@ const SETTINGS_DEFAULTS: Record<string, unknown> = {
   supportIndexIntro: 'User instructions, software guides and product documentation, in your language. Scan the code on the box and you land here.',
   notFoundHeadline: 'This page took\nthe *day off.*',
   notFoundText: "The address doesn't exist (anymore). The tools do, though, and they're this way.",
-  seoTitle: 'STROXX | Premium tools, beastly low prices',
+  seoTitle: 'STROXX | The smart, reliable alternative in professional tools',
   seoDescription:
-    'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.',
+    'Professional tools, specified with the trades across Europe and backed by a 30-day satisfaction guarantee. Put them to work, then decide.',
   ogImage: '/brand/og.jpg',
   llmsTxt: LLMS_FALLBACK,
   chatEnabled: true,

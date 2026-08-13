@@ -71,6 +71,21 @@ const GROUPS: Group[] = [
     },
   },
   {
+    /* The site-wide search snippet. Highest-visibility string on the site: it is
+       the Google result, the social share card and the browser tab description
+       on EVERY page, and it was still selling on costing less. */
+    type: 'siteSettings',
+    fields: ['seoDescription'],
+    replacements: {
+      seoDescription: [
+        [
+          'STROXX is exactly like all your expensive tools and good gear. It just does not cost nearly as much. Real value for money.',
+          'Professional tools, specified with the trades across Europe and backed by a 30-day satisfaction guarantee. Put them to work, then decide.',
+        ],
+      ],
+    },
+  },
+  {
     type: 'testimonial',
     fields: ['quote'],
     replacements: {
