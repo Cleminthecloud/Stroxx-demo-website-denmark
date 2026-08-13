@@ -11,7 +11,6 @@ const badgeStyle: Record<string, string> = {
   'CAMPAIGN': 'bg-[#EE7F00] text-white',
   'BEST IN TEST': 'bg-white text-ink',
   'NEW': 'bg-[#0072BC] text-white',
-  'OUTLET': 'bg-[#5A6473] text-white',
   'ECO': 'bg-[#4C9A2A] text-white',
 };
 

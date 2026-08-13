@@ -24,6 +24,7 @@
     "seed:proevdet": "sanity exec scripts/seed-proevdet.ts --with-user-token",
     "migrate:market-ops": "sanity exec scripts/migrate-market-ops.ts --with-user-token",
     "migrate:english-slugs": "sanity exec scripts/migrate-english-slugs.ts --with-user-token",
+    "migrate:positioning": "sanity exec scripts/migrate-positioning-copy.ts --with-user-token",
     "seed:qr": "sanity exec scripts/seed-qr.ts --with-user-token",
     "import:photos": "npx tsx scripts/import-cms-photos.ts",
     "backup": "mkdir -p backups && sanity dataset export demo backups/demo-backup.tar.gz --overwrite"

@@ -82,9 +82,12 @@ export const HOME_DEFAULTS: HomeCopy = {
   // A market's own locale doc may name its dealer ("Køb hos Carl Ras").
   ctaLabel: 'Where to buy',
   campaignEyebrow: 'Campaign',
-  campaignHeadline: 'Now you can afford\nmore than just tools',
+  // Positioning: STROXX is not the cheap option, it is the one that earns its
+  // place on the van. Lead on the guarantee, never on costing less. See
+  // docs/STROXX-positioning-change-plan.md.
+  campaignHeadline: 'Take it to work.\n*Then* decide.',
   campaignText:
-    'STROXX is exactly like your pricey tools and good gear. It just does not cost nearly as much. And if you think that sounds too good to be true, we simply say: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
+    'STROXX is built for people who use their tools all day and judge them accordingly. So do not take our word for it. Put it to work: *TRY IT.* Not for you, or not happy? You get your money back. Simple as that.',
   campaignPrimaryLabel: '', // empty = automatic: "Buy at <dealer>", or "Where to buy" internationally
   campaignSecondaryLabel: 'Read more',
   campaignHref: '/try-it',

@@ -18,7 +18,7 @@ import { Product, Specialist, toolTexture } from '@/lib/data';
 const badgeStyle: Record<string, string> = {
   'VALUE': 'bg-[#0072BC] text-white', 'POPULAR': 'bg-[#002C5F] text-white',
   'CAMPAIGN': 'bg-[#EE7F00] text-white', 'BEST IN TEST': 'bg-white text-ink',
-  'NEW': 'bg-[#0072BC] text-white', 'OUTLET': 'bg-[#5A6473] text-white', 'ECO': 'bg-[#4C9A2A] text-white',
+  'NEW': 'bg-[#0072BC] text-white', 'ECO': 'bg-[#4C9A2A] text-white',
 };
 
 type Stop = { p: number; x: number; y: number; s: number; r: number; o: number };

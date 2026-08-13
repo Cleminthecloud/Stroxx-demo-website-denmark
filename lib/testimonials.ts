@@ -34,7 +34,7 @@ export const testimonials: Testimonial[] = [
     trades: ['carpenter', 'electrician', 'plumber'],
   },
   {
-    quote: 'A line laser at that price sounded too good to be true. It stays razor sharp, even in daylight.',
+    quote: 'I did not expect this much from a laser I had not heard of. It stays razor sharp, even in daylight.',
     name: 'Søren B.',
     role: 'Bricklayer, Vejle',
     rating: 5,

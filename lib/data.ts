@@ -64,7 +64,7 @@ export type Category = {
 
 export const categories: Category[] = [
   { slug: 'access-control', name: 'Access control', path: 'stroxx-adgangskontrol', blurb: 'Locks, fittings and access. Control who gets in.' },
-  { slug: 'workwear', name: 'Workwear', path: 'stroxx-arbejdstoej', blurb: 'Gear that survives a hard day. Without costing a full wage.' },
+  { slug: 'workwear', name: 'Workwear', path: 'stroxx-arbejdstoej', blurb: 'Gear that survives a hard day. And the one after that.' },
   { slug: 'batteries', name: 'Batteries', path: 'stroxx-batterier', blurb: 'Power when you need it. Full stop.' },
   { slug: 'lighting', name: 'Lighting and accessories', path: 'stroxx-belysning', blurb: 'Light on the job: work lamps, headlamps and bulbs.' },
   { slug: 'bits-screwdrivers', name: 'Bits and screwdrivers', path: 'stroxx-haandvaerktoej/stroxx-bits-skruetraekkere', blurb: 'Grips that hold. Tips that bite. Every time.' },
@@ -74,7 +74,7 @@ export const categories: Category[] = [
   { slug: 'cable-reels', name: 'Cable reels', path: 'stroxx-kabeltromler', blurb: 'Power with enough reach. And the toughness for the site.' },
   { slug: 'chemicals', name: 'Chemicals and paint tools', path: 'stroxx-kemi', blurb: 'Glue, foam, cleaner and spray. The chemistry that just works.' },
   { slug: 'knives', name: 'Knives and blades', path: 'stroxx-haandvaerktoej/stroxx-arbejdsknive', blurb: 'Sharp from the start. Ready when you are.' },
-  { slug: 'lasers', name: 'Lasers and accessories', path: 'stroxx-lasere', blurb: 'Precision for pros, at a sharp price.' },
+  { slug: 'lasers', name: 'Lasers and accessories', path: 'stroxx-lasere', blurb: 'Precision you can set the whole job by.' },
   { slug: 'painting-tools', name: 'Painting gear and accessories', path: 'stroxx-malergrej-tilbehoer', blurb: 'Rollers, brushes and tape for a clean finish.' },
   { slug: 'multi-cutter-blades', name: 'Multi-cutter blades', path: 'stroxx-multicutterklinger', blurb: 'Blades for the multi-tool, for every awkward cut.' },
   { slug: 'measuring-tools', name: 'Measuring tools', path: 'stroxx-maalevaerktoej', blurb: 'Measure right. Cut once. Levels, squares and more.' },
@@ -87,7 +87,14 @@ export const categories: Category[] = [
 
 export const categoryBySlug = (slug: string) => categories.find((c) => c.slug === slug);
 
-export type Badge = 'POPULAR' | 'VALUE' | 'CAMPAIGN' | 'BEST IN TEST' | 'NEW' | 'OUTLET' | 'ECO';
+/** Badges must say something about the product, never about it being cheap.
+ *  STROXX sits at price index 80 to 90 against category leaders (Basixx owns
+ *  the low end), so clearance language works against the brand. 'OUTLET' was
+ *  removed 2026-08-13 for exactly that reason. 'BEST IN TEST' is the one badge
+ *  that raises perceived quality: it is deliberately kept and must only ever be
+ *  set from a real, citable test result.
+ *  See docs/STROXX-positioning-change-plan.md (P0.4, P1.5). */
+export type Badge = 'POPULAR' | 'VALUE' | 'CAMPAIGN' | 'BEST IN TEST' | 'NEW' | 'ECO';
 
 export type Product = {
   slug: string;
@@ -121,8 +128,7 @@ const p = (
   badges: opts.badges ?? [],
   blurb: opts.blurb ?? '',
   specs: opts.specs ?? [],
-  hero: opts.hero ?? false,
-});
+  hero: opts.hero ?? false});
 
 export const products: Product[] = [
   p("Hex key set 1,5-10mm", 47695, "bits-screwdrivers", {code:"30000071", tags:["bits-screwdrivers"], specs:[{"label":"Key width mm and inch","value":"1,5-10"},{"label":"Contents","value":"9"}]}),
@@ -134,19 +140,19 @@ export const products: Product[] = [
   p("Socket set 3/8\", 34 pcs", 161205, "socket-sets", {code:"30012435", tags:["socket-sets"], unit:"Set", badges:["VALUE"], specs:[{"label":"Square drive","value":"3/8\""},{"label":"Contents","value":"34 pcs"},{"label":"Code","value":"102-099"}]}),
   p("Metal drill bit HSS ground 7 edge 5,0mm", 51529, "drill-bits", {code:"32000063", tags:["drill-bits"], unit:"SB card", specs:[{"label":"Diameter mm","value":"5"},{"label":"Qty per bag","value":"1"}]}),
   p("Wood twist drill bit 4,0mm", 51531, "drill-bits", {code:"32000088", tags:["drill-bits"], specs:[{"label":"Diameter mm","value":"4"}]}),
-  p("SDS hammer drill bit 2-edge 8,0 x 250mm", 51414, "drill-bits", {code:"32000126", tags:["drill-bits"], badges:["OUTLET"], specs:[{"label":"Diameter mm","value":"8"},{"label":"Total length mm","value":"250"},{"label":"Flute length mm","value":"185"},{"label":"Contents","value":"1"},{"label":"Cutting edges","value":"2"}]}),
+  p("SDS hammer drill bit 2-edge 8,0 x 250mm", 51414, "drill-bits", {code:"32000126", tags:["drill-bits"], specs:[{"label":"Diameter mm","value":"8"},{"label":"Total length mm","value":"250"},{"label":"Flute length mm","value":"185"},{"label":"Contents","value":"1"},{"label":"Cutting edges","value":"2"}]}),
   p("Metal drill bit HSS ground cobolt 5,0mm 1 pcs", 53644, "drill-bits", {code:"32000249", tags:["drill-bits"], unit:"SB card", badges:["POPULAR"], specs:[{"label":"Diameter mm","value":"5"},{"label":"Total length mm","value":"86"},{"label":"Flute length mm","value":"52"},{"label":"Qty per bag","value":"1"}]}),
   p("Metal drill bit hss ground 2,0mm x 10 pcs", 51533, "drill-bits", {code:"32000319", tags:["drill-bits"], unit:"Pack", specs:[{"label":"Diameter mm","value":"2"},{"label":"Total length mm","value":"49"},{"label":"Flute length mm","value":"24"},{"label":"Qty per bag","value":"10"}]}),
-  p("Hole saw HSS bimetal 19mm", 51535, "hole-saws", {code:"32000377", tags:["hole-saws"], badges:["OUTLET","POPULAR"], specs:[{"label":"Diameter mm","value":"19"},{"label":"Cutting depth mm","value":"38"}]}),
-  p("Arbor XA1 14-30mm", 51547, "hole-saws", {code:"32000435", tags:["hole-saws"], badges:["OUTLET","POPULAR"], specs:[{"label":"For saw diameter mm","value":"14-30"},{"label":"Type","value":"XA1"},{"label":"Code","value":"500-504"}]}),
-  p("Pilot drill HM 6,3x200mm", 51549, "hole-saws", {code:"32000442", tags:["hole-saws"], badges:["OUTLET"], specs:[{"label":"Length mm","value":"200"},{"label":"Diameter mm","value":"63"},{"label":"Type","value":"HM"},{"label":"Code","value":"500-511"}]}),
+  p("Hole saw HSS bimetal 19mm", 51535, "hole-saws", {code:"32000377", tags:["hole-saws"], badges:["POPULAR"], specs:[{"label":"Diameter mm","value":"19"},{"label":"Cutting depth mm","value":"38"}]}),
+  p("Arbor XA1 14-30mm", 51547, "hole-saws", {code:"32000435", tags:["hole-saws"], badges:["POPULAR"], specs:[{"label":"For saw diameter mm","value":"14-30"},{"label":"Type","value":"XA1"},{"label":"Code","value":"500-504"}]}),
+  p("Pilot drill HM 6,3x200mm", 51549, "hole-saws", {code:"32000442", tags:["hole-saws"], specs:[{"label":"Length mm","value":"200"},{"label":"Diameter mm","value":"63"},{"label":"Type","value":"HM"},{"label":"Code","value":"500-511"}]}),
   p("Drill bit set HSS 1-10mm / 0,5mm ground, 19 pcs", 51608, "drill-bits", {code:"32000459", tags:["drill-bits"], unit:"Set", specs:[{"label":"Contents","value":"19"}]}),
   p("Drill bit set HSS 1-13mm / 0,5mm ground, 25 pcs", 51611, "drill-bits", {code:"32000460", tags:["drill-bits"], unit:"Set", specs:[{"label":"Contents","value":"25"}]}),
   p("Drill bit set HSS 1-10mm / 0,5mm ground, 100 pcs", 51604, "drill-bits", {code:"32000461", tags:["drill-bits"], unit:"Set", badges:["VALUE","POPULAR"], specs:[{"label":"Contents","value":"100"}]}),
   p("Drill bit set HSS cobolt 1-10mm / 0,5mm ground, 100 pcs", 51603, "drill-bits", {code:"32000463", tags:["drill-bits"], unit:"Set", specs:[{"label":"Contents","value":"100"}]}),
   p("Wood drill bit set 1/4\"-shank 5 pcs, 60 mm", 51628, "drill-bits", {code:"32000468", tags:["drill-bits"], unit:"Set", badges:["POPULAR"], specs:[{"label":"Size mm","value":"3-8"},{"label":"Contents","value":"5"}]}),
   p("Wood drill bit set 1/4\"-shank 5 pcs, 130 mm", 51620, "drill-bits", {code:"32000471", tags:["drill-bits"], unit:"Set", badges:["POPULAR"], specs:[{"label":"Contents","value":"5"}]}),
-  p("Masonry drill bit Multi construction 4,0 x 70mm", 51626, "drill-bits", {code:"32000477", tags:["drill-bits"], badges:["OUTLET","POPULAR"], specs:[{"label":"Diameter mm","value":"4"},{"label":"Total length mm","value":"70"}]}),
+  p("Masonry drill bit Multi construction 4,0 x 70mm", 51626, "drill-bits", {code:"32000477", tags:["drill-bits"], badges:["POPULAR"], specs:[{"label":"Diameter mm","value":"4"},{"label":"Total length mm","value":"70"}]}),
   p("SDS hammer drill bit 4-edge 5,0x110", 51426, "drill-bits", {code:"32008576", tags:["drill-bits"], badges:["POPULAR"], specs:[{"label":"Diameter mm","value":"5"},{"label":"Total length mm","value":"110"},{"label":"Flute length mm","value":"50"},{"label":"Contents","value":"1"},{"label":"Cutting edges","value":"4"}]}),
   p("SDS hammer drill bitset 4-edge 7 pcs", 51140, "drill-bits", {code:"32008644", tags:["drill-bits"], unit:"Set", badges:["CAMPAIGN"], specs:[{"label":"Contents","value":"7"},{"label":"Code","value":"500-580"}]}),
   p("SDS hammer drill bit 4-edge 6,0x110 a 10 pcs", 51427, "drill-bits", {code:"32008647", tags:["drill-bits"], unit:"Pack", specs:[{"label":"Diameter mm","value":"6"},{"label":"Total length mm","value":"110"},{"label":"Flute length mm","value":"50"},{"label":"Contents","value":"10"},{"label":"Cutting edges","value":"4"}]}),
@@ -182,11 +188,11 @@ export const products: Product[] = [
   p("Drill bit set hss 1-10 / 0,5mm ground a19", 64832, "drill-bits", {code:"32031800", tags:["drill-bits"], badges:["VALUE","POPULAR"], specs:[{"label":"Size mm","value":"1-10"},{"label":"Contents","value":"19"},{"label":"Code","value":"STROXX"}]}),
   p("Drill bit set HSS ground with centre tip 1,0-13,0X0,5 mm, 25 pcs.", 39200, "drill-bits", {code:"32031805", tags:["drill-bits"], specs:[{"label":"Size mm","value":"1-13"},{"label":"Contents","value":"25"},{"label":"Code","value":"STROXX"}]}),
   p("Drill bit set Cobolt 1-10 / 0,5mm ground a19", 39220, "drill-bits", {code:"32032300", tags:["drill-bits"], specs:[{"label":"Size mm","value":"1-10"},{"label":"Contents","value":"19"},{"label":"Code","value":"STROXX"}]}),
-  p("Bits PZ2 1/4\" x 25mm, pak af 20 pcs", 67473, "bits-screwdrivers", {code:"33000060", tags:["bits-screwdrivers"], unit:"Pack", badges:["OUTLET","POPULAR"], specs:[{"label":"Drive size","value":"PZ2"},{"label":"Length mm","value":"25"},{"label":"Qty per pack","value":"20"}]}),
-  p("Bits PZ2 1/4\" x 25mm, pak af 20 pcs", 56633, "bits-screwdrivers", {code:"33008845", tags:["bits-screwdrivers"], unit:"Pack", badges:["OUTLET"], specs:[{"label":"Drive size","value":"PZ2"},{"label":"Length mm","value":"25"},{"label":"Qty per pack","value":"20"}]}),
+  p("Bits PZ2 1/4\" x 25mm, pak af 20 pcs", 67473, "bits-screwdrivers", {code:"33000060", tags:["bits-screwdrivers"], unit:"Pack", badges:["POPULAR"], specs:[{"label":"Drive size","value":"PZ2"},{"label":"Length mm","value":"25"},{"label":"Qty per pack","value":"20"}]}),
+  p("Bits PZ2 1/4\" x 25mm, pak af 20 pcs", 56633, "bits-screwdrivers", {code:"33008845", tags:["bits-screwdrivers"], unit:"Pack", specs:[{"label":"Drive size","value":"PZ2"},{"label":"Length mm","value":"25"},{"label":"Qty per pack","value":"20"}]}),
   p("Angle bit adapter with quick change", 65253, "bits-screwdrivers", {code:"33008996", tags:["bits-screwdrivers"], badges:["VALUE"], specs:[{"label":"Qty per pack","value":"1"},{"label":"Code","value":"100-597"}]}),
-  p("Bits PH1 1/4\" x 90mm, 3-pak", 53321, "bits-screwdrivers", {code:"33009001", tags:["bits-screwdrivers"], unit:"Pack", badges:["OUTLET"], specs:[{"label":"Drive size","value":"PH1"},{"label":"Length mm","value":"90"},{"label":"Qty per pack","value":"3"},{"label":"Code","value":"100-660"}]}),
-  p("Bits PZ3 1/4\" x 90mm, 3-pak", 53322, "bits-screwdrivers", {code:"33009006", tags:["bits-screwdrivers"], unit:"Pack", badges:["OUTLET"], specs:[{"label":"Drive size","value":"PZ3"},{"label":"Length mm","value":"90"},{"label":"Qty per pack","value":"3"},{"label":"Code","value":"100-665"}]}),
+  p("Bits PH1 1/4\" x 90mm, 3-pak", 53321, "bits-screwdrivers", {code:"33009001", tags:["bits-screwdrivers"], unit:"Pack", specs:[{"label":"Drive size","value":"PH1"},{"label":"Length mm","value":"90"},{"label":"Qty per pack","value":"3"},{"label":"Code","value":"100-660"}]}),
+  p("Bits PZ3 1/4\" x 90mm, 3-pak", 53322, "bits-screwdrivers", {code:"33009006", tags:["bits-screwdrivers"], unit:"Pack", specs:[{"label":"Drive size","value":"PZ3"},{"label":"Length mm","value":"90"},{"label":"Qty per pack","value":"3"},{"label":"Code","value":"100-665"}]}),
   p("Bit screwdriver set 89mm, 17 pcs", 110503, "bits-screwdrivers", {code:"33011379", tags:["bits-screwdrivers"], specs:[{"label":"Blade length mm","value":"89"},{"label":"Contents","value":"17"},{"label":"Code","value":"100-850"}]}),
   p("Bit set impact, 32 pcs", 107900, "bits-screwdrivers", {code:"33011400", tags:["bits-screwdrivers"], badges:["VALUE"], specs:[{"label":"Contents","value":"32 pcs"},{"label":"Code","value":"101-177"}]}),
   p("Bit holder Quick lock impact 1/4\" x 60mm, x 3 pcs", 108094, "bits-screwdrivers", {code:"33011401", tags:["bits-screwdrivers"], unit:"Pack", badges:["VALUE","POPULAR"], specs:[{"label":"External dimension mm","value":"1/4\""},{"label":"Length mm","value":"60"}]}),
@@ -259,14 +265,14 @@ export const products: Product[] = [
   p("Tripod stand 1,6 mtr.", 139961, "lasers", {code:"35008533", tags:["lasers","measuring-tools"], specs:[{"label":"Max. height cm","value":"160"}]}),
   p("Laser staff 2,4 mtr.", 51347, "lasers", {code:"35008534", tags:["lasers","measuring-tools"], specs:[{"label":"Length cm","value":"240"}]}),
   p("Batteri 3,7V Li-Ion for STROXX line laser", 159929, "lasers", {code:"35011326", tags:["lasers"], badges:["POPULAR"], specs:[{"label":"Code","value":"BALI-3.7V(B"}]}),
-  p("Receiver for line laser 3D Green Compact laser", 102384, "lasers", {code:"35011373", tags:["lasers","measuring-tools"], badges:["OUTLET"], specs:[{"label":"Accuracy","value":"±1 mm / 10 m."},{"label":"Code","value":"101-126"}]}),
-  p("Receiver for line laser 3D Green Motorized laser", 102389, "lasers", {code:"35011374", tags:["lasers","measuring-tools"], badges:["OUTLET"], specs:[{"label":"Accuracy","value":"±1 mm / 10 m"},{"label":"Code","value":"101-127"}]}),
+  p("Receiver for line laser 3D Green Compact laser", 102384, "lasers", {code:"35011373", tags:["lasers","measuring-tools"], specs:[{"label":"Accuracy","value":"±1 mm / 10 m."},{"label":"Code","value":"101-126"}]}),
+  p("Receiver for line laser 3D Green Motorized laser", 102389, "lasers", {code:"35011374", tags:["lasers","measuring-tools"], specs:[{"label":"Accuracy","value":"±1 mm / 10 m"},{"label":"Code","value":"101-127"}]}),
   p("Charger for line laser 3D Green Atom Compact laser", 102393, "lasers", {code:"35011375", tags:["lasers"], specs:[{"label":"Length mm","value":"800"},{"label":"Code","value":"101-128"}]}),
   p("Batteri for line laser 3D Green Motorized", 102409, "lasers", {code:"35011378", tags:["lasers"], specs:[{"label":"Code","value":"101-131"}]}),
   p("Vacuum extractor for cross/line laser and drill dust", 130353, "lasers", {code:"35011417", tags:["lasers","measuring-tools"], specs:[{"label":"Code","value":"101-215"}]}),
   p("Rotary laser red", 114346, "lasers", {code:"35011418", tags:["lasers","measuring-tools"], specs:[{"label":"Accuracy","value":"±20\" (1 mm / 10 m)"},{"label":"Range m / receiver box m","value":"200"},{"label":"Code","value":"101-132"}]}),
-  p("Tripod stand Heavy duty 1,6 m", 131603, "lasers", {code:"35011419", tags:["lasers","measuring-tools"], badges:["OUTLET"], specs:[{"label":"Code","value":"101-133"}]}),
-  p("Laser staff 2,4 m", 117107, "lasers", {code:"35011420", tags:["lasers","measuring-tools"], badges:["OUTLET"], specs:[{"label":"Code","value":"101-134"}]}),
+  p("Tripod stand Heavy duty 1,6 m", 131603, "lasers", {code:"35011419", tags:["lasers","measuring-tools"], specs:[{"label":"Code","value":"101-133"}]}),
+  p("Laser staff 2,4 m", 117107, "lasers", {code:"35011420", tags:["lasers","measuring-tools"], specs:[{"label":"Code","value":"101-134"}]}),
   p("Receiver heavy duty with millimetre", 143444, "lasers", {code:"35011421", tags:["lasers","measuring-tools"], specs:[{"label":"Code","value":"101-135"}]}),
   p("Spirit level Digital 25 cm", 108221, "measuring-tools", {code:"35011495", tags:["measuring-tools"], badges:["POPULAR"], specs:[{"label":"Length mm","value":"250"},{"label":"Number of vials","value":"2"},{"label":"Code","value":"101-313"}]}),
   p("Spirit level Digital 60 cm", 108228, "measuring-tools", {code:"35011496", tags:["measuring-tools"], specs:[{"label":"Length mm","value":"600"},{"label":"Number of vials","value":"2"},{"label":"Code","value":"101-314"}]}),
@@ -291,7 +297,7 @@ export const products: Product[] = [
   p("Laser set with 3 lasere and skinne 2 m", 170576, "lasers", {code:"35011958", tags:["lasers","measuring-tools"], unit:"Set", specs:[{"label":"Code","value":"Laser set"}]}),
   p("Receiver Universal 60 m for laser", 169229, "lasers", {code:"35011992", tags:["lasers"], specs:[{"label":"Accuracy","value":"±1 mm / 10 m"},{"label":"Length cm","value":"6000"},{"label":"Code","value":"102-321"}]}),
   p("Line laser 3D Green and trefod 1,5 m", 192863, "lasers", {code:"35012024", tags:["lasers","measuring-tools"], unit:"Set", specs:[{"label":"Accuracy","value":"±1.5 mm / 10 m"},{"label":"Range m","value":"40"},{"label":"Range m / receiver box m","value":"70"},{"label":"Self-levelling range","value":"±5°"},{"label":"Code","value":"102-405+102-402"}]}),
-  p("Receiver laser Red", 59485, "lasers", {code:"35987062", tags:["lasers","measuring-tools"], badges:["OUTLET","POPULAR"], specs:[{"label":"Length cm","value":"14,8"},{"label":"Material","value":"Plastic"}]}),
+  p("Receiver laser Red", 59485, "lasers", {code:"35987062", tags:["lasers","measuring-tools"], badges:["POPULAR"], specs:[{"label":"Length cm","value":"14,8"},{"label":"Material","value":"Plastic"}]}),
   p("Lock spray 100 ml", 59861, "chemicals", {code:"36000032", tags:["chemicals"], unit:"Can", badges:["VALUE"], specs:[{"label":"Contents","value":"100 ml"},{"label":"Code","value":"100-344"}]}),
   p("Lubricant Unique Oil with PTFE, 200ml", 59863, "chemicals", {code:"36000033", tags:["chemicals"], unit:"Can", badges:["VALUE"], specs:[{"label":"Contents","value":"200 ml"},{"label":"Code","value":"100-342"}]}),
   p("Drilling/cutting oil, kulsyre, 500 ml", 53360, "chemicals", {code:"36007713", tags:["chemicals"], unit:"Can", badges:["POPULAR"], specs:[{"label":"Contents","value":"500ml"},{"label":"Code","value":"100-709"}]}),
@@ -432,11 +438,11 @@ export const products: Product[] = [
   p("Batteri Alkaline D LR20 Extreme x 2 pcs", 51046, "batteries", {code:"55000180", tags:["batteries"], unit:"SB card", specs:[{"label":"Type","value":"D - LR20"},{"label":"Code","value":"100-440"}]}),
   p("Work light LED 55 W - 600-6000 lumen", 51024, "lighting", {code:"55000195", tags:["lighting"], badges:["VALUE","POPULAR"], specs:[{"label":"Lumens","value":"6000"},{"label":"Watt","value":"60"},{"label":"Code","value":"100-776"}]}),
   p("Power bank/hand warmer, 5.200 mAh", 54994, "site-hut-supplies", {code:"55009003", tags:["site-hut-supplies"], specs:[{"label":"Capacity mAh","value":"5200"},{"label":"Colour","value":"Black"},{"label":"Code","value":"100-712"}]}),
-  p("Charging cable 5m with quick coupling", 170580, "site-hut-supplies", {code:"55009020", tags:["site-hut-supplies"], badges:["OUTLET"], specs:[{"label":"Length cm","value":"500"},{"label":"Code","value":"100-219"}]}),
+  p("Charging cable 5m with quick coupling", 170580, "site-hut-supplies", {code:"55009020", tags:["site-hut-supplies"], specs:[{"label":"Length cm","value":"500"},{"label":"Code","value":"100-219"}]}),
   p("Cable reel 25 m, with earth, 4 outlets, fixed core", 61110, "cable-reels", {code:"55009028", tags:["cable-reels"], specs:[{"label":"Dimension mm²","value":"3x1,5 mm2"},{"label":"Length m","value":"25"},{"label":"Type","value":"4 outlets"}]}),
   p("Cable reel 40 m, with earth, 4 outlets, fixed core", 61112, "cable-reels", {code:"55009029", tags:["cable-reels"], specs:[{"label":"Dimension mm²","value":"3x1,5 mm2"},{"label":"Length m","value":"40"},{"label":"Type","value":"4 outlets"}]}),
   p("Charging cable 5m for 30W arbejdslamper old model", 147437, "site-hut-supplies", {code:"55009041", tags:["site-hut-supplies"], specs:[{"label":"Length cm","value":"50"},{"label":"Code","value":"100-220"}]}),
-  p("Work light rechargeable, 22 W", 67086, "lighting", {code:"55011127", tags:["lighting"], badges:["OUTLET"], specs:[{"label":"Lumens","value":"2100"},{"label":"Watt","value":"22"},{"label":"Kelvin","value":"4500"},{"label":"Classification","value":"IP65"},{"label":"Code","value":"100-772"}]}),
+  p("Work light rechargeable, 22 W", 67086, "lighting", {code:"55011127", tags:["lighting"], specs:[{"label":"Lumens","value":"2100"},{"label":"Watt","value":"22"},{"label":"Kelvin","value":"4500"},{"label":"Classification","value":"IP65"},{"label":"Code","value":"100-772"}]}),
   p("Headlamp 200L", 62554, "lighting", {code:"55011140", tags:["lighting"], specs:[{"label":"Lumens","value":"200"},{"label":"Burn time hours","value":"190"},{"label":"Battery type","value":"AAA"},{"label":"Weight grams","value":"62"},{"label":"Code","value":"100-590"}]}),
   p("Rechargeable batteries 950 mAh AAA, x 4 pcs", 76376, "batteries", {code:"55011397", tags:["batteries"], unit:"Pack", badges:["VALUE"], specs:[{"label":"Type","value":"AAA"},{"label":"Qty per pack","value":"4"},{"label":"Code","value":"101-059"}]}),
   p("Rechargeable batteries 2600 Mah AA, x 4 pcs", 76381, "batteries", {code:"55011398", tags:["batteries"], unit:"Pack", badges:["VALUE"], specs:[{"label":"Type","value":"AA"},{"label":"Qty per pack","value":"4"},{"label":"Code","value":"101-060"}]}),
@@ -456,7 +462,7 @@ export const products: Product[] = [
   p("Batteri coin cell CR2032, pack of 5 pcs", 143376, "batteries", {code:"55011756", tags:["batteries"], unit:"Pack", specs:[{"label":"Type","value":"CR2032"},{"label":"Qty per pack","value":"5"},{"label":"Code","value":"101-719"}]}),
   p("Charging cable USB-A for USB-C black 1,2 m", 144550, "site-hut-supplies", {code:"55011763", tags:["site-hut-supplies"], badges:["POPULAR"], specs:[{"label":"Length cm","value":"120"},{"label":"Type","value":"USB-A for USB-C"},{"label":"Code","value":"101-691"}]}),
   p("Charging cable USB-C for lightning black 1,2 m, fast charge 3 amp", 143381, "site-hut-supplies", {code:"55011766", tags:["site-hut-supplies"], specs:[{"label":"Length cm","value":"120"},{"label":"Type","value":"USB-C"},{"label":"Code","value":"101-694"}]}),
-  p("Car charger black \"Fast Charge\" Input: DC 12-24V", 144479, "site-hut-supplies", {code:"55011767", tags:["site-hut-supplies"], badges:["OUTLET"], specs:[{"label":"Type","value":"DC 12-24V"},{"label":"Code","value":"101-695"}]}),
+  p("Car charger black \"Fast Charge\" Input: DC 12-24V", 144479, "site-hut-supplies", {code:"55011767", tags:["site-hut-supplies"], specs:[{"label":"Type","value":"DC 12-24V"},{"label":"Code","value":"101-695"}]}),
   p("Work light LED 4 lights, 14.000 Lumen, 230 V with trefod", 151942, "lighting", {code:"55011789", tags:["lighting"], unit:"Set", specs:[{"label":"Lumens","value":"14.000"},{"label":"Classification","value":"IP54"},{"label":"Cable length m","value":"3"},{"label":"Code","value":"102-195"}]}),
   p("Work light LED 2 Lights swivel, 5.500 Lumen, 230 V", 152580, "lighting", {code:"55011790", tags:["lighting"], specs:[{"label":"Lumens","value":"5.500"},{"label":"Watt","value":"30"},{"label":"Classification","value":"IP54"},{"label":"Cable length m","value":"1.8"},{"label":"Code","value":"102-197"}]}),
   p("Work light LED 360° Clips, 5.000 lumen, 230 V", 152587, "lighting", {code:"55011791", tags:["lighting"], specs:[{"label":"Lumens","value":"5.000"},{"label":"Classification","value":"IP55"},{"label":"Cable length m","value":"5"},{"label":"Code","value":"102-198"}]}),
@@ -477,7 +483,7 @@ export const products: Product[] = [
   p("Base layer top L/Æ Black/grey, size M", 122930, "workwear", {code:"63117583", tags:["workwear"], badges:["POPULAR"], specs:[{"label":"Size","value":"M"},{"label":"Colour","value":"Black"},{"label":"Gender","value":"Men"}]}),
   p("Base layer bottoms Black/grey, size L", 122797, "workwear", {code:"63117588", tags:["workwear"], unit:"Pair", specs:[{"label":"Size","value":"L"},{"label":"Colour","value":"Black"},{"label":"Gender","value":"Men"}]}),
   p("Beanie with headlamp Black, One size", 156523, "workwear", {code:"63143492", tags:["workwear"], badges:["NEW"], specs:[{"label":"Size","value":"One size"},{"label":"Colour","value":"Black"}]}),
-  p("Hand dispenser with sensor + LED display 0,5L", 103157, "site-hut-supplies", {code:"64011335", tags:["site-hut-supplies"], badges:["OUTLET","POPULAR"], specs:[{"label":"Contents","value":"0,5 L"},{"label":"Code","value":"PW-MS"}]}),
+  p("Hand dispenser with sensor + LED display 0,5L", 103157, "site-hut-supplies", {code:"64011335", tags:["site-hut-supplies"], badges:["POPULAR"], specs:[{"label":"Contents","value":"0,5 L"},{"label":"Code","value":"PW-MS"}]}),
   p("Thermos flask black, 500 ml", 129544, "site-hut-supplies", {code:"64011383", tags:["site-hut-supplies"], badges:["POPULAR"], specs:[{"label":"Contents","value":"500 ml"},{"label":"Code","value":"101-158"}]}),
   p("Hand cleaner Extreme 250 ml", 119292, "site-hut-supplies", {code:"64011709", tags:["site-hut-supplies"], badges:["POPULAR"], specs:[{"label":"Contents","value":"250 ml"},{"label":"Type","value":"Extreme"},{"label":"Code","value":"101-392"}]}),
   p("Hand cream lotion 250 ml", 119283, "site-hut-supplies", {code:"64011710", tags:["site-hut-supplies"], specs:[{"label":"Contents","value":"250 ml"},{"label":"Type","value":"Lotion"},{"label":"Code","value":"101-394"}]}),
@@ -497,8 +503,7 @@ export const brandImages = {
   square04: '/brand/cabinet.jpg',
   og: '/brand/og.jpg',
   logoWhite: '/brand/logo-white.svg',
-  guaranteeFilm: '/films/sticker.mp4',
-};
+  guaranteeFilm: '/films/sticker.mp4'};
 
 /** Real category lifestyle image shipped in /public/categories. */
 export const categoryImage = (slug: string) => `/categories/${slug}.jpg`;

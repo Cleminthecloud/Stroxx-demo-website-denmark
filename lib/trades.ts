@@ -34,7 +34,7 @@ export const trades: Trade[] = [
   {
     slug: 'electrician',
     name: 'Electrician',
-    title: 'Power on the job. *Not on the price.*',
+    title: 'Power on the job. *Where it counts.*',
     blurb:
       'Hole saws for back boxes, bits that bite, cable reels that survive the site, and light that turns night work into day work.',
     categories: ['hole-saws', 'bits-screwdrivers', 'cable-reels', 'lighting', 'multi-cutter-blades', 'measuring-tools'],
@@ -52,7 +52,7 @@ export const trades: Trade[] = [
   {
     slug: 'plumber',
     name: 'Plumber',
-    title: 'Tight work. *Tight prices.*',
+    title: 'Tight work. *Tight tolerances.*',
     blurb:
       'Socket sets that grip, hole saws for pass-throughs, sealant that seals, and measuring tools you can trust in a wet basement.',
     categories: ['socket-sets', 'hole-saws', 'drill-bits', 'sealant', 'measuring-tools', 'knives'],
@@ -77,7 +77,7 @@ export const trades: Trade[] = [
     faq: [
       {
         q: 'What does STROXX painting gear cover?',
-        a: 'Rollers, brushes, masking tape, sheeting, sealant and chemicals like cleaners and sprays, plus sharp knives for trimming. Professional quality at a price that does not eat your margin.',
+        a: 'Rollers, brushes, masking tape, sheeting, sealant and chemicals like cleaners and sprays, plus sharp knives for trimming. Professional quality that holds up across a whole job.',
       },
       {
         q: 'Does cheap masking tape not mean adhesion problems?',
@@ -88,7 +88,7 @@ export const trades: Trade[] = [
   {
     slug: 'bricklayer',
     name: 'Bricklayer',
-    title: 'Hard ground. *Soft price.*',
+    title: 'Hard ground. *Harder tools.*',
     blurb:
       'Masonry and hammer drills that chew through concrete, lasers that set the line, and safety gear so you get home in one piece.',
     categories: ['drill-bits', 'lasers', 'measuring-tools', 'safety', 'chemicals'],
