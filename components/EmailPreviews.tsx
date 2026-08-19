@@ -26,8 +26,8 @@ const TEMPLATES: Template[] = [
     file: 'stroxx-maanedens-juni.html',
     no: '01',
     name: 'Tool of the Month (SKA)',
-    subject: 'One story. Five favorites. Two new arrivals.',
-    preheader: 'STROXX Tool of the Month: Line Laser 3D Green, plus five favorites the crew already knows.',
+    subject: 'One story. Five favorites. Smart access news.',
+    preheader: 'STROXX Tool of the Month: Smart Lock ST-3 stainless, plus five favorites from the Smart Lock family.',
   },
   {
     file: 'stroxx-velkomst.html',
