@@ -59,25 +59,9 @@ export const trade = defineType({
       name: 'title',
       title: 'Page headline',
       type: 'string',
-      description: 'The big h1 on the trade page, e.g. "Power on the job. Every day."',
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: 'accent',
-      title: 'Blue part of the headline',
-      type: 'string',
       description:
-        'The exact ending of the headline rendered in STROXX blue. Must match the headline text exactly, e.g. "Every day."',
-      validation: (r) =>
-        r
-          .custom((accent, context) => {
-            const headline = (context.document as { title?: string } | undefined)?.title;
-            if (!accent || !headline) return true;
-            return headline.trimEnd().endsWith(String(accent).trim())
-              ? true
-              : 'The headline does not end with this text, so the blue accent will not show. Copy the exact ending of the headline.';
-          })
-          .warning(),
+        'The big h1 on the trade page. Wrap the words that should render in STROXX blue in asterisks, same as everywhere else: "Power on the job. *Every day.*"',
+      validation: (r) => r.required(),
     }),
     defineField({
       name: 'blurb',

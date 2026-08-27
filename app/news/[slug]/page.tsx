@@ -57,7 +57,11 @@ const anchorId = (text: string) =>
   stegaClean(text).toLowerCase().replace(/[^a-z0-9æøå]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
 
 type Block = { _type?: string; style?: string; children?: { text?: string }[] };
-const blockText = (b: Block) => (b.children ?? []).map((c) => c.text ?? '').join('');
+/* stegaClean is LOAD-BEARING here: in draft/presentation mode every string
+   carries invisible stega characters that MATCH \s, so an uncleaned split
+   counts each payload as dozens of phantom words (a 3-minute article once
+   showed "55 min read" in preview). */
+const blockText = (b: Block) => stegaClean((b.children ?? []).map((c) => c.text ?? '').join(''));
 
 /* the reading column is 42rem; these classes push media WIDER than the text,
    the long-form breathing room every good editorial layout uses. Breakout
@@ -110,7 +114,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   /* reading time + jump list, derived from the body itself */
   const blocks = (doc.body ?? []) as Block[];
   const words = blocks.filter((b) => b._type === 'block').reduce((a, b) => a + blockText(b).split(/\s+/).filter(Boolean).length, 0);
-  const minutes = Math.max(1, Math.round(words / 220));
+  /* 220 wpm plus 12 seconds per inline image, the standard estimate */
+  const images = blocks.filter((b) => b._type === 'image').length;
+  const minutes = Math.max(1, Math.round(words / 220 + (images * 12) / 60));
   const headings = blocks.filter((b) => b._type === 'block' && b.style === 'h2').map(blockText).filter(Boolean);
 
   const jsonLd = {

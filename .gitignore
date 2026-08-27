@@ -35,3 +35,9 @@ backups/
 /Meena videos/
 
 /_to_delete/
+.env*
+
+# leavings of scripts/build-handover-docs.py: xelatex drops missfont.log in the
+# working directory, and python caches the script next to it
+missfont.log
+__pycache__/

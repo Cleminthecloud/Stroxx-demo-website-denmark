@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { SITE_URL } from '@/lib/site';
 import {
   CONSENT_COOKIE,
   confirmPermission,
@@ -52,15 +53,32 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'invalid-link' }, { status: 400 });
   }
 
+  /* A real person's browser follows this link, so it must land somewhere
+     human, not on a JSON blob. `next` is attacker-controllable, so it is only
+     honoured when it is on our own origin: an open redirect here would let a
+     confirmation email point anywhere. */
+  const next = url.searchParams.get('next') || '';
+  const land = (() => {
+    if (!next) return null;
+    try {
+      const u = new URL(next, SITE_URL);
+      return u.origin === new URL(SITE_URL).origin ? u.toString() : null;
+    } catch {
+      return null;
+    }
+  })();
+  const reply = (ok: boolean) =>
+    land ? NextResponse.redirect(land, 303) : NextResponse.json({ ok });
+
   if (action === 'withdraw') {
     const done = await withdrawPermission(id);
-    const res = NextResponse.json({ ok: done });
+    const res = reply(done);
     res.cookies.delete(CONSENT_COOKIE);
     return res;
   }
 
   const done = await confirmPermission(id);
-  const res = NextResponse.json({ ok: done });
+  const res = reply(done);
   /* The interest cookie is issued here and nowhere else. It points at a record
      whose owner has just proved control of the address; lib/permissions still
      re-reads the record before every write, so the cookie is a pointer, never

@@ -7,7 +7,8 @@ import { stegaClean } from '@sanity/client/stega';
 import { getMarkets } from '@/lib/cms';
 import { resolveOpsMarket } from '@/lib/markets';
 import { resolveSecret } from '@/lib/newsletter-secrets';
-import { recordPermission, type PermissionStatus } from '@/lib/permissions';
+import { permissionId, permissionToken, recordPermission, type PermissionStatus } from '@/lib/permissions';
+import { SITE_URL } from '@/lib/site';
 import { projectId, dataset } from '@/sanity/env';
 
 /** Newsletter signups, provider-agnostic and PER MARKET. Which platform (and
@@ -178,9 +179,30 @@ export async function POST(req: NextRequest) {
       if (templateId > 0 && !redirectionUrl) {
         console.warn(`[newsletter] market ${market.code}: Brevo double opt-in template set but no confirmation landing page; falling back to a direct contact create`);
       }
+      /* The confirmation link comes back through US, not straight to a thank-you
+         page. Brevo's redirectionUrl is per-request, so we hang this signup's
+         record id and its keyed token on it: the person's browser then lands on
+         /api/newsletter/confirm, which is the one place allowed to mark a
+         record confirmed and to issue the interest cookie. Without this the
+         confirmation would happen entirely inside Brevo and our own record
+         would sit at 'pending' forever. The webhook is the backstop for people
+         whose browser never completes the redirect. */
       const url = doi ? 'https://api.brevo.com/v3/contacts/doubleOptinConfirmation' : 'https://api.brevo.com/v3/contacts';
+      let confirmUrl = redirectionUrl;
+      if (doi) {
+        const id = permissionId(email, market.code);
+        const t = permissionToken(id);
+        /* No key configured means no token, and a confirmation link without one
+           would be guessable, so in that case we simply send them to the
+           landing page and let the webhook do the confirming. */
+        if (t) {
+          confirmUrl =
+            `${SITE_URL}/api/newsletter/confirm?id=${encodeURIComponent(id)}&t=${t}` +
+            `&next=${encodeURIComponent(redirectionUrl)}`;
+        }
+      }
       const body = doi
-        ? { email, includeListIds: [list], templateId, redirectionUrl, attributes }
+        ? { email, includeListIds: [list], templateId, redirectionUrl: confirmUrl, attributes }
         : { email, listIds: [list], updateEnabled: true, attributes };
       const r = await fetch(url, {
         method: 'POST',

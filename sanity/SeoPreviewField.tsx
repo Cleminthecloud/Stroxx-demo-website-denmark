@@ -61,8 +61,10 @@ export default function SeoPreviewField() {
     (heroPath && heroPath.startsWith('/') ? `${origin}${heroPath}` : undefined);
   // Prefix the path with the document language's market path (/dk, /be/nl, ...),
   // so a translated document previews its own market's live URL, not the root.
+  const docType = useFormValue(['_type']) as string | undefined;
   const langPrefix = localeById(language)?.path ?? '';
-  const pagePath = slug ? (slug === 'try-it' ? '/try-it' : `/campaign/${slug}`) : '/';
+  const pagePath =
+    docType === 'tradesIndex' ? '/trades' : slug ? (slug === 'try-it' ? '/try-it' : `/campaign/${slug}`) : '/';
   const path = langPrefix ? `${langPrefix}${pagePath === '/' ? '' : pagePath}` : pagePath;
   const url = `${SITE_URL}${path}`;
 
