@@ -194,7 +194,7 @@ The cookie consent banner sits right next to it: paste your market's Cookiebot I
 
 ## 10a. Newsletter signups
 
-The newsletter is split by ownership. **The setup is per market** and lives on the Market document (Settings → Markets → your market → **Newsletter (provider + keys)** box): choose the email platform (Mailchimp, Klaviyo, Adobe Marketo, or "Other", a webhook for anything else, e.g. via Zapier), enter its key (encrypted in your browser before saving, so it is safe to enter there), set the audience/list ID and switch the signup on. A status light at the top of the box tells you whether the connection works. Belgium sets this up once; both languages use it. **The words are per language** and stay in Site settings → Newsletter tab: headline, text, button label, consent line, plus the band and popup switches and the popup rules.
+The newsletter is split by ownership. **The setup is per market** and lives on the Market document (Settings → Markets → your market → **Newsletter (provider + keys)** box): choose the email platform (Brevo, Mailchimp, Klaviyo, Adobe Marketo, or "Other", a webhook for anything else, e.g. via Zapier), enter its key (encrypted in your browser before saving, so it is safe to enter there), set the audience/list ID and switch the signup on. A status light at the top of the box tells you whether the connection works. Belgium sets this up once; both languages use it. **The words are per language** and stay in Site settings → Newsletter tab: headline, text, button label, consent line, plus the band and popup switches and the popup rules.
 
 Where signups appear:
 
@@ -203,6 +203,29 @@ Where signups appear:
 - **The landing-page block**: add a "Newsletter signup" section to any campaign page, with its own copy.
 
 All three send to the same platform, your market's. Switching provider later is changing one radio button on the Market document and entering the new platform's key in the fields that appear.
+
+**Brevo is the recommended platform.** Subscriber data stays in the EU on every Brevo plan at no extra cost, which none of the American tools offer without an enterprise contract. When you pick Brevo, fill in the **double opt-in template ID** as well: with it, Brevo sends the confirmation email and nobody joins the list until they click the link. That is the legal standard in Denmark and Germany, and leaving it empty needs a documented reason. The full comparison of sixteen platforms and what each costs is in the handover pack.
+
+## 10a-2. Permissions: your own consent database
+
+Every signup writes to **two** places: the email platform, which does the sending, and **your own permission record on stroxx.eu**, which holds the proof. Open it from the left-hand menu: **Permissions (newsletter consent)**.
+
+Why two. The email platform tells you somebody subscribed on a date. It cannot tell you the exact sentence they agreed to, and if you reword the consent line next year every record in the platform silently starts claiming the new wording. German law puts the burden of proving consent on the sender, so the record keeps a frozen copy of the words each person actually saw, along with the market, the page, the time and the version of the wording.
+
+What you can filter by, without asking a developer:
+
+- **All records**, newest first
+- **Confirmed (mailable)**, the only ones that may be sent to
+- **Pending confirmation**, where the confirmation email has gone out and the link has not been clicked
+- **Unsubscribed**
+- **Behaviour consent given**, the people who separately said yes to us noting what they look at
+- **One list per market**: Denmark, Germany, France, Belgium, International
+
+**These records are read-only, on purpose.** A consent record somebody typed by hand is not proof of anything. The site writes them; you read and filter them.
+
+**On "what they clicked and saw":** product and category pages are counted against a person's record only when that person ticked the separate behaviour box. It is never pre-ticked, never a condition of subscribing, and if they change their mind the history is deleted, not just stopped.
+
+**On sales data:** there is no sales filter and there cannot be one on our side. STROXX does not sell online, so the orders live in the dealer's systems and belong to the dealer. What a dealer can agree to share is an aggregated, non-personal signal. A list of their customers is not something we may receive, and it does not become allowed because the products are ours.
 
 ## 10b. The AI assistant, and how to train it
 
@@ -291,13 +314,17 @@ The site has a hidden test-drive page at **/test**: a short guide of six real jo
 
 Reports are read-only by design (the record of what testers actually said stays intact); only status and the internal note are yours to edit. Rule of thumb for inviting: send /test to colleagues, friendly customers and the client team, and ask for bluntness. One report per finding beats one long email.
 
-## 11. Products, prices and images (PIM and DAM)
+## 11. Products and images (PIM and DAM)
 
-**You never maintain products by hand.** The site reads the Carl Ras product range (358 STROXX products today) with names, specs, categories and photos. Editors only ever point at products by SKU.
+**You never maintain products by hand.** The site reads the Carl Ras product range (358 STROXX products today) with names, specs, categories and photos. Editors only ever point at products by SKU. **The site never shows prices anywhere:** pricing is the dealer's job, and a test in the build pipeline fails if a price ever reaches the catalogue.
 
 - **PIM (product data)**: currently a snapshot of the Carl Ras range. The production build connects directly to the Carl Ras product API on a schedule, so new products, name changes and assortment changes flow in automatically. If the feed ever fails, the site keeps the last good catalogue, it never goes blank.
 - **DAM (images)**: product photos come from the Carl Ras media bank (Digizuite), preferring the transparent cut-out renditions that make the dark design work. Production moves to a pre-processed image pipeline. Waiting on: API access and a bulk export of transparent renditions from the Carl Ras DAM team.
-- **Product augment (in the Studio now)**: a marketing layer per SKU: copy overrides, comparison reference prices, featured flags. The product feed stays the source of truth; this only decorates it. Comparison prices need legal sign-off per market before going live.
+- **Product augment (in the Studio now)**: a marketing layer per SKU: copy overrides, claims, featured flags. The product feed stays the source of truth; this only decorates it.
+
+**Where to find the settings for these:** Settings → **Data sources (PIM, DAM, sales)**. One document, three boxes, each with a status: Not started, Spec sent to IT, Credentials received and testing, Live. It records which system each feed comes from, how it reaches us, the address, the schedule, and who owns it on the dealer's IT side. Two things it deliberately does not do: it never holds a key (those live in the hosting environment), and filling it in does not start a sync. It records the agreement; the developer connects the pipe. Until 27 August 2026 these two fields hid on the "Technical (developer)" tab of Site settings, which is why nobody could find them.
+
+The third box, **Sales signal**, is usually empty and that is correct. STROXX does not sell online, so the brand holds no order data: every transaction happens in a dealer system and belongs to the dealer. An aggregated, non-personal signal is something a dealer can agree to share. A list of named customers is not, whatever the products.
 
 ## 12. Publishing, history and roles
 

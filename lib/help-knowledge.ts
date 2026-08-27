@@ -34,7 +34,9 @@ document types inside it. What's in each:
   page it appears on, including the chat switches and copy), SEO + AI engines,
   Newsletter (ONLY the form's words and popup rules; the on/off switch,
   provider and keys live on the Market document), and Technical (developer),
-  the last tab is the developer's, editors can leave it alone. One document
+  the last tab is the developer's, editors can leave it alone. The PIM and DAM
+  fields that used to sit on that last tab moved to their own "Data sources"
+  document in the Settings group on 27 August 2026. One document
   per language. NOTE: the dealer name, customer service phone, footer legal
   line, dealer logo, tracking IDs and newsletter setup come from the MARKET
   document (Settings group), not Site settings.
@@ -50,6 +52,15 @@ document types inside it. What's in each:
   newsletter empty. Dealer identity is maintained by the developer; the
   tracking and newsletter boxes are editable in the Studio. The footer, chat,
   mobile menu and guarantee pop-up all read from this document.
+- Data sources (Settings group): one document recording the systems the site
+  reads from but does not own: the PIM (product data), the DAM (product
+  imagery) and any sales signal, each with a status. Addresses and agreements
+  only, never keys, and filling it in does not start a sync.
+- Permission record (its own "Permissions" section in the left menu, above
+  Settings): one read-only record per person per market, written by the site
+  when someone signs up for the newsletter. Holds the frozen consent wording,
+  the market, the dealer, the language, the signup surface and the time. Comes
+  with ready-made filtered lists by status and by market.
 - Redirect (Support & QR codes group): old address to new address forwarding.
   The site creates these automatically when a page's slug changes on publish;
   editors rarely touch them by hand.
@@ -137,13 +148,58 @@ not set one. Related products show as a "Tools mentioned" row (first four).
 ### Newsletter
 Two places, split by ownership. THE SETUP lives on the Market document
 (Settings group, Markets, open your market): the "Newsletter (provider + keys)"
-box holds the on/off switch, the provider choice (Mailchimp / Klaviyo /
+box holds the on/off switch, the provider choice (Brevo / Mailchimp / Klaviyo /
 Marketo / webhook), its keys (encrypted in your browser before saving, so it
 is safe to enter them there) and the audience/list ID; the status light at the
 top of the box tells you if it is connected. Belgium enters this once, both
 languages use it. THE WORDS live in Site settings, "Newsletter" tab, one per
 language: headline, text, button label, consent line, the band and popup
 switches and the popup rules.
+
+Brevo is the recommended platform: subscriber data stays in the EU on every
+plan, which the American tools only offer on enterprise contracts. When you
+pick Brevo, also fill in the double opt-in template ID, so Brevo sends the
+confirmation email and nobody joins the list until they click the link. That
+is the legal standard in Denmark and Germany.
+
+### Permissions (the consent database)
+Left-hand menu, "Permissions (newsletter consent)". Every signup writes to two
+places: the email platform, which sends, and our own permission record on
+stroxx.eu, which holds the proof. The record keeps the EXACT consent wording
+the person saw, frozen, plus the market, the page, the surface (footer band,
+popup, landing block, Pro Club), the time and the version of the wording. That
+is what answers "prove what they agreed to" years later; an email platform can
+only tell you that somebody subscribed on a date.
+
+Ready-made filtered lists: All records, Confirmed (mailable), Pending
+confirmation, Unsubscribed, Behaviour consent given, and one per market
+(Denmark, Germany, France, Belgium, International). Only Confirmed records may
+be mailed.
+
+The records are READ-ONLY on purpose. The site writes them; you read and filter
+them. A consent record typed by hand is not proof of anything.
+
+Behaviour consent is a separate box, never pre-ticked and never a condition of
+subscribing. Only where someone ticks it do we note which product and category
+pages they look at, and if they change their mind that history is deleted, not
+just stopped.
+
+There is no sales filter and there cannot be one on our side: STROXX does not
+sell online, so orders live in dealer systems and belong to the dealer. An
+aggregated, non-personal signal is something a dealer can agree to share; a
+list of their named customers is not, whatever the products.
+
+### Data sources (PIM, DAM, sales)
+Settings group, "Data sources (PIM, DAM, sales)". One document with three
+boxes, each carrying a status (Not started / Spec sent to IT / Credentials
+received and testing / Live): where product data comes from, where product
+imagery comes from, and whether any sales signal conversation has started. It
+records which system, how the data reaches us, the address, the sync schedule
+and who owns it on the dealer's IT side. Two things it never does: it never
+holds a key (those live in the hosting environment), and filling it in does not
+start a sync. It records the agreement; the developer connects the pipe. These
+two fields used to hide on the Site settings "Technical (developer)" tab, which
+is why nobody could find them.
 
 ### Tracking (GTM and Cookiebot)
 On the Market document (Settings group, Markets), "Tracking + consent" box:

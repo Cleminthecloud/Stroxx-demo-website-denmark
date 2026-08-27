@@ -23,7 +23,14 @@ export default function ProClubSignup({ headline, text }: { headline?: string; t
       const r = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), company: '', market: currentDealer?.code }),
+        body: JSON.stringify({
+          email: email.trim(),
+          company: '',
+          market: currentDealer?.code,
+          surface: 'pro-club',
+          language: typeof document !== 'undefined' ? document.documentElement.lang : '',
+          sourcePath: typeof window !== 'undefined' ? window.location.pathname : '',
+        }),
       });
       if (r.ok) {
         setState('done');

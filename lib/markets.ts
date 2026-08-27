@@ -26,6 +26,9 @@ export type Market = {
   newsletterEnabled?: boolean;
   newsletterProvider?: string;
   newsletterListId?: string;
+  brevoApiKey?: string;
+  brevoDoubleOptInTemplateId?: number;
+  brevoRedirectUrl?: string;
   mailchimpApiKey?: string;
   klaviyoApiKey?: string;
   marketoBaseUrl?: string;

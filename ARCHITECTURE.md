@@ -43,7 +43,9 @@ The payoff: deploy once, and Vercel serves all markets from that single build. T
 
 **Local (content + market settings, owned by each market):** every page's copy and structure, campaigns, the sections on a page, translations, and the Market document fields, dealer name and shop URL, support phone and hours, the legal line / HQ address, legal links, and (once built) the market's Cookiebot ID, GTM container, social profile URLs and tracking IDs. Legal text differs by market by law, so it is always per-market.
 
-**Fed by systems, not authored by hand:** products come from the PIM, media/assets from the DAM. Markets do not re-key product data; when the PIM or DAM gets new data we pull it in and every market reflects it. A market's job on products is presentation and campaigns, not data entry.
+**Fed by systems, not authored by hand:** products come from the PIM, media/assets from the DAM. Markets do not re-key product data; when the PIM or DAM gets new data we pull it in and every market reflects it. A market's job on products is presentation and campaigns, not data entry. Which systems those are, how each feed reaches us and how far along it is, is recorded in one place in the CMS: Settings, then **Data sources (PIM, DAM, sales)**. Contract: `docs/STROXX-pim-dam-integration.md`.
+
+**Shared at EU level, not per market: the permission database.** Newsletter consent is collected on stroxx.eu locale paths, in the local language, into ONE record store the brand owns, with market, dealer/partner, language, signup surface and, only where separately agreed, on-site interest as attributes. It is not four national lists, and the email platform is a swappable sending tool rather than the system of record. That split is what makes a platform change survivable and what lets us prove, years later, exactly what each person agreed to. Design: `docs/STROXX-permission-database.md`. Platform choice and costs: `docs/STROXX-newsletter-platform-evaluation.md`.
 
 ---
 

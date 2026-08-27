@@ -83,6 +83,10 @@ export default defineConfig({
               locations: [{ title: `${doc?.name || 'Specialist'} (homepage cards)`, href: '/#specialists' }],
             }),
           }),
+          tradesIndex: defineLocations({
+            select: {},
+            resolve: () => ({ locations: [{ title: 'Trades overview', href: '/trades' }] }),
+          }),
           trade: defineLocations({
             select: { name: 'name', slug: 'slug.current' },
             resolve: (doc) => ({
@@ -123,7 +127,7 @@ export default defineConfig({
     structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
-      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'productAugment', 'specialist', 'testimonial', 'video'],
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'tradesIndex', 'productAugment', 'specialist', 'testimonial', 'video'],
       languageField: 'language',
     }),
   ],
@@ -139,6 +143,14 @@ export default defineConfig({
         : prev;
       return [...base, seePageAction, openInPresentationAction];
     },
+    /* Two types must never be creatable by hand from the global Create menu.
+       `dataSources` is a SINGLETON: a second copy would sit at a random ID that
+       the structure never shows, so IT would fill in a document nobody reads.
+       `permission` is EVIDENCE: it is written by the signup route and marked
+       readOnly, but readOnly only disables the form, it does not remove the
+       type from the create menu, and a hand-made consent record is exactly the
+       thing that must not exist. */
+    newDocumentOptions: (prev) => prev.filter((t) => t.templateId !== 'dataSources' && t.templateId !== 'permission'),
   },
   /* the editor guide as its own Studio tab, always the deployed version */
   tools: (prev) => [...prev, { name: 'welcome', title: 'Welcome', icon: SparklesIcon, component: WelcomeTool },

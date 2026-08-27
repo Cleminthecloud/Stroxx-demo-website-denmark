@@ -211,7 +211,7 @@ export const siteSettings = defineType({
       description: 'The signup box on product pages. Submissions go to the Newsletter platform.' }),
 
     defineField({ name: 'newsHeadline', title: 'News: index headline', type: 'string', group: 'copy', fieldset: 'fsNews',
-      description: 'The big headline at the top of the news page (/news).' }),
+      description: 'The big headline at the top of the news page (/news). *word* = blue accent.' }),
     defineField({ name: 'newsIntro', title: 'News: intro line', type: 'text', rows: 2, group: 'copy', fieldset: 'fsNews',
       description: 'The line under the news page headline.' }),
     defineField({ name: 'newsEmpty', title: 'News: empty-state text', type: 'string', group: 'copy', fieldset: 'fsNews',
@@ -226,7 +226,7 @@ export const siteSettings = defineType({
       description: 'The line under the products page headline.' }),
 
     defineField({ name: 'butikkerHeadlineStores', title: 'Stores page: headline (stores tab)', type: 'string', group: 'copy', fieldset: 'fsStores',
-      description: 'The headline on the store finder (/stores) when the stores tab is active.' }),
+      description: 'The headline on the store finder (/stores) when the stores tab is active. *word* = blue accent.' }),
 
     defineField({ name: 'serviceHeadline', title: 'Service page: headline', type: 'string', group: 'copy', fieldset: 'fsService',
       description: 'The headline at the top of the Service and Support page (/service). *word* = blue accent.' }),
@@ -279,10 +279,7 @@ export const siteSettings = defineType({
     defineField({ name: 'supportIndexIntro', title: 'Support index: intro', type: 'text', rows: 2, group: 'copy', fieldset: 'fsSupportIndex',
       description: 'The line under the support index headline.' }),
 
-    defineField({ name: 'fagHeadline', title: 'Trades page: headline', type: 'string', group: 'copy', fieldset: 'fsTrades',
-      description: 'The headline at the top of the trades overview (/trades). *word* = blue accent.' }),
-    defineField({ name: 'fagIntro', title: 'Trades page: intro', type: 'text', rows: 3, group: 'copy', fieldset: 'fsTrades',
-      description: 'The intro under the trades page headline.' }),
+    /* the trades overview copy moved to its own page document (Pages -> Trades overview) on 2026-07-12 */
 
     defineField({ name: 'notFoundHeadline', title: '404 page: headline', type: 'string', group: 'copy', fieldset: 'fsNotFound',
       description: 'The headline on the "page not found" page.' }),
@@ -416,20 +413,11 @@ export const siteSettings = defineType({
     /* ── Technical (developer): fields the developer manages. Editors can
        read them but nothing here is part of the everyday content work. ── */
     defineField({
-      name: 'pimFeedUrl',
-      title: 'PIM: product feed URL (planned, not yet active)',
+      name: 'dataSourcesNote',
+      title: 'PIM, DAM and sales data have moved',
       description:
-        'ROADMAP FIELD, not wired yet. Product data is currently curated in the codebase. When the live PIM feed is connected, products will be matched by item number (varenummer), not name, and this URL will point the resolver at the Carl Ras product API. Entering a URL here does nothing until that integration ships. URL only; keys live in the hosting environment. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
-      type: 'url',
-      readOnly: true,
-      group: 'integrations',
-    }),
-    defineField({
-      name: 'damBaseUrl',
-      title: 'DAM: image base URL (planned, not yet active)',
-      description:
-        'ROADMAP FIELD, not wired yet. Product and shader images already render live from the Carl Ras DAM (Digizuite, images.carl-ras.dk) via curated asset IDs. This field will let the feed-driven pipeline resolve images from the DAM base once that integration ships; entering a URL here does nothing until then. URL only, no credentials. Spec + questions for Carl Ras IT: see the handover pack → 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
-      type: 'url',
+        'The product feed (PIM), the image feed (DAM) and the sales-signal conversation now have their own document, with a status for each: Settings, then "Data sources (PIM, DAM, sales)". They used to sit here as two read-only URL fields, which is exactly where nobody looked for them. Nothing to fill in on this tab. Contract and questions for Carl Ras IT: the handover pack, 01 - IT / CMS and integrations / STROXX PIM-DAM Integration.',
+      type: 'string',
       readOnly: true,
       group: 'integrations',
     }),

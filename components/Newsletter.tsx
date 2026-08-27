@@ -22,18 +22,48 @@ export type NewsletterCopy = {
 
 const DONE_KEY = 'sx-nl-done';
 
+/** The version tag stored with every permission record. Bump it whenever the
+ *  MEANING of the consent wording changes, never for a typo fix: old records
+ *  keep their old version and their own frozen copy of the text, which is what
+ *  makes them evidence. See docs/STROXX-permission-database.md. */
+export const CONSENT_VERSION = '2026-08-v1';
+
+/** Signup context sent alongside the address. All of it is re-clamped and
+ *  re-validated server side; none of it is trusted here. */
+function signupContext(surface: string) {
+  const ctx = { language: '', sourcePath: '', campaign: '', surface };
+  try {
+    ctx.language = document.documentElement.lang || '';
+    ctx.sourcePath = window.location.pathname;
+    ctx.campaign = new URLSearchParams(window.location.search).get('utm_campaign') || '';
+  } catch {}
+  return ctx;
+}
+
 export function NewsletterForm({
   copy,
   market,
   center = false,
+  surface = 'form',
+  askBehaviourConsent = false,
+  behaviourConsentLabel = 'You may use what I look at on the site to make what you send me more relevant.',
   onDone,
 }: {
   copy: NewsletterCopy;
   market?: string;
   center?: boolean;
+  /** Which surface earned this permission: footer band, popup, landing block,
+   *  pro-club. Stored on the record, so you can see what actually works. */
+  surface?: string;
+  /** Behaviour consent is a SEPARATE, freely given yes, never a pre-ticked box
+   *  and never bundled into the newsletter consent. Off by default: the box
+   *  only appears where the market has decided to ask. */
+  askBehaviourConsent?: boolean;
+  behaviourConsentLabel?: string;
   onDone?: () => void;
 }) {
   const [email, setEmail] = useState('');
+  const [behaviourConsent, setBehaviourConsent] = useState(false);
   const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle');
   /* Market code for the POST: explicit prop first (the layout passes it to the
      band and the popup, which mounts outside the provider), else the dealer
@@ -50,7 +80,16 @@ export function NewsletterForm({
       const r = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, company: '', market: marketCode }),
+        body: JSON.stringify({
+          email,
+          company: '',
+          market: marketCode,
+          ...signupContext(surface),
+          /* The wording actually shown, frozen with the record. */
+          consentVersion: CONSENT_VERSION,
+          consentText: copy.disclaimer,
+          behaviourConsent: askBehaviourConsent ? behaviourConsent : false,
+        }),
       });
       if (r.ok) {
         setState('done');
@@ -98,6 +137,17 @@ export function NewsletterForm({
           {state === 'busy' ? 'Sending…' : copy.buttonLabel} <ArrowRight size={15} />
         </button>
       </div>
+      {askBehaviourConsent && (
+        <label className={`mt-3 flex items-start gap-2.5 text-xs text-fog/70 ${center ? 'justify-center text-center' : ''}`}>
+          <input
+            type="checkbox"
+            checked={behaviourConsent}
+            onChange={(e) => setBehaviourConsent(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-line bg-white/[0.07] accent-stroxx-blue"
+          />
+          <span>{behaviourConsentLabel}</span>
+        </label>
+      )}
       <p
         key={state === 'error' ? 'error' : 'hint'}
         className={`mt-3 text-xs ${state === 'error' ? 'state-in text-red-400' : 'text-fog/70'} ${center ? 'text-center' : ''}`}
@@ -122,7 +172,7 @@ export function NewsletterBand({ copy, market }: { copy: NewsletterCopy; market?
           <p className="text-fog text-lg leading-relaxed max-w-md">{copy.text}</p>
         </div>
         <div className="lg:pl-8">
-          <NewsletterForm copy={copy} market={market} />
+          <NewsletterForm copy={copy} market={market} surface="footer-band" />
         </div>
       </div>
     </section>
@@ -227,7 +277,7 @@ export function NewsletterPopup({
           <div className="eyebrow mb-4">Newsletter</div>
           <h3 className="h-display text-white text-3xl leading-tight mb-3">{copy.headline}</h3>
           <p className="text-fog leading-relaxed mb-7">{copy.text}</p>
-          <NewsletterForm copy={copy} market={market} onDone={() => setTimeout(dismiss, 2500)} />
+          <NewsletterForm copy={copy} market={market} surface="popup" onDone={() => setTimeout(dismiss, 2500)} />
         </div>
       </div>
     </div>

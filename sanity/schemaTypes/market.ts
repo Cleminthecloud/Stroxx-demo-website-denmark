@@ -155,6 +155,7 @@ export const market = defineType({
       fieldset: 'newsletter',
       options: {
         list: [
+          { title: 'Brevo (EU-hosted, recommended)', value: 'brevo' },
           { title: 'Mailchimp', value: 'mailchimp' },
           { title: 'Klaviyo', value: 'klaviyo' },
           { title: 'Adobe Marketo', value: 'marketo' },
@@ -167,6 +168,41 @@ export const market = defineType({
     /* ── Provider credentials. Encrypted in the browser before saving (see
        EncryptedSecretField); the dataset only ever stores ciphertext. Each is
        shown only when its platform is selected. ── */
+    defineField({
+      name: 'brevoApiKey',
+      title: 'Brevo API key',
+      description:
+        'This market\'s key, used by the signup API. From Brevo, then SMTP & API, then API keys. Starts with xkeysib-. Subscriber data stays in the EU on every Brevo plan, which is why it is the recommended platform for STROXX.',
+      type: 'string',
+      fieldset: 'newsletter',
+      components: { input: EncryptedSecretField },
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'brevo',
+    }),
+    defineField({
+      name: 'brevoDoubleOptInTemplateId',
+      title: 'Brevo double opt-in template ID',
+      description:
+        'The numeric ID of the Brevo template that sends the confirmation email. With this filled in, Brevo runs proper double opt-in: the person is not added to the list until they click the link. Leave it empty ONLY if this market has a legal reason not to confirm, which in Denmark and Germany it does not. Brevo requires a confirmation landing page alongside it, so fill in the next field too.',
+      type: 'number',
+      fieldset: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'brevo',
+      validation: (r) =>
+        r.custom((value, ctx) => {
+          const p = ctx.parent as { newsletterProvider?: string; brevoRedirectUrl?: string } | undefined;
+          if (p?.newsletterProvider !== 'brevo') return true;
+          if (value && !p?.brevoRedirectUrl) return 'Brevo needs a confirmation landing page with the template. Without it, double opt-in is skipped and signups go straight onto the list.';
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'brevoRedirectUrl',
+      title: 'Brevo confirmation landing page',
+      description:
+        'Where the person lands after clicking the confirmation link, e.g. https://stroxx.eu/dk/newsletter-confirmed. Only used with double opt-in.',
+      type: 'url',
+      fieldset: 'newsletter',
+      hidden: ({ parent }) => parent?.newsletterProvider !== 'brevo',
+    }),
     defineField({
       name: 'mailchimpApiKey',
       title: 'Mailchimp API key',
@@ -223,7 +259,7 @@ export const market = defineType({
     defineField({
       name: 'newsletterListId',
       title: 'Audience / list ID',
-      description: 'The list THIS market\'s signups land in. Mailchimp: the Audience ID. Klaviyo: the List ID. Marketo: the static list ID (optional). Webhook: not needed.',
+      description: 'The list THIS market\'s signups land in. Brevo: the numeric list ID. Mailchimp: the Audience ID. Klaviyo: the List ID. Marketo: the static list ID (optional). Webhook: not needed.',
       type: 'string',
       fieldset: 'newsletter',
       hidden: ({ parent }) => parent?.newsletterProvider === 'webhook',

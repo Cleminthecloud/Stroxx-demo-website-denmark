@@ -6,12 +6,15 @@ import { homePage } from './homePage';
 import { store } from './store';
 import { market } from './market';
 import { trade } from './trade';
+import { tradesIndex } from './tradesIndex';
 import { specialist, testimonial, video, legalPage } from './collections';
 import { post } from './post';
 import { redirect } from './redirect';
 import { supportPage } from './supportPage';
 import { qrCode } from './qrCode';
 import { feedback } from './feedback';
+import { dataSources } from './dataSources';
+import { permission } from './permission';
 /* brandPage removed from the Studio: /brand is now fully code-owned (we manage it) */
 
 export const schemaTypes = [
@@ -23,6 +26,7 @@ export const schemaTypes = [
   market,
   store,
   trade,
+  tradesIndex,
   specialist,
   testimonial,
   video,
@@ -32,4 +36,6 @@ export const schemaTypes = [
   supportPage,
   qrCode,
   feedback,
+  dataSources,
+  permission,
 ];

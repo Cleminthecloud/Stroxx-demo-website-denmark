@@ -1,15 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { createClient } from '@sanity/client';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sameOrigin } from '@/lib/same-origin';
+import { CONSENT_COOKIE, recordInterest } from '@/lib/permissions';
 import { projectId, dataset } from '@/sanity/env';
 
-/** First-party, privacy-clean analytics collector. No cookies, no user IDs,
- *  no fingerprints: only anonymous counters per day (pageviews per path,
- *  traffic sources, outbound clicks to the partner webshops), so it needs no
- *  consent banner. Events land as one `dayStats` document per day in the
- *  content dataset (invisible in the Studio's Content list; the Dashboard
- *  tab reads them).
+/** First-party analytics collector, in two clearly separated halves.
+ *
+ *  1. ANONYMOUS COUNTERS, for everyone. No cookies, no user IDs, no
+ *     fingerprints: only counts per day (pageviews per path, traffic sources,
+ *     outbound clicks to the partner webshops), so it needs no consent banner.
+ *     Events land as one `dayStats` document per day in the content dataset
+ *     (invisible in the Studio's Content list; the Dashboard tab reads them).
+ *
+ *  2. NAMED INTEREST SIGNALS, only for people who asked for them. If, and only
+ *     if, the visitor carries the first-party permission cookie AND their
+ *     permission record still says behaviourConsent is true, the product or
+ *     category they viewed is added to THEIR record. The cookie is only a
+ *     pointer: lib/permissions re-reads the record and refuses if consent has
+ *     since been withdrawn. Withdrawing consent erases the history it made.
+ *     Nothing in half 2 can affect half 1, and half 2 never runs for a visitor
+ *     who has not signed up and ticked the box.
  *
  *  Requires SANITY_API_WRITE_TOKEN (an Editor token) in the hosting env.
  *  Missing → 204 no-op, the site never depends on the collector. */
@@ -38,9 +49,12 @@ const PARTNERS = ['carl-ras', 'meesenburg', 'foussier', 'lecot'] as const;
 const SHARE_CHANNELS = ['native', 'linkedin', 'facebook', 'x', 'whatsapp', 'email', 'copy'] as const;
 
 /* only real routes get counted: bounds the per-day document size no matter
-   what a flooder posts (everything else lands in the 'other' bucket) */
+   what a flooder posts (everything else lands in the 'other' bucket).
+   The optional leading segment is the market code (/dk, /de, ...): without it
+   every localised pageview fell into 'other', and the interest-signal regexes
+   below (which do accept the prefix) disagreed with this one. */
 const KNOWN_PATH =
-  /^\/($|products|product\/[a-z0-9-]+|stores|monthly|try-it|satisfaction-guarantee|service|trades(\/[a-z0-9-]+)?|news(\/[a-z0-9-]+)?|campaign\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privacy|cookies|terms|brand)$/;
+  /^\/([a-z]{2,5}(\/|$))?($|products|product\/[a-z0-9-]+|category\/[a-z0-9-]+|stores|monthly|try-it|satisfaction-guarantee|service|trades(\/[a-z0-9-]+)?|news(\/[a-z0-9-]+)?|campaign\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privacy|cookies|terms|brand)$/;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });
@@ -61,6 +75,21 @@ export async function POST(req: NextRequest) {
     channel = String(b?.channel ?? '').slice(0, 20);
   } catch {
     return new NextResponse(null, { status: 204 });
+  }
+
+  /* Half 2: the named interest signal. Runs post-response via after(), so it
+     can never slow a pageview, and it is skipped entirely for the vast
+     majority of visitors, who carry no permission cookie. */
+  const pid = req.cookies.get(CONSENT_COOKIE)?.value;
+  if (pid && t === 'pv') {
+    const clean = path.split('?')[0];
+    const product = /^\/(?:[a-z]{2,5}\/)?product\/([a-z0-9-]+)$/.exec(clean);
+    const category = /^\/(?:[a-z]{2,5}\/)?category\/([a-z0-9-]+)$/.exec(clean);
+    const hit = product ?? category;
+    if (hit) {
+      const kind = product ? 'product' : 'category';
+      after(() => recordInterest(pid, hit[1], kind));
+    }
   }
 
   const day = new Date().toISOString().slice(0, 10);

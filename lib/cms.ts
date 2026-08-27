@@ -32,8 +32,8 @@ export type SiteSettings = {
   navLinks?: NavLink[];
   footerPageLinks?: NavLink[];
   footerBuyLinks?: NavLink[];
-  pimFeedUrl?: string;
-  damBaseUrl?: string;
+  /* PIM/DAM/sales moved to the `dataSources` singleton 2026-08-27 (Settings,
+     then Data sources). They were never read by the site, only recorded. */
   chatEnabled?: boolean;
   aiChatEnabled?: boolean;
   /* Per-market OPERATIONS (gtmId, cookiebotId, newsletterEnabled, the provider
@@ -93,7 +93,7 @@ export async function getMarkets(): Promise<Market[]> {
   try {
     const { data } = await sanityFetch({
       query:
-        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLine, legalLinks[]{ label, href }, order, gtmId, cookiebotId, newsletterEnabled, newsletterProvider, newsletterListId, mailchimpApiKey, klaviyoApiKey, marketoBaseUrl, marketoClientId, marketoClientSecret, newsletterWebhookUrl }',
+        '*[_type == "market"] | order(order asc){ _id, name, "code": code.current, languages, defaultLanguage, isReference, active, dealerName, dealerCtaUrl, supportPhone, supportHours, legalLine, legalLinks[]{ label, href }, order, gtmId, cookiebotId, newsletterEnabled, newsletterProvider, newsletterListId, brevoApiKey, brevoDoubleOptInTemplateId, brevoRedirectUrl, mailchimpApiKey, klaviyoApiKey, marketoBaseUrl, marketoClientId, marketoClientSecret, newsletterWebhookUrl }',
     });
     return Array.isArray(data) && data.length ? (data as Market[]) : fallbackMarkets;
   } catch {
