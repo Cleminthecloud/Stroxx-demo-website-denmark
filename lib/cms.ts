@@ -625,6 +625,8 @@ export type HotspotView = {
   eyebrow?: string;
   headline?: string;
   sub?: string;
+  /** 'contain' for a cut-out product shot that must not be cropped. */
+  fit: 'cover' | 'contain';
   spots: HotspotSpot[];
 };
 
@@ -659,6 +661,7 @@ export function hotspotView(raw: unknown): HotspotView | null {
     eyebrow: d.eyebrow as string | undefined,
     headline: d.headline as string | undefined,
     sub: d.sub as string | undefined,
+    fit: stegaClean(d.fit) === 'contain' ? 'contain' : 'cover',
     spots,
   };
 }

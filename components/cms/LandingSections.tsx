@@ -584,7 +584,7 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                     </div>
                   )}
                   <Reveal delay={80}>
-                    <HotspotImage src={view.src} alt={view.alt} spots={view.spots} />
+                    <HotspotImage src={view.src} alt={view.alt} spots={view.spots} fit={view.fit} />
                   </Reveal>
                   {/* the same points as plain text: readable without JS, and
                       the content search engines and screen readers index */}

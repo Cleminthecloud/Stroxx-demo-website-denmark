@@ -60,6 +60,22 @@ export const hotspotImage = defineType({
       description: 'Path under /public, e.g. /Images/campaign/rings.jpg. Used when no photo is uploaded.',
     }),
     defineField({
+      name: 'fit',
+      title: 'How the photo fills the frame',
+      type: 'string',
+      description:
+        'Fill the frame suits a photograph. Show the whole product suits a cut-out product shot on a plain background, where cropping would cut the tool in half.',
+      options: {
+        list: [
+          { title: 'Fill the frame (photographs)', value: 'cover' },
+          { title: 'Show the whole product (product shots)', value: 'contain' },
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+      initialValue: 'cover',
+    }),
+    defineField({
       name: 'spots',
       title: 'The spots',
       type: 'array',

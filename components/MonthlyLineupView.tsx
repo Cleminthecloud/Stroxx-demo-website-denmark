@@ -110,7 +110,10 @@ export default async function MonthlyLineupView({
             </div>
           </Reveal>
           <Reveal from="far-right" className="relative aspect-[5/4]">
-            <ParticleImage src={particleSrc('lasers', hero.imgId)} className="h-full w-full" />
+            {/* the hero's OWN category, not a hardcoded one: the monthly hero
+                changes category every month, and a fixed slug here would keep
+                serving last month's particle source */}
+            <ParticleImage src={particleSrc(hero.category, hero.imgId)} className="h-full w-full" />
           </Reveal>
         </div>
       </section>
@@ -150,7 +153,7 @@ export default async function MonthlyLineupView({
               )}
             </div>
             <Reveal delay={80}>
-              <HotspotImage src={SKA.hotspot.src} alt={SKA.hotspot.alt || hero.name} spots={SKA.hotspot.spots} />
+              <HotspotImage src={SKA.hotspot.src} alt={SKA.hotspot.alt || hero.name} spots={SKA.hotspot.spots} fit={SKA.hotspot.fit} />
             </Reveal>
             <ol className="sr-only">
               {SKA.hotspot.spots.map((sp, i) => (

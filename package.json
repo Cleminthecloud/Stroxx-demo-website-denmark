@@ -18,6 +18,7 @@
     "seed:news": "sanity exec scripts/seed-news.ts --with-user-token",
     "seed:support": "sanity exec scripts/seed-support.ts --with-user-token",
     "seed:videos": "sanity exec scripts/seed-videos.ts --with-user-token",
+    "seed:monthly-lighting": "sanity exec scripts/seed-monthly-lighting.ts --with-user-token",
     "seed:service": "sanity exec scripts/seed-service-copy.ts --with-user-token",
     "seed:markets": "sanity exec scripts/seed-markets.ts --with-user-token",
     "seed:i18n-base": "sanity exec scripts/seed-i18n-base.ts --with-user-token",

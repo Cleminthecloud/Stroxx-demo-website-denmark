@@ -36,12 +36,15 @@ export default function HotspotImage({
   src,
   alt = '',
   spots,
+  fit = 'cover',
   ratio = 'aspect-[16/10]',
   className = '',
 }: {
   src: string;
   alt?: string;
   spots: HotspotSpot[];
+  /** 'contain' for a cut-out product shot that must not be cropped. */
+  fit?: 'cover' | 'contain';
   /** Tailwind aspect class for the frame. */
   ratio?: string;
   className?: string;
@@ -71,9 +74,20 @@ export default function HotspotImage({
   if (!src) return null;
 
   return (
-    <div ref={wrap} className={`relative w-full overflow-hidden rounded-2xl ${ratio} ${className}`}>
+    <div
+      ref={wrap}
+      className={`relative w-full overflow-hidden rounded-2xl ${ratio} ${className} ${
+        /* a cut-out product shot needs a ground under it, or it floats */
+        fit === 'contain' ? 'border border-white/10 bg-white/[0.03]' : ''
+      }`}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} draggable={false} className="absolute inset-0 h-full w-full object-cover select-none" />
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        className={`absolute inset-0 h-full w-full select-none ${fit === 'contain' ? 'object-contain p-6 md:p-10' : 'object-cover'}`}
+      />
 
       {points.map((s, i) => {
         const x = Math.max(0, Math.min(100, s.x ?? 50));
