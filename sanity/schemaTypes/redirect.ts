@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity';
 
-/** Editor-managed URL redirects, applied by middleware without a deploy.
+/** Editor-managed URL redirects, applied by the proxy without a deploy.
  *  The classic use: a campaign page gets renamed and the old QR code /
  *  printed URL / newsletter link must keep working. */
 

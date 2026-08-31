@@ -3,7 +3,7 @@ import { legacyTarget, danishTarget, buildRedirectMap } from '@/lib/redirects';
 
 /* Locks the legacy Shopify URL map (printed packaging QR codes depend on it)
  * and the CMS redirect validation (a bad document must never become an open
- * redirect). Extracted verbatim from middleware.ts into lib/redirects.ts. */
+ * redirect). Extracted verbatim from proxy.ts into lib/redirects.ts. */
 
 describe('legacyTarget', () => {
   it('maps the exact legacy store paths', () => {

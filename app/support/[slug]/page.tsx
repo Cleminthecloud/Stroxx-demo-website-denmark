@@ -7,7 +7,7 @@ import { stegaClean } from '@sanity/client/stega';
 
 /** One support page: manuals/guides grouped by language, each item a direct
  *  file download served from the CMS. The packaging QR codes in circulation
- *  resolve here (middleware forwards the old /pages/<slug> addresses), so
+ *  resolve here (the proxy forwards the old /pages/<slug> addresses), so
  *  this page must work perfectly on a phone in a workshop: big touch
  *  targets, no fluff, downloads one tap away. */
 

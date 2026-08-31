@@ -27,9 +27,9 @@ So the rule is: **anything that should be the same everywhere is code; anything 
 
 Three layers turn one app into many localised sites.
 
-**1. The locale registry, `lib/i18n.ts`.** One array (`locales[]`) is the single source of truth for every language/market: its code, its domain, its path, and how Belgium runs bilingually on one `.be` domain via a `/fr` sub-path. Add or retire a market here and it flows out to the middleware, both language switchers, the market registry, the Sanity internationalization config, and the seed scripts (this coupling is tracked in DEPENDENCIES.md).
+**1. The locale registry, `lib/i18n.ts`.** One array (`locales[]`) is the single source of truth for every language/market: its code, its domain, its path, and how Belgium runs bilingually on one `.be` domain via a `/fr` sub-path. Add or retire a market here and it flows out to the proxy, both language switchers, the market registry, the Sanity internationalization config, and the seed scripts (this coupling is tracked in DEPENDENCIES.md).
 
-**2. Locale resolution, `middleware.ts` + `lib/locale.ts`.** The middleware resolves the incoming request to a locale, domain first (e.g. a `.dk` domain), then sub-path (e.g. `/fr` on the Belgian domain), and sets an `x-stroxx-locale` header. `getLocale()` reads that header and returns the active Locale, which carries its `.market`. Every server component that needs to know "which market am I rendering right now" asks `getLocale()`; nothing hardcodes a market.
+**2. Locale resolution, `proxy.ts` + `lib/locale.ts`.** The proxy resolves the incoming request to a locale, domain first (e.g. a `.dk` domain), then sub-path (e.g. `/fr` on the Belgian domain), and sets an `x-stroxx-locale` header. `getLocale()` reads that header and returns the active Locale, which carries its `.market`. Every server component that needs to know "which market am I rendering right now" asks `getLocale()`; nothing hardcodes a market.
 
 **3. Content by locale, Sanity.** Content documents are internationalised with document-internationalization: each page/section exists once per language, and queries fetch `language == $lang`. Market-level settings live on **Market** documents (`lib/markets.ts` is the seed + fallback registry; `getMarkets()` reads the live Sanity docs). So the same `<Footer/>` component renders Carl Ras's Herlev address on the Danish site and Meesenburg's Flensburg address on the German site, purely from data, because it resolves `marketByCode(currentMarket)?.legalLine`.
 
@@ -39,7 +39,7 @@ The payoff: deploy once, and Vercel serves all markets from that single build. T
 
 ## What is shared vs. what is local
 
-**Shared (code, global, one change reaches everyone):** components, layout, design system and tokens, the store finder, the product explorer, routing and middleware, SEO scaffolding, security headers, analytics wiring, and the Sanity schema itself. A local market cannot edit these and does not need to.
+**Shared (code, global, one change reaches everyone):** components, layout, design system and tokens, the store finder, the product explorer, routing and the request proxy, SEO scaffolding, security headers, analytics wiring, and the Sanity schema itself. A local market cannot edit these and does not need to.
 
 **Local (content + market settings, owned by each market):** every page's copy and structure, campaigns, the sections on a page, translations, and the Market document fields, dealer name and shop URL, support phone and hours, the legal line / HQ address, legal links, and (once built) the market's Cookiebot ID, GTM container, social profile URLs and tracking IDs. Legal text differs by market by law, so it is always per-market.
 

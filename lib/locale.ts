@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { localeById, REFERENCE_LOCALE, type Locale } from '@/lib/i18n';
 
-/** The current request's locale, resolved by the middleware and passed via the
+/** The current request's locale, resolved by the proxy and passed via the
  *  x-stroxx-locale header. Falls back to the international English reference. */
 export async function getLocale(): Promise<Locale> {
   try {

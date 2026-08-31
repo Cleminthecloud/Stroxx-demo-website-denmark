@@ -58,7 +58,7 @@ export const marketByCode = (code: string, list: Market[] = markets): Market | u
 export const MARKET_CODE_RE = /^[a-z]{2,5}$/;
 
 /** Resolve which market's OPERATIONS (tracking + newsletter provider config)
- *  a request belongs to, from a CLIENT-SENT market code (middleware skips
+ *  a request belongs to, from a CLIENT-SENT market code (the proxy skips
  *  /api, so headers cannot tell us; same pattern as /api/chat). The code is
  *  untrusted input: anything that is not a well-formed, registered code falls
  *  back to the REFERENCE market, never to another dealer market. The reference

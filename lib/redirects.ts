@@ -1,9 +1,9 @@
-/** Pure redirect helpers, extracted verbatim from middleware.ts so the unit
+/** Pure redirect helpers, extracted verbatim from proxy.ts so the unit
  *  tests can lock their behavior without pulling in the Next server runtime.
- *  middleware.ts is the only production consumer: it fetches the CMS redirect
+ *  proxy.ts is the only production consumer: it fetches the CMS redirect
  *  documents and feeds them through buildRedirectMap, and routes every
  *  request path through legacyTarget. Zero behavior change from the inline
- *  originals; if you change a rule here, middleware.ts changes with it. */
+ *  originals; if you change a rule here, proxy.ts changes with it. */
 
 export type Rule = { to: string; permanent: boolean };
 
@@ -11,7 +11,7 @@ export type Rule = { to: string; permanent: boolean };
  *  codes in circulation point at /pages/... on the old store; after the
  *  domain cutover those requests hit THIS app, so the map below keeps every
  *  printed code and seven years of links alive. CMS redirects are checked
- *  first (in middleware.ts) so editors can override any single path without
+ *  first (in proxy.ts) so editors can override any single path without
  *  a deploy. */
 const LEGACY_EXACT = new Map<string, string>([
   ['/pages/about', '/'],

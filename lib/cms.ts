@@ -112,7 +112,7 @@ export function cleanLinks(links: NavLink[] | undefined): { label: string; href:
   return out.length ? out : null;
 }
 
-/** The active content language for this request (from the middleware header),
+/** The active content language for this request (from the proxy header),
  *  falling back to the English reference. */
 async function langId(): Promise<string> {
   return (await getLocale()).id;

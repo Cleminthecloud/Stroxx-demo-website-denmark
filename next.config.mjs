@@ -37,7 +37,7 @@ const nextConfig = {
      the Studio's Presentation iframe while blocking third-party embedding. */
   /* The guarantee terms moved from a static Danish PDF to the editable CMS
      page /satisfaction-guarantee (2026-07-11). The PDF path has an extension,
-     so middleware never sees it (its matcher skips files) — the redirect must
+     so the proxy never sees it (its matcher skips files) — the redirect must
      live here. */
   async redirects() {
     return [

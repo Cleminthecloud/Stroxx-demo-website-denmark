@@ -2,8 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { resolveLocale } from '@/lib/i18n';
 import { buildRedirectMap, legacyTarget, type Rule } from '@/lib/redirects';
 
-/** CMS-managed redirects (the `redirect` document type in the Studio).
- *  Editors rename a campaign page, add a redirect, and old QR codes /
+/** Request proxy: locale resolution + redirects, on every page request.
+ *
+ *  This was `middleware.ts` until 2026-08-31. Next.js 16 deprecated the
+ *  middleware file convention and renamed it to `proxy`: same position in the
+ *  request lifecycle, same `config.matcher`, same NextRequest/NextResponse API.
+ *  Two things actually changed, and both are fine for us:
+ *    1. the exported function is `proxy`, not `middleware`;
+ *    2. it runs on the Node.js runtime, which cannot be overridden. Nothing
+ *       here was edge-specific (a fetch with a timeout, a Map lookup), and
+ *       `lib/i18n.ts` is deliberately pure TS with no `next/headers`, so it
+ *       imports cleanly in either runtime.
+ *
+ *  CMS-managed redirects (the `redirect` document type in the Studio):
+ *  editors rename a campaign page, add a redirect, and old QR codes /
  *  printed URLs / newsletter links keep working, no deploy needed.
  *
  *  The redirect list is fetched from Sanity's public CDN and cached in
@@ -13,7 +25,8 @@ import { buildRedirectMap, legacyTarget, type Rule } from '@/lib/redirects';
 
 /* The legacy-URL map (legacyTarget) and the CMS redirect validation
  * (buildRedirectMap) live in lib/redirects.ts: pure, unit-tested, extracted
- * verbatim from this file. */
+ * verbatim from this file. Printed packaging depends on those maps, so they
+ * are locked by tests/redirects.test.ts. */
 
 const TTL_MS = 60_000;
 let cache: { at: number; map: Map<string, Rule> } | null = null;
@@ -35,7 +48,7 @@ async function getRules(): Promise<Map<string, Rule>> {
   return map;
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   try {
     const host = req.nextUrl.hostname;
     const rawPath = req.nextUrl.pathname.replace(/\/+$/, '') || '/';

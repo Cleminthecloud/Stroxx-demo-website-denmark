@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       .filter((m: ChatMsg) => (m?.role === 'user' || m?.role === 'assistant') && typeof m?.content === 'string')
       .slice(-10)
       .map((m: ChatMsg) => ({ role: m.role, content: m.content.slice(0, 2000) }));
-    /* The client sends its market code (middleware skips /api, so headers can't
+    /* The client sends its market code (the proxy skips /api, so headers can't
        tell us). Only used to pick which PUBLIC dealer phone/name to quote, and
        validated against the market registry below — safe as client input. */
     if (typeof body?.market === 'string' && /^[a-z]{2,3}$/.test(body.market)) marketCode = body.market;

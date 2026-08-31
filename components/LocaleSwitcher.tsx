@@ -5,7 +5,7 @@ import { Globe, ChevronDown } from 'lucide-react';
 import { locales, resolveLocale, type Locale } from '@/lib/i18n';
 
 /** Top-nav language / market switcher. Resolves the current locale from the
- *  host + path (same rules as the middleware), and builds a link to the same
+ *  host + path (same rules as the proxy), and builds a link to the same
  *  page in each other locale, cross-domain on the real ccTLDs, sub-path on the
  *  .eu / preview host.
  *
@@ -30,7 +30,7 @@ export default function LocaleSwitcher({ variant = 'dropdown' }: { variant?: 'dr
     return () => { document.removeEventListener('mousedown', onDoc); window.removeEventListener('keydown', onKey); };
   }, [open]);
 
-  // --- shared link logic (same rules as the middleware) ---
+  // --- shared link logic (same rules as the proxy) ---
   const h = host.replace(/^www\./, '').toLowerCase();
   const onCcTLD = !!host && locales.some((l) => !l.isReference && l.domain === h);
   const current = resolveLocale(host, pathname).locale;

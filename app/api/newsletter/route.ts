@@ -13,7 +13,7 @@ import { projectId, dataset } from '@/sanity/env';
 
 /** Newsletter signups, provider-agnostic and PER MARKET. Which platform (and
  *  its list ID + encrypted keys) is chosen on the MARKET document (Settings →
- *  Markets). The client POSTs its market code (middleware skips /api, so
+ *  Markets). The client POSTs its market code (the proxy skips /api, so
  *  headers cannot tell us); it is validated against the market registry via
  *  resolveOpsMarket, and anything missing or bogus falls back to the REFERENCE
  *  market, which normally has no credentials, so a bad code can never reach

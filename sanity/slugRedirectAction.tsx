@@ -12,7 +12,7 @@ import { primaryHref } from './lib/docPageUrl';
  *
  *  Only wired for the slug-bearing page types below (see sanity.config.ts).
  *  The redirect shape matches sanity/schemaTypes/redirect.ts, consumed by
- *  middleware.ts. */
+ *  proxy.ts. */
 
 export const REDIRECTABLE = new Set(['post', 'landingPage', 'supportPage', 'trade', 'legalPage']);
 
