@@ -79,8 +79,11 @@ Landing pages are built from **sections** (blocks). The full menu:
 - **Before / after slider**, two photos with a draggable divider, let people see the difference
 - **Story cards**, a 3-5 chapter narrative that stacks as the reader scrolls (the job, the tool, the result)
 - **Logo band**, a slow scrolling strip of partner names or logos
+- **Hotspot image**, one photo with numbered points the visitor opens (see below)
 - **Embed**, a form, map or video from another service (see the embed rules below)
 - **Spacer**, empty breathing room in three sizes
+
+**Hotspot images.** The Hotspot image block turns one photo into something the visitor explores: numbered points sit on the picture, and tapping one opens a small card with a title, a line or two of text and, when you set an item number, a link straight to that product. Upload the photo first, then **click the photo in the Studio to drop a point** and drag the marker to nudge it; the words for each point are written in the list underneath the picture. Positions are stored as percentages, so a point sits in the same place on a phone and on a big screen. Up to eight points keeps a picture readable. The same block is available on the Monthly lineup (Hero hotspot photo), so the tool of the month can be explained part by part.
 
 **Embed rules.** The Embed block accepts pages from **approved providers only** (Typeform, Microsoft and Google forms, Google Maps, YouTube, Vimeo, and Carl Ras/STROXX pages). Paste the provider's https share/embed address and set a height. Visitors see a "Load content" card first and nothing is fetched, and no cookies are set, until they click, which keeps embeds GDPR-clean. Need another provider? Ask the developer to approve it (one line of code, deliberately). Anything that wants a `<script>` tag never goes in the CMS; those widgets are installed via Google Tag Manager.
 
@@ -160,8 +163,29 @@ The site publishes in English (the international reference) plus each market's l
 The document **Monthly lineup** drives the Tool of the Month page and the homepage section. Changing the month is one edit:
 
 1. Content → **Monthly lineup (Månedens STROXX)** → open the current document (or duplicate it for the new month).
-2. Work through its four boxes, top to bottom: **When it goes live** (month name as it should read on the page, four-digit year, and the optional go-live date), **Hero of the month** (the hero SKU plus its claims/cases/FAQ, the story), **The five winners** (the five SKUs, drag order is display order), and **News + films**.
+2. Work through its four boxes, top to bottom: **When it goes live** (month name as it should read on the page, four-digit year, the optional go-live date, the archive address and a one-line summary), **Hero of the month** (the hero SKU plus its claims/cases/FAQ, the story, and an optional hotspot photo), **The five winners** (the five SKUs, drag order is display order), and **News + films**.
 3. Publish. Homepage and /monthly update together, same lineup everywhere.
+
+**Nothing is ever thrown away.** Each month also keeps a permanent address of its own, `/monthly/2026-07`, set by the **Archive address** field (leave it empty and it is taken from the go-live date). When the next month takes over, the old one does not disappear: it moves to the archive at **/monthly/archive**, where visitors search by month, tool name or item number and open any month exactly as it ran. So a link in an old newsletter, a QR code on a leaflet or a product a customer half-remembers all still land somewhere real. Two habits make this work: fill in the **one-line summary** (it is the line under the month in the archive list, and the intro sentence on the page itself, so an archived month never describes the wrong tool), and never edit an old month's archive address once it has been shared.
+
+In the Studio, Content → **Monthly lineup (Månedens STROXX)** opens onto three lists: **This month and coming up** for what you are working on, **Archive (published months)** for everything already out, and **All months**. Building next month early is normal: give it a go-live date in the future and it sits quietly in the first list until the day it takes over.
+
+## 8b. Campaigns (and which countries run them)
+
+A **Campaign** document holds one campaign's words and photos once. Where and when it runs is decided per country, so the same campaign can be live in Denmark, starting next month in Germany and switched off in France, without anyone copying anything.
+
+Content → **Campaigns**. Every country sees every campaign, the shared EU ones and the ones other countries built, and each campaign opens on two tabs:
+
+- **Where and when.** The campaign's name, who owns it (a shared EU campaign or a country's own), and the table that actually decides everything: **one row per country**. Add your country's row, switch it on, and set **Starts** and **Finishes** (the finish day is included; leave the dates empty and it simply runs until someone switches it off). Choose the **front-page slot**: the big photo band, the slim promo row, or campaign page only. **Running order** decides what comes first when your country has more than one campaign live. No row for your country, or the switch off, means the campaign does not show there at all, whatever anyone else has done.
+- **Words and photos.** Eyebrow, headline, body text, the photos that cross-fade behind them, the button labels, and the campaign page the "read more" button opens. Translate this tab like any other page, through the globe icon.
+
+**Several campaigns at once is normal, not a problem.** Everything set to the big band shares it: the band rotates through them, each with its own photos, headline and buttons, and the progress bars underneath step between them. Anything set to the slim promo row appears as a compact strip under the band. That way a second campaign never pushes the first one off the front page.
+
+**Nothing needs switching off by hand.** A campaign with a finish date disappears by itself the day after, and one with a start date appears on the morning it begins. To take something down early, untick **Switched on** in your country's row and publish.
+
+The campaign lists answer the two questions you actually have: **Live somewhere now**, **Scheduled**, **Finished**, **Switched off everywhere**, plus **Shared EU campaigns** and a "running now" list per country. Each campaign's own line tells you at a glance which countries have it live and which have it scheduled.
+
+If your country has no campaign document live at all, the front page falls back to the campaign fields on the **Homepage** document, exactly as before, so nothing goes blank while you set this up.
 
 ## 9. Site settings (footer, hours, microcopy)
 

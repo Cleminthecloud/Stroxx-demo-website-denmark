@@ -54,7 +54,7 @@ const SHARE_CHANNELS = ['native', 'linkedin', 'facebook', 'x', 'whatsapp', 'emai
    every localised pageview fell into 'other', and the interest-signal regexes
    below (which do accept the prefix) disagreed with this one. */
 const KNOWN_PATH =
-  /^\/([a-z]{2,5}(\/|$))?($|products|product\/[a-z0-9-]+|category\/[a-z0-9-]+|stores|monthly|try-it|satisfaction-guarantee|service|trades(\/[a-z0-9-]+)?|news(\/[a-z0-9-]+)?|campaign\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privacy|cookies|terms|brand)$/;
+  /^\/([a-z]{2,5}(\/|$))?($|products|product\/[a-z0-9-]+|category\/[a-z0-9-]+|stores|monthly(\/(archive|20\d\d-\d\d))?|try-it|satisfaction-guarantee|service|trades(\/[a-z0-9-]+)?|news(\/[a-z0-9-]+)?|campaign\/[a-z0-9\/-]+|support(\/[a-z0-9-]+)?|privacy|cookies|terms|brand)$/;
 
 export async function POST(req: NextRequest) {
   if (!sameOrigin(req)) return new NextResponse(null, { status: 204 });

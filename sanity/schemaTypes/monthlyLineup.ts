@@ -48,6 +48,24 @@ export const monthlyLineup = defineType({
       options: { dateFormat: 'YYYY-MM-DD' },
     }),
     defineField({
+      name: 'period',
+      title: 'Archive address',
+      type: 'string',
+      fieldset: 'timing',
+      description:
+        'Year and month as numbers, e.g. 2026-07. This is the permanent address of the month in the archive (/monthly/2026-07), so it never changes once the month has been shared. Empty = taken from the “Active from” date.',
+      validation: (r) =>
+        r.regex(/^20\d\d-(0[1-9]|1[0-2])$/, { name: 'period' }).error('Four-digit year, dash, two-digit month, e.g. 2026-07'),
+    }),
+    defineField({
+      name: 'summary',
+      title: 'One-line summary (archive card)',
+      type: 'string',
+      fieldset: 'timing',
+      description: 'The line under the month in the archive list. Empty = the hero product name.',
+      validation: (r) => r.max(140),
+    }),
+    defineField({
       name: 'heroSku',
       title: 'Hero product',
       type: 'string',
@@ -108,6 +126,14 @@ export const monthlyLineup = defineType({
           preview: { select: { title: 'q' } },
         }),
       ],
+    }),
+    defineField({
+      name: 'heroHotspots',
+      title: 'Hero hotspot photo (optional)',
+      type: 'hotspotImage',
+      fieldset: 'hero',
+      description:
+        'An optional interactive photo of this month’s hero tool: place numbered points on the picture and write what each one says. Leave the photo empty and the section does not render.',
     }),
     defineField({
       name: 'cashCowSkus',

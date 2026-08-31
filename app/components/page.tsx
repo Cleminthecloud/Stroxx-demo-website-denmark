@@ -253,6 +253,23 @@ const DEMOS: Demo[] = [
     },
   },
   {
+    studioName: 'Hotspot image (clickable points on a photo)',
+    description:
+      'One photo with numbered points the visitor opens. Editors place the points by clicking the picture in the Studio; each point can link to a product by item number. Reusable: the same block sits on the Monthly lineup hero.',
+    section: {
+      _type: 'hotspotImage', _key: 'd21',
+      eyebrow: 'Component · Hotspot image',
+      headline: 'Every detail, *explained.*',
+      sub: 'Tap a point on the photo. Each one carries its own title, text and, when you set one, a link to the product.',
+      image: '/Images/campaign/rings.jpg',
+      spots: [
+        { _key: 's1', title: 'The grip', body: 'Where the point sits on the photo is set by clicking the picture in the Studio.', x: 34, y: 38 },
+        { _key: 's2', title: 'The head', body: 'Keep each card to a sentence or two: it opens small, on a phone as well.', x: 62, y: 30 },
+        { _key: 's3', title: 'Link a product', body: 'Add an item number and the card links straight to that product page.', x: 48, y: 68 },
+      ],
+    },
+  },
+  {
     studioName: 'Embed (form, map or video from another service)',
     description:
       'Sandboxed iframe from an approved provider with click-to-load (GDPR-clean: nothing loads before the visitor chooses). Script widgets go via GTM instead.',

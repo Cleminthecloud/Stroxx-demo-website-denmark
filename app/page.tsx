@@ -26,7 +26,9 @@ import {
   brandImages,
 } from '@/lib/data';
 import { dealerCategoryUrl } from '@/lib/buy';
-import { getSka, getHomePage, getSpecialists, getVideos, getMarkets } from '@/lib/cms';
+import CampaignStrip from '@/components/CampaignStrip';
+import { getSka, getHomePage, getSpecialists, getVideos, getMarkets, getLiveCampaigns } from '@/lib/cms';
+import { bandCampaigns, stripCampaigns } from '@/lib/campaigns';
 import { getLocale } from '@/lib/locale';
 import { cardCols, statColsSm } from '@/lib/grid';
 import { Accent } from '@/components/cms/LandingSections';
@@ -70,6 +72,22 @@ export default async function Home() {
   const specs = await getSpecialists();
   const marketList = await getMarkets();
   const locale = await getLocale();
+  /* Campaigns: every campaign live in THIS market today, in running order
+     (lib/campaigns.ts). Markets set their own on/off, dates and slot, so the
+     same EU campaign can run here and be off next door. Nothing live = the
+     homepage's own campaign fields still render, exactly as before. */
+  const live = await getLiveCampaigns();
+  const bandItems = bandCampaigns(live).map((c) => ({
+    id: c._id,
+    eyebrow: c.eyebrow,
+    headline: c.headline,
+    text: c.text,
+    primaryLabel: c.primaryLabel,
+    secondaryLabel: c.secondaryLabel,
+    href: c.secondaryHref,
+    images: c.images,
+  }));
+  const stripItems = stripCampaigns(live);
   const isReferenceMarket = locale.market === 'int';
   const dealers = marketList.filter((m) => !m.isReference && m.dealerName);
   /* current market's dealer for the category "see all at <dealer>" links —
@@ -287,9 +305,12 @@ export default async function Home() {
       </section>
       )}
 
-      {/* CAMPAIGN — print campaign as a cinematic image series */}
-      {hp.showCampaign && (
+      {/* CAMPAIGN — print campaign as a cinematic image series. CMS campaign
+          documents win when this market has any live; the homepage's own
+          campaign fields are the fallback and the international default. */}
+      {(hp.showCampaign || bandItems.length > 0) && (
       <CampaignBand
+        campaigns={bandItems}
         images={(hp.campaignImages ?? []).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[]}
         eyebrow={hp.campaignEyebrow}
         headline={hp.campaignHeadline}
@@ -304,6 +325,10 @@ export default async function Home() {
         secondaryAttr={hAttr('campaignSecondaryLabel')}
       />
       )}
+
+      {/* Any further campaigns this market has running: the slim promo row, so
+          several live campaigns coexist without fighting for the same slot. */}
+      <CampaignStrip campaigns={stripItems} />
 
       {/* MÅNEDENS STROXX — the SKA engine: one hero story + the month's five
           DB2-winners, same lineup as nyhedsbrev/SoMe/kampagner/salg. The hero

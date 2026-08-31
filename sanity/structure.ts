@@ -13,6 +13,8 @@ import {
   ComponentIcon,
   LockIcon,
   DatabaseIcon,
+  RocketIcon,
+  CalendarIcon,
 } from '@sanity/icons';
 
 /** The markets whose permission records get their own filtered list. Kept in
@@ -25,6 +27,45 @@ const PERMISSION_MARKETS: [string, string][] = [
   ['be', 'Belgium'],
   ['int', 'International'],
 ];
+
+/** Today and the first of this month, resolved when the Studio loads its
+ *  structure. Both drive the "what is running now" campaign lists and the
+ *  live/archive split on the monthly lineups. */
+const TODAY = new Date().toISOString().slice(0, 10);
+const MONTH_START = `${TODAY.slice(0, 7)}-01`;
+
+/** One activation row is live when it is switched on and today sits inside its
+ *  window. Mirrors windowState() in lib/campaigns.ts, in GROQ. */
+const ACTIVE_ROW = 'active == true && (!defined(startDate) || startDate <= $today) && (!defined(endDate) || endDate >= $today)';
+
+const campaignList = (
+  S: Parameters<StructureResolver>[0],
+  title: string,
+  filter: string,
+  params: Record<string, string> = {},
+) =>
+  S.listItem()
+    .title(title)
+    .child(
+      S.documentTypeList('campaign')
+        .title(title)
+        .apiVersion('2026-07-01')
+        .filter(`_type == "campaign" && ${filter}`)
+        .params({ today: TODAY, ...params })
+        .defaultOrdering([{ field: 'name', direction: 'asc' }]),
+    );
+
+const lineupList = (S: Parameters<StructureResolver>[0], title: string, filter: string) =>
+  S.listItem()
+    .title(title)
+    .child(
+      S.documentTypeList('monthlyLineup')
+        .title(title)
+        .apiVersion('2026-07-01')
+        .filter(`_type == "monthlyLineup" && ${filter}`)
+        .params({ monthStart: MONTH_START })
+        .defaultOrdering([{ field: 'activeFrom', direction: 'desc' }]),
+    );
 
 const permissionList = (S: Parameters<StructureResolver>[0], title: string, filter: string, params: Record<string, string>) =>
   S.listItem()
@@ -60,8 +101,49 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('landingPage').title('Campaign / landing pages'),
               S.documentTypeListItem('tradesIndex').title('Trades overview'),
               S.documentTypeListItem('trade').title('Trade pages'),
-              S.documentTypeListItem('monthlyLineup').title('Monthly lineup'),
+              /* The monthly engine, split so the month being worked on is never
+                 mixed up with the months already published. Past months keep
+                 their permanent address at /monthly/YYYY-MM and stay editable
+                 here; the site lists them at /monthly/archive. */
+              S.listItem()
+                .title('Monthly lineup (Månedens STROXX)')
+                .icon(CalendarIcon)
+                .child(
+                  S.list()
+                    .title('Monthly lineup')
+                    .items([
+                      lineupList(S, 'This month and coming up', '!defined(activeFrom) || activeFrom >= $monthStart'),
+                      lineupList(S, 'Archive (published months)', 'defined(activeFrom) && activeFrom < $monthStart'),
+                      S.divider(),
+                      S.documentTypeListItem('monthlyLineup').title('All months'),
+                    ]),
+                ),
               S.documentTypeListItem('legalPage').title('Legal & guarantee pages'),
+            ]),
+        ),
+      /* Campaigns: the creative once, the schedule per market. Every country
+         sees every campaign, shared EU and local alike, and decides in the
+         campaign's own "Where and when" table what runs, when, and where on
+         its front page. These lists answer the two questions an editor
+         actually has: what is running right now, and what is mine. */
+      S.listItem()
+        .title('Campaigns')
+        .icon(RocketIcon)
+        .child(
+          S.list()
+            .title('Campaigns')
+            .items([
+              campaignList(S, 'Live somewhere now', `count(activations[${ACTIVE_ROW}]) > 0`),
+              campaignList(S, 'Scheduled (not started yet)', 'count(activations[active == true && defined(startDate) && startDate > $today]) > 0'),
+              campaignList(S, 'Finished', `count(activations[active == true && defined(endDate) && endDate < $today]) > 0 && count(activations[${ACTIVE_ROW}]) == 0`),
+              campaignList(S, 'Switched off everywhere', 'count(activations[active == true]) == 0'),
+              S.divider(),
+              campaignList(S, 'Shared EU campaigns', 'origin == "eu"'),
+              ...PERMISSION_MARKETS.map(([code, name]) =>
+                campaignList(S, `${name}: running now`, `count(activations[market == $code && ${ACTIVE_ROW}]) > 0`, { code }),
+              ),
+              S.divider(),
+              S.documentTypeListItem('campaign').title('All campaigns'),
             ]),
         ),
       S.listItem()

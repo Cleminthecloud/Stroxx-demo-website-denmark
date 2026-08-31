@@ -12,6 +12,9 @@ import { trades as fallbackTrades, Trade } from '@/lib/trades';
 import { markets as fallbackMarkets, Market } from '@/lib/markets';
 export type { Market } from '@/lib/markets';
 import { getLocale } from '@/lib/locale';
+import type { HotspotSpot } from '@/components/HotspotImage';
+import { liveCampaigns, type CampaignDoc, type CampaignPlacement, type LiveCampaign } from '@/lib/campaigns';
+export type { CampaignDoc, LiveCampaign } from '@/lib/campaigns';
 
 /** CMS access layer with hardcoded fallbacks: if the dataset is empty or
  *  unreachable, every consumer renders exactly what it rendered before the
@@ -614,9 +617,173 @@ export async function getLandingSlugs(): Promise<string[]> {
   }
 }
 
+/* ── Hotspot images (reusable block) ────────────────────────────────────── */
+
+export type HotspotView = {
+  src: string;
+  alt: string;
+  eyebrow?: string;
+  headline?: string;
+  sub?: string;
+  spots: HotspotSpot[];
+};
+
+/** Turn a raw `hotspotImage` object from the CMS into what the component
+ *  renders: the picture URL and one entry per spot, with any product SKU
+ *  already joined against the feed (name + product page link). Returns null
+ *  when there is no picture, so a half-filled block simply does not render.
+ *  Used by landing/campaign sections and the Monthly lineup hero alike. */
+export function hotspotView(raw: unknown): HotspotView | null {
+  const d = raw as Record<string, any> | null | undefined;
+  if (!d) return null;
+  const path = stegaClean(d.image as string | undefined);
+  const src = assetUrl(d.imageUpload, 1800) || (path && path.startsWith('/') ? path : null);
+  if (!src) return null;
+  const spots: HotspotSpot[] = ((d.spots ?? []) as Record<string, any>[])
+    .filter((s) => s && (s.title || s.body))
+    .map((s) => {
+      const product = products.find((p) => p.code === stegaClean(s.sku));
+      return {
+        _key: s._key as string | undefined,
+        title: (s.title as string) ?? '',
+        body: (s.body as string) ?? '',
+        x: typeof s.x === 'number' ? s.x : 50,
+        y: typeof s.y === 'number' ? s.y : 50,
+        ...(product ? { productName: product.name, productHref: `/product/${product.slug}` } : {}),
+        ...(!product && typeof s.href === 'string' && s.href ? { href: stegaClean(s.href) } : {}),
+      };
+    });
+  return {
+    src,
+    alt: (d.imageUpload as { alt?: string } | undefined)?.alt ?? '',
+    eyebrow: d.eyebrow as string | undefined,
+    headline: d.headline as string | undefined,
+    sub: d.sub as string | undefined,
+    spots,
+  };
+}
+
+/* ── Campaigns (global + local, per-market activation) ──────────────────── */
+
+/** Every campaign document in the current language, with images resolved and
+ *  the "read more" target turned into a path. The WHEN/WHERE decision is made
+ *  by lib/campaigns.ts against the request's market: this fetcher stays dumb on
+ *  purpose so the window logic is one pure, unit-tested function. */
+export async function getCampaigns(): Promise<CampaignDoc[]> {
+  try {
+    const lang = await langId();
+    const q = (pred: string) =>
+      `*[_type == "campaign" && ${pred}]{ ..., "linkSlug": link->slug.current } | order(name asc)`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
+    if (!Array.isArray(data)) return [];
+    return (data as Record<string, any>[]).map((d) => {
+      const slug = typeof d.linkSlug === 'string' ? stegaClean(d.linkSlug).trim() : '';
+      return {
+        _id: d._id as string,
+        name: d.name as string,
+        language: d.language as string,
+        origin: stegaClean(d.origin as string) ?? undefined,
+        eyebrow: d.eyebrow as string,
+        headline: d.headline as string,
+        text: d.text as string,
+        primaryLabel: d.primaryLabel as string,
+        secondaryLabel: d.secondaryLabel as string,
+        secondaryHref: slug ? `/campaign/${slug}` : '/try-it',
+        images: ((d.images ?? []) as unknown[]).map((img) => assetUrl(img, 2200)).filter(Boolean) as string[],
+        activations: ((d.activations ?? []) as Record<string, any>[]).map((a) => ({
+          market: stegaClean(a.market as string) ?? undefined,
+          active: !!a.active,
+          startDate: stegaClean(a.startDate as string) ?? undefined,
+          endDate: stegaClean(a.endDate as string) ?? undefined,
+          placement: ((stegaClean(a.placement as string) as CampaignPlacement) ?? 'band') as CampaignPlacement,
+          order: typeof a.order === 'number' ? a.order : undefined,
+        })),
+      } satisfies CampaignDoc;
+    });
+  } catch {
+    return [];
+  }
+}
+
+/** The campaigns live in THIS request's market today, in running order. */
+export async function getLiveCampaigns(): Promise<LiveCampaign[]> {
+  const [docs, locale] = await Promise.all([getCampaigns(), getLocale()]);
+  return liveCampaigns(docs, locale.market);
+}
+
 /* ── Månedens STROXX (SKA) ──────────────────────────────────────────────── */
 
-export type SkaData = typeof SKA;
+export type SkaData = typeof SKA & {
+  /** YYYY-MM, the lineup's permanent archive address (/monthly/2026-07). */
+  period?: string;
+  summary?: string;
+  activeFrom?: string;
+  hotspot?: HotspotView | null;
+};
+
+/** One lineup summarised for the archive list. */
+export type LineupSummary = {
+  period: string;
+  month: string;
+  year: string;
+  summary: string;
+  heroName: string;
+  heroImgId?: number;
+  activeFrom?: string;
+  /** Item numbers in the month, so the archive search can match on them. */
+  skus: string[];
+};
+
+/** A lineup's archive address: the explicit period, else the month it went
+ *  live. Empty when neither is set, which keeps it out of the archive rather
+ *  than giving it an address that could change under a shared link. */
+export const lineupPeriod = (d: { period?: string; activeFrom?: string }): string => {
+  const p = stegaClean(d.period)?.trim();
+  if (p && /^20\d\d-(0[1-9]|1[0-2])$/.test(p)) return p;
+  const a = stegaClean(d.activeFrom)?.trim();
+  return a && /^20\d\d-\d\d/.test(a) ? a.slice(0, 7) : '';
+};
+
+/** Shared shape mapping for one monthlyLineup document. */
+function mapLineup(d: Record<string, any>): SkaData {
+  const find = (code?: string) => products.find((p) => p.code === stegaClean(code));
+  const hero = find(d.heroSku);
+  const cashCows = productsBySkus(d.cashCowSkus);
+  const nyheder = ((d.news ?? []) as Record<string, any>[])
+    .map((n) => ({ type: (n.label as string) ?? '', product: find(n.sku), pitch: (n.pitch as string) ?? '' }))
+    .filter((n) => n.product) as SkaData['nyheder'];
+  const films = ((d.films ?? []) as Record<string, any>[])
+    .filter((f) => f.youtubeId)
+    .map((f): Video => ({
+      id: stegaClean(f.youtubeId) ?? f.youtubeId,
+      title: stegaClean(f.title) ?? f.title ?? '',
+      by: stegaClean(f.by) ?? f.by ?? '',
+    }));
+  return {
+    month: (d.month as string) || SKA.month,
+    year: (d.year as string) || SKA.year,
+    period: lineupPeriod(d),
+    summary: (d.summary as string) || '',
+    activeFrom: stegaClean(d.activeFrom as string) || undefined,
+    hero: hero ?? SKA.hero,
+    heroClaims: d.heroClaims?.length
+      ? (d.heroClaims as Record<string, any>[]).map((c) => ({ title: c.title ?? '', body: c.body ?? '' }))
+      : SKA.heroClaims,
+    heroCases: d.heroCases?.length
+      ? (d.heroCases as Record<string, any>[]).map((c) => ({ trade: c.trade ?? '', use: c.use ?? '' }))
+      : SKA.heroCases,
+    heroFaq: d.heroFaq?.length
+      ? (d.heroFaq as Record<string, any>[]).map((f) => ({ q: f.q ?? '', a: f.a ?? '' }))
+      : SKA.heroFaq,
+    hotspot: hotspotView(d.heroHotspots),
+    cashCows: cashCows.length ? cashCows : SKA.cashCows,
+    nyheder: nyheder.length ? nyheder : SKA.nyheder,
+    films,
+  };
+}
+
+const LINEUP_PROJECTION = '{ ..., "films": films[]->{ _id, youtubeId, title, by } }';
 
 export async function getSka(): Promise<SkaData> {
   try {
@@ -624,43 +791,72 @@ export async function getSka(): Promise<SkaData> {
     // passed, so editors can stage next month ahead of time. Lineups with no
     // date stay eligible and fall back to newest-created (backwards compatible).
     const lang = await langId();
+    const today = new Date().toISOString().slice(0, 10);
     const q = (pred: string) =>
-      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]{ ..., "films": films[]->{ _id, youtubeId, title, by } }`;
-    let { data } = await sanityFetch({ query: q(LANG_IS), params: { today: new Date().toISOString().slice(0, 10), lang } });
-    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { today: new Date().toISOString().slice(0, 10) } }));
+      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { today, lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { today } }));
     if (!data) return SKA;
-    const d = data as Record<string, any>;
-    const find = (code?: string) => products.find((p) => p.code === stegaClean(code));
-    const hero = find(d.heroSku);
-    const cashCows = productsBySkus(d.cashCowSkus);
-    const nyheder = ((d.news ?? []) as Record<string, any>[])
-      .map((n) => ({ type: (n.label as string) ?? '', product: find(n.sku), pitch: (n.pitch as string) ?? '' }))
-      .filter((n) => n.product) as SkaData['nyheder'];
-    const films = ((d.films ?? []) as Record<string, any>[])
-      .filter((f) => f.youtubeId)
-      .map((f): Video => ({
-        id: stegaClean(f.youtubeId) ?? f.youtubeId,
-        title: stegaClean(f.title) ?? f.title ?? '',
-        by: stegaClean(f.by) ?? f.by ?? '',
-      }));
-    return {
-      month: (d.month as string) || SKA.month,
-      year: (d.year as string) || SKA.year,
-      hero: hero ?? SKA.hero,
-      heroClaims: d.heroClaims?.length
-        ? (d.heroClaims as Record<string, any>[]).map((c) => ({ title: c.title ?? '', body: c.body ?? '' }))
-        : SKA.heroClaims,
-      heroCases: d.heroCases?.length
-        ? (d.heroCases as Record<string, any>[]).map((c) => ({ trade: c.trade ?? '', use: c.use ?? '' }))
-        : SKA.heroCases,
-      heroFaq: d.heroFaq?.length
-        ? (d.heroFaq as Record<string, any>[]).map((f) => ({ q: f.q ?? '', a: f.a ?? '' }))
-        : SKA.heroFaq,
-      cashCows: cashCows.length ? cashCows : SKA.cashCows,
-      nyheder: nyheder.length ? nyheder : SKA.nyheder,
-      films,
-    };
+    return mapLineup(data as Record<string, any>);
   } catch {
     return SKA;
+  }
+}
+
+/* ── Monthly archive ────────────────────────────────────────────────────── */
+
+/** One archived month by its permanent address (/monthly/2026-07).
+ *  Matches on the explicit `period` field first, then on lineups that went live
+ *  in that month, so months created before the archive existed still resolve. */
+export async function getLineup(period: string): Promise<SkaData | null> {
+  if (!/^20\d\d-(0[1-9]|1[0-2])$/.test(period)) return null;
+  try {
+    const lang = await langId();
+    const q = (pred: string) =>
+      `*[_type == "monthlyLineup" && (period == $period || (!defined(period) && string::startsWith(activeFrom, $period))) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { period, lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { period } }));
+    return data ? mapLineup(data as Record<string, any>) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Every lineup that already went live, newest first: the archive index.
+ *  Staged future months are excluded, they are not history yet. Lineups with no
+ *  resolvable address are skipped rather than given a URL that could move. */
+export async function getLineupArchive(): Promise<LineupSummary[]> {
+  try {
+    const lang = await langId();
+    const today = new Date().toISOString().slice(0, 10);
+    const q = (pred: string) =>
+      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(coalesce(period, activeFrom) desc, _createdAt desc){ month, year, period, summary, activeFrom, heroSku, cashCowSkus }`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { today, lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en')
+      ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { today } }));
+    if (!Array.isArray(data)) return [];
+    const seen = new Set<string>();
+    return (data as Record<string, any>[])
+      .map((d): LineupSummary | null => {
+        const period = lineupPeriod(d);
+        if (!period || seen.has(period)) return null;
+        seen.add(period);
+        const hero = products.find((p) => p.code === stegaClean(d.heroSku));
+        const winners = productsBySkus(d.cashCowSkus);
+        return {
+          period,
+          month: (stegaClean(d.month as string) || '').trim(),
+          year: (stegaClean(d.year as string) || period.slice(0, 4)).trim(),
+          summary: (stegaClean(d.summary as string) || hero?.name || '').trim(),
+          heroName: hero?.name ?? '',
+          heroImgId: hero?.imgId,
+          activeFrom: stegaClean(d.activeFrom as string) || undefined,
+          /* item numbers + names feed the archive search box */
+          skus: [hero, ...winners].filter(Boolean).map((p) => `${p!.code} ${p!.name}`),
+        };
+      })
+      .filter((x): x is LineupSummary => x !== null);
+  } catch {
+    return [];
   }
 }

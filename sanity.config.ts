@@ -55,11 +55,25 @@ export default defineConfig({
             }),
           }),
           monthlyLineup: defineLocations({
-            select: { month: 'month' },
+            select: { month: 'month', period: 'period', activeFrom: 'activeFrom' },
+            resolve: (doc) => {
+              const period = (doc?.period || (doc?.activeFrom ? String(doc.activeFrom).slice(0, 7) : '')) as string;
+              return {
+                locations: [
+                  { title: `Månedens STROXX (${doc?.month || ''})`, href: '/monthly' },
+                  ...(period ? [{ title: `Its permanent address (/monthly/${period})`, href: `/monthly/${period}` }] : []),
+                  { title: 'Archive of past months', href: '/monthly/archive' },
+                  { title: 'Homepage section', href: '/#monthly' },
+                ],
+              };
+            },
+          }),
+          campaign: defineLocations({
+            select: { name: 'name', slug: 'link.slug.current' },
             resolve: (doc) => ({
               locations: [
-                { title: `Månedens STROXX (${doc?.month || ''})`, href: '/monthly' },
-                { title: 'Homepage section', href: '/#monthly' },
+                { title: `${doc?.name || 'Campaign'} on the front page`, href: '/' },
+                ...(doc?.slug ? [{ title: 'Its campaign page', href: `/campaign/${doc.slug}` }] : []),
               ],
             }),
           }),
@@ -127,7 +141,7 @@ export default defineConfig({
     structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
-      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'tradesIndex', 'productAugment', 'specialist', 'testimonial', 'video'],
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'campaign', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'tradesIndex', 'productAugment', 'specialist', 'testimonial', 'video'],
       languageField: 'language',
     }),
   ],

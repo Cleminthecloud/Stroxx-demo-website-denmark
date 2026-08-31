@@ -6,15 +6,34 @@ import GlassButton from '@/components/GlassButton';
 import Accent from '@/components/Accent';
 import { ArrowRight } from 'lucide-react';
 
+/** One campaign as the band renders it. */
+export type BandCampaign = {
+  id?: string;
+  eyebrow?: string;
+  headline?: string;
+  text?: string;
+  primaryLabel?: string;
+  secondaryLabel?: string;
+  /** resolved "read more" target (campaign landing page or /try-it) */
+  href?: string;
+  images?: string[];
+};
+
 type CampaignBandProps = {
+  /** Campaigns live in this market today, in running order. Several is normal:
+   *  the band rotates through them so a second campaign does not push the first
+   *  one off the page. Empty = the homepage's own campaign fields (below). */
+  campaigns?: BandCampaign[];
   images?: string[];
   eyebrow?: string;
   headline?: string;
   text?: string;
   primaryLabel?: string;
   secondaryLabel?: string;
-  href?: string; // resolved "read more" target (campaign landing page or /try-it)
-  // click-to-edit targets (Presentation) — data-sanity strings from the homepage
+  href?: string;
+  // click-to-edit targets (Presentation) — data-sanity strings from the homepage.
+  // Only used on the homepage-fields path: a campaign document's copy is edited
+  // in its own document, not through the homepage.
   eyebrowAttr?: string;
   headlineAttr?: string;
   textAttr?: string;
@@ -22,10 +41,15 @@ type CampaignBandProps = {
   secondaryAttr?: string;
 };
 
-/** Full-bleed cinematic campaign band — the print campaign as motion: three B&W
+/** Full-bleed cinematic campaign band — the print campaign as motion: B&W
  *  lifestyle shots cross-fade with a slow Ken Burns drift while the headline /
  *  body stay pinned on a dark left scrim. Auto-advances, pauses on hover, and
- *  falls back to a single still for reduced-motion. */
+ *  falls back to a single still for reduced-motion.
+ *
+ *  With one campaign the band behaves exactly as it always has: its photos
+ *  rotate under one piece of copy. With several live at once each photo carries
+ *  its own campaign's copy and buttons, and the progress bars below become the
+ *  way to step between them. */
 const SLIDES = [
   { src: '/Images/campaign/rings.jpg', sm: '/Images/campaign/rings-sm.jpg', pos: '60% 40%', alt: 'Tradesperson with rings and a hammer' },
   { src: '/Images/campaign/tea.jpg', sm: '/Images/campaign/tea-sm.jpg', pos: '68% 50%', alt: 'Tradesperson in bib overalls drinking from fine porcelain' },
@@ -33,7 +57,10 @@ const SLIDES = [
 ];
 const DWELL = 3400; // ms per slide
 
+const builtin = (src: string) => SLIDES.find((s) => s.src === src);
+
 export default function CampaignBand({
+  campaigns,
   images,
   eyebrow = 'Campaign',
   headline = 'Now you can afford\nmore than just tools',
@@ -51,10 +78,22 @@ export default function CampaignBand({
   /* Null when there is no market dealer URL (international, or a dealer market
      missing its Buy-at CTA link) → show the chooser, never another market's shop. */
   const dealerUrl = dealerBuyUrl(currentDealer);
-  // CMS uploads when present, the built-in campaign shots otherwise
-  const slides = images && images.length
-    ? images.map((src, n) => ({ src, sm: undefined as string | undefined, pos: '60% 40%', alt: `STROXX campaign photo ${n + 1}` }))
-    : SLIDES;
+
+  /* CMS campaign documents when the market has any live, otherwise the
+     homepage's own campaign fields (the pre-campaign-documents behaviour). */
+  const fromDoc = !!campaigns?.length;
+  const list: BandCampaign[] = fromDoc
+    ? campaigns!
+    : [{ eyebrow, headline, text, primaryLabel, secondaryLabel, href, images }];
+
+  /* One slide per photo, each carrying its own campaign's copy. A campaign with
+     no photos of its own borrows the built-in shots: all three when it is the
+     only one running, one when it has to share the band. */
+  const slides = list.flatMap((c, ci) => {
+    const imgs = c.images?.length ? c.images : list.length === 1 ? SLIDES.map((s) => s.src) : [SLIDES[ci % SLIDES.length].src];
+    return imgs.map((src, n) => ({ src, campaign: c, n, ci }));
+  });
+
   const [i, setI] = useState(0);
   const [reduce, setReduce] = useState(false);
   const paused = useRef(false);
@@ -69,43 +108,46 @@ export default function CampaignBand({
     return () => clearInterval(id);
   }, [slides.length]);
 
+  if (!slides.length) return null;
+  const active = slides[Math.min(i, slides.length - 1)];
+  const c = active.campaign;
+  /* click-to-edit only applies to the homepage-fields path */
+  const attr = (a?: string) => (fromDoc ? undefined : a);
+
   return (
     <section
       className="relative z-[46] w-full overflow-hidden bg-ink"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
-      aria-label="STROXX campaign"
+      aria-label={list.length > 1 ? 'STROXX campaigns' : 'STROXX campaign'}
     >
-      {/* carry the photos' real 16:9 ratio so the full frame shows (no head-crop);
-          min-height keeps it substantial on short/!mobile, where it covers-crops */}
       {/* phones: a full-screen poster (image covers, copy bottom-left on the
           scrim); desktop: the photos' real 16:9 ratio so the full frame shows */}
       <div className="relative w-full h-[92svh] lg:h-auto lg:aspect-[16/9] lg:min-h-[72vh] lg:max-h-[112vh]">
         {/* image series */}
         {slides.map((s, idx) => {
-          const active = idx === i;
+          const b = builtin(s.src);
+          const isActive = idx === i;
           return (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              key={s.src}
+              key={`${s.src}-${idx}`}
               src={s.src}
-              srcSet={`${s.sm} 1280w, ${s.src} 2200w`}
+              {...(b?.sm ? { srcSet: `${b.sm} 1280w, ${s.src} 2200w` } : {})}
               sizes="100vw"
-              alt={s.alt}
-              // slide 1 paints the band; 2 and 3 can arrive when the rotation needs them
+              alt={b?.alt ?? `${s.campaign.eyebrow || 'STROXX'} campaign photo ${s.n + 1}`}
+              // slide 1 paints the band; the rest can arrive when the rotation needs them
               loading={idx === 0 ? 'eager' : 'lazy'}
               decoding="async"
               draggable={false}
               className="absolute inset-0 h-full w-full object-cover select-none grayscale"
               style={{
-                objectPosition: s.pos,
-                opacity: active ? 1 : 0,
+                objectPosition: b?.pos ?? '60% 40%',
+                opacity: isActive ? 1 : 0,
                 // start at 1.0 so the full frame is visible as it fades in, then a
                 // gentle drift — keeps the head in shot while still feeling alive.
-                transform: reduce ? 'none' : `scale(${active ? 1.06 : 1.0})`,
-                transition: reduce
-                  ? 'opacity 0.9s ease'
-                  : 'opacity 0.9s ease, transform 4.6s ease-out',
+                transform: reduce ? 'none' : `scale(${isActive ? 1.06 : 1.0})`,
+                transition: reduce ? 'opacity 0.9s ease' : 'opacity 0.9s ease, transform 4.6s ease-out',
                 willChange: 'opacity, transform',
               }}
             />
@@ -130,13 +172,14 @@ export default function CampaignBand({
 
         {/* text — bottom-left on phones, centered-left on desktop */}
         <div className="relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-12 lg:items-center lg:pb-0">
-          <div className="max-w-xl">
-            <div className="eyebrow mb-5" data-sanity={eyebrowAttr}>{eyebrow}</div>
-            <h2 data-sanity={headlineAttr} className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
-              <Accent text={headline} />
+          {/* keyed on the campaign so switching campaign re-runs the fade */}
+          <div key={c.id ?? active.ci} className="max-w-xl motion-safe:animate-[state-rise_.5s_ease]">
+            <div className="eyebrow mb-5" data-sanity={attr(eyebrowAttr)}>{c.eyebrow}</div>
+            <h2 data-sanity={attr(headlineAttr)} className="h-display text-white text-[clamp(2.1rem,5.6vw,4.8rem)] leading-[0.95] mb-4 md:mb-7">
+              <Accent text={c.headline} />
             </h2>
-            <p data-sanity={textAttr} className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
-              <Accent text={text} />
+            <p data-sanity={attr(textAttr)} className="text-fog text-sm md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
+              <Accent text={c.text} />
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -144,27 +187,30 @@ export default function CampaignBand({
                   base doc stays dealer-neutral (it renders internationally). */}
               {currentDealer && dealerUrl ? (
                 <GlassButton href={dealerUrl} external>
-                  <span data-sanity={primaryAttr}>{primaryLabel || `Buy at ${currentDealer.dealerName}`}</span> <ArrowRight size={16} />
+                  <span data-sanity={attr(primaryAttr)}>{c.primaryLabel || `Buy at ${currentDealer.dealerName}`}</span> <ArrowRight size={16} />
                 </GlassButton>
               ) : (
-                <GlassButton onClick={openChooser}><span data-sanity={primaryAttr}>{primaryLabel || 'Where to buy'}</span> <ArrowRight size={16} /></GlassButton>
+                <GlassButton onClick={openChooser}><span data-sanity={attr(primaryAttr)}>{c.primaryLabel || 'Where to buy'}</span> <ArrowRight size={16} /></GlassButton>
               )}
-              <GlassButton href={href} variant="ghost">
-                <span data-sanity={secondaryAttr}>{secondaryLabel}</span>
+              <GlassButton href={c.href || '/try-it'} variant="ghost">
+                <span data-sanity={attr(secondaryAttr)}>{c.secondaryLabel || 'Read more'}</span>
               </GlassButton>
             </div>
 
-            {/* progress indicator */}
-            <div className="mt-7 md:mt-10 flex gap-2.5" role="tablist" aria-label="Choose campaign image">
+            {/* progress indicator — one bar per photo, grouped per campaign when
+                more than one is running */}
+            <div className="mt-7 md:mt-10 flex flex-wrap gap-2.5" role="tablist" aria-label="Choose campaign image">
               {slides.map((s, idx) => (
                 <button
-                  key={s.src}
+                  key={`${s.src}-${idx}`}
                   type="button"
                   role="tab"
                   aria-selected={idx === i}
-                  aria-label={`Image ${idx + 1}`}
+                  aria-label={list.length > 1 ? `${s.campaign.eyebrow || 'Campaign'} ${s.ci + 1}, image ${s.n + 1}` : `Image ${idx + 1}`}
                   onClick={() => setI(idx)}
-                  className="group relative h-1 w-12 rounded-full bg-white/15 overflow-hidden cursor-pointer"
+                  className={`group relative h-1 rounded-full bg-white/15 overflow-hidden cursor-pointer ${
+                    list.length > 1 && s.ci !== active.ci ? 'w-6 opacity-60' : 'w-12'
+                  }`}
                 >
                   <span
                     className="absolute inset-0 origin-left rounded-full bg-stroxx-blue"

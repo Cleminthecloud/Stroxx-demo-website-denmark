@@ -19,7 +19,8 @@ import EmbedFrame from '@/components/EmbedFrame';
 import { ArrowRight, ArrowDown } from 'lucide-react';
 import { createDataAttribute } from 'next-sanity';
 import { stegaClean } from '@sanity/client/stega';
-import { productsBySkus, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
+import HotspotImage from '@/components/HotspotImage';
+import { productsBySkus, hotspotView, LandingSection, getVideos, getTestimonials } from '@/lib/cms';
 import { cardCols, productCols, colsPlain } from '@/lib/grid';
 import { projectId, dataset, studioUrl } from '@/sanity/env';
 import { assetUrl } from '@/sanity/lib/image';
@@ -558,6 +559,44 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                 </div>
               </section>
             );
+
+          case 'hotspotImage': {
+            /* the picture, its numbered points and any product links are
+               resolved server-side (lib/cms hotspotView); the block simply does
+               not render when no photo is set */
+            const view = hotspotView(s);
+            if (!view) return null;
+            return (
+              <section key={s._key} className="relative">
+                <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32">
+                  {(s.eyebrow || s.headline || s.sub) && (
+                    <div className="max-w-3xl mb-10 md:mb-14">
+                      <Reveal><Eyebrow>{s.eyebrow}</Eyebrow></Reveal>
+                      {s.headline && (
+                        <ScrollText as="h2" text={s.headline}
+                          className="h-display text-white text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.96]" />
+                      )}
+                      {s.sub && (
+                        <Reveal delay={120}>
+                          <p className="text-fog text-base md:text-lg leading-relaxed max-w-xl mt-5"><Accent text={s.sub} /></p>
+                        </Reveal>
+                      )}
+                    </div>
+                  )}
+                  <Reveal delay={80}>
+                    <HotspotImage src={view.src} alt={view.alt} spots={view.spots} />
+                  </Reveal>
+                  {/* the same points as plain text: readable without JS, and
+                      the content search engines and screen readers index */}
+                  <ol className="sr-only">
+                    {view.spots.map((sp, i) => (
+                      <li key={sp._key ?? i}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>
+                    ))}
+                  </ol>
+                </div>
+              </section>
+            );
+          }
 
           case 'photoBreak':
             return (

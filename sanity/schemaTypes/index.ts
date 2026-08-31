@@ -15,11 +15,16 @@ import { qrCode } from './qrCode';
 import { feedback } from './feedback';
 import { dataSources } from './dataSources';
 import { permission } from './permission';
+import { campaign } from './campaign';
+import { hotspotImage } from './hotspotImage';
 /* brandPage removed from the Studio: /brand is now fully code-owned (we manage it) */
 
 export const schemaTypes = [
+  /* shared object types first: documents below reference them by name */
+  hotspotImage,
   siteSettings,
   landingPage,
+  campaign,
   monthlyLineup,
   productAugment,
   homePage,

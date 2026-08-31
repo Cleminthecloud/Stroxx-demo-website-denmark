@@ -742,6 +742,11 @@ export const landingPage = defineType({
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Story cards · ${s.title || ''}` }) },
         }),
         defineArrayMember({
+          name: 'hotspotImage',
+          type: 'hotspotImage',
+          title: 'Hotspot image (clickable points on a photo)',
+        }),
+        defineArrayMember({
           name: 'logoMarquee',
           title: 'Logo band (partners, scrolling)',
           type: 'object',
