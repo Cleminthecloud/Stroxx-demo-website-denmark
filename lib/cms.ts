@@ -790,13 +790,20 @@ const LINEUP_PROJECTION = '{ ..., "films": films[]->{ _id, youtubeId, title, by 
 
 export async function getSka(): Promise<SkaData> {
   try {
-    // The live lineup is the most recent one whose "Active from" date has
-    // passed, so editors can stage next month ahead of time. Lineups with no
-    // date stay eligible and fall back to newest-created (backwards compatible).
+    /* The live lineup is the most recent one whose "Active from" date has
+       passed, so editors can stage next month ahead of time. Lineups with no
+       date stay eligible and fall back to newest-created (backwards compatible).
+
+       The coalesce is load-bearing: GROQ sorts an UNDEFINED field FIRST in a
+       descending order, so a lineup with no "Active from" date used to outrank
+       every dated one and take over /monthly on its own. Substituting a floor
+       date puts undated lineups last, which is what "fall back to" always
+       meant. Found live 2026-08-31: an undated July draft full of placeholder
+       copy was sitting on /monthly ahead of the real, dated month. */
     const lang = await langId();
     const today = new Date().toISOString().slice(0, 10);
     const q = (pred: string) =>
-      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
+      `*[_type == "monthlyLineup" && (!defined(activeFrom) || activeFrom <= $today) && ${pred}] | order(coalesce(activeFrom, "0001-01-01") desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
     let { data } = await sanityFetch({ query: q(LANG_IS), params: { today, lang } });
     if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { today } }));
     if (!data) return SKA;
@@ -816,7 +823,7 @@ export async function getLineup(period: string): Promise<SkaData | null> {
   try {
     const lang = await langId();
     const q = (pred: string) =>
-      `*[_type == "monthlyLineup" && (period == $period || (!defined(period) && string::startsWith(activeFrom, $period))) && ${pred}] | order(activeFrom desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
+      `*[_type == "monthlyLineup" && (period == $period || (!defined(period) && string::startsWith(activeFrom, $period))) && ${pred}] | order(coalesce(activeFrom, "0001-01-01") desc, _createdAt desc)[0]${LINEUP_PROJECTION}`;
     let { data } = await sanityFetch({ query: q(LANG_IS), params: { period, lang } });
     if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { period } }));
     return data ? mapLineup(data as Record<string, any>) : null;
