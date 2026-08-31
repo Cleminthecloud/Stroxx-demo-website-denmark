@@ -584,14 +584,16 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                     </div>
                   )}
                   <Reveal delay={80}>
-                    <HotspotImage src={view.src} alt={view.alt} spots={view.spots} fit={view.fit} />
+                    <HotspotImage angles={view.angles} />
                   </Reveal>
-                  {/* the same points as plain text: readable without JS, and
-                      the content search engines and screen readers index */}
+                  {/* every angle's points as plain text: readable without JS,
+                      and the content search engines and screen readers index */}
                   <ol className="sr-only">
-                    {view.spots.map((sp, i) => (
-                      <li key={sp._key ?? i}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>
-                    ))}
+                    {view.angles.flatMap((a, ai) =>
+                      a.spots.map((sp, i) => (
+                        <li key={`${ai}-${sp._key ?? i}`}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>
+                      )),
+                    )}
                   </ol>
                 </div>
               </section>

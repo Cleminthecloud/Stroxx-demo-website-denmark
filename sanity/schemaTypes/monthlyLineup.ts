@@ -93,6 +93,27 @@ export const monthlyLineup = defineType({
         }),
       ],
     }),
+    /* The "where it earns its keep" section used to carry HARDCODED laser copy,
+       which read as nonsense the first month the hero was not a laser. Both
+       lines are editable here now, and fall back to the generic wording. */
+    defineField({
+      name: 'casesHeadline',
+      title: 'Use cases: headline',
+      type: 'text',
+      rows: 2,
+      fieldset: 'hero',
+      description:
+        'The headline above the trade use cases. Wrap a word in *asterisks* for the blue accent, press Enter for a line break. Empty = “One person easily gets the job done.”',
+    }),
+    defineField({
+      name: 'casesIntro',
+      title: 'Use cases: intro paragraph',
+      type: 'text',
+      rows: 3,
+      fieldset: 'hero',
+      description:
+        'The paragraph under that headline. Write it about THIS month’s tool: it is the one line most likely to still describe last month’s product if nobody changes it.',
+    }),
     defineField({
       name: 'heroCases',
       title: 'Hero use cases',

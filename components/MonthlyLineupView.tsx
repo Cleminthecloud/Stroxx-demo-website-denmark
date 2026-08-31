@@ -18,6 +18,11 @@ import { getLocale } from '@/lib/locale';
 import { cardCols, productColsWide } from '@/lib/grid';
 import { SITE_URL } from '@/lib/site';
 
+/** Small counts read better as words in a display headline. Anything past ten
+ *  falls back to the digits rather than inventing a word. */
+const NUMBER_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+const count = (n: number) => NUMBER_WORDS[n] ?? String(n);
+
 /** Månedens STROXX — one month's full page.
  *
  *  Shared by the live month at /monthly and by every archived month at
@@ -153,12 +158,16 @@ export default async function MonthlyLineupView({
               )}
             </div>
             <Reveal delay={80}>
-              <HotspotImage src={SKA.hotspot.src} alt={SKA.hotspot.alt || hero.name} spots={SKA.hotspot.spots} fit={SKA.hotspot.fit} />
+              <HotspotImage
+                angles={SKA.hotspot.angles.map((a) => ({ ...a, alt: a.alt || hero.name }))}
+              />
             </Reveal>
             <ol className="sr-only">
-              {SKA.hotspot.spots.map((sp, i) => (
-                <li key={sp._key ?? i}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>
-              ))}
+              {SKA.hotspot.angles.flatMap((a, ai) =>
+                a.spots.map((sp, i) => (
+                  <li key={`${ai}-${sp._key ?? i}`}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>
+                )),
+              )}
             </ol>
           </div>
         </section>
@@ -170,10 +179,13 @@ export default async function MonthlyLineupView({
         <div className="relative mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-32 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <Reveal><div className="eyebrow mb-5">Application</div></Reveal>
-            <ScrollText as="h2" text={'One person easily \n gets the job *done.*'}
+            {/* both lines come from the lineup, because a hardcoded sentence
+                here described a line laser on a month whose hero was a work
+                light. The fallbacks stay generic for exactly that reason. */}
+            <ScrollText as="h2" text={SKA.casesHeadline || 'One person easily \n gets the job *done.*'}
               className="h-display text-white text-[clamp(2.2rem,5vw,4rem)] leading-[0.92] mb-8" />
             <ScrollText as="p" className="text-fog text-lg leading-relaxed max-w-md"
-              text="The most expensive thing on site is time. A 3D laser sets every line at once, so marking out doesn't take two people and a string." />
+              text={SKA.casesIntro || 'The most expensive thing on site is time. The right tool takes a step out of the job, every time you use it.'} />
           </div>
           <div className="grid gap-5">
             {SKA.heroCases.map((c, i) => (
@@ -240,8 +252,10 @@ export default async function MonthlyLineupView({
           <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="eyebrow mb-5">The rest of the month</div>
+              {/* counted, not hardcoded: this month has three new arrivals and
+                  the heading used to insist there were two */}
               <h2 className="h-display text-white text-[clamp(2rem,4.5vw,3.4rem)] leading-[0.95]">
-                Five winners. Two new arrivals.
+                {count(SKA.cashCows.length)} winners. {count(SKA.nyheder.length)} new arrival{SKA.nyheder.length === 1 ? '' : 's'}.
               </h2>
             </div>
             <Link href="/products" className="link-arrow hidden sm:inline-flex shrink-0">

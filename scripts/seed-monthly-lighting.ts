@@ -68,6 +68,9 @@ const lineup = {
       body: 'Rated against dust and splashing water, with a 3 metre lead. It lives on site through the whole job, not in the van until the weather improves.',
     },
   ],
+  casesHeadline: 'Light the job. \n Not the *ceiling.*',
+  casesIntro:
+    'Bad light costs twice: once when you cannot see the work, and again when you come back to fix what you could not see. Four aimed heads put the light where the job is.',
   heroCases: [
     {
       _type: 'case',
@@ -128,43 +131,50 @@ const lineup = {
        is bumped. Swap in a real site photograph and the points stay put. */
     image: '/api/tool/151942',
     fit: 'contain',
+    /* one angle for now, so no switcher shows. The label is set so that adding
+       a second angle later reads sensibly straight away. */
+    viewLabel: 'The set',
+    /* Positions were read off the rendered page, not guessed: the product is a
+       narrow vertical object on a wide frame, so the points run DOWN THE MAST
+       rather than spreading across the width. A point floating on empty
+       background looks like a bug, not a feature. */
     spots: [
       {
         _type: 'hotspot',
         _key: k(31),
-        x: 50,
-        y: 16,
+        x: 48,
+        y: 11,
         title: 'Four heads, aimed separately',
         body: 'Each head swivels on its own, so you light the wall you are working on rather than the back of your own head.',
       },
       {
         _type: 'hotspot',
         _key: k(32),
-        x: 27,
-        y: 44,
+        x: 47,
+        y: 34,
         title: 'One 230 V lead',
         body: '14,000 lumen from a single socket. One lead to trip over instead of four, and one thing to unplug at the end of the day.',
       },
       {
         _type: 'hotspot',
         _key: k(33),
-        x: 52,
-        y: 72,
-        title: 'The tripod does the work',
-        body: 'Height adjustable and stable on a rough slab. The light comes from above the job, so the shadow falls behind you and not on it.',
-      },
-      {
-        _type: 'hotspot',
-        _key: k(34),
-        x: 73,
-        y: 38,
+        x: 47,
+        y: 56,
         title: 'IP54, and it means it',
         body: 'Dust and splashing water from any direction. It stays on site through the shell phase instead of going back in the van.',
       },
       {
         _type: 'hotspot',
+        _key: k(34),
+        x: 48,
+        y: 76,
+        title: 'The tripod does the work',
+        body: 'Height adjustable and stable on a rough slab. The light comes from above the job, so the shadow falls behind you and not on it.',
+      },
+      {
+        _type: 'hotspot',
         _key: k(35),
-        x: 38,
+        x: 62,
         y: 88,
         title: 'Lighting a corridor instead?',
         body: 'A tripod throws light from one point. For a long run, the LED strip lays it along the whole length.',

@@ -619,15 +619,22 @@ export async function getLandingSlugs(): Promise<string[]> {
 
 /* ── Hotspot images (reusable block) ────────────────────────────────────── */
 
-export type HotspotView = {
+/** One angle: its own photo, its own spots. */
+export type HotspotAngle = {
+  label: string;
   src: string;
   alt: string;
-  eyebrow?: string;
-  headline?: string;
-  sub?: string;
   /** 'contain' for a cut-out product shot that must not be cropped. */
   fit: 'cover' | 'contain';
   spots: HotspotSpot[];
+};
+
+export type HotspotView = {
+  eyebrow?: string;
+  headline?: string;
+  sub?: string;
+  /** Always at least one. More than one puts a switcher above the picture. */
+  angles: HotspotAngle[];
 };
 
 /** Turn a raw `hotspotImage` object from the CMS into what the component
@@ -635,8 +642,10 @@ export type HotspotView = {
  *  already joined against the feed (name + product page link). Returns null
  *  when there is no picture, so a half-filled block simply does not render.
  *  Used by landing/campaign sections and the Monthly lineup hero alike. */
-export function hotspotView(raw: unknown): HotspotView | null {
-  const d = raw as Record<string, any> | null | undefined;
+/** Resolve one angle (the main photo, or an entry in "More angles"). Returns
+ *  null when it has no picture, so a half-filled angle is skipped rather than
+ *  rendering an empty frame with a switcher tab pointing at it. */
+function hotspotAngle(d: Record<string, any> | null | undefined, fallbackLabel: string): HotspotAngle | null {
   if (!d) return null;
   const path = stegaClean(d.image as string | undefined);
   const src = assetUrl(d.imageUpload, 1800) || (path && path.startsWith('/') ? path : null);
@@ -656,13 +665,29 @@ export function hotspotView(raw: unknown): HotspotView | null {
       };
     });
   return {
+    label: (stegaClean(d.label as string) || stegaClean(d.viewLabel as string) || fallbackLabel).trim(),
     src,
     alt: (d.imageUpload as { alt?: string } | undefined)?.alt ?? '',
+    fit: stegaClean(d.fit) === 'contain' ? 'contain' : 'cover',
+    spots,
+  };
+}
+
+export function hotspotView(raw: unknown): HotspotView | null {
+  const d = raw as Record<string, any> | null | undefined;
+  if (!d) return null;
+  /* the flat fields are the FIRST angle; "More angles" follow it. One photo
+     stays one photo, with no switcher and nothing extra for the editor. */
+  const angles = [
+    hotspotAngle(d, 'Front'),
+    ...((d.moreViews ?? []) as Record<string, any>[]).map((v, i) => hotspotAngle(v, `Angle ${i + 2}`)),
+  ].filter((a): a is HotspotAngle => a !== null);
+  if (!angles.length) return null;
+  return {
     eyebrow: d.eyebrow as string | undefined,
     headline: d.headline as string | undefined,
     sub: d.sub as string | undefined,
-    fit: stegaClean(d.fit) === 'contain' ? 'contain' : 'cover',
-    spots,
+    angles,
   };
 }
 
@@ -722,6 +747,9 @@ export type SkaData = typeof SKA & {
   period?: string;
   summary?: string;
   activeFrom?: string;
+  /** Copy for the "where it earns its keep" section. Empty = the generic lines. */
+  casesHeadline?: string;
+  casesIntro?: string;
   hotspot?: HotspotView | null;
 };
 
@@ -779,6 +807,8 @@ function mapLineup(d: Record<string, any>): SkaData {
     heroFaq: d.heroFaq?.length
       ? (d.heroFaq as Record<string, any>[]).map((f) => ({ q: f.q ?? '', a: f.a ?? '' }))
       : SKA.heroFaq,
+    casesHeadline: (d.casesHeadline as string) || undefined,
+    casesIntro: (d.casesIntro as string) || undefined,
     hotspot: hotspotView(d.heroHotspots),
     cashCows: cashCows.length ? cashCows : SKA.cashCows,
     nyheder: nyheder.length ? nyheder : SKA.nyheder,
