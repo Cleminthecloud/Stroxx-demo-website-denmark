@@ -119,7 +119,7 @@ export default function BrandPage() {
         <Reveal>
           <div className="eyebrow mb-6">Internal · Brand</div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logos/stroxx-white.svg" alt="STROXX" className="h-12 md:h-16 w-auto mb-10" />
+          <img src="/brand/logos/stroxx-white.svg" alt="STROXX, proud professionals" className="h-20 md:h-28 w-auto mb-10" />
           <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.6rem)] leading-[0.95] max-w-3xl">
             Premium tools. <span className="text-stroxx-blue">Unpremium prices.</span>
           </h1>
@@ -172,7 +172,7 @@ export default function BrandPage() {
               <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
                 <div className="rounded-xl grid place-items-center py-14 mb-5" style={{ background: set.dark ? '#0A0B0D' : '#F6F5F3', border: '1px solid rgba(255,255,255,0.06)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={set.src} alt={`STROXX ${set.name}`} className="h-10 md:h-12 w-auto" />
+                  <img src={set.src} alt={`STROXX ${set.name}`} className="h-16 md:h-20 w-auto" />
                 </div>
                 <div className="text-white text-sm font-medium">{set.name}</div>
                 <div className="text-fog text-xs mb-4">{set.note}</div>
@@ -192,8 +192,11 @@ export default function BrandPage() {
         </div>
         <Reveal>
           <p className="mt-6 text-fog text-sm leading-relaxed max-w-2xl">
-            {'The wordmark exists in black or white only, and stands alone (the old “Proud Professionals” baseline is retired). Keep clear space of at least a third of the logo’s height on every side, and never stretch, recolour or add effects to it.'}
+            {'The lockup exists in black or white only: the framed wordmark over the Proud Professionals bar, always together, never rearranged. Keep clear space of at least a third of the logo’s height on every side, and never stretch, recolour or add effects to it. For code and web embeds there is also a currentColor SVG that picks up the surrounding text colour:'}
           </p>
+          <div className="mt-3">
+            <FmtLink f={['currentColor SVG', '/brand/logos/stroxx-currentcolor.svg']} />
+          </div>
         </Reveal>
       </section>
 
@@ -213,7 +216,7 @@ export default function BrandPage() {
             <div className="glass glass-card glass-panel--glow rounded-2xl p-6 h-full flex flex-col">
               <LogoMotion src="/brand/motion/stroxx-logo-reveal.svg" alt="STROXX logo reveal animation" />
               <div className="text-white text-sm font-medium mt-4">Logo reveal (sting)</div>
-              <div className="text-fog text-xs mb-4">The frame draws, then the letters rise in. For intros, headers and video.</div>
+              <div className="text-fog text-xs mb-4">The frame draws, the letters rise in, and the Proud Professionals bar lands last. For intros, headers and video.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-reveal.svg']} />
                 <FmtLink f={['MP4 film', '/brand/motion/stroxx-logo.mp4']} />
@@ -244,7 +247,7 @@ export default function BrandPage() {
                 <MetallicMark />
               </div>
               <div className="text-white text-sm font-medium mt-4">Metallic mark</div>
-              <div className="text-fog text-xs mb-4">Solid brushed steel. Here the light follows your cursor; the downloadable file carries the ambient pass for reels and intros.</div>
+              <div className="text-fog text-xs mb-4">Solid brushed steel, wordmark only: the baseline bar is too small to read in metal, so it sits this one out. Here the light follows your cursor; the downloadable file carries the ambient pass for reels and intros.</div>
               <div className="mt-auto flex flex-wrap gap-2">
                 <FmtLink f={['SVG', '/brand/motion/stroxx-logo-metallic.svg']} />
               </div>

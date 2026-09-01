@@ -126,7 +126,7 @@ export default function Nav({ links = LINKS, logoSrc, logoAlt }: { links?: { hre
             <img
               src={logoSrc || brandImages.logoWhite}
               alt={logoAlt || 'STROXX'}
-              className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-6' : 'h-7 md:h-8'}`}
+              className={`w-auto transition-[height] duration-300 ease-out ${scrolled ? 'h-9' : 'h-11 md:h-12'}`}
             />
           </Link>
           <div className="flex items-center gap-4 sm:gap-7 text-[13px] text-fog">

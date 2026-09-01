@@ -91,7 +91,7 @@ export default async function Footer() {
         <div className="grid gap-14 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div className="max-w-md">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={brandImages.logoWhite} alt="STROXX" className="h-7 w-auto mb-7" />
+            <img src={brandImages.logoWhite} alt="STROXX" className="h-14 w-auto mb-7" />
             <p className="text-fog leading-relaxed">
               <AboutText
                 text={

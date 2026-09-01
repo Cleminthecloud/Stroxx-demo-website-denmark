@@ -51,13 +51,13 @@ export default function LogoCraft() {
             <div className="rounded-xl grid place-items-center py-12 mb-5" style={panel}>
               <div className="flex items-end gap-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/logos/stroxx-white.svg" alt="STROXX minimum size" className="h-[18px] w-auto" />
-                <span className="text-fog/50 text-[11px]">24px</span>
+                <img src="/brand/logos/stroxx-white.svg" alt="STROXX minimum size" className="h-[32px] w-auto" />
+                <span className="text-fog/50 text-[11px]">32px</span>
               </div>
             </div>
             <div className="text-white text-sm font-medium">Minimum size</div>
             <p className="text-fog text-xs leading-relaxed mt-1">
-              {'24px tall on screen, 30mm in print. Below that the frame closes up and it stops being legible, size up or drop the frame.'}
+              {'32px tall on screen, 35mm in print. Below that the frame closes up and the lockup stops being legible. The Proud Professionals bar reads comfortably from about 60px, so give the logo room wherever you can.'}
             </p>
           </div>
         </Reveal>
@@ -96,7 +96,7 @@ export default function LogoCraft() {
               <div className="rounded-xl grid place-items-center py-10 mb-4" style={panel}>
                 <div className="flex items-center gap-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brand/logos/stroxx-white.svg" alt="STROXX" className="h-6 w-auto" />
+                  <img src="/brand/logos/stroxx-white.svg" alt="STROXX" className="h-8 w-auto" />
                   <span className="block w-px h-7 bg-line" aria-hidden />
                   {d.logo ? (
                     // eslint-disable-next-line @next/next/no-img-element
