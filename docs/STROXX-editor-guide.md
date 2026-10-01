@@ -1,9 +1,11 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.13 · July 2026
+Version 1.14 · October 2026
 
----
+Updated 1 October 2026.
+
+ 
 
 ## 1. What you're working with
 
@@ -14,13 +16,17 @@ Two golden rules:
 1. **You can't break the design.** Layout, animations and brand styling are locked in code. You edit words, images, products, stores and the order of sections.
 2. **Nothing is live until you publish.** Every change is a draft first. Publish when ready, or schedule it.
 
+ 
+
 ## 2. Getting in
 
 1. Go to the site URL followed by `/studio`.
 2. Log in with your invited account (Google login works).
 3. You land in the Studio. Your first stop is the **Welcome** tab: a personal hello, the two golden rules, and three steps that take you from zero to editing. After that, the two tabs you'll live in:
    - **Edit site**: the visual editor. The live site on the left, editing panel on the right. This is where you'll spend 95% of your time.
-   - **Content**: every document, grouped into labelled sections so it reads top to bottom the way you think about the site, Pages, Support & QR codes, Products, News, Social proof & media, Stores, then Settings and System at the bottom. Open a group to see what's inside. Useful for creating new things and finding things. Each document in a list shows its live address and its language under the title (a campaign page reads "/campaign/sommer · Dansk", a trade page "/trades/toemrer · English (base)"), so you always know where a document publishes and which translation you are looking at before you open it.
+   - **Content**: every document, grouped into labelled sections so it reads top to bottom the way you think about the site: Pages, Campaigns, Support & QR codes, Products, News articles, Social proof & media, Stores and Permissions (newsletter consent), then Settings and System at the bottom. Open a group to see what's inside. Useful for creating new things and finding things. Each document in a list shows its live address and its language under the title (a campaign page reads "/campaign/sommer · Dansk", a trade page "/trades/toemrer · English (base)"), so you always know where a document publishes and which translation you are looking at before you open it.
+
+ 
 
 ## 3. Editing text on a page
 
@@ -33,8 +39,10 @@ Two golden rules:
 ### Text formatting codes
 Two small codes give you the site's signature typography:
 
-- Wrap a word in asterisks for the blue accent: `Without the *brand* tax.` renders "brand" in STROXX blue. One word per headline reads best.
+- Wrap a word in asterisks for the blue accent: `Made for *proud* professionals.` renders "proud" in STROXX blue. One word per headline reads best.
 - Press Enter inside a headline field for a line break exactly where you want it.
+
+ 
 
 ## 3b. Images and media
 
@@ -44,19 +52,23 @@ Video works two ways: the **Film (YouTube)** collection for the film sections (p
 
 Photography ground rules: the design converts photos to black and white automatically, use high-resolution originals (2000px+ wide for full-bleed), and landscape orientation for heroes and photo breaks.
 
+ 
+
 ## 4. Editing the homepage
 
 The homepage is one document ("Homepage" under Content, or click any headline on the front page in Edit site). Editable: the giant hero headline (one field, press Enter where the line should break, each line animates in separately), the claim and its subtext, the marquee text, the range and scale sections with their two-column texts, the stats band (numbers, suffixes, labels), the specialists headline, the guarantee headline and text (and the peeling guarantee sticker's lines), the Tool of the Month intro, the categories headline, and the final buy-button label.
 
 Headlines that mix white and blue (the claim, the Tool of the Month headline) are one field: the part you wrap in *asterisks* renders blue, and Enter breaks the line.
 
-**The campaign band (box 8 · Campaign photo band) is fully editable and swappable.** Its eyebrow, headline, text and both button labels are their own fields now, so you can click any of them on the page and edit them, and the cross-fading photos are uploadable (three recommended). The "Read more" button is wired to a campaign landing page rather than a fixed address: set **Read more → campaign page** to whichever Landing page the band should promote, and the button links straight to that page's /campaign/… address. To **swap the campaign**, point that one reference at a different, or brand-new, Landing page, no developer and nothing else to touch. The current campaign, "Campaign: Try It", lives at /campaign/try-it (the older /try-it address redirects there automatically).
+**The campaign band (box 8 · Campaign photo band).** Campaigns normally run from their own Campaign documents, scheduled per country (section 8b). The fields in this box are the fallback the band shows when your country has no campaign live, so they are still worth keeping tidy. The band is fully editable and swappable. Its eyebrow, headline, text and both button labels are their own fields now, so you can click any of them on the page and edit them, and the cross-fading photos are uploadable (three recommended). The "Read more" button is wired to a campaign landing page rather than a fixed address: set **Read more → campaign page** to whichever Landing page the band should promote, and the button links straight to that page's /campaign/… address. To **swap the campaign**, point that one reference at a different, or brand-new, Landing page, no developer and nothing else to touch. The current campaign, "Campaign: Try It", lives at /campaign/try-it (the older /try-it address redirects there automatically).
 
-The panel is organised as **ten numbered, collapsible boxes in the order the page scrolls** (1 · Hero down to 10 · Categories + final CTA), so what you see in the panel mirrors what you see on the page. They start collapsed for the overview; clicking text on the page opens the right one automatically.
+The panel is organised in four tabs (Hero + claim, Range + scale, Specialists + guarantee, Month + categories + CTA) holding **numbered, collapsible boxes in the order the page scrolls** (1 · Hero down to 10 · Categories + final CTA, with 6b · Featured film), so what you see in the panel mirrors what you see on the page. They start collapsed for the overview; clicking text on the page opens the right one automatically.
 
 **Showing and hiding sections (per market).** Every section except the hero has a "Shown on the site" switch at the top of its box. Markets differ, so a market that has no specialists yet, or no campaign photos, simply switches those sections off; nothing else moves. Two rules: if a menu link points at a hidden section (e.g. Tool of the Month), remove that link too under Site settings → menus, and remember the switch hides the section for everyone visiting that market's site, it is not a draft.
 
 Not editable by design: the bag animation and all motion, the category data and product cards (they come from the product feed), and the order of the homepage sections (the flagship's composition is locked; landing pages are where you reorder freely). Any field left empty simply shows the original copy, so you can never blank the front page.
+
+ 
 
 ## 5. Moving, adding and removing blocks (landing pages)
 
@@ -67,7 +79,7 @@ Landing pages are built from **sections** (blocks). The full menu:
 - **Headline + animated number stats**
 - **Image + text, side by side**, with switchable image side and optional button
 - **Feature cards**, a 3-up frosted-glass grid for USPs and promises
-- **Product cards (by SKU)**, live products from item numbers
+- **Product cards (by SKU)**, live products from item numbers (SKU, stock keeping unit, is the product's item number)
 - **Video gallery**, the partner films
 - **Pull quote**, one big citation
 - **Testimonials**, the customer quote grid
@@ -87,9 +99,9 @@ Landing pages are built from **sections** (blocks). The full menu:
 
 Two things are worth knowing. **How the photo fills the frame**: leave it on "Fill the frame" for a photograph, and switch to "Show the whole product" for a cut-out product shot on a plain background, which would otherwise be cropped in half. And **More angles**: leave it empty for a single picture, which is the usual case, or add an angle and a small switcher appears above the photo. Each angle has its own photo and its own points, so the back of a tool is explained separately from the front, and switching angle closes any open card. A photograph of the tool in use gives you far more to point at than a cut-out on a plain background, so prefer one where you have it.
 
-**Embed rules.** The Embed block accepts pages from **approved providers only** (Typeform, Microsoft and Google forms, Google Maps, YouTube, Vimeo, and Carl Ras/STROXX pages). Paste the provider's https share/embed address and set a height. Visitors see a "Load content" card first and nothing is fetched, and no cookies are set, until they click, which keeps embeds GDPR-clean. Need another provider? Ask the developer to approve it (one line of code, deliberately). Anything that wants a `<script>` tag never goes in the CMS; those widgets are installed via Google Tag Manager.
+**Embed rules.** The Embed block accepts pages from **approved providers only** (Typeform, Microsoft and Google forms, Google Maps, YouTube, Vimeo, and Carl Ras/STROXX pages). Paste the provider's https share/embed address and set a height. Visitors see a "Load content" card first and nothing is fetched, and no cookies are set, until they click, which keeps embeds GDPR-clean (GDPR: the EU data protection regulation). Need another provider? Ask the developer to approve it (one line of code, deliberately). Anything that wants a `<script>` tag never goes in the CMS; those widgets are installed via Google Tag Manager.
 
-**The brand itself** lives at **/brand** (also the Studio's **Brand** tab): the colors and rules, downloadable Adobe swatches and CSS tokens for designers and developers, and the written brand guide, which grows over the summer, including when you speak as STROXX the brand and when as the STROXX dealer.
+**The brand itself** lives at **/brand** (also the Studio's **Brand** tab): the colors and rules, downloadable Adobe swatches and CSS tokens for designers and developers, and the written brand guide, including when you speak as STROXX the brand and when as the STROXX dealer. Since 1 September 2026 every logo on the site and in the download pack is the new Proud Professionals lockup (the framed wordmark over the Proud Professionals bar), with a rebuilt motion kit alongside it.
 
 **See them all live**: open **/components** on the site. Every block is rendered there with sample content, its exact Studio name and a short description. Browse it before building a page.
 
@@ -103,12 +115,14 @@ Two things are worth knowing. **How the photo fills the frame**: leave it on "Fi
 ### Picking products for a block
 Product blocks (Product proof, and the monthly lineup) reference products by their **item number (SKU)**, for example `34011573`. The site fetches name, photo and specs automatically. A typo'd SKU is simply skipped, it never breaks the page, but double-check the numbers against the webshop.
 
+ 
+
 ## 6. Creating a new landing page
 
-1. Go to **Content** → **Landing page** → create a new one.
+1. Go to **Content** → **Pages** → **Campaign / landing pages** → create a new one.
 2. Give it an internal title (e.g. "Summer campaign") and press Generate next to the slug. The slug becomes the address: slug `sommer` publishes at **/campaign/sommer**.
 3. Add sections (start with a Photo hero, end with Guarantee + steps and FAQ, that arc converts).
-4. Fill in SEO title and SEO description, that's what Google shows. They live in the page's **SEO + sharing** tab (the editing panel has two tabs: Content for the sections, SEO + sharing for search and social), and the Studio warns you when a title or description is long enough that Google would cut it off, fix it before publishing. Optionally upload a Share image (1200x630) for how the page looks when shared on LinkedIn or Facebook; empty means the site-wide one is used. The live Google/share preview under the fields shows the address exactly as this language's market publishes it: a Danish page previews /dk/campaign/…, the English base previews the root address.
+4. Fill in SEO (search engine optimisation) title and SEO description, that's what Google shows. They live in the page's **SEO + sharing** tab (the editing panel has two tabs: Content for the sections, SEO + sharing for search and social), and the Studio warns you when a title or description is long enough that Google would cut it off, fix it before publishing. Optionally upload a Share image (1200x630) for how the page looks when shared on LinkedIn or Facebook; empty means the site-wide one is used. The live Google/share preview under the fields shows the address exactly as this language's market publishes it: a Danish page previews /dk/campaign/…, the English base previews the root address.
 5. Open **Edit site** and steer the preview to /campaign/your-slug to fine-tune visually.
 6. Publish. The page is live at its address immediately. Share the link in newsletters and SoMe.
 
@@ -116,9 +130,11 @@ Tip: fastest way to a new page is duplicating an existing one: three-dot menu on
 
 **Nesting and moving pages**: use / in the slug to nest, slug `sommer/tilbud` publishes at /campaign/sommer/tilbud. Moving a page is simply editing its slug, and when you publish, the site automatically creates a permanent redirect from the old address to the new one, so shared links keep working. (Support pages are the exception to casual renaming: their addresses are printed on packaging QR codes, so leave those slugs alone.)
 
+ 
+
 ## 7. The store finder (map)
 
-Every store on /stores is a **Store** document (Content → Store). The map, the list, the search and the "nearest store" suggestions all read from these documents.
+Every store on /stores is a **Store** document (Content → Stores). The map, the list, the search and the "nearest store" suggestions all read from these documents.
 
 - **Country decides where a store shows.** Every store has a **Country** (Denmark, Germany, France or Belgium). Each local site shows only its own country's stores; the international (English) site shows every store across Europe and zooms out to the whole map, which is the point, it puts STROXX's real reach on show. So set the country correctly and the store lands on the right maps automatically. (Fallback if a market has no stores of its own yet: all countries, all stores.)
 - **Edit a store**: the form is grouped into collapsible boxes, Location, Contact (store), Store manager, Opening hours, and Shop-in-shop + visibility, so the map fields and the people fields stay apart. Opening hours use a decimal clock (6.3 means 06:30, 16 means 16:00, the fields explain it); latitude and longitude come from Google Maps (right-click the store on the map, the two numbers at the top of the menu, first is latitude), and the Studio flags a number that can't be a European coordinate.
@@ -128,13 +144,15 @@ Every store on /stores is a **Store** document (Content → Store). The map, the
 - **Take a store off the site**: flip "Active" off, no deleting needed.
 - **Privacy matters**: both the manager's and the STROXX Specialist's photo and direct phone are personal data. The relevant "consent given" flag must be on before publishing those details; while it is off, the site quietly hides them. The flag sits right next to the photo and phone it governs, and the Studio shows a warning if a photo or direct phone is filled in while consent is off. If someone leaves or withdraws consent, clear the fields or flip the flag.
 
+ 
+
 ## 7b. People, voices, films and legal pages
 
-Four more collections under Content, all with the same pattern (edit, Active on/off, publish):
+More collections under Content, all with the same pattern (edit, Active on/off, publish). Specialists, Testimonials and Films sit under Social proof & media; Trade pages, Trades overview and Legal & guarantee pages under Pages; Support pages, QR codes and Redirects under Support & QR codes:
 
 - **Specialist**: the trade specialists on the homepage cards and product pages (this is separate from a store's STROXX Specialist in section 7, which is the per-store contact). The "Quote topic" field matters: if a quote names a product or category, pick that category from the list (it is a picklist now, no slugs to remember) so the quote only ever appears on matching products. Consent flag before publishing photo and direct phone; the Studio warns if details are filled while the flag is off. Specialists are per language/market: each market shows its own people, and until a market has any, visitors there see the English base set. To reuse a specialist in another market, open them and use the globe translations menu (section 7d).
 - **Testimonial**: customer quotes. Link one to a product SKU and the product page shows it as a review, including to Google. The trades picklist controls which trade pages show it: tick the trades the quote suits. Testimonials are per language/market too, so a Danish carpenter's quote only appears on the Danish site; share one into another market with the globe translations menu (section 7d) and translate the quote.
-- **Trade (fag page)**: the trade areas on /trades, each with its own page at /trades/<slug> (Carpenter, Electrician, Plumber, Painter, Bricklayer today). You can add a trade, retire one (Active off), reorder them (Sort order) and edit the headline, blurb and trade FAQ. The headline is one field and uses the same asterisk trick as every other headline: wrap the words that should turn blue, like `Hard ground. *Soft price.*` Tick the product categories the trade buys from and the product cards pick themselves, top 3 on the card, top 8 on the page. Testimonials ticked with the trade appear on the page automatically.
+- **Trade (fag page)**: the trade areas on /trades, each with its own page at /trades/<slug> (Carpenter, Electrician, Plumber, Painter, Bricklayer today). You can add a trade, retire one (Active off), reorder them (Sort order) and edit the headline, blurb and trade FAQ. The headline is one field and uses the same asterisk trick as every other headline: wrap the words that should turn blue, like `Hard ground. *Harder tools.*` Tick the product categories the trade buys from and the product cards pick themselves, top 3 on the card, top 8 on the page. Testimonials ticked with the trade appear on the page automatically.
 - **Trades overview**: the /trades page itself (Pages, right above Trade pages): its headline (asterisks for the blue words), intro and SEO fields with a live preview. The trade cards below the intro come from the Trade page documents automatically, so this document is only the page's own words.
 - **Film (YouTube)**: the partner films. Paste the YouTube video ID, mark one as featured for the big player. Films are per language/market like specialists: each market's film sections show its own films (a Lecot film belongs to Belgium), with the English base set as the fallback; copy one into another market with the globe translations menu (section 7d). Films you pick by hand on a page (the film pickers) are not filtered, a picked film always shows on that page.
 - **Legal page**: privacy, cookies and terms, formatted text served at /privacy, /cookies and /terms (also linked in the footer). Placeholder text renders until legal delivers the real content.
@@ -145,6 +163,8 @@ Four more collections under Content, all with the same pattern (edit, Active on/
 
 Also worth knowing: the **Contact form** block (in the landing-page "Add item" menu) gives any page a name/email/message form. Where submissions land (inbox, CRM) is configured once by the developer; until then the form politely points to the phone.
 
+ 
+
 ## 7c. Where to buy and the dealer chooser
 
 Buy is market-aware, and you do not set it per button. On a single-dealer market the Buy buttons link straight to that market's dealer: Denmark to Carl Ras, Germany to Meesenburg, France to Foussier, Belgium to Lecot. On the international site there is no single dealer, so every Buy opens a **Where to buy** chooser that lists all the dealers with their phone and website, and the homepage carries the same directory as a section. Dealer names and contact details live on the **Market** documents; they are looked after by the developer (a change is pushed to the CMS with a short seed step), so if a dealer detail is ever wrong, tell the developer rather than hunting for a field. The guarantee seal, the guarantee text and page copy stay yours to edit as normal.
@@ -152,25 +172,31 @@ Buy is market-aware, and you do not set it per button. On a single-dealer market
 The Market document also carries your market's operations, and these two boxes ARE editable in the Studio (Settings, then Markets, open your market):
 
 - **Tracking + consent**: the market's Google Tag Manager container ID and its Cookiebot consent banner ID. One market, one set of IDs; Belgium's Dutch and French pages share them. The consent banner gates the tracking automatically. The international version normally leaves both empty.
-- **Newsletter (provider + keys)**: the signup on/off switch, the email platform (Mailchimp, Klaviyo, Adobe Marketo or a webhook), its keys (encrypted in your browser before saving) and the audience/list ID, with a connection status light at the top. The signup form's words stay per language in Site settings (section 10a).
+- **Newsletter (provider + keys)**: the signup on/off switch, the email platform (Brevo, Mailchimp, Klaviyo, Adobe Marketo or a webhook), its keys (encrypted in your browser before saving) and the audience/list ID, with a connection status light at the top. The signup form's words stay per language in Site settings (section 10a).
 
 One writing rule that keeps the international site honest: **the English version of any page is also the international site**, so English button labels and copy never name one dealer ("Where to buy", not "Buy at Carl Ras"). Your own market's language version is exactly where the dealer name belongs.
+
+ 
 
 ## 7d. Languages: translating a page
 
 The site publishes in English (the international reference) plus each market's language, and every page lives once per language. To create a language version of a page: open the page, use the **translations menu** (the globe icon in the document's top bar) and pick the language; the Studio creates a linked copy you translate and publish. Translate the content, keep the structure: blocks, images and product pickers carry over. Two habits make this painless. Translate from the English version (it is the reference the site falls back to while a translation does not exist yet), and never touch the small read-only "language" field on documents, it is how the site knows which market sees what. Support-page addresses are printed on packaging, so their slugs stay identical across languages. Content lists make translations easy to tell apart: every document shows its language next to its live address, and the SEO/share previews on a translated page show that market's own address (a Danish campaign page previews /dk/campaign/…).
 
+ 
+
 ## 8. Månedens STROXX (the monthly lineup)
 
 The document **Monthly lineup** drives the Tool of the Month page and the homepage section. Changing the month is one edit:
 
-1. Content → **Monthly lineup (Månedens STROXX)** → open the current document (or duplicate it for the new month).
+1. Content → **Pages** → **Monthly lineup (Månedens STROXX)** → open the current document (or duplicate it for the new month).
 2. Work through its four boxes, top to bottom: **When it goes live** (month name as it should read on the page, four-digit year, the optional go-live date, the archive address and a one-line summary), **Hero of the month** (the hero SKU plus its claims/cases/FAQ, the story, and an optional hotspot photo), **The five winners** (the five SKUs, drag order is display order), and **News + films**.
 3. Publish. Homepage and /monthly update together, same lineup everywhere.
 
 **Nothing is ever thrown away.** Each month also keeps a permanent address of its own, `/monthly/2026-07`, set by the **Archive address** field (leave it empty and it is taken from the go-live date). When the next month takes over, the old one does not disappear: it moves to the archive at **/monthly/archive**, where visitors search by month, tool name or item number and open any month exactly as it ran. So a link in an old newsletter, a QR code on a leaflet or a product a customer half-remembers all still land somewhere real. Two habits make this work: fill in the **one-line summary** (it is the line under the month in the archive list, and the intro sentence on the page itself, so an archived month never describes the wrong tool), and never edit an old month's archive address once it has been shared.
 
-In the Studio, Content → **Monthly lineup (Månedens STROXX)** opens onto three lists: **This month and coming up** for what you are working on, **Archive (published months)** for everything already out, and **All months**. Building next month early is normal: give it a go-live date in the future and it sits quietly in the first list until the day it takes over.
+In the Studio, Content → Pages → **Monthly lineup (Månedens STROXX)** opens onto three lists: **This month and coming up** for what you are working on, **Archive (published months)** for everything already out, and **All months**. Building next month early is normal: give it a go-live date in the future and it sits quietly in the first list until the day it takes over.
+
+ 
 
 ## 8b. Campaigns (and which countries run them)
 
@@ -189,21 +215,25 @@ The campaign lists answer the two questions you actually have: **Live somewhere 
 
 If your country has no campaign document live at all, the front page falls back to the campaign fields on the **Homepage** document, exactly as before, so nothing goes blank while you set this up.
 
+ 
+
 ## 9. Site settings (footer, hours, microcopy)
 
 Content → **Site settings**. One document per language that feeds the whole site, organized in tabs. It opens on the everyday tab, Menu + footer; the others follow in order of how often you need them (Microcopy, SEO + AI engines, Newsletter, Technical (developer)):
 
 - **Dealer name, customer service phone, footer legal line and dealer logo come from the MARKET document** (Settings → Markets), not from here: edit the market and the footer, mobile menu, chat handoff and guarantee pop-up all update together. The international version deliberately has no dealer, so those spots simply hide there. **The market's tracking IDs (GTM, Cookiebot) and its newsletter setup (provider, keys, on/off) also live on the Market document** since these are per market, not per language; sections 10 and 10a explain where.
-- **Menu and footer links** (Menu + footer tab): the top navigation (first four show on desktop, all in the mobile menu) and the footer's Pages and Buy columns. Leave empty to use the built-in lists. The header logo override lives here too.
+- **Menu and footer links** (Menu + footer tab): the top navigation (first four show on desktop, all in the mobile menu) and the footer's Pages and Buy columns. Leave empty to use the built-in lists. The header logo override lives here too: leave it empty for the standard Proud Professionals logo, or upload a white SVG (or a transparent PNG) for a special occasion; the field's own description gives the size rules.
 - **Customer service hours** (Menu + footer tab): the localized hours text under the dealer's phone in the footer. This is per-language display copy, which is why it lives here rather than on the market. Leave it empty on the international version, the seed keeps the English base dealer-neutral by clearing it. (Store opening hours are separate: each store document carries its own hours, shown in the store finder.)
 - **News section enabled** (Menu + footer tab): markets without a blog switch news off here; /news and every article return "page not found" and leave the sitemap. Remove News menu/footer links too.
 - **The guarantee's full terms are their own page**: the Legal page document with the slug "satisfaction-guarantee" renders at /satisfaction-guarantee, and every "Read the full terms" link on the site points there. Edit the text like any other page; each market gets its own translated version. (This replaced the old static PDF, whose address now forwards to the page.)
 - **Microcopy tab**: every small text on the site lives here, grouped into collapsible boxes by the page it appears on (Footer, Chat, Pro Club, News page, Newsletter form, Products page, Stores page, Service page, Support index, 404 page). Open the box for the page you are editing: the footer's about paragraph (partner names turn into links automatically), the chat switches plus its button label, panel copy, greeting and fallback answer, the Pro Club box on product pages, the page headlines and intros for Products, Stores and Service (*word* = blue accent; the Trades page copy moved to its own page document under Pages, Trades overview), the whole Service page (guarantee, returns, FAQ, documents and contact copy), the Support index headline and intro, the news page headline and empty state, the newsletter success message, and even the 404 page. Change the words, publish, done.
 - **Chat switches** (Microcopy tab, Chat box, next to the chat copy): "Show Talk to a specialist chat" hides or shows the floating chat button on the whole site. The separate "AI specialist chat" toggle controls whether it answers with AI (section 10b).
 - **SEO: site title and description** (SEO + AI engines tab): the defaults Google and social shares use when a page has no specific ones. Individual landing pages set their own in their SEO fields. The site-wide share image is a developer-managed file path on the Technical (developer) tab; the live preview here still shows it.
-- **AEO: llms.txt content** (SEO + AI engines tab): the brand summary AI answer engines (ChatGPT, Perplexity, Google AI) read at /llms.txt. Keep the facts identical to the site, consistency is what makes engines quote you. This same text is also the brain of the site's own AI chat (see section 10b).
+- **AEO: llms.txt content** (SEO + AI engines tab; AEO is answer engine optimisation): the brand summary AI answer engines (ChatGPT, Perplexity, Google AI) read at /llms.txt. Keep the facts identical to the site, consistency is what makes engines quote you. This same text is also the brain of the site's own AI chat (see section 10b).
 - **Newsletter tab**: the signup form's words for this language (headline, text, button label, consent line) plus the band and popup switches and the popup rules. The provider, its keys and the master on/off switch live on the Market document (section 10a).
-- **Technical (developer) tab**: the developer's shelf, not part of everyday editing. It holds the planned PIM product feed URL and DAM image base URL (where this market's product data and images will come from once those integrations ship; URLs only, API keys and secrets never go in the CMS, they live in the secured hosting environment) and the site-wide share image path. If something there looks wrong, tell the developer rather than editing it.
+- **Technical (developer) tab**: the developer's shelf, not part of everyday editing. It holds the site-wide share image path and a note pointing to where the product and image feed settings now live (Settings → Data sources, section 11). API keys and secrets never go in the CMS, they live in the secured hosting environment. If something there looks wrong, tell the developer rather than editing it.
+
+ 
 
 ## 10. Analytics and tracking (GTM)
 
@@ -214,9 +244,11 @@ The site loads Google Tag Manager when a container ID is set on your market's **
 3. From now on, everything happens inside GTM: GA4, Meta pixel, LinkedIn tag, conversion events. No deploys, no developer.
 4. Leave the field empty to switch tracking off entirely.
 
-What to measure first: clicks on the **Buy** button (the site's money event, market-aware: it links to the local dealer, or opens the "Where to buy" chooser on the international site, and the dealer links carry UTM tags), store-finder usage, and visits to the guarantee terms page.
+What to measure first: clicks on the **Buy** button (the site's money event, market-aware: it links to the local dealer, or opens the "Where to buy" chooser on the international site, and the dealer links carry UTM tracking tags), store-finder usage, and visits to the guarantee terms page.
 
 The cookie consent banner sits right next to it: paste your market's Cookiebot ID (CBID from manage.cookiebot.com) into **Cookiebot consent banner ID** in the same Tracking + consent box, and the banner appears on your market's pages, auto-blocking tracking until visitors consent (it gates GTM). Required before real traffic in the EU. Empty = off. The international version normally leaves both fields empty.
+
+ 
 
 ## 10a. Newsletter signups
 
@@ -230,7 +262,9 @@ Where signups appear:
 
 All three send to the same platform, your market's. Switching provider later is changing one radio button on the Market document and entering the new platform's key in the fields that appear.
 
-**Brevo is the recommended platform.** Subscriber data stays in the EU on every Brevo plan at no extra cost, which none of the American tools offer without an enterprise contract. When you pick Brevo, fill in the **double opt-in template ID** as well: with it, Brevo sends the confirmation email and nobody joins the list until they click the link. That is the legal standard in Denmark and Germany, and leaving it empty needs a documented reason. The full comparison of sixteen platforms and what each costs is in the handover pack.
+**Brevo is the recommended platform.** It is a recommendation, not a decision: the Brevo account is set up once Carl Ras has accepted it, so no market has a live email platform connected yet. Subscriber data stays in the EU on every Brevo plan at no extra cost, which none of the American tools offer without an enterprise contract. When you pick Brevo, fill in the **double opt-in template ID** as well: with it, Brevo sends the confirmation email and nobody joins the list until they click the link. That is the legal standard in Denmark and Germany, and leaving it empty needs a documented reason. The full comparison of sixteen platforms is in the handover pack.
+
+ 
 
 ## 10a-2. Permissions: your own consent database
 
@@ -247,11 +281,15 @@ What you can filter by, without asking a developer:
 - **Behaviour consent given**, the people who separately said yes to us noting what they look at
 - **One list per market**: Denmark, Germany, France, Belgium, International
 
+**Not switched on yet.** The site only writes permission records once the content dataset has been made private (so personal data can never be read by the public). Until that setup step is done the lists stay empty, by design.
+
 **These records are read-only, on purpose.** A consent record somebody typed by hand is not proof of anything. The site writes them; you read and filter them.
 
 **On "what they clicked and saw":** product and category pages are counted against a person's record only when that person ticked the separate behaviour box. It is never pre-ticked, never a condition of subscribing, and if they change their mind the history is deleted, not just stopped.
 
 **On sales data:** there is no sales filter and there cannot be one on our side. STROXX does not sell online, so the orders live in the dealer's systems and belong to the dealer. What a dealer can agree to share is an aggregated, non-personal signal. A list of their customers is not something we may receive, and it does not become allowed because the products are ours.
+
+ 
 
 ## 10b. The AI assistant, and how to train it
 
@@ -259,12 +297,14 @@ The "Talk to a specialist" chat is a hybrid. Practical questions (guarantee, nea
 
 **Training it is editing text, not machine learning.** The AI reads, live, from:
 
-1. **The "AEO: llms.txt content" field in Site settings**, its main brain. Write everything it should know here in plain language: what STROXX is, the guarantee terms, who sells STROXX in each market (Carl Ras in Denmark, Meesenburg in Germany, Foussier in France, Lecot in Belgium), what makes the price possible, tone of voice. If the AI gives a wrong or missing answer, add or correct the fact here and it knows it immediately.
+1. **The "AEO: llms.txt content" field in Site settings**, its main brain. Write everything it should know here in plain language: what STROXX is, the guarantee terms, who sells STROXX in each market (Carl Ras in Denmark, Meesenburg in Germany, Foussier in France, Lecot in Belgium), what the quality promise and guarantee stand on, tone of voice. If the AI gives a wrong or missing answer, add or correct the fact here and it knows it immediately.
 2. **The market's dealer facts** (dealer name and customer service phone come from the Market document) and the product category list.
 
 Rules it always follows: it never invents prices, stock or specifications (it points to the shop instead), it stays on topic, and it offers the human handoff for anything sensitive. Test it after editing: open the chat and ask the question a customer would.
 
 Switches: "Show Talk to a specialist chat" (the button itself) and "AI specialist chat" (AI on/off; when off, the built-in answers still work), both in Site settings → Microcopy → Chat, right next to the chat's copy. The AI also requires a one-time API key set up by your administrator in the hosting environment. Already have a chat product like Intercom or Zendesk? Its widget can be added through Google Tag Manager instead, no code needed; just switch the built-in chat off here.
+
+ 
 
 ## 10c. The Article AI (ideas, drafts and LinkedIn posts)
 
@@ -280,6 +320,8 @@ The LinkedIn workflow that drives traffic: publish the article → open it on th
 **See the card before you post:** every article shows a live preview of its link card at the bottom of its own editing form, built from the SEO title and share image as you type. If the card looks thin, fix those fields right above it and publish. The same kind of live preview (Google result + shared-link card) sits under the SEO fields on Site settings and on every landing page. Instagram note: no link cards in the feed, so use the share image as the post and put the link in a Story sticker or the bio.
 
 It follows the same rules as the chat: grounded in your llms.txt brand facts, and it never invents prices, specs or statistics.
+
+ 
 
 ## 10d. The Dashboard (your site's own numbers)
 
@@ -303,6 +345,8 @@ Every product card links on to the partner webshop, and those clicks show up in 
 The Dashboard always shows the full layout, even before the first visit: zeroed cards are the map of what will fill up. A **QR scans** card counts every scan of the managed /qr/ short links (section 10e).
 
 A **Brand footprint** row shows two live totals pulled straight from your content: **STROXX stores** (every active Store document) and **STROXX specialists** (the active stores that have a named STROXX Specialist, section 7). They update themselves as you add stores and name specialists, a running measure of the brand's real-world reach, good for a meeting slide or a partner update.
+
+ 
 
 ## 10e. Support pages and QR codes (the packaging workflow)
 
@@ -328,6 +372,8 @@ Today the packaging design and the PDFs are produced externally (Kreativ Zone / 
 2. **Product suppliers, via Carl Ras.** Going forward, manuals, declarations and software guides for a product come from whoever sources that product (purchasing/product management at Carl Ras, or the supplier directly). Whoever receives a new or updated PDF sends it to an editor, and the editor uploads it to the product's support page, two minutes, no developer. Which department officially owns "manuals source of truth" is one of the open questions Carl Ras IT is asked in the technical hand-over document; until it is answered, the working rule is: the person who receives the file uploads it (or mails it to whoever has Studio access).
 3. **The packaging designer**, for anything created as part of new packaging or campaigns, per the workflow above.
 
+ 
+
 ## 10f. The test page and feedback (finding bugs together)
 
 The site has a hidden test-drive page at **/test**: a short guide of six real journeys to try (find a tool, find a store, scan the QR, read and share an article, ask the assistant, judge the guarantee) and a report form at the bottom. Testers can attach up to four images (PNG/JPG/WebP, large photos are downscaled automatically in the browser) and paste links straight into the text. It is not in any menu and not in Google; you invite testers simply by sending them the link. No account or login is needed, testing the site and editing the site are two different things.
@@ -340,17 +386,24 @@ The site has a hidden test-drive page at **/test**: a short guide of six real jo
 
 Reports are read-only by design (the record of what testers actually said stays intact); only status and the internal note are yours to edit. Rule of thumb for inviting: send /test to colleagues, friendly customers and the client team, and ask for bluntness. One report per finding beats one long email.
 
+ 
+
 ## 11. Products and images (PIM and DAM)
 
-**You never maintain products by hand.** The site reads the Carl Ras product range (358 STROXX products today) with names, specs, categories and photos. Editors only ever point at products by SKU. **The site never shows prices anywhere:** pricing is the dealer's job, and a test in the build pipeline fails if a price ever reaches the catalogue.
+**You never maintain products by hand.** The site reads the STROXX product range (358 products today) with names, specs, categories and photos. Editors only ever point at products by item number. **The site never shows prices anywhere:** pricing is the dealer's job, and a test in the build pipeline fails if a price ever reaches the catalogue.
 
-- **PIM (product data)**: currently a snapshot of the Carl Ras range. The production build connects directly to the Carl Ras product API on a schedule, so new products, name changes and assortment changes flow in automatically. If the feed ever fails, the site keeps the last good catalogue, it never goes blank.
-- **DAM (images)**: product photos come from the Carl Ras media bank (Digizuite), preferring the transparent cut-out renditions that make the dark design work. Production moves to a pre-processed image pipeline. Waiting on: API access and a bulk export of transparent renditions from the Carl Ras DAM team.
-- **Product augment (in the Studio now)**: a marketing layer per SKU: copy overrides, claims, featured flags. The product feed stays the source of truth; this only decorates it.
+- **PIM (product information management, the product data)**: today the site runs on a fixed snapshot of the Carl Ras range. Nothing is agreed yet about the live feed. Each of the four dealers (Carl Ras in Denmark, Meesenburg in Germany, Foussier in France, Lecot in Belgium) owns its own PIM, so the proposal is one feed per dealer, matched on the product's barcode number (GTIN/EAN), delivered in whichever of four ways suits that dealer's IT (read-only access, a file at a web address, a file drop, or email), and monthly is enough. If a feed ever fails, the site keeps the last good catalogue, it never goes blank.
+- **DAM (digital asset management, the product images)**: today's photos come from the Carl Ras media bank (Digizuite), preferring the transparent cut-out renditions that make the dark design work. The same per-dealer proposal applies: transparent cut-outs at 1600px or wider, and permission for any images the dealer shot itself.
+- **Item numbers**: each dealer's own item numbers are meant to stay behind the scenes, in a server-side mapping table, and not be shown on the international site. Product pages still show an "Item no" line today; removing it is an open build item.
+- **Product augment (in the Studio now)**: a marketing layer per item number: copy overrides, claims, featured flags. The product feed stays the source of truth; this only decorates it.
 
-**Where to find the settings for these:** Settings → **Data sources (PIM, DAM, sales)**. One document, three boxes, each with a status: Not started, Spec sent to IT, Credentials received and testing, Live. It records which system each feed comes from, how it reaches us, the address, the schedule, and who owns it on the dealer's IT side. Two things it deliberately does not do: it never holds a key (those live in the hosting environment), and filling it in does not start a sync. It records the agreement; the developer connects the pipe. Until 27 August 2026 these two fields hid on the "Technical (developer)" tab of Site settings, which is why nobody could find them.
+The product data brief for each dealer's IT is in the handover pack under 01 - IT, Product data for dealer IT.
+
+**Where to find the settings for these:** Settings → **Data sources (PIM, DAM, sales)**. One document, three boxes, each with a status: Not started, Spec sent to IT, Credentials received and testing, Live. It records which system each feed comes from, how it reaches us, the address, the schedule, and who owns it on the dealer's IT side. Two things it deliberately does not do: it never holds a key (those live in the hosting environment), and filling it in does not start a sync. It records the agreement; connecting the pipe is a developer task. Until 27 August 2026 these two fields hid on the "Technical (developer)" tab of Site settings, which is why nobody could find them.
 
 The third box, **Sales signal**, is usually empty and that is correct. STROXX does not sell online, so the brand holds no order data: every transaction happens in a dealer system and belongs to the dealer. An aggregated, non-personal signal is something a dealer can agree to share. A list of named customers is not, whatever the products.
+
+ 
 
 ## 12. Publishing, history and roles
 
@@ -359,6 +412,8 @@ The third box, **Sales signal**, is usually empty and that is correct. STROXX do
 - **Scheduled publishing**: set a publish time on a draft (campaign launches at 06:00 without anyone awake).
 - **Inviting new team members** (administrators): open the **Welcome** tab and follow "Invite a colleague": one button opens Sanity's member management (choose the **Editor** role for content people), and a ready-made welcome message points the newcomer straight back to the Welcome tab so they onboard themselves.
 - **Roles**: Administrators manage everything; Editors create and publish content; Contributors draft but can't publish; Viewers see previews. Ask your site administrator for invites.
+
+ 
 
 ## 12b. The team: inviting and removing members (administrators)
 
@@ -379,11 +434,15 @@ Good to know:
 - **"I can't see anything"** usually means they're logged into the wrong account: the avatar in the Studio's top right shows who's signed in.
 - **When someone leaves the team**: member management → find the person → Remove, the same day. If an administrator leaves, also ask your developer to rotate the API tokens.
 
+ 
+
 ## 13. Do's and don'ts
 
 Do: duplicate before big rewrites, check SKUs against the webshop, keep headlines short (they're huge on screen), fill SEO fields on new pages, use the blue accent sparingly (one word per headline), keep manager consent flags honest.
 
 Don't: paste text with exotic formatting from Word (paste as plain text), publish half-finished pages (drafts cost nothing), share your login, delete store documents when "Active off" does the job.
+
+ 
 
 ## 14. Help and learning more
 
@@ -395,6 +454,8 @@ Want to go deeper into Sanity itself?
 - **Sanity documentation**: https://www.sanity.io/docs, the reference for everything the Studio can do (drafts, history, comments, tasks, real-time collaboration).
 - Honestly though: for editing THIS site, this guide plus fifteen minutes of clicking around in Edit site teaches you more than any course. The Studio is built so you can't break anything.
 
+ 
+
 ## 15. Ownership and hand-over
 
-The platform is built to be owned by you. The code is standard Next.js in a Git repository that transfers to your organization with full history. The content lives in your Sanity project, which transfers between organizations in their dashboard (content, media and users included) and is exportable as plain files at any time. Hosting is a standard Vercel project that transfers to your team. There are no proprietary pieces and no lock-in: your IT department or any web agency can take over the whole thing in an afternoon, whenever you choose.
+The platform is built to be owned by you. The rule is simple: every account (hosting, CMS, code, domains, analytics) is created in the name of Union (Union Euro Trading, STROXX's owner), which pays for and owns it; agencies are invited in and can be removed. The two per-market exceptions are the cookie banner (Cookiebot, per domain) and the email platform (Brevo, which holds that country's list), which sit with each market's partner. A few accounts created during the build move over at handover. The code is standard Next.js in a Git repository that transfers with full history. The content lives in your Sanity project, which transfers between organizations in their dashboard (content, media and users included) and is exportable as plain files at any time. Hosting is a standard Vercel project that transfers to your team. There are no proprietary pieces and no lock-in: your IT department or any web agency can take over the whole thing in an afternoon, whenever you choose.
