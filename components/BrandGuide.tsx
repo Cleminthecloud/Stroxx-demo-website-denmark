@@ -30,7 +30,7 @@ export default function BrandGuide() {
   return (
     <section className="mx-auto max-w-[1600px] px-6 md:px-10 pb-8">
       {/* ── colors ── */}
-      <div className="eyebrow mb-6">Brand guide · Colors</div>
+      <div id="colors" className="eyebrow mb-6 scroll-mt-24">Brand guide · Colors</div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-16">
         {COLORS.map((c) => (
           <div key={c.varName} className="glass-panel rounded-xl overflow-hidden">
@@ -66,7 +66,7 @@ export default function BrandGuide() {
       </div>
 
       {/* ── typography ── */}
-      <div className="eyebrow mb-6">Brand guide · Typography</div>
+      <div id="typography" className="eyebrow mb-6 scroll-mt-24">Brand guide · Typography</div>
       <div className="glass-panel rounded-xl p-8 md:p-10 mb-16 space-y-10">
         <div>
           <div className="text-fog/60 text-xs uppercase tracking-wider mb-3">Display headline · h-display, white, tight leading</div>
@@ -104,7 +104,7 @@ export default function BrandGuide() {
       </div>
 
       {/* ── elements ── */}
-      <div className="eyebrow mb-6">Brand guide · Interface elements</div>
+      <div id="interface-elements" className="eyebrow mb-6 scroll-mt-24">Brand guide · Interface elements</div>
       <div className="glass-panel rounded-xl p-8 md:p-10 mb-16">
         <div className="flex flex-wrap items-center gap-4 mb-8">
           <GlassButton href="#">Primary action <ArrowRight size={16} /></GlassButton>
@@ -123,7 +123,7 @@ export default function BrandGuide() {
       </div>
 
       {/* ── the rules ── */}
-      <div className="eyebrow mb-6">Brand guide · The rules</div>
+      <div id="rules" className="eyebrow mb-6 scroll-mt-24">Brand guide · The rules</div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-20">
         <Rule title="Photography is black and white">
           The design converts photos to B&W automatically. Only product cut-outs and the blue glow carry color, so the tools are the heroes.

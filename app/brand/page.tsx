@@ -130,7 +130,7 @@ export default function BrandPage() {
       </div>
 
       {/* STROXX 3.0 — the rallying story for team + dealers */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
+      <section id="welcome" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-10">
         <Reveal><div className="eyebrow mb-6">Welcome to STROXX 3.0</div></Reveal>
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <Reveal>
@@ -164,7 +164,7 @@ export default function BrandPage() {
       </section>
 
       {/* LOGO + DOWNLOADS */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
+      <section id="logo" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-10">
         <Reveal><div className="eyebrow mb-6">The logo</div></Reveal>
         <div className="grid gap-6 lg:grid-cols-2">
           {LOGO_SETS.map((set) => (
@@ -204,7 +204,7 @@ export default function BrandPage() {
       <LogoCraft />
 
       {/* MOTION + EMBEDS */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-10">
+      <section id="motion" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-10">
         <Reveal><div className="eyebrow mb-6">Motion + embeds</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
@@ -278,7 +278,7 @@ export default function BrandPage() {
       <BrandGuide />
 
       {/* IMAGERY */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="imagery" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <Reveal><div className="eyebrow mb-6">Imagery</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
@@ -289,7 +289,7 @@ export default function BrandPage() {
       </section>
 
       {/* CAMPAIGN PHOTOGRAPHY */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="campaign-photography" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <Reveal><div className="eyebrow mb-6">Campaign photography</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
@@ -300,18 +300,29 @@ export default function BrandPage() {
       </section>
 
       {/* STROXX IN THE WORLD */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="in-the-world" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <Reveal><div className="eyebrow mb-6">STROXX in the world</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
-            {'The campaign, activated. One idea running everywhere a tradesperson looks, from the storefront to the feed. This is what every market can put up next month. Click any preview to view it large. The editable templates live in Carl Ras’s Digizuite DAM as InDesign IDML packages (translate the copy, keep the layout), an English master is the base each market localises from. Grabbing a JPEG here is just a reference; the real, editable file comes from the DAM.'}
+            {'The campaign, activated. One idea running everywhere a tradesperson looks, from the storefront to the feed. This is what every market can put up next month. Click any preview to view it large.'}
           </p>
+        </Reveal>
+        <Reveal>
+          <div className="glass glass-card rounded-2xl p-6 mb-8 max-w-3xl border border-stroxx-blue/30">
+            <div className="text-stroxx-blue text-xs uppercase tracking-wider mb-3">Where the editable files live: the DAM</div>
+            <p className="text-fog text-sm leading-relaxed mb-3">
+              {'Every piece below is to be added to the DAM as a full InDesign package: the IDML file, linked images and fonts, plus a print PDF. In Denmark that is Carl Ras’s Digizuite; each market uses its own dealer’s DAM. An English master is the base each market localises from: translate the copy, keep the layout.'}
+            </p>
+            <p className="text-fog/70 text-xs leading-relaxed">
+              {'Status: not yet uploaded. Until the packages are in the DAM, the JPEGs here are reference only and must not be used for print or production. Uploading new campaign material to the DAM is part of every campaign handover.'}
+            </p>
+          </div>
         </Reveal>
         <PhotoGallery images={APPLICATIONS} />
       </section>
 
       {/* POSITIONING + VOICE */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="positioning-and-voice" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <Reveal><div className="eyebrow mb-6">Positioning + voice</div></Reveal>
         <div className="grid gap-6 lg:grid-cols-3">
           <Reveal>
@@ -355,7 +366,7 @@ export default function BrandPage() {
       </section>
 
       {/* PARTNERS */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="sold-across-europe" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <Reveal><div className="eyebrow mb-6">Sold across Europe</div></Reveal>
         <Reveal>
           <p className="text-fog text-sm leading-relaxed max-w-2xl mb-8">
@@ -378,7 +389,7 @@ export default function BrandPage() {
       <Messaging />
 
       {/* DO / DON'T */}
-      <section className="mx-auto max-w-[1600px] px-6 md:px-10 py-8">
+      <section id="do-and-dont" className="scroll-mt-24 mx-auto max-w-[1600px] px-6 md:px-10 py-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <Reveal>
             <div className="glass glass-card glass-panel--glow rounded-2xl p-7 h-full">

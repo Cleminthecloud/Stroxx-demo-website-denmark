@@ -47,12 +47,15 @@ export default function Messaging() {
       {/* the promise */}
       <Reveal>
         <div className="glass glass-card glass-panel--glow rounded-2xl p-8 md:p-10 mb-6">
-          <div className="text-fog/60 text-xs uppercase tracking-wider mb-4">The promise</div>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-fog/60 text-xs uppercase tracking-wider">The promise</span>
+            <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-amber-300">Placeholder</span>
+          </div>
           <p className="h-display text-white text-[clamp(1.8rem,4vw,3rem)] leading-[0.98] mb-5">
-            We get you. <span className="text-stroxx-blue">We got you.</span>
+            Premium tools. <span className="text-stroxx-blue">Unpremium prices.</span>
           </p>
           <p className="text-fog leading-relaxed max-w-2xl">
-            {'We totally get you, we’ve got everything you need, and we’ve always got your back. Skilled work deserves more than fair pay; it deserves respect. When the work matters, the tools should too.'}
+            {'Placeholder line until the brand platform is signed off. Quality is felt first; the price is the positive surprise, never the opening line.'}
           </p>
         </div>
       </Reveal>

@@ -1,26 +1,28 @@
 import type { CSSProperties } from 'react';
 import { X } from 'lucide-react';
 import Reveal from '@/components/Reveal';
+import DealerMark from '@/components/DealerMark';
 
 /** Logo craft: clear space, minimum size, the misuse "never" grid, and dealer
  *  co-branding lockups. Code-owned, part of /brand. Uses the real wordmark
- *  (public/brand/logos/stroxx-white.svg) and the Carl Ras mark; the other three
- *  markets show the typographic lockup rule (no dealer logos in-repo yet). */
+ *  (public/brand/logos/stroxx-white.svg) and the four dealer marks from
+ *  public/brand/partners, rendered single-ink via DealerMark. */
 
 const MISUSE: { label: string; imgStyle?: CSSProperties; panel?: string }[] = [
   { label: 'Don’t stretch it', imgStyle: { transform: 'scaleX(1.45)' } },
   { label: 'Don’t squash it', imgStyle: { transform: 'scaleY(0.6)' } },
   { label: 'Don’t tilt it', imgStyle: { transform: 'rotate(7deg)' } },
-  { label: 'Don’t add effects', imgStyle: { filter: 'drop-shadow(0 3px 10px rgba(0,136,194,0.9))' } },
+  // Deliberately loud so the misuse reads at a glance: hard offset shadow plus a neon outer glow.
+  { label: 'Don’t add effects', imgStyle: { filter: 'drop-shadow(5px 6px 0 rgba(0,136,194,1)) drop-shadow(0 0 6px rgba(120,210,255,1)) drop-shadow(0 0 18px rgba(0,170,255,0.95)) drop-shadow(0 0 36px rgba(0,170,255,0.7))' } },
   { label: 'Don’t recolour it', imgStyle: { filter: 'brightness(0) saturate(100%) invert(20%) sepia(93%) saturate(3000%) hue-rotate(345deg)' } },
   { label: 'Don’t kill the contrast', panel: '#C3C7CC' },
 ];
 
-const LOCKUPS: { market: string; name: string; logo?: string }[] = [
-  { market: 'Denmark', name: 'Carl Ras', logo: '/brand/carl-ras-logo-white.svg' },
-  { market: 'Germany', name: 'Meesenburg' },
-  { market: 'France', name: 'Foussier' },
-  { market: 'Belgium', name: 'Lecot' },
+const LOCKUPS: { market: string; name: string; logo: string; ar: string }[] = [
+  { market: 'Denmark', name: 'Carl Ras', logo: '/brand/partners/carl-ras.svg', ar: '211 / 60' },
+  { market: 'Germany', name: 'Meesenburg', logo: '/brand/partners/meesenburg.svg', ar: '214 / 51' },
+  { market: 'France', name: 'Foussier', logo: '/brand/partners/foussier.svg', ar: '203 / 35' },
+  { market: 'Belgium', name: 'Lecot', logo: '/brand/partners/lecot.svg', ar: '217 / 45' },
 ];
 
 const panel: CSSProperties = { background: '#0A0B0D', border: '1px solid rgba(255,255,255,0.06)' };
@@ -98,12 +100,7 @@ export default function LogoCraft() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brand/logos/stroxx-white.svg" alt="STROXX" className="h-8 w-auto" />
                   <span className="block w-px h-7 bg-line" aria-hidden />
-                  {d.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={d.logo} alt={d.name} className="h-6 w-auto opacity-90" />
-                  ) : (
-                    <span className="text-white text-sm tracking-wide">{d.name}</span>
-                  )}
+                  <DealerMark src={d.logo} ar={d.ar} label={d.name} height={22} className="text-white/90" />
                 </div>
               </div>
               <div className="text-white text-sm">{d.name}</div>
