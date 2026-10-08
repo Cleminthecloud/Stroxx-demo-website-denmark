@@ -26,6 +26,27 @@ import { projectId, dataset, studioUrl } from '@/sanity/env';
 import { assetUrl } from '@/sanity/lib/image';
 import type { Testimonial } from '@/lib/testimonials';
 import type { Video } from '@/lib/videos';
+import { getLocale } from '@/lib/locale';
+import FilmPlayer from '@/components/focus/FilmPlayer';
+import DealerLink from '@/components/focus/DealerLink';
+import {
+  type BlockCtx,
+  TextIntro,
+  NumberedTabsBlock,
+  FilmSection,
+  ComparisonTable,
+  BentoCompare,
+  SpecGrid,
+  ModelCards,
+  RangeAdvisorBlock,
+  SafetyNotice,
+  StepList,
+  ImageMosaic,
+  LinkCards,
+  Explainer,
+  PeopleCards,
+} from '@/components/focus/FocusBlocks';
+import { isForeignDealerUrl, localizeHref, safeHref } from '@/lib/focus';
 
 /** Renders CMS landing-page sections with the exact art direction of the
  *  hand-built /try-it page. Each `_type` maps to one section block; editors
@@ -47,12 +68,19 @@ export { default as Accent } from '@/components/Accent';
 export default async function LandingSections({
   sections,
   docId,
+  docType = 'landingPage',
+  linkPrefix = '',
 }: {
   sections: LandingSection[];
   docId?: string;
+  /** the Sanity type of the page, for click-to-edit overlays (landingPage | focusPage) */
+  docType?: string;
+  /** the visitor's locale path prefix, applied to internal links in new blocks */
+  linkPrefix?: string;
 }) {
   /* collections some blocks render (CMS-managed with hardcoded fallbacks) */
-  const [videosData, testimonialsData] = await Promise.all([getVideos(), getTestimonials()]);
+  const [videosData, testimonialsData, locale] = await Promise.all([getVideos(), getTestimonials(), getLocale()]);
+  const ctx: BlockCtx = { prefix: linkPrefix, market: locale.market };
   /* data-sanity on every section wrapper makes the WHOLE block click-to-edit
      in Presentation (headlines run through Accent/ScrollText, which split the
      invisible stega markers, so per-string overlays alone aren't enough). */
@@ -63,7 +91,7 @@ export default async function LandingSections({
           dataset,
           baseUrl: studioUrl,
           id: docId,
-          type: 'landingPage',
+          type: docType,
           path: `sections[_key=="${key}"]`,
         }).toString()
       : undefined;
@@ -72,15 +100,44 @@ export default async function LandingSections({
     <>
       {sections.map((s) => (
         <div key={s._key} data-sanity={sectionAttr(s._key)} style={{ display: 'contents' }}>
-          {renderSection(s, videosData, testimonialsData)}
+          {renderSection(s, videosData, testimonialsData, ctx)}
         </div>
       ))}
     </>
   );
 }
 
-function renderSection(s: LandingSection, videosData?: Video[], testimonialsData?: Testimonial[]) {
+function renderSection(s: LandingSection, videosData?: Video[], testimonialsData?: Testimonial[], ctx: BlockCtx = { prefix: '', market: 'int' }) {
   switch (s._type) {
+          case 'textIntro':
+            return <TextIntro key={s._key} s={s} ctx={ctx} />;
+          case 'numberedTabs':
+            return <NumberedTabsBlock key={s._key} s={s} />;
+          case 'filmSection':
+            return <FilmSection key={s._key} s={s} />;
+          case 'comparisonTable':
+            return <ComparisonTable key={s._key} s={s} />;
+          case 'bentoCompare':
+            return <BentoCompare key={s._key} s={s} />;
+          case 'specGrid':
+            return <SpecGrid key={s._key} s={s} />;
+          case 'modelCards':
+            return <ModelCards key={s._key} s={s} ctx={ctx} />;
+          case 'rangeAdvisor':
+            return <RangeAdvisorBlock key={s._key} s={s} />;
+          case 'safetyNotice':
+            return <SafetyNotice key={s._key} s={s} />;
+          case 'stepList':
+            return <StepList key={s._key} s={s} />;
+          case 'imageMosaic':
+            return <ImageMosaic key={s._key} s={s} />;
+          case 'linkCards':
+            return <LinkCards key={s._key} s={s} ctx={ctx} />;
+          case 'explainer':
+            return <Explainer key={s._key} s={s} ctx={ctx} />;
+          case 'peopleCards':
+            return <PeopleCards key={s._key} s={s} />;
+
           case 'photoHero': {
             const height =
               s.height === 'half' ? 'h-[60svh] min-h-[420px]' : s.height === 'tall' ? 'h-[80svh] min-h-[520px]' : 'h-[100svh] min-h-[560px]';
@@ -88,76 +145,123 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
             const justify = align === 'center' ? 'lg:justify-center' : align === 'right' ? 'lg:justify-end' : '';
             const textAlign = align === 'center' ? 'lg:text-center' : align === 'right' ? 'lg:text-right' : '';
             const btnJustify = align === 'center' ? 'lg:justify-center' : align === 'right' ? 'lg:justify-end' : '';
+            /* video: an uploaded file wins over a pasted URL; optional square
+               (tablet) and portrait (phone) cuts swap in by viewport */
+            const video = safeHref(s.videoFileUrl || s.videoUrl);
+            const cuts = [
+              { min: 992, src: video },
+              ...(safeHref(s.videoUrlSquare) ? [{ min: 768, src: safeHref(s.videoUrlSquare) }] : []),
+              ...(safeHref(s.videoUrlPortrait) ? [{ min: 0, src: safeHref(s.videoUrlPortrait) }] : []),
+            ].filter((c) => c.src);
+            const poster = assetUrl(s.imageUpload) || s.image || undefined;
+            const hasText = Boolean(stegaClean(s.headline) || stegaClean(s.sub) || s.ctaLabel || s.eyebrow);
+            /* a hard dealer link from another market never shows (buy contract) */
+            const ctaHref = s.ctaHref && isForeignDealerUrl(stegaClean(s.ctaHref), ctx.market) ? '' : localizeHref(stegaClean(s.ctaHref) || '', ctx.prefix);
             return (
               <section key={s._key} className={`relative ${height} overflow-hidden`}>
-                {s.videoUrl ? (
-                  <video
-                    src={s.videoUrl}
-                    poster={assetUrl(s.imageUpload) || s.image || undefined}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 h-full w-full object-cover select-none"
-                  />
+                {video ? (
+                  cuts.length > 1 ? (
+                    <FilmPlayer hero src={video} poster={poster} sources={cuts} label={stegaClean(s.headline) || 'Film'} />
+                  ) : (
+                    <video
+                      src={video}
+                      poster={poster}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover select-none"
+                    />
+                  )
                 ) : (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/rings.jpg'} sizes="100vw" alt={imgAlt(s.imageUpload)} draggable={false}
                     className="absolute inset-0 h-full w-full object-cover grayscale select-none" style={{ objectPosition: '62% 35%' }} />
                 )}
-                {align === 'left' && (
+                {hasText && align === 'left' && (
                   <div className="pointer-events-none absolute inset-0 hidden lg:block" style={{
                     background: 'linear-gradient(90deg, rgba(8,9,11,0.93) 0%, rgba(8,9,11,0.66) 34%, rgba(8,9,11,0.18) 62%, rgba(8,9,11,0) 82%)' }} />
                 )}
-                {align === 'right' && (
+                {hasText && align === 'right' && (
                   <div className="pointer-events-none absolute inset-0 hidden lg:block" style={{
                     background: 'linear-gradient(270deg, rgba(8,9,11,0.93) 0%, rgba(8,9,11,0.66) 34%, rgba(8,9,11,0.18) 62%, rgba(8,9,11,0) 82%)' }} />
                 )}
-                {align === 'center' && (
+                {hasText && align === 'center' && (
                   <div className="pointer-events-none absolute inset-0 hidden lg:block" style={{
                     background: 'radial-gradient(70% 70% at 50% 55%, rgba(8,9,11,0.78), rgba(8,9,11,0.25) 70%, rgba(8,9,11,0) 100%)' }} />
                 )}
-                <div className="pointer-events-none absolute inset-0 lg:hidden" style={{
-                  background: 'linear-gradient(180deg, rgba(8,9,11,0.35) 0%, rgba(8,9,11,0) 30%, rgba(8,9,11,0.5) 55%, rgba(8,9,11,0.97) 100%)' }} />
+                {hasText && (
+                  <div className="pointer-events-none absolute inset-0 lg:hidden" style={{
+                    background: 'linear-gradient(180deg, rgba(8,9,11,0.35) 0%, rgba(8,9,11,0) 30%, rgba(8,9,11,0.5) 55%, rgba(8,9,11,0.97) 100%)' }} />
+                )}
                 <div className="pointer-events-none absolute inset-0" style={{
-                  background: 'linear-gradient(180deg, rgba(11,12,14,0.6) 0%, rgba(11,12,14,0) 18%, rgba(11,12,14,0) 80%, #0B0C0E 100%)' }} />
-                <div className={`relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end pb-14 lg:items-center lg:pb-0 ${justify}`}>
-                  <div className={`max-w-2xl ${textAlign}`}>
-                    <Eyebrow>{s.eyebrow}</Eyebrow>
-                    <h1 className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-6">
-                      <Accent text={s.headline} />
-                    </h1>
-                    <p className={`text-fog text-base md:text-xl leading-relaxed mb-8 max-w-lg ${align === 'center' ? 'lg:mx-auto' : align === 'right' ? 'lg:ml-auto' : ''}`}>
-                      <Accent text={s.sub} />
-                    </p>
-                    <div className={`flex flex-wrap items-center gap-3 ${btnJustify}`}>
-                      {s.ctaLabel && (
-                        <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
+                  background: hasText
+                    ? 'linear-gradient(180deg, rgba(11,12,14,0.6) 0%, rgba(11,12,14,0) 18%, rgba(11,12,14,0) 80%, #0B0C0E 100%)'
+                    : 'linear-gradient(180deg, rgba(11,12,14,0.45) 0%, rgba(11,12,14,0) 16%, rgba(11,12,14,0) 86%, #0B0C0E 100%)' }} />
+                {hasText && (
+                  <div className={`relative h-full mx-auto max-w-[1600px] px-6 md:px-10 flex items-end ${s.disclosure ? 'pb-36' : s.cueLabel ? 'pb-24' : 'pb-14'} lg:items-center lg:pb-0 ${justify}`}>
+                    <div className={`max-w-2xl ${textAlign}`}>
+                      <Eyebrow>{s.eyebrow}</Eyebrow>
+                      {stegaClean(s.headline) && (
+                        <h1 className="h-display text-white text-[clamp(2.6rem,7vw,6rem)] leading-[0.92] mb-6">
+                          <Accent text={s.headline} />
+                        </h1>
                       )}
-                      {s.secondaryLabel && (
-                        <a href={s.secondaryHref || '#section-1'} className="link-arrow text-sm">
-                          {s.secondaryLabel} <ArrowDown size={15} />
-                        </a>
+                      {s.sub && (
+                        <p className={`text-fog text-base md:text-xl leading-relaxed mb-8 max-w-lg ${align === 'center' ? 'lg:mx-auto' : align === 'right' ? 'lg:ml-auto' : ''}`}>
+                          <Accent text={s.sub} />
+                        </p>
                       )}
+                      <div className={`flex flex-wrap items-center gap-3 ${btnJustify}`}>
+                        {s.ctaLabel && (
+                          <LandingBuyButton ctaHref={ctaHref} label={s.ctaLabel} />
+                        )}
+                        {s.secondaryLabel && (
+                          <a href={s.secondaryHref || '#section-1'} className="link-arrow text-sm">
+                            {s.secondaryLabel} <ArrowDown size={15} />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+                {(s.cueLabel || s.disclosure) && (
+                  /* bottom LEFT, stacked: the bottom-right corner belongs to the
+                     specialist chat button, which would cover a legal line */
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto flex max-w-[1600px] flex-col items-start gap-2 px-6 pb-5 md:px-10">
+                    {s.disclosure && <span className="max-w-[26rem] text-[11px] leading-snug text-white/65">{s.disclosure}</span>}
+                    {s.cueLabel && (
+                      <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/70">
+                        {s.cueLabel} <ArrowDown size={13} className="animate-bounce" aria-hidden />
+                      </span>
+                    )}
+                  </div>
+                )}
               </section>
             );
           }
 
           case 'splitMedia': {
             const imgLeft = s.imageSide === 'left';
+            const contain = s.fit === 'contain';
+            /* product shots may stay in colour; mood photos go black and white */
+            const tone = s.colour ? '' : 'grayscale';
+            const splitHref = s.ctaHref && isForeignDealerUrl(stegaClean(s.ctaHref), ctx.market) ? '' : localizeHref(stegaClean(s.ctaHref) || '', ctx.prefix);
             return (
               <section key={s._key} className="relative">
                 <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-24 md:py-36 grid gap-14 lg:grid-cols-2 lg:items-center">
                   <Reveal from={imgLeft ? 'left' : 'right'} className={imgLeft ? '' : 'lg:order-2'}>
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                    <div className={`relative overflow-hidden rounded-2xl ${contain ? 'aspect-[4/5] bg-steel' : s.colour ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>
+                      {contain && (
+                        <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 55%, rgba(0,136,194,0.2), transparent 72%)' }} />
+                      )}
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={assetUrl(s.imageUpload) || s.image || '/Images/campaign/tea.jpg'} alt={imgAlt(s.imageUpload)} draggable={false}
-                        className="absolute inset-0 h-full w-full object-cover grayscale select-none" />
-                      <div className="pointer-events-none absolute inset-0" style={{
-                        background: 'linear-gradient(180deg, rgba(11,12,14,0) 55%, rgba(11,12,14,0.45) 100%)' }} />
+                        className={`absolute inset-0 h-full w-full select-none ${contain ? 'object-contain p-8' : 'object-cover'} ${tone}`} />
+                      {!contain && (
+                        <div className="pointer-events-none absolute inset-0" style={{
+                          background: 'linear-gradient(180deg, rgba(11,12,14,0) 55%, rgba(11,12,14,0.45) 100%)' }} />
+                      )}
                     </div>
                   </Reveal>
                   <Reveal delay={100} className={imgLeft ? 'lg:order-2' : ''}>
@@ -165,9 +269,14 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                     <ScrollText as="h2" text={s.headline || ''}
                       className="h-display text-white text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] mb-6" />
                     {s.body && <p className="text-fog text-lg leading-relaxed max-w-xl mb-8">{s.body}</p>}
-                    {s.ctaLabel && (
-                      <LandingBuyButton ctaHref={s.ctaHref} label={s.ctaLabel} />
-                    )}
+                    {s.ctaLabel && (splitHref || !s.itemNumber ? (
+                      <LandingBuyButton ctaHref={splitHref} label={s.ctaLabel} />
+                    ) : (
+                      <DealerLink itemNumber={stegaClean(s.itemNumber)} className="glass-cta">
+                        <span className="glass-cta__glow" aria-hidden />
+                        <span>{s.ctaLabel}</span> <ArrowRight size={16} />
+                      </DealerLink>
+                    ))}
                   </Reveal>
                 </div>
               </section>
@@ -228,7 +337,12 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
             );
 
           case 'ctaBanner': {
-            const sHref = s.secondaryHref || '/stores';
+            const sRaw = stegaClean(s.secondaryHref) || '';
+            const sHref = sRaw && !isForeignDealerUrl(sRaw, ctx.market) ? localizeHref(sRaw, ctx.prefix) : localizeHref('/stores', ctx.prefix);
+            const pRaw = stegaClean(s.primaryHref) || '';
+            const pHref = pRaw && !isForeignDealerUrl(pRaw, ctx.market) ? localizeHref(pRaw, ctx.prefix) : '';
+            const nRaw = safeHref(stegaClean(s.noteLinkHref) || '');
+            const noteHref = nRaw && !isForeignDealerUrl(nRaw, ctx.market) ? localizeHref(nRaw, ctx.prefix) : '';
             return (
               <section key={s._key} className="relative">
                 <div className="absolute inset-0" style={{ background: 'radial-gradient(55% 55% at 50% 50%, rgba(0,136,194,0.14), transparent 70%)' }} />
@@ -244,13 +358,25 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                   <Reveal delay={160}>
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       {s.primaryLabel && (
-                        <LandingBuyButton ctaHref={s.primaryHref} label={s.primaryLabel} />
+                        <LandingBuyButton ctaHref={pHref} label={s.primaryLabel} />
                       )}
                       {s.secondaryLabel && (
                         <GlassButton href={sHref} external={/^https?:/i.test(sHref)} variant="ghost">{s.secondaryLabel}</GlassButton>
                       )}
                     </div>
                   </Reveal>
+                  {(s.note || (s.noteLinkLabel && noteHref)) && (
+                    <Reveal delay={200}>
+                      <p className="mx-auto mt-8 max-w-xl text-sm leading-relaxed text-fog">
+                        {s.note}{' '}
+                        {s.noteLinkLabel && noteHref && (
+                          <a href={noteHref} className="text-white underline underline-offset-4 hover:text-stroxx-blueGlow" {...(/^https?:/i.test(noteHref) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                            {s.noteLinkLabel}
+                          </a>
+                        )}
+                      </p>
+                    </Reveal>
+                  )}
                 </div>
               </section>
             );
@@ -584,11 +710,30 @@ function renderSection(s: LandingSection, videosData?: Video[], testimonialsData
                     </div>
                   )}
                   <Reveal delay={80}>
-                    <HotspotImage angles={view.angles} />
+                    <div className={s.frame === '4/5' ? 'mx-auto max-w-xl' : s.frame === '1/1' ? 'mx-auto max-w-3xl' : ''}>
+                      <HotspotImage
+                        angles={view.angles}
+                        ratio={s.frame === '4/5' ? 'aspect-[4/5]' : s.frame === '1/1' ? 'aspect-square' : 'aspect-[16/10]'}
+                      />
+                    </div>
                   </Reveal>
+                  {s.showList && (
+                    <ol className={`mt-8 grid list-none gap-3 p-0 sm:grid-cols-2 ${s.frame === '4/5' ? 'mx-auto max-w-xl sm:grid-cols-1' : ''}`}>
+                      {(Array.isArray(s.listItems) && s.listItems.length
+                        ? (s.listItems as string[])
+                        : (view.angles[0]?.spots ?? []).map((sp) => [sp.title, sp.body].filter(Boolean).join('. '))
+                      ).map((line, i) => (
+                        <li key={i} className="flex gap-3 text-sm leading-relaxed text-fog">
+                          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-stroxx-blue text-xs font-medium text-white">{i + 1}</span>
+                          <span>{line}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
                   {/* every angle's points as plain text: readable without JS,
-                      and the content search engines and screen readers index */}
-                  <ol className="sr-only">
+                      and the content search engines and screen readers index
+                      (hidden when the visible list above already says it) */}
+                  <ol className={s.showList ? 'hidden' : 'sr-only'}>
                     {view.angles.flatMap((a, ai) =>
                       a.spots.map((sp, i) => (
                         <li key={`${ai}-${sp._key ?? i}`}>{[sp.title, sp.body, sp.productName].filter(Boolean).join('. ')}</li>

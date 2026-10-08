@@ -20,13 +20,17 @@ export function primaryHref(type: string | undefined, doc: Doc): string | null {
      here once minted an auto-redirect from "/news/" that hijacked the whole
      news index to one article (2026-07-12); a legalPage would even have
      produced "/" and hijacked the homepage. Null = no page, no redirect. */
-  const SLUGGED = new Set(['landingPage', 'post', 'supportPage', 'trade', 'legalPage']);
+  const SLUGGED = new Set(['landingPage', 'post', 'supportPage', 'trade', 'legalPage', 'focusPage']);
   if (SLUGGED.has(type ?? '') && !s) return null;
   switch (type) {
     case 'landingPage':
       return s === 'try-it' ? '/try-it' : `/campaign/${s}`;
     case 'post':
       return `/news/${s}`;
+    case 'focusPage':
+      return `/focus-on/${s}`;
+    case 'focusCategory':
+      return '/focus-on';
     case 'supportPage':
       return `/support/${s}`;
     case 'trade':

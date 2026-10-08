@@ -12,6 +12,7 @@ import { trades as fallbackTrades, Trade } from '@/lib/trades';
 import { markets as fallbackMarkets, Market } from '@/lib/markets';
 export type { Market } from '@/lib/markets';
 import { getLocale } from '@/lib/locale';
+import type { FocusCard } from '@/lib/focus';
 import type { HotspotSpot } from '@/components/HotspotImage';
 import { liveCampaigns, type CampaignDoc, type CampaignPlacement, type LiveCampaign } from '@/lib/campaigns';
 export type { CampaignDoc, LiveCampaign } from '@/lib/campaigns';
@@ -140,6 +141,12 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 
 /* ── Landing pages ──────────────────────────────────────────────────────── */
 
+/** Per-section projection shared by landing and focus pages: dereference the
+ *  film picker, and resolve uploaded video FILES to their CDN URL (an image
+ *  asset is resolved by assetUrl() at render, a file asset needs its url). */
+const SECTION_PROJECTION = `{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } }, "videoFileUrl": videoFile.asset->url }`;
+
+
 export type LandingSection = { _type: string; _key: string } & Record<string, any>;
 export type LandingDoc = {
   _id?: string;
@@ -157,7 +164,7 @@ export async function getLandingPage(slug: string): Promise<LandingDoc | null> {
     // Dereference the film-section's picked films so the renderer gets their
     // youtubeId/title/by (empty = section falls back to all active films).
     const q = (pred: string) =>
-      `*[_type == "landingPage" && slug.current == $slug && ${pred}][0]{ ..., sections[]{ ..., _type == "videoProof" => { "films": films[]->{ _id, youtubeId, title, by } } } }`;
+      `*[_type == "landingPage" && slug.current == $slug && ${pred}][0]{ ..., sections[]${SECTION_PROJECTION} }`;
     let { data } = await sanityFetch({ query: q(LANG_IS), params: { slug, lang } });
     if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { slug } }));
     /* transitional alias (2026-07-11 English-slug sweep): until
@@ -896,6 +903,75 @@ export async function getLineupArchive(): Promise<LineupSummary[]> {
         };
       })
       .filter((x): x is LineupSummary => x !== null);
+  } catch {
+    return [];
+  }
+}
+
+/* ── Focus on… (focus product pages) ─────────────────────────────────────── */
+
+export type { FocusCard, FocusCategory } from '@/lib/focus';
+
+export type FocusDoc = LandingDoc & {
+  month?: string;
+  teaser?: string;
+  hideMoreStrip?: boolean;
+  cardImage?: unknown;
+  category?: { key?: string; title?: string } | null;
+};
+
+const FOCUS_CARD = `{ _id, title, "slug": slug.current, month, teaser, tags, "category": category->{ key, title }, cardImage, cutout }`;
+
+function toFocusCard(d: Record<string, any>): FocusCard | null {
+  const slug = stegaClean(d?.slug) as string | undefined;
+  if (!slug || !d?.title) return null;
+  const key = stegaClean(d.category?.key) as string | undefined;
+  return {
+    _id: d._id,
+    slug,
+    title: d.title,
+    teaser: d.teaser || undefined,
+    month: (stegaClean(d.month) as string | undefined) || undefined,
+    category: key ? { key, title: d.category?.title || key } : null,
+    tags: Array.isArray(d.tags) ? (d.tags as string[]).map((t) => (stegaClean(t) as string) || t).filter(Boolean) : [],
+    image: assetUrl(d.cardImage, 900),
+    imageAlt: (d.cardImage?.alt as string | undefined) || (d.cutout?.alt as string | undefined) || '',
+    cutout: assetUrl(d.cutout, 700),
+  };
+}
+
+/** Every focus page in the current language (English fallback per page set:
+ *  a market with no focus pages yet shows the English ones). */
+export async function getFocusCards(): Promise<FocusCard[]> {
+  try {
+    const lang = await langId();
+    const q = (pred: string) => `*[_type == "focusPage" && defined(slug.current) && ${pred}] | order(month desc) ${FOCUS_CARD}`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { lang } });
+    if ((!Array.isArray(data) || !data.length) && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN) }));
+    return ((data ?? []) as Record<string, any>[]).map(toFocusCard).filter((c): c is FocusCard => c !== null);
+  } catch {
+    return [];
+  }
+}
+
+export async function getFocusPage(slug: string): Promise<FocusDoc | null> {
+  try {
+    const lang = await langId();
+    const q = (pred: string) =>
+      `*[_type == "focusPage" && slug.current == $slug && ${pred}][0]{ ..., "category": category->{ key, title }, sections[]${SECTION_PROJECTION} }`;
+    let { data } = await sanityFetch({ query: q(LANG_IS), params: { slug, lang } });
+    if (!data && lang !== 'en') ({ data } = await sanityFetch({ query: q(LANG_IS_EN), params: { slug } }));
+    return (data as FocusDoc) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** English-base focus slugs for the sitemap. */
+export async function getFocusSlugs(): Promise<string[]> {
+  try {
+    const { data } = await sanityFetch({ query: `*[_type == "focusPage" && defined(slug.current) && ${LANG_IS_EN}].slug.current` });
+    return ((data ?? []) as string[]).map((s) => stegaClean(s) ?? s).filter(Boolean);
   } catch {
     return [];
   }

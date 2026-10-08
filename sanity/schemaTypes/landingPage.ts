@@ -3,6 +3,7 @@ import SeoPreviewField from '../SeoPreviewField';
 import SkuListInput from '../SkuListInput';
 import FilmPicker from '../FilmPicker';
 import { langLabel } from '../lib/langLabel';
+import { focusBlockMembers } from './focusBlocks';
 
 /** Campaign landing pages assembled from a fixed menu of section blocks.
  *  Every block title reads like what it does; a live preview of every block
@@ -21,76 +22,10 @@ const eyebrow = defineField({
 });
 const headline = defineField({ name: 'headline', title: 'Headline', type: 'text', rows: 2, description: accentNote });
 
-export const landingPage = defineType({
-  name: 'landingPage',
-  title: 'Landing page',
-  type: 'document',
-  groups: [
-    { name: 'content', title: 'Content', default: true },
-    { name: 'seo', title: 'SEO + sharing' },
-  ],
-  fields: [
-    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
-    defineField({ name: 'title', title: 'Internal title', type: 'string', group: 'content', validation: (r) => r.required() }),
-    defineField({
-      name: 'slug',
-      title: 'URL slug',
-      description:
-        'Becomes the address: slug "sommer" publishes at /campaign/sommer. Use / to nest: "sommer/tilbud" publishes at /campaign/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
-      type: 'slug',
-      group: 'content',
-      options: {
-        source: 'title',
-        slugify: (input: string) =>
-          input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9/-]/g, '').replace(/-+/g, '-').slice(0, 96),
-      },
-      validation: (r) =>
-        r.required().custom((s: { current?: string } | undefined) =>
-          !s?.current || /^[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(s.current)
-            ? true
-            : 'Lowercase letters, numbers and dashes; use / to nest under a parent'
-        ),
-    }),
-    defineField({
-      name: 'seoTitle',
-      title: 'SEO title',
-      type: 'string',
-      group: 'seo',
-      description: 'The title Google and share cards show. Under 60 characters. Empty = the page title.',
-      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
-    }),
-    defineField({
-      name: 'seoDescription',
-      title: 'SEO description',
-      type: 'text',
-      rows: 3,
-      group: 'seo',
-      description: 'The snippet under the title in Google. Under 155 characters.',
-      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
-    }),
-    defineField({
-      name: 'ogImage',
-      title: 'Share image (social)',
-      description: 'Shown when this page is shared on LinkedIn/Facebook etc. 1200x630 works best. Empty = the site-wide share image from Site settings.',
-      type: 'image',
-      options: { hotspot: true },
-      group: 'seo',
-    }),
-    defineField({
-      name: 'seoPreview',
-      title: 'SEO preview (live)',
-      description: 'How this page looks in a Google result and a shared link, built from the fields above as you type. Nothing to fill in here.',
-      type: 'string',
-      readOnly: true,
-      components: { input: SeoPreviewField },
-      group: 'seo',
-    }),
-    defineField({
-      name: 'sections',
-      title: 'Sections',
-      type: 'array',
-      group: 'content',
-      of: [
+
+/** The section-block menu, shared by landing pages and Focus on pages, so a
+ *  block built for one is available in both (the Studio keeps one library). */
+export const landingSectionMembers = [
         defineArrayMember({
           name: 'photoHero',
           title: 'Hero: full-screen photo or video',
@@ -147,6 +82,38 @@ export const landingPage = defineType({
               title: 'Background video URL (optional)',
               type: 'string',
               description: 'Direct .mp4 link. Plays muted on loop behind the text; the image is used as fallback/poster.',
+            }),
+            defineField({
+              name: 'videoFile',
+              title: 'Background video file (optional)',
+              type: 'file',
+              options: { accept: 'video/mp4,video/webm' },
+              description: 'Upload an .mp4 (H.264, under 30 MB) instead of pasting a link. Wins over the URL above.',
+            }),
+            defineField({
+              name: 'videoUrlSquare',
+              title: 'Square video for tablets (optional)',
+              type: 'string',
+              description: 'A 1:1 cut of the same film, shown between 768 and 991 px wide. Empty = the main video.',
+            }),
+            defineField({
+              name: 'videoUrlPortrait',
+              title: 'Portrait video for phones (optional)',
+              type: 'string',
+              description: 'A 9:16 cut of the same film, shown under 768 px wide. Empty = the main video.',
+            }),
+            defineField({
+              name: 'disclosure',
+              title: 'AI disclosure line (optional)',
+              type: 'string',
+              description:
+                'Required by the EU AI Act when the film or photo is AI-generated or AI-altered. Shown small, bottom right, on the hero itself, e.g. "AI-generated content. The film on this page was made with artificial intelligence."',
+            }),
+            defineField({
+              name: 'cueLabel',
+              title: 'Scroll cue (optional)',
+              type: 'string',
+              description: 'A small "Scroll down" hint at the bottom of a text-less film hero. Empty = no cue.',
             }),
             defineField({
               name: 'align',
@@ -302,6 +269,34 @@ export const landingPage = defineType({
               type: 'string',
               options: { list: ['left', 'right'], layout: 'radio', direction: 'horizontal' },
               initialValue: 'right',
+            }),
+            defineField({
+              name: 'colour',
+              title: 'Keep the image in colour',
+              type: 'boolean',
+              description: 'Scenes and mood photos turn black and white by design. Switch this on for product shots, which stay in full colour.',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'fit',
+              title: 'How the image fills its frame',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Fill the frame (photographs)', value: 'cover' },
+                  { title: 'Show the whole product (cut-outs)', value: 'contain' },
+                ],
+                layout: 'radio',
+                direction: 'horizontal',
+              },
+              initialValue: 'cover',
+            }),
+            defineField({
+              name: 'itemNumber',
+              title: 'Button: product item number (optional)',
+              type: 'string',
+              description:
+                'Sends the button to this product at the visitor’s own dealer (Carl Ras in Denmark, the dealer chooser on the international site). Used when the button link above is empty.',
             }),
           ],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `Split · ${s.title || ''}` }) },
@@ -486,6 +481,14 @@ export const landingPage = defineType({
             }),
             defineField({ name: 'secondaryLabel', title: 'Secondary button label', type: 'string' }),
             defineField({ name: 'secondaryHref', title: 'Secondary button link', type: 'string' }),
+            defineField({
+              name: 'note',
+              title: 'Small print under the buttons (optional)',
+              type: 'string',
+              description: 'One line, e.g. stock or availability. Shown small under the buttons.',
+            }),
+            defineField({ name: 'noteLinkLabel', title: 'Small print link label (optional)', type: 'string' }),
+            defineField({ name: 'noteLinkHref', title: 'Small print link', type: 'string' }),
           ],
           preview: { select: { title: 'headline' }, prepare: (s) => ({ title: `CTA · ${s.title || ''}` }) },
         }),
@@ -841,7 +844,79 @@ export const landingPage = defineType({
           ],
           preview: { select: { title: 'size' }, prepare: (s) => ({ title: `Spacer · ${s.title || 'm'}` }) },
         }),
-      ],
+  ...focusBlockMembers,
+];
+
+export const landingPage = defineType({
+  name: 'landingPage',
+  title: 'Landing page',
+  type: 'document',
+  groups: [
+    { name: 'content', title: 'Content', default: true },
+    { name: 'seo', title: 'SEO + sharing' },
+  ],
+  fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
+    defineField({ name: 'title', title: 'Internal title', type: 'string', group: 'content', validation: (r) => r.required() }),
+    defineField({
+      name: 'slug',
+      title: 'URL slug',
+      description:
+        'Becomes the address: slug "sommer" publishes at /campaign/sommer. Use / to nest: "sommer/tilbud" publishes at /campaign/sommer/tilbud. Moving a page = editing its slug (the old address stops working, so set up a redirect if it was shared).',
+      type: 'slug',
+      group: 'content',
+      options: {
+        source: 'title',
+        slugify: (input: string) =>
+          input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9/-]/g, '').replace(/-+/g, '-').slice(0, 96),
+      },
+      validation: (r) =>
+        r.required().custom((s: { current?: string } | undefined) =>
+          !s?.current || /^[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(s.current)
+            ? true
+            : 'Lowercase letters, numbers and dashes; use / to nest under a parent'
+        ),
+    }),
+    defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      type: 'string',
+      group: 'seo',
+      description: 'The title Google and share cards show. Under 60 characters. Empty = the page title.',
+      validation: (r) => r.max(60).warning('Google cuts titles around 60 characters, so the end of this one will be truncated in results'),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      type: 'text',
+      rows: 3,
+      group: 'seo',
+      description: 'The snippet under the title in Google. Under 155 characters.',
+      validation: (r) => r.max(160).warning('Google cuts descriptions around 155 to 160 characters, so the end of this one will be truncated in results'),
+    }),
+    defineField({
+      name: 'ogImage',
+      title: 'Share image (social)',
+      description: 'Shown when this page is shared on LinkedIn/Facebook etc. 1200x630 works best. Empty = the site-wide share image from Site settings.',
+      type: 'image',
+      options: { hotspot: true },
+      group: 'seo',
+    }),
+    defineField({
+      name: 'seoPreview',
+      title: 'SEO preview (live)',
+      description: 'How this page looks in a Google result and a shared link, built from the fields above as you type. Nothing to fill in here.',
+      type: 'string',
+      readOnly: true,
+      components: { input: SeoPreviewField },
+      group: 'seo',
+    }),
+    defineField({
+      name: 'sections',
+      title: 'Sections',
+      type: 'array',
+      group: 'content',
+      of: landingSectionMembers,
     }),
   ],
   preview: {

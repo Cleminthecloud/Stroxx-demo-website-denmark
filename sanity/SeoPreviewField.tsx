@@ -64,7 +64,15 @@ export default function SeoPreviewField() {
   const docType = useFormValue(['_type']) as string | undefined;
   const langPrefix = localeById(language)?.path ?? '';
   const pagePath =
-    docType === 'tradesIndex' ? '/trades' : slug ? (slug === 'try-it' ? '/try-it' : `/campaign/${slug}`) : '/';
+    docType === 'tradesIndex'
+      ? '/trades'
+      : docType === 'focusPage'
+        ? `/focus-on/${slug || ''}`
+        : slug
+          ? slug === 'try-it'
+            ? '/try-it'
+            : `/campaign/${slug}`
+          : '/';
   const path = langPrefix ? `${langPrefix}${pagePath === '/' ? '' : pagePath}` : pagePath;
   const url = `${SITE_URL}${path}`;
 

@@ -1,0 +1,61 @@
+{
+  "language": "da-DK",
+  "title": "Eksempel: Arbejdslampe 18V",
+  "slug": "example-work-lamp-18v",
+  "month": "2026-12-01",
+  "teaser": "Akku arbejdslampe til servicebilen og de opgaver, hvor der ikke er strøm i væggen endnu.",
+  "categoryKey": "lighting",
+  "tags": [
+    "arbejdslys"
+  ],
+  "itemNumbers": [
+    "39013533"
+  ],
+  "cutout": {
+    "imageUrl": "https://cdn.prod.website-files.com/693fc82ce8e0df3e1f7ceda4/6a96fd94298bf7d2c2924541_39013533_50391.png",
+    "alt": "STROXX akku arbejdslampe"
+  },
+  "seoTitle": "Arbejdslampe 18V LED, 3500 lumen | STROXX",
+  "seoDescription": "Akku arbejdslampe med 3.500 lumen til servicebilen og råhuset.",
+  "sections": [
+    {
+      "_type": "photoHero",
+      "eyebrow": "Arbejdslampe 18V",
+      "headline": "Lys, hvor der *ingen strøm* er",
+      "sub": "Akku arbejdslampe med 3.500 lumen.",
+      "ctaLabel": "Kun hos Carl Ras",
+      "imageUpload": {
+        "imageUrl": "https://cdn.prod.website-files.com/693fc82ce8e0df3e1f7ceda4/6a96fd94298bf7d2c2924541_39013533_50391.png",
+        "alt": "Arbejdslampe"
+      }
+    },
+    {
+      "_type": "specGrid",
+      "eyebrow": "Specifikationer",
+      "headline": "Tallene bag *lyset*",
+      "specs": [
+        {
+          "value": "3500",
+          "unit": "lumen",
+          "body": "Fra et 18 V batteri."
+        }
+      ]
+    },
+    {
+      "_type": "linkCards",
+      "headline": "Se også",
+      "linkLabel": "Se den hos Carl Ras",
+      "cards": [
+        {
+          "title": "LED Strip 1500 L, 300W, 20 m",
+          "body": "Til den faste installation.",
+          "itemNumber": "55011716",
+          "imageUpload": {
+            "imageUrl": "https://cdn.prod.website-files.com/693fc82ce8e0df3e1f7ceda4/6a96fd5d7a3dcdbd96aaf02d_55011716a_50391.png",
+            "alt": "LED strip"
+          }
+        }
+      ]
+    }
+  ]
+}

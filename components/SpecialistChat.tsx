@@ -29,6 +29,7 @@ const PATH_LABELS: [RegExp, string][] = [
   [/^\/products/, 'Products'],
   [/^\/stores/, 'Store finder'],
   [/^\/try-it/, 'The 30-day guarantee'],
+  [/^\/focus-on/, 'Focus on…'],
   [/^\/monthly/, 'Tool of the Month'],
   [/^\/news/, 'News'],
   [/^\/service/, 'Service and support'],

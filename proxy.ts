@@ -69,6 +69,10 @@ export async function proxy(req: NextRequest) {
     // carry the resolved locale to the app via a request header
     const headers = new Headers(req.headers);
     headers.set('x-stroxx-locale', locale.id);
+    /* the path prefix this request came in under (/dk on the shared domain,
+       '' on a country domain), so server components can build links that stay
+       in the visitor's market (lib/locale getLocalePrefix) */
+    headers.set('x-stroxx-prefix', strip);
     if (appPath !== rawPath) {
       const url = req.nextUrl.clone();
       url.pathname = appPath;

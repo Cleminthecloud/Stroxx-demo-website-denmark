@@ -14,7 +14,7 @@ import { primaryHref } from './lib/docPageUrl';
  *  The redirect shape matches sanity/schemaTypes/redirect.ts, consumed by
  *  proxy.ts. */
 
-export const REDIRECTABLE = new Set(['post', 'landingPage', 'supportPage', 'trade', 'legalPage']);
+export const REDIRECTABLE = new Set(['post', 'landingPage', 'supportPage', 'trade', 'legalPage', 'focusPage']);
 
 const API_VERSION = '2024-11-01';
 

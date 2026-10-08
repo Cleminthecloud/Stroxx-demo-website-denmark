@@ -146,6 +146,37 @@ export const hotspotImage = defineType({
       description: 'Wrap a word in *asterisks* for the blue accent. Press Enter for a line break. Optional.',
     }),
     defineField({ name: 'sub', title: 'Subline', type: 'text', rows: 2 }),
+    defineField({
+      name: 'frame',
+      title: 'Frame shape',
+      type: 'string',
+      description: 'Match the photo: a portrait photo in a wide frame gets cropped. Spots are placed on the frame, so set this before placing them.',
+      options: {
+        list: [
+          { title: 'Wide 16:10', value: '16/10' },
+          { title: 'Square 1:1', value: '1/1' },
+          { title: 'Portrait 4:5', value: '4/5' },
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+      initialValue: '16/10',
+    }),
+    defineField({
+      name: 'showList',
+      title: 'Also list the points under the photo',
+      type: 'boolean',
+      description: 'A short numbered list under the picture, so the points can be read without tapping. Good on product pages.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'listItems',
+      title: 'List text (optional)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'One line per point, in the same order as the spots. Empty = each spot’s title and text.',
+      hidden: ({ parent }) => !(parent as { showList?: boolean } | undefined)?.showList,
+    }),
     ...imageFields.map((f) => ({ ...f, fieldset: 'main' })),
     defineField({
       name: 'viewLabel',

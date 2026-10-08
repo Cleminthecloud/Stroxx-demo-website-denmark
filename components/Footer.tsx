@@ -9,7 +9,7 @@ import DealerMark from '@/components/DealerMark';
 import { DEALER_LOGOS } from '@/lib/dealer-logos';
 
 const PAGES_FALLBACK = [
-  { label: 'Tool of the Month', href: '/monthly' },
+  { label: 'Focus on…', href: '/focus-on' },
   { label: 'Products', href: '/products' },
   { label: 'Trades', href: '/trades' },
   { label: 'Stores', href: '/stores' },
