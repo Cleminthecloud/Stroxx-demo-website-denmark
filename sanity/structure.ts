@@ -99,6 +99,25 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.documentTypeListItem('homePage').title('Homepage').icon(HomeIcon),
               S.documentTypeListItem('landingPage').title('Campaign / landing pages'),
+              /* Focus on… (Fokus på…): one page per focus product, the overview
+                 at /focus-on filters them by category. Newest month first. */
+              S.listItem()
+                .title('Focus on… (focus product pages)')
+                .icon(CalendarIcon)
+                .child(
+                  S.list()
+                    .title('Focus on…')
+                    .items([
+                      S.listItem()
+                        .title('Focus pages, newest first')
+                        .child(
+                          S.documentTypeList('focusPage')
+                            .title('Focus pages')
+                            .defaultOrdering([{ field: 'month', direction: 'desc' }]),
+                        ),
+                      S.documentTypeListItem('focusCategory').title('Categories (overview filters)'),
+                    ]),
+                ),
               S.documentTypeListItem('tradesIndex').title('Trades overview'),
               S.documentTypeListItem('trade').title('Trade pages'),
               /* The monthly engine, split so the month being worked on is never

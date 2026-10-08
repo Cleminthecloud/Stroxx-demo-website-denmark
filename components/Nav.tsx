@@ -9,7 +9,7 @@ import { useDealerChooser } from '@/components/DealerChooser';
 import { brandImages } from '@/lib/data';
 
 const LINKS = [
-  { href: '/monthly', label: 'Tool of the Month' },
+  { href: '/focus-on', label: 'Focus on…' },
   { href: '/products', label: 'Products' },
   { href: '/stores', label: 'Stores' },
   { href: '/trades', label: 'Trades' },

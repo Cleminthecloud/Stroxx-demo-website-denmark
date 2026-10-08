@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/data';
-import { getLandingSlugs, getPosts, getSupportPages, getTrades, getSiteSettings, getLineupArchive, getSka } from '@/lib/cms';
+import { getLandingSlugs, getPosts, getSupportPages, getTrades, getSiteSettings, getLineupArchive, getSka, getFocusSlugs } from '@/lib/cms';
 import { SITE_URL as BASE } from '@/lib/site';
 
 /** Public pages only: hidden internals (/components, /guide) and the
@@ -9,6 +9,7 @@ import { SITE_URL as BASE } from '@/lib/site';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const landingSlugs = await getLandingSlugs();
+  const focusSlugs = await getFocusSlugs();
   /* news drops out entirely when the market has the section switched off */
   const newsOn = (await getSiteSettings())?.newsEnabled !== false;
   const posts = newsOn ? await getPosts() : [];
@@ -32,6 +33,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly' as const,
       priority: 0.5,
     })),
+    /* Focus on…: the overview plus one URL per focus page (English base) */
+    { url: `${BASE}/focus-on`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    ...focusSlugs.map((s) => ({ url: `${BASE}/focus-on/${s}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
     { url: `${BASE}/stores`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     /* /try-it permanently redirects to its CMS landing page — list the
        canonical target, never the redirect (getLandingSlugs excludes proev-det,

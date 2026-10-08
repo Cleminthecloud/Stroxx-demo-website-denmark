@@ -17,6 +17,7 @@ import { dataSources } from './dataSources';
 import { permission } from './permission';
 import { campaign } from './campaign';
 import { hotspotImage } from './hotspotImage';
+import { focusPage, focusCategory } from './focusPage';
 /* brandPage removed from the Studio: /brand is now fully code-owned (we manage it) */
 
 export const schemaTypes = [
@@ -24,6 +25,8 @@ export const schemaTypes = [
   hotspotImage,
   siteSettings,
   landingPage,
+  focusPage,
+  focusCategory,
   campaign,
   monthlyLineup,
   productAugment,

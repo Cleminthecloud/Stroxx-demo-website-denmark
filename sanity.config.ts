@@ -7,7 +7,7 @@ import { presentationTool, defineLocations } from 'sanity/presentation';
 import { BookIcon, BulbOutlineIcon, BarChartIcon, SparklesIcon, HelpCircleIcon } from '@sanity/icons';
 import { schemaTypes } from './sanity/schemaTypes';
 import { documentInternationalization } from '@sanity/document-internationalization';
-import { supportedLanguages } from './lib/i18n';
+import { supportedLanguages, localeById } from './lib/i18n';
 import { projectId, dataset } from './sanity/env';
 import GuideTool from './sanity/GuideTool';
 import BrandTool from './sanity/BrandTool';
@@ -43,6 +43,25 @@ export default defineConfig({
                   href: doc?.slug === 'try-it' ? '/try-it' : `/campaign/${doc?.slug || ''}`,
                 },
               ],
+            }),
+          }),
+          focusPage: defineLocations({
+            select: { title: 'title', slug: 'slug.current', language: 'language' },
+            resolve: (doc) => {
+              /* a translated document previews on ITS market's path (/dk/...) */
+              const prefix = localeById(doc?.language as string | undefined)?.path ?? '';
+              return {
+                locations: [
+                  { title: doc?.title || 'Focus page', href: `${prefix}/focus-on/${doc?.slug || ''}` },
+                  { title: 'Focus on overview', href: `${prefix}/focus-on` },
+                ],
+              };
+            },
+          }),
+          focusCategory: defineLocations({
+            select: { title: 'title', language: 'language' },
+            resolve: (doc) => ({
+              locations: [{ title: 'Focus on overview (filters)', href: `${localeById(doc?.language as string | undefined)?.path ?? ''}/focus-on` }],
             }),
           }),
           post: defineLocations({
@@ -141,7 +160,7 @@ export default defineConfig({
     structureTool({ title: 'Content', structure }),
     documentInternationalization({
       supportedLanguages,
-      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'campaign', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'tradesIndex', 'productAugment', 'specialist', 'testimonial', 'video'],
+      schemaTypes: ['homePage', 'siteSettings', 'landingPage', 'focusPage', 'focusCategory', 'campaign', 'supportPage', 'post', 'legalPage', 'monthlyLineup', 'trade', 'tradesIndex', 'productAugment', 'specialist', 'testimonial', 'video'],
       languageField: 'language',
     }),
   ],

@@ -1,9 +1,9 @@
 # STROXX website: editor guide
 How to edit the site, build landing pages, manage stores, run the monthly lineup, and handle tracking. No coding needed.
 
-Version 1.14 · October 2026
+Version 1.15 · October 2026
 
-Updated 1 October 2026.
+Updated 8 October 2026.
 
  
 
@@ -95,6 +95,25 @@ Landing pages are built from **sections** (blocks). The full menu:
 - **Embed**, a form, map or video from another service (see the embed rules below)
 - **Spacer**, empty breathing room in three sizes
 
+Added in October 2026 for the Focus on… pages, available on every page:
+
+- **Text: headline + paragraph (+ button)**, the quiet block between louder ones
+- **Numbered points with photo (tabs)**, three selling points with a photo that follows the selected one
+- **Film (self-hosted, plays in view)**, our own mp4, no cookie wall, with caption and footnote
+- **Comparison table (2 to 4 options)**, type + for a tick and - for a cross, one column highlighted
+- **Two-way comparison tiles (A versus B)**
+- **Specifications (big numbers)**
+- **Variant / fact cards (key-value rows)**, e.g. three lengths, or what is in the box
+- **Slider advisor (value → recommendation)**, e.g. door thickness to spindle length
+- **Safety notice (important box)**
+- **Step-by-step list**
+- **Photo mosaic (pairs and wide)**
+- **Product cards with links (manual)**, your own words per product, linking to the visitor’s dealer by item number
+- **Explainer (levels, colour temperature, notes)**
+- **People to call (specialists)**
+
+The hero also takes an uploaded film, phone and tablet cuts, an AI disclosure line and a scroll cue; Image + text can keep its photo in colour; the hotspot image has a frame shape and an optional visible list; the call-to-action banner has a small-print line.
+
 **Hotspot images.** The Hotspot image block turns one photo into something the visitor explores: numbered points sit on the picture, and tapping one opens a small card with a title, a line or two of text and, when you set an item number, a link straight to that product. Upload the photo first, then **click the photo in the Studio to drop a point** and drag the marker to nudge it; the words for each point are written in the list underneath the picture. Positions are stored as percentages, so a point sits in the same place on a phone and on a big screen. Up to eight points keeps a picture readable. The same block is available on the Monthly lineup (Hero hotspot photo), so the tool of the month can be explained part by part.
 
 Two things are worth knowing. **How the photo fills the frame**: leave it on "Fill the frame" for a photograph, and switch to "Show the whole product" for a cut-out product shot on a plain background, which would otherwise be cropped in half. And **More angles**: leave it empty for a single picture, which is the usual case, or add an angle and a small switcher appears above the photo. Each angle has its own photo and its own points, so the back of a tool is explained separately from the front, and switching angle closes any open card. A photograph of the tool in use gives you far more to point at than a cut-out on a plain background, so prefer one where you have it.
@@ -183,6 +202,26 @@ One writing rule that keeps the international site honest: **the English version
 The site publishes in English (the international reference) plus each market's language, and every page lives once per language. To create a language version of a page: open the page, use the **translations menu** (the globe icon in the document's top bar) and pick the language; the Studio creates a linked copy you translate and publish. Translate the content, keep the structure: blocks, images and product pickers carry over. Two habits make this painless. Translate from the English version (it is the reference the site falls back to while a translation does not exist yet), and never touch the small read-only "language" field on documents, it is how the site knows which market sees what. Support-page addresses are printed on packaging, so their slugs stay identical across languages. Content lists make translations easy to tell apart: every document shows its language next to its live address, and the SEO/share previews on a translated page show that market's own address (a Danish campaign page previews /dk/campaign/…).
 
  
+
+## 7e. Focus on… (Fokus på…): one product, properly
+
+Every focus product gets its own page at **/focus-on/your-product** (Danish visitors see the Danish version at /dk/focus-on/your-product), and the overview at **/focus-on** lists them all as cards, newest month first, with a filter per category. The newest month that has started carries a **Current** badge; a page dated next month shows as **Coming**. Every focus page ends with a **More focus products** strip that builds itself: you never copy it by hand.
+
+**Making a new focus page**
+
+1. **Content → Pages → Focus on… → Focus pages** → create a new one (or duplicate the last one: three-dot menu → Duplicate).
+2. **Card + filters** tab: product name, press Generate for the slug (English, the same slug on every language version), the **focus month** (the first of the month, e.g. 2026-12-01), a one-sentence teaser, the category, a card photo (landscape) and/or the product cut-out.
+3. **Page sections** tab: add blocks, exactly like a campaign page (section 5). The focus blocks are listed in section 5 and live at /components: numbered points with photo, film, comparison table, A versus B tiles, specifications, fact cards, slider advisor, safety notice, step-by-step list, photo mosaic, product cards with links, explainer (lux, Kelvin), people to call.
+4. **SEO + sharing** tab, then open **Edit site** and steer to /focus-on/your-product to fine-tune.
+5. Publish. The card appears on /focus-on straight away.
+
+Need a new category? **Focus on… → Categories**: one per language, with the same English filter key (lighting, security, power-tools).
+
+**Letting Claude build the page.** In Claude (Cowork or Code), give it the Word brief, the PDF data sheet, product links and item numbers, and ask for a focus page. Claude writes the page as an **unpublished draft**; you find it under Focus on… → Focus pages, check every block in Edit site, then press Publish yourself. Claude cannot publish, cannot add prices, and keeps the English version free of dealer names. If the page needs a kind of block that does not exist yet, Claude says so: new block types are a developer job.
+
+Two rules the blocks enforce for you: product photos stay in colour while mood photos turn black and white, and a link to the Carl Ras webshop only ever shows to Danish visitors (everyone else gets their own dealer). Anything AI-made needs its disclosure line filled in (the hero, the film footnote, the mosaic).
+
+ 
 
 ## 8. Månedens STROXX (the monthly lineup)
 

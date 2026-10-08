@@ -293,6 +293,147 @@ const DEMOS: Demo[] = [
       height: 480,
     },
   },
+  /* ── Focus on… blocks (October 2026), also available on campaign pages ── */
+  {
+    studioName: 'Text: headline + paragraph (+ button)',
+    description: 'The quiet block between the louder ones: eyebrow, headline, one paragraph, optional button and a small note.',
+    section: {
+      _type: 'textIntro', _key: 'f1',
+      eyebrow: 'Component · Text',
+      headline: 'Say one thing *clearly.*',
+      intro: 'Two or three sentences that carry one idea. No more, or it stops being a quiet block.',
+      ctaLabel: 'Optional button', ctaHref: '/focus-on',
+      note: 'An optional note in small print, e.g. where a number comes from.',
+    },
+  },
+  {
+    studioName: 'Numbered points with photo (tabs)',
+    description: 'Three or four numbered selling points; on desktop the photo follows the selected point, on phones every point shows in full.',
+    section: {
+      _type: 'numberedTabs', _key: 'f2',
+      eyebrow: 'Component · Numbered points',
+      headline: 'Three reasons, *one tool.*',
+      items: [
+        { _key: 'a', title: 'The first point', body: 'One or two sentences. Each point gets its own photo in the Studio.' },
+        { _key: 'b', title: 'The second point', body: 'Keep the titles short: they are the buttons on desktop.' },
+        { _key: 'c', title: 'The third point', body: 'Arrow keys move between points, for keyboard users.' },
+      ],
+    },
+  },
+  {
+    studioName: 'Comparison table (2 to 4 options)',
+    description: 'Options side by side. Type + for a tick and - for a cross. One column can be highlighted. Scrolls sideways on phones with the row labels pinned.',
+    section: {
+      _type: 'comparisonTable', _key: 'f3',
+      eyebrow: 'Component · Compare',
+      headline: 'Which one *fits the job?*',
+      cornerLabel: 'STROXX',
+      columns: [
+        { _key: 'a', name: '20 m on reel', note: 'Item 55011718', tag: 'Focus product', highlight: true },
+        { _key: 'b', name: '50 m on reel', note: 'Item 55011719' },
+        { _key: 'c', name: '20 m without reel', note: 'Item 55011716' },
+      ],
+      rows: [
+        { _key: 'r1', label: 'Length', cells: ['20 m', '50 m', '20 m'] },
+        { _key: 'r2', label: 'Supplied on a reel', cells: ['+', '+', '-'] },
+        { _key: 'r3', label: 'Extendable with couplers', cells: ['+', '-', '+'] },
+      ],
+      notes: [{ _key: 'n1', title: 'A note under the table', body: 'Explain the one number people misread.' }],
+    },
+  },
+  {
+    studioName: 'Two-way comparison tiles (A versus B)',
+    description: 'Each tile asks one question and answers it for two approaches. Wide tiles carry a "why it matters" line.',
+    section: {
+      _type: 'bentoCompare', _key: 'f4', title: 'The difference, tile by tile', labelA: 'Finger', labelB: 'Palm',
+      tiles: [
+        { _key: 'a', question: 'How much is read?', a: 'One fingertip. A small area.', b: 'The whole palm. Far more detail.', why: 'More detail, fewer false rejections.', wide: true },
+        { _key: 'b', question: 'Worn or cracked hands', a: 'Ridges wear down.', b: 'Veins sit under the skin.', why: 'Works for hands that work.', wide: true },
+        { _key: 'c', question: 'Wet or dirty hands', a: 'Dirt on the sensor', b: 'Held in front of the sensor' },
+        { _key: 'd', question: 'Print left on the glass', a: 'Can be lifted', b: 'Nothing to copy' },
+        { _key: 'e', question: 'Other ways in', a: 'Code or card', b: 'Code, card or app' },
+      ],
+    },
+  },
+  {
+    studioName: 'Specifications (big numbers)',
+    description: 'The hard facts as large numbers; pure whole numbers count up when scrolled into view.',
+    section: {
+      _type: 'specGrid', _key: 'f5', eyebrow: 'Component · Specs', headline: 'The numbers *behind it.*',
+      specs: [
+        { _key: 'a', value: '1500', unit: 'lumen', body: 'Per metre, 180 LEDs per metre.' },
+        { _key: 'b', value: 'IP65', unit: 'sealing', body: 'Dust-tight and water-jet proof.' },
+        { _key: 'c', value: '230 V', unit: 'ordinary socket', body: 'One plug for the whole length.' },
+      ],
+      note: 'An optional note under the numbers, e.g. that a total is calculated.',
+    },
+  },
+  {
+    studioName: 'Variant / fact cards (key-value rows)',
+    description: 'A name, a one-line use and key/value rows per card; each card can link to the product at the visitor\u2019s dealer.',
+    section: {
+      _type: 'modelCards', _key: 'f6', title: 'Three lengths', intro: 'Same light per metre. Length changes total power and reach.',
+      cards: [
+        { _key: 'a', name: '10 metres', use: 'Corridor, basement', rows: [{ _key: '1', key: 'Length', value: '10 m' }, { _key: '2', key: 'Power', value: '150 W' }] },
+        { _key: 'b', name: '20 metres', use: 'Our focus product', highlight: true, rows: [{ _key: '1', key: 'Length', value: '20 m' }, { _key: '2', key: 'Power', value: '300 W' }] },
+        { _key: 'c', name: '50 metres', use: 'The whole floor', rows: [{ _key: '1', key: 'Length', value: '50 m' }, { _key: '2', key: 'Power', value: '750 W' }] },
+      ],
+    },
+  },
+  {
+    studioName: 'Slider advisor (value → recommendation)',
+    description: 'The visitor drags a slider and gets a recommendation. You set the steps as "up to X, recommend Y".',
+    section: {
+      _type: 'rangeAdvisor', _key: 'f7', title: 'Does it fit your door?', label: 'Door thickness', unit: 'mm', min: 40, max: 100, step: 1, defaultValue: 55,
+      bands: [50, 60, 70, 80, 90, 100].map((u, i) => ({ _key: String(i), upTo: u, result: String(70 + i * 10) })),
+      resultTemplate: 'Use spindle 8x8x{result} mm', valueLabel: '{value} mm door', resultLabel: '{result} mm spindle',
+    },
+  },
+  {
+    studioName: 'Safety notice (important box)',
+    description: 'The one thing people must do, framed in red. Use sparingly.',
+    section: { _type: 'safetyNotice', _key: 'f8', eyebrow: 'Important', headline: 'Always unroll fully *before switching on.*', body: 'Heat cannot escape a coiled reel.', sub: 'This applies to every length.' },
+  },
+  {
+    studioName: 'Step-by-step list',
+    description: 'Numbered steps with a bold lead-in, for installation and set-up.',
+    section: {
+      _type: 'stepList', _key: 'f9', eyebrow: 'Component · Steps', headline: 'Installed in *an afternoon.*',
+      steps: [
+        { _key: 'a', lead: 'Check the door.', body: '40 to 100 mm thick, flat and true.' },
+        { _key: 'b', lead: 'Fit the case.', body: 'Then the cylinder and the strike plate.' },
+        { _key: 'c', lead: 'Test.', body: 'Try the key, press the handle.' },
+      ],
+    },
+  },
+  {
+    studioName: 'Explainer (levels, colour temperature, notes)',
+    description: 'Teach one concept: a scale of levels (lux) or a colour-temperature strip (Kelvin), two notes and a read-more button.',
+    section: {
+      _type: 'explainer', _key: 'f10', eyebrow: 'Worth knowing', headline: 'What does *Kelvin* mean?', visual: 'kelvin',
+      levels: [
+        { _key: 'a', value: '3,000 K', kelvin: 3000, body: 'Warm, yellowish light.' },
+        { _key: 'b', value: '4,000 K', kelvin: 4000, body: 'Neutral light.', chips: ['Workshop', 'Site'] },
+        { _key: 'c', value: '5,000 K', kelvin: 5000, body: 'Closer to daylight.', chips: ['Detail'] },
+        { _key: 'd', value: '6,500 K', kelvin: 6500, body: 'Cool, bluish white.' },
+      ],
+      axisLow: 'Lower Kelvin, warmer light', axisHigh: 'Higher Kelvin, cooler light',
+      notes: [
+        { _key: 'n1', title: 'For professional work light', body: 'Around 4,000 K suits most tasks.' },
+        { _key: 'n2', title: 'Kelvin is not the amount of light', body: 'That is lumen.' },
+      ],
+    },
+  },
+  {
+    studioName: 'People to call (specialists)',
+    description: 'Named people with photo, store, role, short bio, tap-to-call and tap-to-mail.',
+    section: {
+      _type: 'peopleCards', _key: 'f11', eyebrow: 'Ask a specialist', headline: 'Call someone who has *seen it before.*',
+      people: [
+        { _key: 'a', name: 'Sample Person', role: 'Sales', location: 'Store, City', bio: 'One line on why to call them.', phone: '+45 00 00 00 00', email: 'name@example.com' },
+      ],
+    },
+  },
 ];
 
 export default function ComponentLibraryPage() {

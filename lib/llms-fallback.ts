@@ -22,6 +22,7 @@ export const LLMS_FALLBACK: string = [
   "## Site pages",
   "",
   "- / : brand home",
+  "- /focus-on : Focus on…, one product at a time with the full story (film, specifications, comparisons, set-up, FAQ), filterable by category; each page lives at /focus-on/<product>",
   "- /monthly : tool of the month, one hero product with the full story (claims, use cases, video, comparison, FAQ) plus the month's five best-value products and new arrivals",
   "- /products : full product finder (filter by category, search with /products?q=...)",
   "- /product/{slug} : product pages with specs, item number and a buy link to the market's dealer",
