@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Download } from 'lucide-react';
 import { getSupportPage } from '@/lib/cms';
+import { getLocale, getLocalePrefix } from '@/lib/locale';
 import { stegaClean } from '@sanity/client/stega';
 
 /** One support page: manuals/guides grouped by language, each item a direct
@@ -21,6 +22,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/** Page chrome copy per site language; anything not listed falls back to English. */
+const CHROME: Record<string, { back: string; missing: string; stores: string; onItsWay: string }> = {
+  en: { back: 'All support pages', missing: 'Missing a document or a language? Ask the specialists via the chat, or find your local dealer under', stores: 'stores', onItsWay: 'file on its way' },
+  da: { back: 'Alle supportsider', missing: 'Mangler du et dokument eller et sprog? Spørg specialisterne i chatten, eller find din lokale forhandler under', stores: 'butikker', onItsWay: 'filen er på vej' },
+};
+
 const LANG_NAMES: Record<string, string> = { da: 'Dansk', de: 'Deutsch', nl: 'Nederlands', fr: 'Français', en: 'English', es: 'Español' };
 const langName = (code?: string) => {
   const c = stegaClean(code);
@@ -36,12 +43,14 @@ function fmtSize(bytes?: number) {
 export default async function SupportPage({ params }: { params: Promise<{ slug: string }> }) {
   const doc = await getSupportPage((await params).slug);
   if (!doc) notFound();
+  const t = CHROME[(await getLocale()).htmlLang] ?? CHROME.en;
+  const prefix = await getLocalePrefix();
 
   return (
     <main className="bg-ink min-h-screen">
       <div className="mx-auto max-w-[1600px] px-6 md:px-10 pt-36 pb-28">
-        <Link href="/support" className="link-arrow text-sm mb-8 inline-flex">
-          <ArrowLeft size={15} /> All support pages
+        <Link href={`${prefix}/support`} className="link-arrow text-sm mb-8 inline-flex">
+          <ArrowLeft size={15} /> {t.back}
         </Link>
         <div className="eyebrow mb-6 mt-6">Support</div>
         <h1 className="h-display text-white text-[clamp(2.4rem,5.5vw,4.5rem)] leading-[0.92] mb-6">{doc.title}</h1>
@@ -103,7 +112,7 @@ export default async function SupportPage({ params }: { params: Promise<{ slug: 
                           <span className="min-w-0">
                             <span className="block text-fog text-[15px] leading-snug">{it.label}</span>
                             <span className="block text-fog/70 text-xs mt-0.5">
-                              {[it.note, 'file on its way'].filter(Boolean).join(' · ')}
+                              {[it.note, t.onItsWay].filter(Boolean).join(' · ')}
                             </span>
                           </span>
                         </span>
@@ -117,8 +126,8 @@ export default async function SupportPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <p className="text-fog/70 text-sm max-w-xl leading-relaxed mt-12">
-          Missing a document or a language? Ask the specialists via the chat, or find your local dealer under{' '}
-          <Link href="/stores" className="text-stroxx-blue">stores</Link>.
+          {t.missing}{' '}
+          <Link href={`${prefix}/stores`} className="text-stroxx-blue">{t.stores}</Link>.
         </p>
       </div>
     </main>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="{{ g.language or 'da' }}">
+<head>
+<meta charset="utf-8">
+<title>{{ g.title }} | STROXX {{ g.product_line }}</title>
+<style>
+  /* STROXX guide template v2. Screen-first A5 portrait (reads 1:1 on a phone, prints 2-up on A4).
+     Brand rules: square corners everywhere (only true circles may curve), black + STROXX blue,
+     Helvetica Neue (500 for display, never 800). No prices, no dealer branding. */
+  @font-face { font-family: "HN"; src: url("fonts/HelveticaNeue-Light.otf"); font-weight: 300; }
+  @font-face { font-family: "HN"; src: url("fonts/HelveticaNeue-Roman.otf"); font-weight: 400; }
+  @font-face { font-family: "HN"; src: url("fonts/HelveticaNeueMedium.ttf"); font-weight: 500; }
+  @font-face { font-family: "HN"; src: url("fonts/HelveticaNeueBold.ttf"); font-weight: 700; }
+
+  :root {
+    --ink: #0B0C0E; --carbon: #111317; --steel: #171B21; --line: #23272E; --fog: #8A9199;
+    --paper: #F6F5F3; --blue: #0088C2; --blue-glow: #2FACE8; --red: #EB0029; --hair: #E3E2DF; --body: #2A2F36;
+  }
+  @page { size: 148mm 210mm; margin: 12mm 0 13mm; }
+  @page :first { margin: 0; }
+  * { box-sizing: border-box; border-radius: 0 !important; }
+  html, body { margin: 0; padding: 0; background: #fff; color: var(--ink);
+    font-family: "HN", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 9.4pt; line-height: 1.5; letter-spacing: -0.005em; }
+  .eyebrow { font-size: 6.6pt; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
+
+  /* ================= COVER (one full page) ================= */
+  .cover { height: 210mm; background: var(--ink); color: #fff; position: relative; overflow: hidden;
+    page-break-after: always; break-after: page; padding: 12mm 12mm 10mm; display: flex; flex-direction: column; }
+  .cover .glow { /* light pool behind the product: a true circle, so it may curve */
+    position: absolute; left: 50%; margin-left: -65mm; top: 13mm; width: 130mm; height: 130mm; border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(0,136,194,.34) 0%, rgba(0,136,194,.10) 42%, rgba(0,136,194,0) 70%); }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
+  .cover .logo { width: 36mm; display: block; }
+  .cover .doc-tag { text-align: right; color: var(--fog); line-height: 1.7; }
+  .cover .doc-tag b { color: #fff; font-weight: 500; }
+  .cover .hero { position: absolute; left: 0; right: 0; top: 34mm; height: 88mm;
+    display: flex; align-items: center; justify-content: center; gap: 10mm; }
+  .cover .hero img { max-height: 88mm; max-width: 96mm; object-fit: contain;
+    filter: drop-shadow(0 5mm 5mm rgba(0,0,0,.6)); }
+  .cover .hero.pair { gap: 2mm; }
+  .cover .hero.pair img { max-width: 60mm; max-height: 84mm; }
+  .cover .titles { position: relative; margin-top: auto; padding-top: 6mm; }
+  .cover .kicker { color: var(--blue-glow); }
+  .cover h1 { margin: 3mm 0 0; font-size: 25pt; line-height: 1.04; font-weight: 500; letter-spacing: -.025em; max-width: 120mm; }
+  .cover .summary { margin: 4mm 0 0; color: #B9BFC6; font-size: 9.8pt; line-height: 1.45; font-weight: 300; max-width: 112mm; }
+  .cover .facts { position: relative; margin-top: 7mm;
+    display: grid; grid-template-columns: 1.5fr 1fr .55fr; border-top: 1px solid var(--line); }
+  .cover .fact { padding: 3mm 3mm 0 0; }
+  .cover .fact + .fact { padding-left: 3mm; border-left: 1px solid var(--line); }
+  .cover .fact .k { color: var(--fog); }
+  .cover .fact .v { margin-top: 1.4mm; font-size: 7.6pt; line-height: 1.4; color: #fff; }
+  .cover .fact .v small { display: block; color: var(--fog); font-size: 6.6pt; }
+  .cover .fact .big { font-size: 15pt; font-weight: 500; letter-spacing: -.02em; line-height: 1; display: block; }
+  .cover .fact ul { margin: 0; padding: 0; list-style: none; }
+  .cover .fact li + li { margin-top: 1mm; }
+
+  main { padding: 0 12mm; }
+
+  /* ================= OVERVIEW ================= */
+  .overview { display: grid; grid-template-columns: 1.15fr 1fr; gap: 7mm; break-inside: avoid; }
+  .overview h2 { margin: 1.2mm 0 3mm; font-size: 13pt; font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }
+  .toc { list-style: none; margin: 0; padding: 0; }
+  .toc li { display: grid; grid-template-columns: 7mm 1fr; padding: 1.7mm 0; border-top: 1px solid var(--hair);
+    font-size: 8.3pt; line-height: 1.3; }
+  .toc li span { color: var(--blue); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .toc li.sec { display: block; color: var(--fog); padding-top: 3mm; border-top: 0; font-size: 6.2pt; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { display: grid; grid-template-columns: 6mm 1fr; padding: 1.7mm 0; border-top: 1px solid var(--hair);
+    font-size: 8.3pt; line-height: 1.3; }
+  .checklist li::before { content: ""; width: 3.2mm; height: 3.2mm; border: 1.2px solid var(--ink); margin-top: .2mm; }
+  .aside-box { margin-top: 4mm; background: var(--paper); padding: 3mm 3.2mm; font-size: 7.9pt; color: var(--body); line-height: 1.45; }
+  .aside-box b { display: block; color: var(--ink); margin-bottom: .8mm; }
+
+  /* ================= SECTIONS + STEPS ================= */
+  .section-h { margin: 10mm 0 0; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 3mm; break-after: avoid; }
+  .section-h .label { background: var(--ink); color: #fff; padding: 1.5mm 2.6mm 1.3mm; }
+  .section-h .rule { height: 2px; background: var(--ink); }
+  .section-h-title { margin: 3mm 0 0; font-size: 14pt; font-weight: 500; letter-spacing: -.018em; line-height: 1.15; break-after: avoid; }
+  .section-intro { margin: 1.8mm 0 0; color: var(--body); max-width: 120mm; break-after: avoid; }
+
+  .step { margin-top: 7mm; break-inside: avoid; page-break-inside: avoid; }
+  .step-head { display: grid; grid-template-columns: 9mm 1fr auto; align-items: center; gap: 3mm;
+    padding-bottom: 2.2mm; border-bottom: 1px solid var(--hair); }
+  .step-num { width: 9mm; height: 9mm; background: var(--ink); color: #fff; display: flex;
+    align-items: center; justify-content: center; font-size: 11pt; font-weight: 500;
+    font-variant-numeric: tabular-nums; }
+  .step h3 { margin: 0; font-size: 11.4pt; line-height: 1.2; font-weight: 500; letter-spacing: -.012em; }
+  .step-of { color: var(--fog); white-space: nowrap; font-size: 6pt; }
+  .step-body { display: grid; grid-template-columns: 1fr; padding-top: 2.8mm; }
+  .step.solo .step-body { grid-template-columns: 1fr 40mm; column-gap: 5mm; }
+  .step p { margin: 0 0 1.5mm; color: var(--body); }
+  .step ul.bullets { margin: 0 0 1.5mm; padding: 0; list-style: none; }
+  .step ul.bullets li { position: relative; padding-left: 4.5mm; margin: .9mm 0; color: var(--body); }
+  .step ul.bullets li::before { content: ""; position: absolute; left: 0; top: 2mm; width: 2.2mm; height: 2px; background: var(--blue); }
+  .step code { font-family: "HN"; font-weight: 500; color: var(--ink); background: var(--paper);
+    padding: .3mm 1.4mm; letter-spacing: .03em; white-space: nowrap; }
+
+  .result { margin-top: 2.4mm; display: grid; grid-template-columns: 4.2mm 1fr; gap: 2mm; align-items: start;
+    font-size: 8.1pt; color: var(--ink); line-height: 1.4; }
+  .result i { display: block; width: 4.2mm; height: 4.2mm; border-radius: 50% !important; background: var(--blue); position: relative; }
+  .result i::after { content: ""; position: absolute; left: 1.5mm; top: .7mm; width: 1.05mm; height: 2.1mm;
+    border: solid #fff; border-width: 0 1.3px 1.3px 0; transform: rotate(45deg); }
+  .result b { font-weight: 500; }
+
+  /* phone screenshots get a square device frame so mixed sources look consistent */
+  .shots { display: flex; gap: 3mm; margin-top: 3.2mm; align-items: flex-start; flex-wrap: wrap; }
+  .frame { margin: 0; background: var(--ink); padding: 1.5mm 1.5mm 3.6mm; position: relative; display: inline-block; }
+  .frame::after { content: ""; position: absolute; left: 50%; bottom: 1.3mm; width: 6mm; height: .7mm; margin-left: -3mm; background: #3A3F46; }
+  .frame img { display: block; height: 60mm; width: auto; }
+  .shots.count-1 .frame img { height: 72mm; }
+  .shots.count-3 .frame img { height: 51mm; }
+  .shot-wrap figcaption, .photo figcaption { margin-top: 1.2mm; font-size: 6.7pt; color: var(--fog); }
+  .solo-shot .frame { display: block; }
+  .solo-shot .frame img { width: 100%; height: auto; max-height: 84mm; object-fit: contain; }
+  .photo { margin: 0; }
+  .photo img { display: block; max-width: 100%; max-height: 48mm; border: 1px solid var(--hair); }
+  .shots .photo img { height: 44mm; width: auto; }
+
+  .note { margin-top: 3.2mm; padding: 2.6mm 3mm 2.8mm 3.4mm; background: var(--paper);
+    border-left: 3px solid var(--blue); font-size: 8.2pt; color: var(--body); line-height: 1.45; break-inside: avoid; }
+  .note.warning { border-left-color: var(--red); }
+  .note b { display: block; margin-bottom: .8mm; color: var(--blue); }
+  .note.warning b { color: var(--red); }
+
+  /* ================= FINISH ================= */
+  .done { margin-top: 9mm; padding-top: 4.5mm; border-top: 2px solid var(--ink); display: grid;
+    grid-template-columns: 10mm 1fr; gap: 4mm; break-inside: avoid; }
+  .done .tick { width: 10mm; height: 10mm; border-radius: 50% !important; background: var(--blue); position: relative; }
+  .done .tick::after { content: ""; position: absolute; left: 3.6mm; top: 2mm; width: 2.4mm; height: 4.6mm;
+    border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .done h2 { margin: 0; font-size: 13pt; font-weight: 500; letter-spacing: -.015em; line-height: 1.2; }
+  .done p { margin: 1.2mm 0 0; color: var(--body); }
+
+  .help { margin: 5mm 0 0; background: var(--ink); color: #fff; padding: 5mm 6mm;
+    display: grid; grid-template-columns: 1fr 23mm; gap: 6mm; align-items: center; break-inside: avoid; }
+  .help .eyebrow { color: var(--blue-glow); }
+  .help h2 { margin: 1.5mm 0 0; font-size: 13pt; font-weight: 500; letter-spacing: -.015em; }
+  .help p { margin: 1.5mm 0 0; color: #B9BFC6; font-size: 8.3pt; }
+  .help a { color: #fff; text-decoration: none; border-bottom: 1px solid var(--blue); font-weight: 500; }
+  .help img { width: 23mm; height: 23mm; display: block; background: #fff; padding: 1.6mm; }
+
+  .signoff { margin-top: 5mm; display: flex; justify-content: space-between; align-items: flex-end; break-inside: avoid; }
+  .signoff img { width: 20mm; display: block; }
+  .signoff .meta { font-size: 6.4pt; color: var(--fog); text-align: right; line-height: 1.6; }
+</style>
+</head>
+<body>
+{% set total = namespace(n=0) %}{% for s in g.sections %}{% set total.n = total.n + s.steps|length %}{% endfor %}
+
+<header class="cover">
+  <div class="glow"></div>
+  <div class="top">
+    <img class="logo" src="brand/stroxx-white.svg" alt="STROXX">
+    <div class="doc-tag eyebrow"><b>{{ g.product_line }}</b><br>{{ g.kind or 'Vejledning' }}<br>{{ total.n }} trin</div>
+  </div>
+  {% if g.hero %}<div class="hero{% if g.hero|length > 1 %} pair{% endif %}">{% for h in g.hero %}<img src="{{ h }}" alt="">{% endfor %}</div>{% endif %}
+  <div class="titles">
+    <div class="kicker eyebrow">{{ g.kicker or (g.product_line ~ ' · Trin for trin') }}</div>
+    <h1>{{ g.title }}</h1>
+    {% if g.summary %}<p class="summary">{{ g.summary }}</p>{% endif %}
+  </div>
+  <div class="facts">
+    <div class="fact"><div class="k eyebrow">Gælder for</div>
+      <div class="v"><ul>{% for p in g.applies_to %}<li>{{ p.name }}{% if p.item_no %}<small>Varenr. {{ p.item_no }}</small>{% endif %}</li>{% endfor %}</ul></div></div>
+    <div class="fact"><div class="k eyebrow">Niveau</div>
+      <div class="v">{{ g.level or 'Let' }}<small>{{ g.level_note or 'Ingen værktøj eller forkundskaber' }}</small></div></div>
+    <div class="fact"><div class="k eyebrow">Tid</div>
+      <div class="v"><span class="big">{{ g.time_num }}</span><small>{{ g.time_unit or 'minutter' }}</small></div></div>
+  </div>
+</header>
+
+<main>
+<section class="overview">
+  <div>
+    <div class="eyebrow" style="color:var(--blue)">Overblik</div>
+    <h2>Sådan gør du</h2>
+    <ol class="toc">
+      {% set c = namespace(n=0) %}
+      {% for s in g.sections %}
+        {% if s.heading and g.sections|length > 1 %}<li class="sec eyebrow">{{ s.heading }}</li>{% endif %}
+        {% for st in s.steps %}{% set c.n = c.n + 1 %}<li><span>{{ '%02d' % c.n }}</span>{{ st.title }}</li>{% endfor %}
+      {% endfor %}
+    </ol>
+  </div>
+  <div>
+    <div class="eyebrow" style="color:var(--blue)">Før du går i gang</div>
+    <h2>Hav dette klar</h2>
+    <ul class="checklist">{% for x in g.you_need %}<li>{{ x }}</li>{% endfor %}</ul>
+    {% if g.good_to_know %}<div class="aside-box"><b class="eyebrow">Godt at vide</b>{{ g.good_to_know }}</div>{% endif %}
+  </div>
+</section>
+
+{% set ns = namespace(n=0) %}
+{% for s in g.sections %}
+  {% if s.heading %}
+  <div class="section-h"><span class="label eyebrow">{{ s.label or ('Del ' ~ loop.index) }}</span><span class="rule"></span></div>
+  <div class="section-h-title">{{ s.heading }}</div>
+  {% endif %}
+  {% if s.intro %}<p class="section-intro">{{ s.intro }}</p>{% endif %}
+
+  {% for st in s.steps %}{% set ns.n = ns.n + 1 %}
+  {% set solo = st.images and st.images|length == 1 and st.images[0].portrait and not st.images[0].photo and not st.images[0].wide %}
+  <section class="step{% if solo %} solo{% endif %}">
+    <div class="step-head">
+      <div class="step-num">{{ ns.n }}</div>
+      <h3>{{ st.title }}</h3>
+      <div class="step-of eyebrow">Trin {{ ns.n }} af {{ total.n }}</div>
+    </div>
+    <div class="step-body">
+      <div>
+        {% if st.text %}{% for para in st.text.split('\n\n') %}<p>{{ para|codes }}</p>{% endfor %}{% endif %}
+        {% if st.bullets %}<ul class="bullets">{% for b in st.bullets %}<li>{{ b|codes }}</li>{% endfor %}</ul>{% endif %}
+        {% if st.images and not solo %}
+        <div class="shots count-{{ st.images|length }}">
+          {% for im in st.images %}
+            {% if im.photo or im.wide %}<figure class="photo"><img src="{{ im.src }}" alt="{{ im.caption or st.title }}">{% if im.caption %}<figcaption>{{ im.caption }}</figcaption>{% endif %}</figure>
+            {% else %}<div class="shot-wrap"><figure class="frame"><img src="{{ im.src }}" alt="{{ im.caption or st.title }}"></figure>{% if im.caption %}<figcaption>{{ im.caption }}</figcaption>{% endif %}</div>{% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if st.result %}<div class="result"><i></i><div><b>Du ser nu:</b> {{ st.result }}</div></div>{% endif %}
+        {% if st.note %}<div class="note {{ st.note.type }}"><b class="eyebrow">{{ 'Vigtigt' if st.note.type == 'warning' else 'Tip' }}</b>{{ st.note.text }}</div>{% endif %}
+      </div>
+      {% if solo %}<div class="solo-shot"><figure class="frame"><img src="{{ st.images[0].src }}" alt="{{ st.title }}"></figure></div>{% endif %}
+    </div>
+  </section>
+  {% endfor %}
+{% endfor %}
+
+<section class="done">
+  <div class="tick"></div>
+  <div>
+    <h2>{{ g.done_title or 'Færdig' }}</h2>
+    <p>{{ g.done or 'Du har gennemført alle trin.' }}</p>
+  </div>
+</section>
+
+<div class="finish-tail" style="break-inside: avoid;">
+<section class="help">
+  <div>
+    <div class="eyebrow">Mere hjælp</div>
+    <h2>{{ g.help.title or 'Virker det ikke?' }}</h2>
+    <p>{{ g.help.text }}</p>
+    {% if g.help.url %}<p><a href="https://{{ g.help.url }}">{{ g.help.url }}</a></p>{% endif %}
+  </div>
+  {% if qr %}<img src="{{ qr }}" alt="QR">{% endif %}
+</section>
+
+<div class="signoff">
+  <img src="brand/stroxx-black.svg" alt="STROXX">
+  <div class="meta">Version {{ g.version }} · {{ g.date }}</div>
+</div>
+</div>
+</main>
+</body>
+</html>
